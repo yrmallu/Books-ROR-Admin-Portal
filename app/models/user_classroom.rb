@@ -1,6 +1,4 @@
-class RoleAccessright < ActiveRecord::Base
-
-  belongs_to :role
-  belongs_to :accessright
-
+class UserClassroom < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :classroom
 end
