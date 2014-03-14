@@ -113,10 +113,15 @@ input {
 	color:red;
 }
 
+//.form_validation { width: 500px; }
+//.form_validation label { width: 400px; }
+.form_validation label.error, .form_validation input.submit { margin-left: 0px; color:red;font-weight: 400;}
+
 .help_message{
 	margin: 0px 0px 7px 1px;
-	color: darkseagreen;
-	background-color: cornsilk;
+	color: #c09853;
+	background-color: #fcf8e3;
+	border: 1px solid #fbeed5;
 	height: 45px;
 	line-height: 44px;
 	
@@ -126,7 +131,7 @@ input {
 	padding: 22px 0px 0px 0px;
 }
 
-#user_date_of_birth_1i, #user_date_of_birth_2i,#user_date_of_birth_3i, .width_100px{
+#user_date_of_birth_1i, #user_date_of_birth_2i,#user_date_of_birth_3i, .width_100px, #user_joining_date_1i, #user_joining_date_2i, #user_joining_date_3i, .date_select_list{
 	width: 100px;
 }
 
@@ -163,8 +168,6 @@ input {
 
 .listing_heading{
 	font-size: 20px;
-	width: 200px;
-	text-align:left;
 }
 
 .page_title{
@@ -186,11 +189,75 @@ input {
 }
 
 .filter_scroll{
-	height:500px;
+	height:410px;
 	overflow:scroll;
 	overflow-x:hidden;
 }
 
-.show_page_heading{
-	margin: 15px 0px 10px 285px;
+.create_page_headings{
+	margin-left: 300px;
+	padding-bottom: 28px;
+}
+
+.ajax_loader
+{
+	width:20px;
+	height:89px;
+	position:absolute;
+	top: 9%;
+	left: 71%;
+	padding:2px;
+	display:none;
+}
+
+.left-div {
+    float: left;
+    width: 380px;
+    height: 100%;
+    margin-right: 6px;
+}
+.right-div {
+    float: left;
+  //  margin-left: 108px;
+}
+
+.comment{
+	width:200px;
+	background-color:#f0f0f0;
+	margin:10px
+}
+
+a.morelink{
+	text-decoration:none;
+	outline:none
+}
+.morecontent span{display:none}
+
+// on team listing page 1st hide all ul then on click open them
+ul#master ul{
+display:none;
+}
+
+.cursor_pointer{
+	cursor:pointer;
+}
+
+.role_font
+{
+	font-style:italic;
+	color:grey;
+}
+
+.current_project_type
+{
+	color:#428bca;
+}
+
+.other_project_type
+{
+	color:grey;
+}
+
+.project_name{
+	color:brown;
 }
