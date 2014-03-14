@@ -1,41 +1,43 @@
-<h1>Listing schools</h1>
+<h3>Listing schools</h3>
+<%#= link_to 'New School', new_school_path %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Code</th>
-      <th>Name</th>
-      <th>Address</th>
-      <th>City</th>
-      <th>District</th>
-      <th>State</th>
-      <th>Country</th>
-      <th>Phone</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+<div class="container">
+	<div class="row row-offcanvas row-offcanvas-right">
+		<div class="col-xs-12 col-sm-9" id="id_content_div">
+		  <span id = "id_no_records" class = "no_records_found" style = "display:none;margin-left:350px;">No Schools's</span>
+		   <table class="table table-hover listingTable" id="id_main_content">
+			   <thead>	
+					<tr>
+      				  	<th>Code</th>
+      					<th>Name</th>
+      				  	<th>Address</th>
+      				  	<th>City</th>
+      				  	<th>District</th>
+      				  	<th>State</th>
+      				  	<th>Country</th>
+      				  	<th>Phone</th>
+					</tr>
+  			   </thead>
+  			   <tbody>
+    			   <% @schools.each do |school| %>
+      			       <tr>
+        				   <td><%= school.code %></td>
+        				   <td><%= school.name %></td>
+        				   <td><%= school.address %></td>
+        				   <td><%= school.city %></td>
+        				   <td><%= school.district %></td>
+        				   <td><%= school.state %></td>
+        				   <td><%= school.country %></td>
+        				   <td><%= school.phone %></td>
+        				   <td><%= link_to 'Show', school %> |
+        				   	   <%= link_to 'Edit', edit_school_path(school) %> |
+        				   	   <%= link_to 'Destroy', school, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      				 </tr>
+    			<% end %>
+  		  	</tbody>
+	  	</table>
+		</div>
+	</div>
+</div>
 
-  <tbody>
-    <% @schools.each do |school| %>
-      <tr>
-        <td><%= school.code %></td>
-        <td><%= school.name %></td>
-        <td><%= school.address %></td>
-        <td><%= school.city %></td>
-        <td><%= school.district %></td>
-        <td><%= school.state %></td>
-        <td><%= school.country %></td>
-        <td><%= school.phone %></td>
-        <td><%= link_to 'Show', school %></td>
-        <td><%= link_to 'Edit', edit_school_path(school) %></td>
-        <td><%= link_to 'Destroy', school, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<br>
-
-<%= link_to 'New School', new_school_path %>
