@@ -1,0 +1,3 @@
+class SchoolAdmin < User
+  
+end

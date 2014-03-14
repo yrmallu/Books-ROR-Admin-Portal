@@ -1,0 +1,35 @@
+<h1>Listing classrooms</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Name</th>
+      <th>Cover image</th>
+      <th>Secret key</th>
+      <th>Classroom count</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @classrooms.each do |classroom| %>
+      <tr>
+        <td><%= classroom.code %></td>
+        <td><%= classroom.name %></td>
+        <td><%= classroom.cover_image %></td>
+        <td><%= classroom.secret_key %></td>
+        <td><%= classroom.classroom_count %></td>
+        <td><%= link_to 'Show', classroom %></td>
+        <td><%= link_to 'Edit', edit_classroom_path(classroom) %></td>
+        <td><%= link_to 'Destroy', classroom, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Classroom', new_classroom_path %>

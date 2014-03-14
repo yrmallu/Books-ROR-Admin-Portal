@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @classroom.code %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @classroom.name %>
+</p>
+
+<p>
+  <strong>Cover image:</strong>
+  <%= @classroom.cover_image %>
+</p>
+
+<p>
+  <strong>Secret key:</strong>
+  <%= @classroom.secret_key %>
+</p>
+
+<p>
+  <strong>Classroom count:</strong>
+  <%= @classroom.classroom_count %>
+</p>
+
+<%= link_to 'Edit', edit_classroom_path(@classroom) %> |
+<%= link_to 'Back', classrooms_path %>
