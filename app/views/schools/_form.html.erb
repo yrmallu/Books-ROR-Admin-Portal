@@ -11,10 +11,15 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :code %><br>
-    <%= f.number_field :code %>
-  </div>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="form-group" >
+  		  	<div class="field">
+    			<%= f.label :code %><br>
+    			<%= f.number_field :code %>
+  		  	</div>
+        </div>
+   </div>	
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>

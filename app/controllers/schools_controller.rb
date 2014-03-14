@@ -42,7 +42,7 @@ class SchoolsController < ApplicationController
   def update
     respond_to do |format|
       if @school.update(school_params)
-        format.html { redirect_to @school, notice: 'School was successfully updated.' }
+        format.html { redirect_to @school, notice: 'School updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -56,7 +56,7 @@ class SchoolsController < ApplicationController
   def destroy
     @school.destroy
     respond_to do |format|
-      format.html { redirect_to schools_url }
+      format.html { redirect_to schools_url, notice: 'School deleted.' }
       format.json { head :no_content }
     end
   end
