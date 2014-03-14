@@ -1,0 +1,2 @@
+module AccessrightsHelper
+end
