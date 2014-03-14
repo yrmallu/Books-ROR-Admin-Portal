@@ -40,6 +40,21 @@
   <%= @school.phone %>
 </p>
 
+	       <% unless @school.licenses.blank? %>
+		   		<%@school.licenses.each do |lic|%>
+   					<fieldset>
+					    <p>
+						<strong>Expiry Date:</strong>
+					           <%= lic.expiry_date.to_date unless lic.blank?%>
+					    </p>
+						<p>
+					           <strong>No. of Licenses:</strong>
+					           <%= lic.no_of_licenses unless lic.blank?%>
+					    </p>   
+					</fieldset>
+				<%end%>	
+	      <%end%>	
+</p>
 <%#= link_to 'Edit', edit_school_path(@school) %>
 <%#= link_to 'Back', schools_path %>
 <%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary width_100px", data: { disable_with: 'Saving...' } %>

@@ -15,6 +15,7 @@ class SchoolsController < ApplicationController
   # GET /schools/new
   def new
     @school = School.new
+	@licenses = @school.licenses.build()
   end
 
   # GET /schools/1/edit
@@ -69,6 +70,6 @@ class SchoolsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def school_params
-      params.require(:school).permit(:code, :name, :address, :city, :district, :state, :country, :phone)
+      params.require(:school).permit(:code, :name, :address, :city, :district, :state, :country, :phone,:licenses_attributes=> [:id,:license_group_id,:expiry_date,:no_of_licenses,:school_id])
     end
 end
