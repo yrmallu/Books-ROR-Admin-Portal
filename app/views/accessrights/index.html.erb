@@ -1,0 +1,29 @@
+<h1>Listing accessrights</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @accessrights.each do |accessright| %>
+      <tr>
+        <td><%= accessright.name %></td>
+        <td><%= accessright.description %></td>
+        <td><%= link_to 'Show', accessright %></td>
+        <td><%= link_to 'Edit', edit_accessright_path(accessright) %></td>
+        <td><%= link_to 'Destroy', accessright, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Accessright', new_accessright_path %>

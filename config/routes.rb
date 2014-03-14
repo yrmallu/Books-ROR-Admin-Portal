@@ -1,4 +1,8 @@
 BooksThatShow::Application.routes.draw do
+  resources :accessrights
+
+  resources :roles
+
   devise_for :users
   resources :schools
 
