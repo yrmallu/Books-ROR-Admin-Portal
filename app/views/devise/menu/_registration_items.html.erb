@@ -1,0 +1,9 @@
+<% if user_signed_in? %>
+  <li>
+    &nbsp;&nbsp; Logged In As <%= current_user.email %>&nbsp;|&nbsp;<%= link_to('MyAccount', edit_user_registration_path) %>&nbsp;|
+  </li>
+<% else %>
+  <li>
+    <%= link_to('Register', new_user_registration_path)  %>
+  </li>
+<% end %>
