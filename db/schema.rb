@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(version: 20140314102404) do
   end
 
   create_table "role_accessrights", force: true do |t|
-    t.integer  "role_id"
-    t.integer  "user_id"
+    t.integer  "role_id",    null: false
+    t.integer  "user_id",    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

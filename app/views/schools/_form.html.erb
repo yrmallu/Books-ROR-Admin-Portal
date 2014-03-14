@@ -85,6 +85,21 @@
 		</div>
 	</div>
 </div>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="form-group" >  
+  		    <div class="field">
+				<%=f.fields_for :licenses,@licenses do |lic|%>
+			  		<%= lic.label :expiry_date %><br />
+					<%= lic.text_field :expiry_date %>
+					
+			  		<%= lic.label :no_of_licenses %><br />
+					<%= lic.text_field :no_of_licenses %>
+    			<%end%>
+	  	    </div>
+		</div>
+	</div>
+</div>	
   	<div class="actions">
     	<%= f.submit "Save", class: "btn btn-primary width_100px", data: { disable_with: 'Saving...' } %>
 		<%= link_to 'Cancel', schools_path, class: "btn btn-primary width_100px"%>
