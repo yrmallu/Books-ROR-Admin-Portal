@@ -1,17 +1,32 @@
-<h2>Sign in</h2>
+<h1>Sign in</h1>
+	
+<div class="row">
+	<div class="col-lg-3"></div>	
+	<div class="col-lg-6">
+		<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+  	  		<%= f.label :email %>
+  		  	<%= f.email_field :email, :autofocus => true %>
 
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email, :autofocus => true %></div>
+ 		    <%= f.label :password %>
+  		  	<%= f.password_field :password %>
 
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
+  		  	<%#= if devise_mapping.rememberable? -%>
+   		 		<%#= f.check_box :remember_me %> <%#= f.label :remember_me %>
+  			<%#= end -%>
 
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
-  <% end -%>
-
-  <div><%= f.submit "Sign in" %></div>
-<% end %>
+			<div class="row">		
+	  		    <div class="col-lg-3"></div>
+	  		    <div class="col-lg-6">	
+      				<%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
+      		  	</div>
+      		  	<div class="col-lg-3"></div>
+  		  	</div>
+		<% end %>
+	    <%#= link_to 'Forgot password', forgot_password_path , :style=>"margin-left: 225px;"%>
+	</div>
+	  <div class="col-lg-3"></div>  
+</div>
 
 <%= render "devise/shared/links" %>
+
+

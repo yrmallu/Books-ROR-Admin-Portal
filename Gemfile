@@ -11,6 +11,7 @@ gem 'pg'
 
 # Use devise for Authentication
 gem 'devise'
+gem 'cancan'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
