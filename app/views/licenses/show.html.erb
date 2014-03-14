@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>License group:</strong>
+  <%= @license.license_group_id %>
+</p>
+
+<p>
+  <strong>Datetime:</strong>
+  <%= @license.datetime %>
+</p>
+
+<p>
+  <strong>No of licenses:</strong>
+  <%= @license.no_of_licenses %>
+</p>
+
+<p>
+  <strong>Allocated to:</strong>
+  <%= @license.allocated_to %>
+</p>
+
+<p>
+  <strong>Used liscenses:</strong>
+  <%= @license.used_liscenses %>
+</p>
+
+<p>
+  <strong>School:</strong>
+  <%= @license.school_id %>
+</p>
+
+<%= link_to 'Edit', edit_license_path(@license) %> |
+<%= link_to 'Back', licenses_path %>

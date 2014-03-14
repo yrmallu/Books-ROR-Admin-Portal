@@ -1,8 +1,8 @@
 class CreateRoleAccessrights < ActiveRecord::Migration
   def change
     create_table :role_accessrights do |t|
-      t.column :role_id, :integer, null:false
-      t.column :user_id, :integer, null:false
+      t.integer :role_id
+      t.integer :user_id
       t.timestamps
     end
   end

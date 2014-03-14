@@ -1,0 +1,3 @@
+class WebAdmin < User
+  
+end
