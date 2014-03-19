@@ -1,0 +1,63 @@
+
+<%= link_to 'Add new Admin', new_user_path %> | <%= link_to 'Delete', '', class:"delete-user-list" %> 
+
+<h1>Listing Web Admin </h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>FirstName</th>
+      <th>LastName</th>
+      <th>UserName</th>
+      <th>Password</th>
+      <th>Email</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+      	<td><%= check_box_tag 'user_ids[]', user.id, false, :id => "user_ids_#{user.id}", :class => "delete-user" %></td>
+        <td><%= user.first_name %></td>
+        <td><%= user.last_name %></td>
+        <td><%= user.username %></td>
+        <td><%= user.password %></td>
+        <td><%= user.email %></td>
+        <td><%= link_to 'Show', user %></td>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
+        <td><%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript" charset="utf-8">
+	var checked_user = [] 
+	 $(document).on("click",".delete-user",function(){
+		var status = $(this).is(':checked');
+		var user_id = $(this).attr('id');
+	   	user_id = user_id.split("_")[2];
+		
+		if(status)
+			checked_user.push(user_id)
+		else
+		{
+			var index = checked_user.indexOf(user_id);
+			checked_user.splice(index,1);
+		}
+	});	 	
+	
+	 $(document).on("click",".delete-user-list",function(){
+	 	alert(checked_user);
+	 	$.ajax({
+	            url: "<%= delete_multiple_user_users_url %>",
+	            data: {
+	                    checked_user:checked_user,
+	                    checked:status
+	                  }
+	           });	
+	 });	
+</script>
