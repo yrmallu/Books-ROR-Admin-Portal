@@ -1,6 +1,12 @@
-<h1>Editing WebAdmin</h1>
-
+<div class="pageheader" data-no-turbolink>
+   <h2><i class="glyphicon glyphicon-book"></i> Edit Web Admin <!-- <span>Subtitle goes here...</span> --></h2>
+   <div class="breadcrumb-wrapper">
+       <span class="label">You are here:</span>
+       <ol class="breadcrumb">
+           <li><%= link_to 'Dashboard', root_path %></li>
+           <li><%= link_to 'User List', users_path %></li>
+           <li class="active">Edit User </li>
+       </ol>
+    </div>
+</div>
 <%= render 'form' %>
-
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
