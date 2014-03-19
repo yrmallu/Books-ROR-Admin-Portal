@@ -29,7 +29,10 @@ class SchoolsController < ApplicationController
 
     respond_to do |format|
       if @school.save
-        format.html { redirect_to @school, notice: 'School created.' }
+        format.html { 
+						flash[:success] = "School created."
+						redirect_to @school  
+					}
         format.json { render action: 'show', status: :created, location: @school }
       else
         format.html { render action: 'new' }
@@ -43,7 +46,10 @@ class SchoolsController < ApplicationController
   def update
     respond_to do |format|
       if @school.update(school_params)
-        format.html { redirect_to @school, notice: 'School updated.' }
+        format.html { 
+						flash[:success] = "School updated." 
+						redirect_to @school
+					}
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -57,7 +63,10 @@ class SchoolsController < ApplicationController
   def destroy
     @school.destroy
     respond_to do |format|
-      format.html { redirect_to schools_url, notice: 'School deleted.' }
+      format.html { 
+	  			       flash[:success] = "School deleted." 
+	  				   redirect_to schools_url 
+				  }
       format.json { head :no_content }
     end
   end

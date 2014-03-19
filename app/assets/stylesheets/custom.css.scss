@@ -1,10 +1,15 @@
-
-.error_message{
-	color:red;
+#error_explanation {
+  color: #f00;
+  ul {
+    list-style: none;
+    margin: 0 0 18px 0;
+  }
 }
+
+.error_message{ color:red;}
 
 .form_validation label.error, .form_validation input.submit { margin-left: 0px; color:red;font-weight: 400;}
 
-form .form-group {
-margin-bottom: 15px !important;
-}
+form .form-group {margin-bottom: 15px !important;}
+
+.index_page_btns{ margin-bottom: 20px !important; float:right;}

@@ -1,19 +1,29 @@
-  <div class="pageheader">
+<div class="pageheader">
    <h2><i class="fa fa-table"></i> School List <!-- <span>Subtitle goes here...</span> --></h2>
    <div class="breadcrumb-wrapper">
      <span class="label">You are here:</span>
      <ol class="breadcrumb">
-       <li><%= link_to 'Dashboard', root_path %></li>
-       <!-- <li><a href="buttons.html">UI Elements</a></li> -->
-       <li class="active">School List</li>
+         <li><%= link_to 'Dashboard', root_path %></li>
+         <!-- <li><a href="buttons.html">UI Elements</a></li> -->
+         <li class="active">School List</li>
      </ol>
    </div>
- </div>
- <div class="row">
-          <div class="table-responsive">
-          <table class="table" id="table2">
-              <thead>
-                 <tr>
+</div>
+
+<div class="panel panel-default">
+<div class="panel-body"> 
+	<div class="index_page_btns">
+        <%=link_to 'Import School List', new_school_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Download Sample', new_school_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Renew', new_school_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Delete', new_school_path, :class=>"btn btn-success btn-xs"%>
+	 </div>
+	 
+	 <div class="table-responsive">
+		<table class="table" id="table2">
+            <thead>
+                <tr>
                     <th>School Code</th>
                     <th>School Name</th>
                     <th>District</th>
@@ -44,16 +54,43 @@
 					</td>
                  </tr>
 				 <% end %>
-                 </tbody>
-           </table>
-          </div>
-		  
+        </tbody>
+    </table>
+</div>
+</div>		  
 
 <script>
   jQuery(document).ready(function() {
     
-   jQuery('#table2').dataTable({
+    jQuery('#table2').dataTable({
       "sPaginationType": "full_numbers"
     });
-	});
+    
+    // Chosen Select
+    jQuery("select").chosen({
+      'min-width': '100px',
+      'white-space': 'nowrap',
+      disable_search_threshold: 10
+    });
+    
+    // Delete row in a table
+    jQuery('.delete-row').click(function(){
+      var c = confirm("Continue delete?");
+      if(c)
+        jQuery(this).closest('tr').fadeOut(function(){
+          jQuery(this).remove();
+        });
+        
+        return false;
+    });
+    
+    // Show aciton upon row hover
+    jQuery('.table-hidaction tbody tr').hover(function(){
+      jQuery(this).find('.table-action-hide a').animate({opacity: 1});
+    },function(){
+      jQuery(this).find('.table-action-hide a').animate({opacity: 0});
+    });
+  
+  
+  });
 </script>
