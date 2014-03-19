@@ -1,61 +1,62 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Code:</strong>
-  <%= @school.code %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @school.name %>
-</p>
-
-<p>
-  <strong>Address:</strong>
-  <%= @school.address %>
-</p>
-
-<p>
-  <strong>City:</strong>
-  <%= @school.city %>
-</p>
-
-<p>
-  <strong>District:</strong>
-  <%= @school.district %>
-</p>
-
-<p>
-  <strong>State:</strong>
-  <%= @school.state %>
-</p>
-
-<p>
-  <strong>Country:</strong>
-  <%= @school.country %>
-</p>
-
-<p>
-  <strong>Phone:</strong>
-  <%= @school.phone %>
-</p>
-
-	       <% unless @school.licenses.blank? %>
-		   		<%@school.licenses.each do |lic|%>
-   					<fieldset>
-					    <p>
-						<strong>Expiry Date:</strong>
-					           <%= lic.expiry_date.to_date unless lic.blank?%>
-					    </p>
-						<p>
-					           <strong>No. of Licenses:</strong>
-					           <%= lic.no_of_licenses unless lic.blank?%>
-					    </p>   
-					</fieldset>
-				<%end%>	
-	      <%end%>	
-</p>
-<%#= link_to 'Edit', edit_school_path(@school) %>
-<%#= link_to 'Back', schools_path %>
-<%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary width_100px", data: { disable_with: 'Saving...' } %>
-<%= link_to 'Cancel', schools_path, class: "btn btn-primary width_100px"%>
+<div class="row">
+	<div class="col-md-12">
+    	<div class="panel panel-default">
+        	<div class="panel-heading">
+            	<h4 class="panel-title">School Information</h4>
+        	</div>
+			<p id="notice"><%= notice %></p>
+        	<div class="panel-body">
+            	<address>
+                	<strong>Code:</strong>
+                	<%= @school.code %>
+            	</address>
+            	<address>
+			    	<strong>Name:</strong>
+			    	<%= @school.name %>
+            	</address>
+            	<address>
+			    	<strong>Address:</strong>
+			    	<%= @school.address %>
+            	</address>
+            	<address>
+			    	<strong>City:</strong>
+			    	<%= @school.city %>
+            	</address>
+            	<address>
+			    	<strong>District:</strong>
+			    	<%= @school.district %>
+            	</address>
+            	<address>
+			    	<strong>State:</strong>
+			    	<%= @school.state %>
+            	</address>
+            	<address>
+			    	<strong>Country:</strong>
+			    	<%= @school.country %>
+            	</address>
+            	<address>
+			    	<strong>Phone:</strong>
+			    	<%= @school.phone %>
+            	</address>
+            	<address>
+	  	       	    <% unless @school.licenses.blank? %>
+	  		   		    <%@school.licenses.each do |lic|%>
+	     		        <address>
+	  						<strong>Expiry Date:</strong>
+	  					    <%= lic.expiry_date.to_date unless lic.blank?%>
+	  					</address>
+	  					<address>
+	  					    <strong>No. of Licenses:</strong>
+	  					    <%= lic.no_of_licenses unless lic.blank?%>
+	  					</address>
+	  				    <%end%>	
+	  	            <%end%>
+                </address>
+			    <div data-no-turbolink>
+			        <%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary", data: { disable_with: 'Saving...' } %>
+			        <%= link_to 'Cancel', schools_path, class: "btn btn-white"%>
+        	    </div>
+		    </div>
+        </div>
+    </div>
+</div>

@@ -1,107 +1,126 @@
-<%= form_for(@school, :html=>{:class=>"form_validation"} ) do |f| %>
-  <% if @school.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@school.errors.count, "error") %> prohibited this school from being saved:</h2>
-
-      <ul>
-      <% @school.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+ 
 <div class="row">
-    <div class="col-lg-3">
-        <div class="form-group" >
-  		  	<div class="field">
-    			<%= f.label :code, "School Code" %><br>
-    			<%= f.number_field :code %>
-  		  	</div>
-        </div>
-   </div>
-   <div class="col-lg-6">
-       <div class="form-group" >	
-  	       <div class="field">
-    		   <%= f.label :name, "School Name" %><br>
-    		   <%= f.text_field :name, :autofocus => true, :required=>true %>
-  		   </div>
-  		</div>
-  </div>
-</div>
-<div class="row">
-    <div class="col-lg-3">
-        <div class="form-group" >
-			<div class="field">
-	    		<%= f.label :district, "School District" %><br>
-	    		<%= f.text_field :district %>
-	  	  	</div>
-  	  	</div>
-    </div>
-    <div class="col-lg-3">
-        <div class="form-group" >
- 	   	    <div class="field">
-			    <%= f.label :phone %><br>
-			    <%= f.text_field :phone %>
- 	  	  	</div>
-   	  	</div>
-    </div>    	   
-</div>
-<div class="row">
-    <div class="col-lg-8">
-        <div class="form-group" >
-  		    <div class="field">
-    		    <%= f.label :address %><br>
-    			<%= f.text_field :address %>
-  			</div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-3">
-        <div class="form-group" >
-  		    <div class="field">
-    			<%= f.label :city %><br>
-    			<%= f.text_field :city %>
-  		  	</div>
-	    </div>
-	</div>
-    <div class="col-lg-3">
-        <div class="form-group" >
-		    <div class="field">
-		      <%= f.label :state %><br>
-		      <%= f.text_field :state %>
-		    </div>
-		</div>
-	</div>
-</div>
-<div class="row">
-    <div class="col-lg-3">
-        <div class="form-group" >  
-  		    <div class="field">
-    			<%= f.label :country %><br>
-    			<%= f.text_field :country %>
-  		    </div>
-		</div>
-	</div>
-</div>
-<div class="row">
-    <div class="col-lg-3">
-        <div class="form-group" >  
-  		    <div class="field">
+	<div class="col-md-12">
+	    <div class="panel panel-default">
+	        <div class="panel-heading">
+	            <h4 class="panel-title">School Form</h4>
+	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	        </div>
+	        <div class="panel-body">
+				<%= form_for(@school, :html=>{:class=>"form_validation"} ) do |f| %>
+				    <% if @school.errors.any? %>
+				    <div id="error_explanation">
+				        <h2><%= pluralize(@school.errors.count, "error") %> prohibited this school from being saved:</h2>
+				        <ul>
+				            <% @school.errors.full_messages.each do |msg| %>
+				                <li><%= msg %></li>
+				            <% end %>
+				        </ul>
+				    </div>
+				  	<% end %>
+	            <div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+	                    	<%= f.label :code, "School Code", :class=>"control-label" %><span class="asterisk">*</span>
+		    			    <%= f.number_field :code, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-9">
+	                    <div class="form-group">
+			     		   <%= f.label :name, "School Name", :class=>"control-label" %><span class="asterisk">*</span>
+			     		   <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+				    		<%= f.label :district, "School District", :class=>"control-label"%>
+				    		<%= f.text_field :district, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+		   			    	<%= f.label :phone, :class=>"control-label"%>
+		   			    	<%= f.text_field :phone, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-12">
+	                    <div class="form-group">
+			    		    <%= f.label :address, :class=>"control-label" %>
+			    			<%= f.text_field :address, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+			    			<%= f.label :city, :class=>"control-label" %>
+			    			<%= f.text_field :city, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+		   			    	<%= f.label :state, :class=>"control-label"%>
+		   			    	<%= f.text_field :state, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+			    			<%= f.label :country, :class=>"control-label" %>
+			    			<%= f.text_field :country, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
 				<%=f.fields_for :licenses,@licenses do |lic|%>
-			  		<%= lic.label :expiry_date %><br />
-					<%= lic.text_field :expiry_date %>
-					
-			  		<%= lic.label :no_of_licenses %><br />
-					<%= lic.text_field :no_of_licenses %>
-    			<%end%>
-	  	    </div>
-		</div>
-	</div>
-</div>	
-  	<div class="actions">
-    	<%= f.submit "Save", class: "btn btn-primary width_100px", data: { disable_with: 'Saving...' } %>
-		<%= link_to 'Cancel', schools_path, class: "btn btn-primary width_100px"%>
-  	</div>
-<% end %>
+	            <div class="row">
+					<div class="col-sm-6">
+	                    <div class="form-group">
+							<div class="input-group">
+								<%= lic.label :expiry_date, :class=>"control-label"  %>
+								<%= lic.text_field :expiry_date, :class=>"form-control", :placeholder=>"mm/dd/yyyy", :id=>"datepicker" %>
+			                  <!-- <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="datepicker"> -->
+			                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+			                </div>
+						</div>
+	                </div>
+				</div>
+	            <div class="row">
+					<div class="col-sm-6">
+	                    <div class="form-group">
+						  	<%= lic.label :no_of_licenses, :class=>"control-label"  %>
+							<%= lic.text_field :no_of_licenses, :class=>"form-control" %>
+			    	    </div>
+	                </div>
+				</div>
+				<%end%>	
+	        </div><!-- panel-body -->
+	        <div class="panel-footer" data-no-turbolink>
+	            <%= f.submit "Save", class: "btn btn-primary", data: { disable_with: 'Saving...' } %>
+				<%= link_to 'Cancel', schools_path, class: "btn btn-white"%>
+	        </div>
+			<% end %>
+	    </div>
+    </div>       
+</div>
+
+<script>
+jQuery(document).ready(function(){
+    
+   // Date Picker
+  jQuery('#datepicker').datepicker();
+  
+  jQuery('#datepicker-inline').datepicker();
+  
+  jQuery('#datepicker-multiple').datepicker({
+    numberOfMonths: 3,
+    showButtonPanel: true
+  });
+  
+
+});
+</script>
