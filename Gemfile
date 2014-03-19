@@ -50,6 +50,9 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+group :development do
+ gem 'letter_opener'
+end
 
 group :development, :test do
   gem 'rspec-rails'  
