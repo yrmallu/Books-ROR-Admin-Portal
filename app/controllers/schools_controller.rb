@@ -1,10 +1,10 @@
 class SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy]
-
+  before_action :get_schools, only: [:index]
+  
   # GET /schools
   # GET /schools.json
   def index
-    @schools = School.all
   end
 
   # GET /schools/1
@@ -61,11 +61,12 @@ class SchoolsController < ApplicationController
   # DELETE /schools/1
   # DELETE /schools/1.json
   def destroy
-    @school.destroy
+    #@school.destroy
     respond_to do |format|
       format.html { 
-	  			       flash[:success] = "School deleted." 
-	  				   redirect_to schools_url 
+	  			      @school.update_attributes(:delete_flag=>true)
+				      flash[:success] = "School deleted." 
+  				      redirect_to schools_url	
 				  }
       format.json { head :no_content }
     end
