@@ -1,43 +1,59 @@
-<h3>Listing schools</h3>
-<%#= link_to 'New School', new_school_path %>
+  <div class="pageheader">
+   <h2><i class="fa fa-table"></i> School List <!-- <span>Subtitle goes here...</span> --></h2>
+   <div class="breadcrumb-wrapper">
+     <span class="label">You are here:</span>
+     <ol class="breadcrumb">
+       <li><%= link_to 'Dashboard', root_path %></li>
+       <!-- <li><a href="buttons.html">UI Elements</a></li> -->
+       <li class="active">School List</li>
+     </ol>
+   </div>
+ </div>
+ <div class="row">
+          <div class="table-responsive">
+          <table class="table" id="table2">
+              <thead>
+                 <tr>
+                    <th>School Code</th>
+                    <th>School Name</th>
+                    <th>District</th>
+                    <th>City</th>
+					<th>State</th>
+                    <th>Country</th>
+					<th>Licenses In Use</th>
+					<th>Unused Licenses</th>
+					<th>Expiration Date</th>
+					<th>Actions</th>
+                 </tr>
+              </thead>
+              <tbody>
+				 <% @schools.each do |school| %>
+                 <tr class="odd gradeX">
+                      <td class=""><%= school.code %></td>
+                      <td class=""><%= school.name %></td>
+                      <td class=""><%= school.district %></td>
+                      <td class="center "><%= school.city %></td>
+                      <td class="center "><%= school.state %></td>
+					  <td class="center "><%= school.country %></td>
+					  <td class="center "></td>
+					  <td class="center "></td>
+					  <td class="center "></td>
+   				      <td data-no-turbolink>
+						  <%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %> 
+   				   	      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: 'Are you sure?' } %>
+					</td>
+                 </tr>
+				 <% end %>
+                 </tbody>
+           </table>
+          </div>
+		  
 
-<div class="container">
-	<div class="row row-offcanvas row-offcanvas-right">
-		<div class="col-xs-12 col-sm-9" id="id_content_div">
-		  <span id = "id_no_records" class = "no_records_found" style = "display:none;margin-left:350px;">No Schools's</span>
-		   <table class="table table-hover listingTable" id="id_main_content">
-			   <thead>	
-					<tr>
-      				  	<th>Code</th>
-      					<th>Name</th>
-      				  	<th>Address</th>
-      				  	<th>City</th>
-      				  	<th>District</th>
-      				  	<th>State</th>
-      				  	<th>Country</th>
-      				  	<th>Phone</th>
-					</tr>
-  			   </thead>
-  			   <tbody>
-    			   <% @schools.each do |school| %>
-      			       <tr>
-        				   <td><%= school.code %></td>
-        				   <td><%= school.name %></td>
-        				   <td><%= school.address %></td>
-        				   <td><%= school.city %></td>
-        				   <td><%= school.district %></td>
-        				   <td><%= school.state %></td>
-        				   <td><%= school.country %></td>
-        				   <td><%= school.phone %></td>
-        				   <td><%= link_to 'Show', school %> |
-        				   	   <%= link_to 'Edit', edit_school_path(school) %> |
-        				   	   <%= link_to 'Destroy', school, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      				 </tr>
-    			<% end %>
-  		  	</tbody>
-	  	</table>
-		</div>
-	</div>
-</div>
-
-
+<script>
+  jQuery(document).ready(function() {
+    
+   jQuery('#table2').dataTable({
+      "sPaginationType": "full_numbers"
+    });
+	});
+</script>
