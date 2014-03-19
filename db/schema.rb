@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140314102404) do
+ActiveRecord::Schema.define(version: 20140319091429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20140314102404) do
 
   create_table "licenses", force: true do |t|
     t.integer  "license_group_id"
-    t.datetime "expiry_date"
+    t.date     "expiry_date"
     t.integer  "no_of_licenses"
     t.integer  "used_liscenses"
     t.integer  "school_id"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20140314102404) do
     t.integer  "phone"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "delete_flag"
   end
 
   create_table "studentinfos", force: true do |t|
@@ -108,7 +109,7 @@ ActiveRecord::Schema.define(version: 20140314102404) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "username"
-    t.datetime "license_expiry_date"
+    t.date     "license_expiry_date"
     t.boolean  "delete_flag",            default: false
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false
