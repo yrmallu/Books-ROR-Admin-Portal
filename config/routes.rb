@@ -9,7 +9,9 @@ BooksThatShow::Application.routes.draw do
 
   resources :roles
 
-   #devise_for :users, :controllers => { :sessions => "sessions" }
+  devise_for :users
+
+  #devise_for :users, :controllers => { :sessions => "sessions" }
   
   resources :schools
   
