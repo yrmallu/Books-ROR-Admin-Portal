@@ -2,6 +2,8 @@ class SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy]
   before_action :get_schools, only: [:index]
   
+  load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
+  
   # GET /schools
   # GET /schools.json
   def index
