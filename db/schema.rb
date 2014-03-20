@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20140319091429) do
     t.string   "district"
     t.string   "state"
     t.string   "country"
-    t.integer  "phone"
+    t.string   "phone"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "delete_flag"
