@@ -1,24 +1,36 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>FirstName:</strong>
-  <%= @user.first_name %>
-</p>
-
-<p>
-  <strong>LastName:</strong>
-  <%= @user.last_name %>
-</p>
-
-<p>
-  <strong>UserName:</strong>
-  <%= @user.username %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<div class="row">
+	<div class="col-md-12">
+    	<div class="panel panel-default">
+        	<div class="panel-heading">
+            	<h4 class="panel-title">User Information</h4>
+        	</div>
+			<p id="notice"><%= notice %></p>
+        	<div class="panel-body">
+            	<address>
+                	<strong>First Name:</strong>
+                	<%= @user.first_name %>
+            	</address>
+            	<address>
+			    	<strong>Last Name:</strong>
+			    	<%= @user.last_name %>
+            	</address>
+            	<address>
+			    	<strong>Username:</strong>
+			    	<%= @user.username %>
+            	</address>
+            	<address>
+			    	<strong>Password:</strong>
+			    	<%= @user.password %>
+            	</address>
+            	<address>
+			    	<strong>Password Confirmation:</strong>
+			    	<%= @user.password_confirmation %>
+            	</address>
+			    <div data-no-turbolink>
+			        <%= link_to 'Edit', edit_user_path(@user), class: "btn btn-primary", data: { disable_with: 'Saving...' } %>
+			        <%= link_to 'Cancel', users_path, class: "btn btn-white"%>
+        	    </div>
+		    </div>
+        </div>
+    </div>
+</div>

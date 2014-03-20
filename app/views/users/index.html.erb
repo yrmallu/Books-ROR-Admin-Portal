@@ -1,45 +1,69 @@
+<div class="pageheader">
+   <h2><i class="fa fa-table"></i> Web Admin List <!-- <span>Subtitle goes here...</span> --></h2>
+   <div class="breadcrumb-wrapper">
+     <span class="label">You are here:</span>
+     <ol class="breadcrumb">
+         <li><%= link_to 'Dashboard', root_path %></li>
+         <!-- <li><a href="buttons.html">UI Elements</a></li> -->
+         <li class="active">Web Admin List</li>
+     </ol>
+   </div>
+</div>
 
-<%= link_to 'Add new Admin', new_user_path %> | <%= link_to 'Delete', '', class:"delete-user-list" %> 
+<div class="panel panel-default">
+<div class="panel-body"> 
+	<div class="index_page_btns" data-no-turbolink>
+		<%=link_to 'Add User', new_user_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Delete', '', :class=>"btn btn-success btn-xs delete-user-list"%>
+	 </div>
+	 
+	 <div class="table-responsive">
+		<table class="table" id="table2">
+            <thead>
+                <tr>
+                	<th></th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+					<th>Password</th>
+                    <th>Password Confirmation</th>
+					<th>Actions</th>
+                 </tr>
+              </thead>
+              <tbody>
+				 <% @users.each do |user| %>
+                 <tr class="odd gradeX">
+                 	  <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :id => "user_ids_#{user.id}", :class => "delete-user" %></td>
+                      <td class=""><%= user.first_name %></td>
+                      <td class=""><%= user.last_name %></td>
+                      <td class=""><%= user.username %></td>
+                      <td class="center "><%= user.email %></td>
+                      <td class="center "><%= user.password %></td>
+					  <td class="center "><%= user.password_confirmation %></td>
+					 
+   				      <td data-no-turbolink>
+   				      	<% if user.email == current_user.email %>
+   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_registration_path(user) %> 
+   				      	<% else %>			
+						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user) %>
+						<% end %> 
+   				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %>
+					 </td>
+                 </tr>
+				 <% end %>
+        </tbody>
+    </table>
+</div>
+</div>		  
 
-<h1>Listing Web Admin </h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>FirstName</th>
-      <th>LastName</th>
-      <th>UserName</th>
-      <th>Password</th>
-      <th>Email</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-      	<td><%= check_box_tag 'user_ids[]', user.id, false, :id => "user_ids_#{user.id}", :class => "delete-user" %></td>
-        <td><%= user.first_name %></td>
-        <td><%= user.last_name %></td>
-        <td><%= user.username %></td>
-        <td><%= user.password %></td>
-        <td><%= user.email %></td>
-        <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
 <script type="text/javascript" charset="utf-8">
 	var checked_user = [] 
-	 $(document).on("click",".delete-user",function(){
+	$(document).on("click",".delete-user",function(){
 		var status = $(this).is(':checked');
 		var user_id = $(this).attr('id');
-	   	user_id = user_id.split("_")[2];
+	  	user_id = user_id.split("_")[2];
 		
 		if(status)
 			checked_user.push(user_id)
@@ -48,16 +72,16 @@
 			var index = checked_user.indexOf(user_id);
 			checked_user.splice(index,1);
 		}
-	});	 	
-	
-	 $(document).on("click",".delete-user-list",function(){
-	 	alert(checked_user);
-	 	$.ajax({
-	            url: "<%= delete_multiple_user_users_url %>",
-	            data: {
-	                    checked_user:checked_user,
-	                    checked:status
-	                  }
-	           });	
-	 });	
+	});	
+	 
+	$(document).on("click",".delete-user-list",function(){
+		$.ajax({
+	    	url: "<%= delete_multiple_user_users_url %>",
+	        	data: {
+	            	checked_user:checked_user,
+	                checked:status
+	                }
+	          });
+	});
+
 </script>

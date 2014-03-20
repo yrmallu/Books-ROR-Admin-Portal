@@ -17,7 +17,7 @@ class SchoolsController < ApplicationController
   # GET /schools/new
   def new
     @school = School.new
-	@licenses = @school.licenses.build()
+	  @licenses = @school.licenses.build()
   end
 
   # GET /schools/1/edit

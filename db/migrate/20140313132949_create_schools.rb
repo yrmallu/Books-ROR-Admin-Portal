@@ -8,7 +8,7 @@ class CreateSchools < ActiveRecord::Migration
       t.string :district
       t.string :state
       t.string :country
-      t.integer :phone
+      t.string :phone
 
       t.timestamps
     end

@@ -1,41 +1,72 @@
-<%#= form_for(@user) do |f| %>
-  <%#= form_for(@user, :url => { :action =>  'user_create' }) do |f| %>
- <%= form_for(@user, :url => { :action => @user.new_record? ? 'user_create' : 'update' }) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-      <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :first_name %><br>
-    <%= f.text_field :first_name %>
-  </div>
-  <div class="field">
-    <%= f.label :last_name %><br>
-    <%= f.text_area :last_name %>
-  </div>
-  <div class="field">
-    <%= f.label :username %><br>
-    <%= f.text_field :username %>
-  </div>
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
-  </div>
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
-
-  <div><%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation %></div>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<div class="row">
+	<div class="col-md-12">
+	    <div class="panel panel-default">
+	        <div class="panel-heading">
+	            <h4 class="panel-title">User Form</h4>
+	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	        </div>
+	        <div class="panel-body">
+	        	<%= form_for(@user, :html=>{:class=>"form_validation"}, :url => { :action => @user.new_record? ? 'user_create' : 'update' }) do |f| %>
+				    <% if @user.errors.any? %>
+				    <div id="error_explanation">
+				        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+				        <ul>
+				            <% @user.errors.full_messages.each do |msg| %>
+				                <li><%= msg %></li>
+				            <% end %>
+				        </ul>
+				    </div>
+				  	<% end %>
+	            <div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+	                    	<%= f.label :first_name, "First Name", :class=>"control-label" %><span class="asterisk">*</span>
+		    			    <%= f.text_field :first_name, :required=>true,  :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+			     		   <%= f.label :last_name, "Last Name", :class=>"control-label" %><span class="asterisk">*</span>
+			     		   <%= f.text_field :last_name, :required=>true, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+				    		<%= f.label :username, "Username", :class=>"control-label"%><span class="asterisk">*</span>
+				    		<%= f.text_field :username, :required=>true, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+		   			    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
+		   			    	<%= f.text_field :email, :required=>true, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+			    		    <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
+			    			<%= f.password_field :password, :required=>true, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+			    			<%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
+			    			<%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                
+	            </div>
+	           
+	        </div><!-- panel-body -->
+	        <div class="panel-footer" data-no-turbolink>
+	            <%= f.submit "Save", class: "btn btn-primary", data: { disable_with: 'Saving...' } %>
+				<%= link_to 'Cancel', users_path, class: "btn btn-white"%>
+	        </div>
+			<% end %>
+	    </div>
+    </div>       
+</div>

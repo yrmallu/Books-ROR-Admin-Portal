@@ -49,8 +49,9 @@
 		<% if can? :create, User %>
 		<li class="nav-parent"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
           <ul class="children">
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", root_path %></li>
-          </ul>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path %></li>
+          </ul
         </li>
 		<%end%>
       </ul>
