@@ -72,6 +72,13 @@ class SchoolsController < ApplicationController
     end
   end
 
+  # def checked_schools
+  # end
+#   
+  # def delete_school
+#     
+  # end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_school

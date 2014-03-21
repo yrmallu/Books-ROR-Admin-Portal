@@ -22,6 +22,7 @@ BooksThatShow::Application.routes.draw do
   resources :schools do 
     collection do
       get :delete_school
+      get :checked_schools
      end
   end
   # The priority is based upon order of creation: first created -> highest priority.
