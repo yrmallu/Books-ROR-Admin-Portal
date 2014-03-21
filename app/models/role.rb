@@ -1,5 +1,5 @@
 class Role < ActiveRecord::Base
-  has_many :role_accessrights
-  has_many :accessrights, :through => :role_accessrights
   has_many :users
+  has_many :user_accessrights
+  has_and_belongs_to_many :accessrights
 end

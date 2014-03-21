@@ -11,16 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140319091429) do
+ActiveRecord::Schema.define(version: 20140320093029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "accessrights", force: true do |t|
     t.string   "name"
-    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "accessrights_roles", id: false, force: true do |t|
+    t.integer "accessright_id"
+    t.integer "role_id"
   end
 
   create_table "books", force: true do |t|
@@ -53,16 +57,8 @@ ActiveRecord::Schema.define(version: 20140319091429) do
     t.datetime "updated_at"
   end
 
-  create_table "role_accessrights", force: true do |t|
-    t.integer  "role_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "roles", force: true do |t|
     t.string   "name"
-    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -90,6 +86,15 @@ ActiveRecord::Schema.define(version: 20140319091429) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_accessrights", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "accessright_id"
+    t.boolean  "access_flag"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "role_id"
   end
 
   create_table "user_classrooms", force: true do |t|

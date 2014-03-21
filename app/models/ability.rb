@@ -2,6 +2,21 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+      if user.role_id.eql?(1)
+          can :manage, :all
+      elsif user.role_id.eql?(2) 
+         # user_rights = user.user_permission_names.collect{|i| i.name}
+          # cannot :create, User ("Create Web Admin")
+# 		  cannot :read, User ("View Web Admin")
+# 		  cannot :update, User ("Update Web Admin")
+# 		  cannot :destroy, User ("Delete Web Admin")
+		  
+		  can :manage, School
+		  can :manage, Classroom
+	  elsif user.role_id.eql?(3)
+	 
+	  end
+  
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)

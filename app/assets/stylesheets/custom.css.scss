@@ -6,10 +6,19 @@
   }
 }
 
-.error_message{ color:red;}
+.error_message{ color: #B94A48;margin-top: 2px;}
 
-.form_validation label.error, .form_validation input.submit { margin-left: 0px; color:red;font-weight: 400;}
+.form_validation label.error, .form_validation input.submit { margin-left: 0px; color: #B94A48; margin-top: 2px; font-weight: 400;}
 
 form .form-group {margin-bottom: 15px !important;}
 
 .index_page_btns{ margin-bottom: 20px !important; float:right;}
+
+.alert { padding: 10px !important;}
+
+.alert-notice {background-color: #dff0d8; border-color: #d6e9c6; color: #3c763d;}
+
+.forgot_password_link{ font-size: 11px; color: #666; cursor: pointer;}
+
+.alert-alert{background-color: #f2dede; border-color: #ebccd1; color: #a94442;}
+small br {display:none;}

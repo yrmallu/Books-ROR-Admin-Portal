@@ -3,6 +3,7 @@ class RolesController < ApplicationController
 
   # GET /roles
   # GET /roles.json
+#sagar
   def index
     @roles = Role.all
   end

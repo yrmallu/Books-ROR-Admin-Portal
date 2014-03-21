@@ -8,4 +8,18 @@ class ApplicationController < ActionController::Base
     @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
+  layout :layout_by_page_type
+  private
+  def layout_by_page_type
+      if devise_controller?
+          "login"
+      else
+          "application"
+      end
+  end
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, :alert => exception.message
+  end	
+  
 end
