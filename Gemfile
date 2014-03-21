@@ -61,7 +61,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'cucumber-rails', '1.4.0', :require => false
+  #gem 'cucumber-rails', '1.4.0', :require => false
   gem 'capybara', '2.2.1'
   gem 'database_cleaner', '1.2.0'
   gem 'email_spec', '1.5.0'
