@@ -13,19 +13,16 @@ BooksThatShow::Application.routes.draw do
 
   #devise_for :users, :controllers => { :sessions => "sessions" }
   
-  resources :schools
-  
   resources :users do 
     collection do
       post :user_create
-      get :delete_multiple_user
-      get :checked_user
+      post :delete_user
      end
   end
 
   resources :schools do 
     collection do
-      get :delete_school
+      post :delete_school
      end
   end
   # The priority is based upon order of creation: first created -> highest priority.

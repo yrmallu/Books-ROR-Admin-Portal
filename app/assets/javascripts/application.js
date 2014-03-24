@@ -17,8 +17,13 @@
 jQuery(document).ready(function() {
     
     jQuery('#table2').dataTable({
-      "sPaginationType": "full_numbers"
-    });
+	"bRetrieve": true,
+	 "bDestroy": true,
+    "bPaginate": false,
+     "bAutoWidth": false,
+    "bLengthChange": false,
+    "bInfo": false,
+    "bAutoWidth": false });
     
     // Chosen Select
     jQuery("select").chosen({
@@ -47,3 +52,4 @@ jQuery(document).ready(function() {
   
   
   });
+

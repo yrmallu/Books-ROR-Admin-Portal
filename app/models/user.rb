@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
          
+  paginates_per 2
+  max_paginates_per 10
+         
   has_many :user_classrooms    
   has_many :classrooms, :through => :user_classrooms  
   has_one :studentinfo 

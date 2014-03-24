@@ -11,3 +11,18 @@ FactoryGirl.define do
     book_unique_id "MyString"
   end
 end
+
+# == Schema Information
+#
+# Table name: books
+#
+#  id             :integer          not null, primary key
+#  title          :string(255)
+#  description    :text
+#  author         :string(255)
+#  book_file_name :string(255)
+#  chapters       :integer
+#  book_unique_id :string(255)
+#  created_at     :datetime
+#  updated_at     :datetime
+#

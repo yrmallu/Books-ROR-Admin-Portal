@@ -4,8 +4,7 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy]
   
   def index
-    #@users = User.all
-    @users = User.where("delete_flag is not true")
+    @users = User.where("delete_flag is not true").order(:first_name).page params[:page]
   end
   
   def show
@@ -53,26 +52,13 @@ class UsersController < ApplicationController
     end
   end
   
-  def delete_multiple_user
-    if params[:checked_user] != nil
-      params[:checked_user].each do|i|
-        @user = User.find(i.to_i)
-        @user.update_attributes(:delete_flag=>true)
-        #@user.destroy
-      end  
+  def delete_user
+    User.where(id: params[:user_ids]).each do |user|
+      user.update_attributes(delete_flag: true)
     end
     respond_to do |format|
-      format.html { redirect_to users_url }
-      format.json { head :no_content }
-    end
-  end
-  
-  def checked_user
-    @checked_user = []
-    @checked_user << params[:user_id].to_i
-    respond_to do |format|
-      format.html {render text: "OK"}
-    end      
+      format.js
+    end  
   end
   
   private

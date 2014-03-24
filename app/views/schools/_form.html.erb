@@ -19,12 +19,14 @@
 				    </div>
 				  	<% end %>
 	            <div class="row">
+	            	<% if params["action"] == "edit"%>
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 	                    	<%= f.label :code, "School Code", :class=>"control-label" %><span class="asterisk">*</span>
 		    			    <%= f.number_field :code, :class=>"form-control" %>
 	                    </div>
 	                </div>
+	               <% end %> 
 	                <div class="col-sm-9">
 	                    <div class="form-group">
 			     		   <%= f.label :name, "School Name", :class=>"control-label" %><span class="asterisk">*</span>

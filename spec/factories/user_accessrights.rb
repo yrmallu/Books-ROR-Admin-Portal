@@ -7,3 +7,16 @@ FactoryGirl.define do
     access_flag false
   end
 end
+
+# == Schema Information
+#
+# Table name: user_accessrights
+#
+#  id             :integer          not null, primary key
+#  user_id        :integer
+#  accessright_id :integer
+#  access_flag    :boolean
+#  created_at     :datetime
+#  updated_at     :datetime
+#  role_id        :integer
+#
