@@ -6,7 +6,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: BookThatShow_development
+  database: BookThatGrow_development
   pool: 5
   host: localhost
   username: postgres
@@ -18,7 +18,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: BookThatShow_test
+  database: BookThatGrow_test
   pool: 5
   host: localhost
   username: postgres
@@ -27,7 +27,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: BookThatShow_production
+  database: BookThatGrow_production
   pool: 5
   host: localhost
   username: postgres

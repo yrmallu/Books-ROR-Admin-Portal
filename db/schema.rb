@@ -57,6 +57,13 @@ ActiveRecord::Schema.define(version: 20140320093029) do
     t.datetime "updated_at"
   end
 
+  create_table "role_accessrights", force: true do |t|
+    t.integer  "role_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "roles", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
