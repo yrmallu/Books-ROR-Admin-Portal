@@ -73,13 +73,15 @@ class SchoolsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-  # def checked_schools
-  # end
-#   
-  # def delete_school
-#     
-  # end
+  
+  def delete_school
+    School.where(id: params[:school_ids]).each do |school|
+      school.update_attributes(delete_flag: true)
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
   
   private
     # Use callbacks to share common setup or constraints between actions.

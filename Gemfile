@@ -24,6 +24,8 @@ gem 'coffee-rails', '4.0.1'
 
 gem 'kaminari', '0.15.1'
 
+gem 'annotate', '2.6.2'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -67,5 +69,5 @@ group :test do
   gem 'capybara', '2.2.1'
   gem 'database_cleaner', '1.2.0'
   gem 'email_spec', '1.5.0'
-  #gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '2.5.0'
 end

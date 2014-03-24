@@ -10,3 +10,17 @@ FactoryGirl.define do
     school_id 1
   end
 end
+
+# == Schema Information
+#
+# Table name: licenses
+#
+#  id               :integer          not null, primary key
+#  license_group_id :integer
+#  expiry_date      :date
+#  no_of_licenses   :integer
+#  used_liscenses   :integer
+#  school_id        :integer
+#  created_at       :datetime
+#  updated_at       :datetime
+#
