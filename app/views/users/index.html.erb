@@ -15,7 +15,7 @@
 	<div class="panel-body"> 
 	  <div class="index_page_btns" data-no-turbolink>
 		<%=link_to 'Add Web Admin', new_user_path, :class=>"btn btn-success btn-xs"%>
-		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure?' }%>
+		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	  </div>
 	 
 	 <div class="table-responsive">

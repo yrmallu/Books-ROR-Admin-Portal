@@ -10,11 +10,11 @@ class School < ActiveRecord::Base
 	
 	before_create :generate_random_code
 	
-	paginates_per 2
+	paginates_per 10
 	max_paginates_per 10
 	
 	def generate_random_code
-      self.code = School.count == 0 ? 10001:School.maximum("code") + 1
-    end
+    self.code = School.count == 0 ? 10001:School.maximum("code") + 1
+  end
 	
 end

@@ -18,14 +18,6 @@
 			    	<strong>Username:</strong>
 			    	<%= @user.username %>
             	</address>
-            	<address>
-			    	<strong>Password:</strong>
-			    	<%= @user.password %>
-            	</address>
-            	<address>
-			    	<strong>Password Confirmation:</strong>
-			    	<%= @user.password_confirmation %>
-            	</address>
 			    <div data-no-turbolink>
 			        <%= link_to 'Edit', edit_user_path(@user), class: "btn btn-primary", data: { disable_with: 'Saving...' } %>
 			        <%= link_to 'Cancel', users_path, class: "btn btn-white"%>
