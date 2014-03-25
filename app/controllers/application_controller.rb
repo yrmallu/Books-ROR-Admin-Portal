@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
     @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
+  def get_accessright
+    if current_user.role_id.eql?(1)
+      @accessrights = Accessright.where("id > 4")	
+	end
+  end
+  
   layout :layout_by_page_type
   private
   def layout_by_page_type

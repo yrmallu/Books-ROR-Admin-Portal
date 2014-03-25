@@ -1,0 +1,78 @@
+<table id="tab1">
+	<label><h5>
+		<input type="checkbox" class="check-all" name="checkAll" id="checkAll", false>
+		<span>Select All</span>
+	</h5></label><br/>
+	<div class="row-fluid">
+		<div class="multi-rightselect">
+		<%@accessrights.each do |right|%>
+ 			<label class="label-rights"><%=right.name%> 
+			<%=check_box_tag('accessright[]',right.id,["check_role_accessright", "edit", "get_user_accessright"].include?(action_name) ? check_checked(right.id.to_s ,@access_rights) : false, :multiple=>true, :class=>"case checkbox check-success")%></label>
+			
+		<%end%>
+	</div>
+    </div>
+</table>
+
+<script type="text/javascript">
+checked_list = [];
+unchecked_list = [];
+
+$('.case').click(function() {
+	
+    if ($(this).is(':checked')) {
+		checked_list.push($(this).val())
+		unchecked_list = jQuery.removeFromArray($(this).val(), unchecked_list);
+    } else {
+		 unchecked_list.push($(this).val())
+		 checked_list = jQuery.removeFromArray($(this).val(), checked_list);
+    }
+	$("#checked_list_").val(checked_list);
+	$("#unchecked_list_").val(unchecked_list);
+});
+jQuery.removeFromArray = function(value, arr) {
+    return jQuery.grep(arr, function(elem, index) {
+        return elem !== value;
+    });
+};
+$(".access_right #checkAll").click(function () {
+	if ($(this).is(':checked')) {
+		$(".case").prop('checked', true);
+        $(".case").each(function () {
+			checked_list.push($(this).val())
+			unchecked_list = jQuery.removeFromArray($(this).val(), unchecked_list);
+        });
+		
+	} else {
+		$(".case").prop('checked', false);
+        $(".case").each(function () {
+   		 unchecked_list.push($(this).val())
+   		 checked_list = jQuery.removeFromArray($(this).val(), checked_list);
+        });		
+	}
+	$("#checked_list_").val(checked_list);
+	$("#unchecked_list_").val(unchecked_list);
+});
+
+$('.multi-rightselect').change(function () {
+    var check = ($('.multi-rightselect').filter(":checked").length == $('.multi-rightselect').length);
+    $('.check-all').prop("checked", check);
+});
+
+$('select').on('change', function() {
+	if(this.value.length <=0){
+		jQuery("#access_right").hide();
+		jQuery("#access_right_load").show();
+	}else{
+          jQuery.get("<%= url_for :controller=> 'accessrights', :action => 'check_role_accessright'%>",{ id : this.value },
+function(data) {
+	jQuery("#access_right").show();
+	jQuery("#access_right_load").hide();	
+	jQuery("#access_right").html(data);
+ });
+	}
+  
+});
+</script>
+
+

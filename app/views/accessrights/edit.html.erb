@@ -1,6 +1,15 @@
-<h1>Editing accessright</h1>
+<div class="pageheader" data-no-turbolink>
+   <h2><i class="glyphicon glyphicon-ban-circle"></i> Edit Access Rights <!-- <span>Subtitle goes here...</span> --></h2>
+   <div class="breadcrumb-wrapper">
+     <span class="label">You are here:</span>
+     <ol class="breadcrumb">
+         <li><%= link_to 'Dashboard', root_path %></li>
+         <li><%= link_to 'Access Right Listing', accessrights_path %></li>
+         <li class="active">Access Right Listing </li>
+     </ol>
+   </div>
+</div>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @accessright %> |
-<%= link_to 'Back', accessrights_path %>
+<%=form_tag(accessright_path, :method=>"put", :class=>"form_validation") do%>
+	<%= render 'form' %>
+<%end%>	

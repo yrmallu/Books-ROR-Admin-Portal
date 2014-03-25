@@ -26,11 +26,11 @@ jQuery(document).ready(function() {
     "bAutoWidth": false });
     
     // Chosen Select
-    jQuery("select").chosen({
-      'min-width': '100px',
-      'white-space': 'nowrap',
-      disable_search_threshold: 10
-    });
+    // jQuery("select").chosen({
+//       'min-width': '100px',
+//       'white-space': 'nowrap',
+//       disable_search_threshold: 10
+//     });
     
     // Delete row in a table
     jQuery('.delete-row').click(function(){

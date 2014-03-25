@@ -5,7 +5,11 @@ BooksThatShow::Application.routes.draw do
 
   resources :licenses
 
-  resources :accessrights
+  resources :accessrights do
+    collection do
+      get 'check_role_accessright'
+    end  
+  end
 
   resources :roles
 
