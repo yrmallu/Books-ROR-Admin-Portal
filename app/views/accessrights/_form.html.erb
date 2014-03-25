@@ -14,7 +14,7 @@
 								<%=select_tag :id, options_from_collection_for_select(@roles, 'id', 'name'), {:prompt=>"Select User Type", :class=>"form-control", :required=>true}%>
 							<%else%>
 								<%=hidden_field_tag :id, @role.id%>
-								<%=text_field_tag :role, @role.name, :readonly=>true%>
+								<%=text_field_tag :role, @role.name, :readonly=>true, :class=>"form-control" %>
 							<%end%>
 						</div>
                     </div>

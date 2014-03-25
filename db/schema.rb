@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325054739) do
+ActiveRecord::Schema.define(version: 20140325061523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,17 @@ ActiveRecord::Schema.define(version: 20140325054739) do
     t.integer "role_id"
   end
 
+  create_table "books", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "author"
+    t.string   "book_file_name"
+    t.integer  "chapters"
+    t.string   "book_unique_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "classrooms", force: true do |t|
     t.integer  "code"
     t.string   "name"
@@ -35,6 +46,7 @@ ActiveRecord::Schema.define(version: 20140325054739) do
     t.string   "secret_key"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.hstore   "classroom_count"
   end
 
   create_table "licenses", force: true do |t|
@@ -45,6 +57,7 @@ ActiveRecord::Schema.define(version: 20140325054739) do
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.hstore   "allocated_to"
   end
 
   create_table "roles", force: true do |t|
@@ -67,8 +80,18 @@ ActiveRecord::Schema.define(version: 20140325054739) do
     t.boolean  "delete_flag"
   end
 
-  create_table "user_accessrights", id: false, force: true do |t|
-    t.integer  "id",             limit: 8, null: false
+  create_table "studentinfos", force: true do |t|
+    t.string   "user_level"
+    t.string   "grade"
+    t.string   "reading_ability"
+    t.string   "profile_pic"
+    t.integer  "license_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_accessrights", force: true do |t|
     t.integer  "user_id"
     t.integer  "accessright_id"
     t.boolean  "access_flag"
@@ -81,6 +104,13 @@ ActiveRecord::Schema.define(version: 20140325054739) do
     t.integer "user_id"
     t.integer "classroom_id"
     t.integer "user_type"
+  end
+
+  create_table "userinfos", force: true do |t|
+    t.integer  "license_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

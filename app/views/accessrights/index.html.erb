@@ -1,10 +1,10 @@
 <div class="pageheader" data-no-turbolink>
-   <h2><i class="glyphicon glyphicon-book"></i> Acsess Rights Listing <!-- <span>Subtitle goes here...</span> --></h2>
+   <h2><i class="glyphicon glyphicon-book"></i> Access Rights Listing <!-- <span>Subtitle goes here...</span> --></h2>
    <div class="breadcrumb-wrapper">
      <span class="label">You are here:</span>
      <ol class="breadcrumb">
          <li><%= link_to 'Dashboard', root_path %></li>
-         <li><%= link_to 'Access Right Listing', accessrights_path %></li>
+         <!-- <li><%#= link_to 'Access Right Listing', accessrights_path %></li> -->
          <li class="active">Acsess Rights Listing </li>
      </ol>
    </div>
@@ -16,7 +16,7 @@
 		    <%= link_to 'Add Access Rights', new_accessright_path, class: "btn btn-success btn-xs"%>
 	    </div>
    	 <div class="table-responsive">
-   		<table class="table" id="table2">
+   		<table class="table" id="accessright_table">
                <thead>
                    <tr>
 				       <%unless @roles.blank?%>
