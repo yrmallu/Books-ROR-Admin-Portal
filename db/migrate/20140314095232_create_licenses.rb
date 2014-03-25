@@ -10,5 +10,6 @@ class CreateLicenses < ActiveRecord::Migration
 
       t.timestamps
     end
+    change_column :licenses, :id, :integer, :limit => 8
   end
 end

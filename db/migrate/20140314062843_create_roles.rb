@@ -6,5 +6,6 @@ class CreateRoles < ActiveRecord::Migration
 
       t.timestamps
     end
+    change_column :roles, :id, :integer, :limit => 8
   end
 end

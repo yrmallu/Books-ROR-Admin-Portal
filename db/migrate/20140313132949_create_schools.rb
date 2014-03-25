@@ -12,5 +12,6 @@ class CreateSchools < ActiveRecord::Migration
 
       t.timestamps
     end
+    change_column :schools, :id, :integer, :limit => 8
   end
 end
