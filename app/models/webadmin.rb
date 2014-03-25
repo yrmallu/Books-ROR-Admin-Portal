@@ -1,3 +1,0 @@
-class WebAdmin < User
-  
-end

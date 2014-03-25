@@ -4,17 +4,18 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
          
-  paginates_per 2
+  paginates_per 10
   max_paginates_per 10
          
   has_many :user_classrooms    
-  has_many :classrooms, :through => :user_classrooms  
-  has_one :studentinfo 
-  has_one :userinfo
+  has_many :classrooms, :through => :user_classrooms
+  has_many :accessrights, :through => :user_accessrights  
   belongs_to :school
   belongs_to :role
   has_many :user_accessrights
-  has_many :accessrights, :through => :user_accessrights
+  belongs_to :user
+  
+  store_accessor :user_info, :phone_number,:license_id,:user_level,:grade,:reading_ability,:reading_based_on,:profile_pic,:parent_name,:parent_email
   
   
   def access_to_remove_or_add(options={})

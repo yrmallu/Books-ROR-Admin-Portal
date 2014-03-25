@@ -10,16 +10,16 @@
    </div>
 </div>
 
-<%= form_tag 'users/delete_user', multipart: true, remote: true do %>
+<%= form_tag 'users/delete_user', remote: true do %>
   <div class="panel panel-default">
 	<div class="panel-body"> 
 	  <div class="index_page_btns" data-no-turbolink>
-		<%=link_to 'Add User', new_user_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Add Web Admin', new_user_path, :class=>"btn btn-success btn-xs"%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure?' }%>
 	  </div>
 	 
 	 <div class="table-responsive">
-		<table class="table" id="table2">
+		<table class="table" id="users_table">
             <thead>
                 <tr>
                 	<th></th>
@@ -27,8 +27,6 @@
                     <th>Last Name</th>
                     <th>Username</th>
                     <th>Email</th>
-					<th>Password</th>
-                    <th>Password Confirmation</th>
 					<th>Actions</th>
                  </tr>
               </thead>
@@ -40,8 +38,6 @@
                       <td class=""><%= user.last_name %></td>
                       <td class=""><%= user.username %></td>
                       <td class="center "><%= user.email %></td>
-                      <td class="center "><%= user.password %></td>
-					  <td class="center "><%= user.password_confirmation %></td>
 					 
    				      <td data-no-turbolink>
    				      	<% if user.email == current_user.email %>
@@ -62,3 +58,4 @@
 	</div>
  </div>		  
 <% end %>		
+
