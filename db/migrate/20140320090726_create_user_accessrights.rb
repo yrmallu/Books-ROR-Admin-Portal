@@ -7,5 +7,6 @@ class CreateUserAccessrights < ActiveRecord::Migration
 
       t.timestamps
     end
+    change_column :user_accessrights, :id, :integer, :limit => 8
   end
 end

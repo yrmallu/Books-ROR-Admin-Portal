@@ -1,29 +1,65 @@
-<h1>Listing accessrights</h1>
+<div class="pageheader" data-no-turbolink>
+   <h2><i class="glyphicon glyphicon-book"></i> Access Rights Listing <!-- <span>Subtitle goes here...</span> --></h2>
+   <div class="breadcrumb-wrapper">
+     <span class="label">You are here:</span>
+     <ol class="breadcrumb">
+         <li><%= link_to 'Dashboard', root_path %></li>
+         <!-- <li><%#= link_to 'Access Right Listing', accessrights_path %></li> -->
+         <li class="active">Acsess Rights Listing </li>
+     </ol>
+   </div>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+<div class="panel panel-default">
+    <div class="panel-body"> 
+	    <div class="index_page_btns" data-no-turbolink>
+		    <%= link_to 'Add Access Rights', new_accessright_path, class: "btn btn-success btn-xs"%>
+	    </div>
+   	 <div class="table-responsive">
+   		<table class="table" id="accessright_table">
+               <thead>
+                   <tr>
+				       <%unless @roles.blank?%>
+			       	   <th>Role</th>
+					   <th>Access Rights</th>
+					   <th>Action</th>	
+				   </tr>
+               </thead>
+               <tbody>
+			       <% @roles.each do |role| %>
+				       <tr class="gradeX odd">
+					       <td><%=role.name%></td>
+						   <td class="<%=role.id%>">
+						       <%unless role.accessrights.blank?%>
+							       <%role.accessrights.each do |x|%>
+								       <li class="<%=role.id%>"><%=x.name%></li>
+								   <%end%>
+							   <%end%>
+							</td>
+							<td data-no-turbolink>
+								   <%= link_to '<i title="Edit Accessright" class="fa fa-pencil"></i>'.html_safe, edit_accessright_path(role) %>
+							</td>
+				       </tr>
+	   	      	  	<% end %>
+					<% end %>
+			  		</tbody>
+		  		  </table>
+			 </div>
+    </div>
+</div> 
+ 
 
-  <tbody>
-    <% @accessrights.each do |accessright| %>
-      <tr>
-        <td><%= accessright.name %></td>
-        <td><%= accessright.description %></td>
-        <td><%= link_to 'Show', accessright %></td>
-        <td><%= link_to 'Edit', edit_accessright_path(accessright) %></td>
-        <td><%= link_to 'Destroy', accessright, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<br>
-
-<%= link_to 'New Accessright', new_accessright_path %>
+  
+<script type="text/javascript">
+<% @roles.each do |role| %>
+$('.<%=role.id%>:gt(4)').hide().last().after(
+    $('<a />').attr('href','#').text('Show more').click(function(){
+        var a = this;
+        $('.<%=role.id%>:not(:visible):lt(5)').fadeIn(function(){
+         if ($('.<%=role.id%>:not(:visible)').length == 0) $(a).remove();   
+        }); return false;
+    })
+);
+<%end%>
+</script>

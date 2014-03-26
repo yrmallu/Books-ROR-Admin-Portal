@@ -1,3 +1,0 @@
-class Teacher < User
-  
-end

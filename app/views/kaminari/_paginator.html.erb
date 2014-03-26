@@ -8,7 +8,6 @@
 -%>
 <%= paginator.render do -%>
   <nav class="dataTables_paginate paging_bootstrap pagination">
-  	<div class="dataTables_info" id="example_info">Showing <b><%= current_page%> to <%= per_page%></b> of <%= total_pages * per_page %> entries</div>
     <%= first_page_tag %>
     <%= prev_page_tag %>
     <% each_page do |page| -%>

@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
-  load_and_authorize_resource :only=>[:show, :new, :edit, :destroy]
+  load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
     @users = User.where("delete_flag is not true").order(:first_name).page params[:page]

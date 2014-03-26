@@ -3,18 +3,35 @@ class Ability
 
   def initialize(user)
       if user.role_id.eql?(1)
-          can :manage, :all
-      elsif user.role_id.eql?(2) 
-         # user_rights = user.user_permission_names.collect{|i| i.name}
-          # cannot :create, User ("Create Web Admin")
-# 		  cannot :read, User ("View Web Admin")
-# 		  cannot :update, User ("Update Web Admin")
-# 		  cannot :destroy, User ("Delete Web Admin")
-		  
-		  can :manage, School
-		  can :manage, Classroom
-	  elsif user.role_id.eql?(3)
-	 
+        can :manage, :all
+      else 
+        user_rights = user.user_permission_names.collect{|i| i.name}
+		
+        can :create, School if user_rights.include?("Create School")
+        can :read, School if user_rights.include?("View School")
+        can [:destroy, :read], School if user_rights.include?("Delete School")
+        can [:update, :read], School if user_rights.include?("Update School")
+		 
+        can :create, School if user_rights.include?("Create School Admin")
+        can :read, School if user_rights.include?("View School Admin")
+        can [:destroy, :read], School if user_rights.include?("Delete School Admin")
+        can [:update, :read], School if user_rights.include?("Update School Admin")
+		
+        can :create, School if user_rights.include?("Create Teacher")
+        can :read, School if user_rights.include?("View Teacher")
+        can [:destroy, :read], School if user_rights.include?("Delete Teacher")
+        can [:update, :read], School if user_rights.include?("Update Teacher")
+		
+        can :create, School if user_rights.include?("Create Teacher")
+        can :read, School if user_rights.include?("View Teacher")
+        can [:destroy, :read], School if user_rights.include?("Delete Teacher")
+        can [:update, :read], School if user_rights.include?("Update Teacher")
+		
+        can :create, School if user_rights.include?("Create Student")
+        can :read, School if user_rights.include?("View Student")
+        can [:destroy, :read], School if user_rights.include?("Delete Student")
+        can [:update, :read], School if user_rights.include?("Update Student")
+		
 	  end
   
     # Define abilities for the passed in user here. For example:

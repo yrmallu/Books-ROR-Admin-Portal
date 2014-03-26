@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140320093029) do
+ActiveRecord::Schema.define(version: 20140325061523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "accessrights", force: true do |t|
     t.string   "name"
@@ -45,6 +46,7 @@ ActiveRecord::Schema.define(version: 20140320093029) do
     t.string   "secret_key"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.hstore   "classroom_count"
   end
 
   create_table "licenses", force: true do |t|
@@ -55,6 +57,7 @@ ActiveRecord::Schema.define(version: 20140320093029) do
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.hstore   "allocated_to"
   end
 
   create_table "roles", force: true do |t|
@@ -131,6 +134,7 @@ ActiveRecord::Schema.define(version: 20140320093029) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.hstore   "userinfo"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

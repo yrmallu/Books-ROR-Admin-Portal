@@ -1,74 +1,47 @@
 class AccessrightsController < ApplicationController
-  before_action :set_accessright, only: [:show, :edit, :update, :destroy]
-
-  # GET /accessrights
-  # GET /accessrights.json
-  def index
-    @accessrights = Accessright.all
-  end
-
-  # GET /accessrights/1
-  # GET /accessrights/1.json
-  def show
-  end
-
-  # GET /accessrights/new
+  before_action :get_role_accessright, :only => [:new, :index]
+  before_action :get_accessright, :only=>[:new, :edit, :check_role_accessright]
+  before_action :set_role, :only => [:edit, :create, :update, :check_role_accessright]
+  before_action :role_accessright, :only=>[:edit, :check_role_accessright]
+  
   def new
-    @accessright = Accessright.new
   end
-
-  # GET /accessrights/1/edit
+    
+  def index
+  end
+    
   def edit
   end
-
-  # POST /accessrights
-  # POST /accessrights.json
+    
   def create
-    @accessright = Accessright.new(accessright_params)
-
-    respond_to do |format|
-      if @accessright.save
-        format.html { redirect_to @accessright, notice: 'Accessright was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @accessright }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @accessright.errors, status: :unprocessable_entity }
-      end
-    end
+    update
   end
-
-  # PATCH/PUT /accessrights/1
-  # PATCH/PUT /accessrights/1.json
+    
   def update
-    respond_to do |format|
-      if @accessright.update(accessright_params)
-        format.html { redirect_to @accessright, notice: 'Accessright was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @accessright.errors, status: :unprocessable_entity }
-      end
+    existing_rights = @role.accessrights.collect!{|i| i.id.to_s}
+    added_rights = params[:checked_list].reject {|x| x.empty?}.join(",").split(",") - existing_rights
+    removed_rights = params[:unchecked_list].reject {|x| x.empty?}.join(",").split(",") & existing_rights
+    @role.add_accessrights(added_rights)
+    @role.remove_accessright(removed_rights)
+    redirect_to accessrights_path
+  end
+    
+  def check_role_accessright
+    if request.xhr?
+      render :partial=>"accessright"
     end
   end
-
-  # DELETE /accessrights/1
-  # DELETE /accessrights/1.json
-  def destroy
-    @accessright.destroy
-    respond_to do |format|
-      format.html { redirect_to accessrights_url }
-      format.json { head :no_content }
-    end
+    
+  def role_accessright
+    @access_rights = @role.accessrights.collect!{|i| i.id.to_s}
+  end
+    
+  def set_role
+    @role = Role.includes([:accessrights]).where("id = #{params[:id]}").first
+  end
+	
+  def get_role_accessright
+    @roles = Role.includes(:accessrights).where("id >= #{current_user.id} + 1")
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_accessright
-      @accessright = Accessright.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def accessright_params
-      params.require(:accessright).permit(:name, :description)
-    end
 end

@@ -27,3 +27,7 @@ span.page{padding: 10px !important;}
 #example_info{padding-right: 10px !important;}
 .delete-school-list{height:27px !important;}
 .delete-user-list{height:27px !important;}
+
+label.label-rights { display: inline-block; overflow: hidden; width: 190px;margin-bottom: 10px; }
+label.label-rights input[type=checkbox] {display:inline-block; float:left; margin:4px 5px 0 0;}
+label.error {display:block;}

@@ -1,25 +1,43 @@
-<%= form_for(@accessright) do |f| %>
-  <% if @accessright.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@accessright.errors.count, "error") %> prohibited this accessright from being saved:</h2>
-
-      <ul>
-      <% @accessright.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<div class="row">
+	<div class="col-md-12">
+	    <div class="panel panel-default">
+	        <div class="panel-heading">
+	            <h4 class="panel-title">Access Right Form</h4>
+	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	        </div>
+	        <div class="panel-body">
+				<div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+							<%= label_tag "role_id", "User Type", :class=>"control-label" %><span class="asterisk">*</span>
+	    					<%unless action_name.eql?("edit")%>
+								<%=select_tag :id, options_from_collection_for_select(@roles, 'id', 'name'), {:prompt=>"Select User Type", :class=>"form-control", :required=>true}%>
+							<%else%>
+								<%=hidden_field_tag :id, @role.id%>
+								<%=text_field_tag :role, @role.name, :readonly=>true, :class=>"form-control" %>
+							<%end%>
+						</div>
+                    </div>
+                </div>
+				<h4 class="semi-bold">Access Rights</h4>
+				<div class="row">
+			    	<div class="col-md-12">
+						<div class="form-group">
+				    		<div id="access_right_load" class="access_right" style="display:block">
+								<%=render 'accessright'%>
+							</div>
+				  			<div id="access_right" class="access_right"  style="display:none"></div>
+				  		</div>
+					</div>
+				</div>
+	        </div><!-- panel-body -->
+			<%=hidden_field_tag('checked_list[]')%>
+			<%=hidden_field_tag('unchecked_list[]')%>
+	        <div class="panel-footer" data-no-turbolink>
+	            <%= submit_tag "Save", class: "btn btn-primary", data: { disable_with: 'Saving...' } %>
+				<%= link_to 'Cancel', accessrights_path, class: "btn btn-white"%>
+	        </div>
+			
+	    </div>
+    </div>       
+</div>
