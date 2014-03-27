@@ -53,10 +53,13 @@
 	  	            <%end%>
                 </address>
 			    <div data-no-turbolink>
-			        <%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary" %>
-			        <%= link_to 'Cancel', schools_path, class: "btn btn-white"%>
+			        <%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary btn-xs" %>
+			        <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
         	    </div>
 		    </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+	showHideMenu('li_school');
+</script>

@@ -52,6 +52,7 @@
 
   
 <script type="text/javascript">
+showHideMenu('li_accessright');
 <% @roles.each do |role| %>
 $('.<%=role.id%>:gt(4)').hide().last().after(
     $('<a />').attr('href','#').text('Show more').click(function(){

@@ -6,8 +6,8 @@ required_field = function(){
 			"school[name]": { required: true },
 			"school[phone]":{ number: true },
 			"user[email]":{ required: true, email:true },
-			"user[password]":{ required: true, minlength: 5 }
-			
+			"user[password]":{ required: true, minlength: 5 },
+			"user[password_confirmation]": {required: true,	minlength: 5, equalTo: "#password"},
 		},
 		messages: {
 			id:"Select User Type.",
@@ -17,7 +17,12 @@ required_field = function(){
 			"user[password]": {
 								required: "Please provide a password.",
 								minlength: "Your password must be at least 5 characters long."
-			                  }
+			                 },
+			"user[password_confirmation]":{
+											required: "Please provide a password",
+											minlength: "Your password must be at least 5 characters long.",
+											equalTo: "Password confirmation doesn't match Password"
+											}	                  
 			
 		}
 		});
