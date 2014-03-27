@@ -3,7 +3,7 @@
 	    <div class="panel panel-default">
 	        <div class="panel-heading">
 	            <h4 class="panel-title">User Form</h4>
-	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	            <p>Please enter all fields.</p>
 	        </div>
 	        <div class="panel-body">
 	        	<%= form_for(@user, :html=>{:class=>"form_validation"}, :url => { :action => @user.new_record? ? 'user_create' : 'update' }) do |f| %>
@@ -41,7 +41,7 @@
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 		   			    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
-		   			    	<%= f.text_field :email, :required=>true, :class=>"form-control" %>
+		   			    	<%= f.text_field :email, :required=>true, :value => ' ', :class=>"form-control" %>
 	                    </div>
 	                </div>
 	            </div>
@@ -63,10 +63,14 @@
 	           
 	        </div><!-- panel-body -->
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary", data: { disable_with: 'Saving...' } %>
-				<%= link_to 'Cancel', users_path, class: "btn btn-white"%>
+	            <%= f.submit "Save", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' } %>
+				<%= link_to 'Cancel', users_path, class: "btn btn-white btn-xs"%>
 	        </div>
 			<% end %>
 	    </div>
     </div>       
 </div>
+
+<script type="text/javascript">
+	showHideMenu('li_webadmin');
+</script>

@@ -28,7 +28,7 @@ class SchoolsController < ApplicationController
   # POST /schools.json
   def create
     @school = School.new(school_params)
-
+    @school.country = 'US'
     respond_to do |format|
       if @school.save
         format.html { 
@@ -46,6 +46,7 @@ class SchoolsController < ApplicationController
   # PATCH/PUT /schools/1
   # PATCH/PUT /schools/1.json
   def update
+    @school.country = 'US'
     respond_to do |format|
       if @school.update(school_params)
         format.html { 
@@ -81,6 +82,10 @@ class SchoolsController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+  
+  def subregion_options
+    render partial: 'subregion_select'
   end
   
   private

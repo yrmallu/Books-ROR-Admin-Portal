@@ -26,6 +26,8 @@ gem 'kaminari', '0.15.1'
 
 gem 'annotate', '2.6.2'
 
+gem 'carmen-rails'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
