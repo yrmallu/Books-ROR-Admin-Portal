@@ -41,7 +41,7 @@
 					 
    				      <td data-no-turbolink>
    				      	<% if user.email == current_user.email %>
-   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_registration_path(user) %> 
+   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user) %> 
    				      	<% else %>			
 						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user) %>
 						<% end %> 

@@ -6,7 +6,8 @@
 	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
-	        	<%= form_for(@user, :html=>{:class=>"form_validation"}, :url => { :action => @user.new_record? ? 'user_create' : 'update' }) do |f| %>
+	        	<%#= form_for(@user, :html=>{:class=>"form_validation"}, :url => { :action => @user.new_record? ? 'user_create' : 'update' }) do |f| %>
+				<%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
 				    <% if @user.errors.any? %>
 				    <div id="error_explanation">
 				        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -58,7 +59,7 @@
 			    			<%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
 	                    </div>
 	                </div>
-	                
+	                <%=hidden_field_tag :id, 1%>
 	            </div>
 	           
 	        </div><!-- panel-body -->

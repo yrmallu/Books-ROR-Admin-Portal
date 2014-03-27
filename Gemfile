@@ -9,8 +9,6 @@ gem 'rails', '4.0.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '0.17.1'
 
-# Use devise for Authentication
-gem 'devise', '3.2.4'
 gem 'cancan', '1.6.10'
 
 # Use SCSS for stylesheets
@@ -26,6 +24,9 @@ gem 'kaminari', '0.15.1'
 
 gem 'annotate', '2.6.2'
 
+# Use ActiveModel has_secure_password
+ gem 'bcrypt-ruby', '3.1.5'
+ 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
