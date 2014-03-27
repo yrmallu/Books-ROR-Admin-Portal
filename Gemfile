@@ -25,8 +25,9 @@ gem 'kaminari', '0.15.1'
 gem 'annotate', '2.6.2'
 
 # Use ActiveModel has_secure_password
- gem 'bcrypt-ruby', '3.1.5'
+gem 'bcrypt-ruby', '3.1.5'
  
+gem 'carmen-rails'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 

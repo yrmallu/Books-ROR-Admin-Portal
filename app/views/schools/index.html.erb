@@ -19,7 +19,7 @@
 		<%=link_to 'Download Sample', new_school_path, :class=>"btn btn-success btn-xs"%>
 		<% if can? :create, School %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
 		<%=link_to 'Renew', new_school_path, :class=>"btn btn-success btn-xs"%>
-		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", data: { confirm: 'Are you sure?' } %>
+		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	 </div>
 	 
 	 <div class="table-responsive">
@@ -70,3 +70,7 @@
 	</div>	
 </div>		  
 <% end %>		  
+
+<script type="text/javascript">
+	showHideMenu('li_school');	
+</script>

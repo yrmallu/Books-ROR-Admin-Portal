@@ -20,7 +20,6 @@ required_field = function(){
  				minlength: 5,
  				equalTo: "#password"
  			}
-			
 		},
 		messages: {
 			id:"Select User Type.",
@@ -41,7 +40,6 @@ required_field = function(){
 				minlength: "Your password must be at least 5 characters long.",
 				equalTo: "Please enter the same password as above."
 			}
-			
 		}
 		});
 	}

@@ -10,7 +10,7 @@ BooksThatShow::Application.routes.draw do
       get 'check_role_accessright'
     end  
   end
-
+  get '/schools/subregion_options' => 'schools#subregion_options'
   resources :roles
 
   resources :users do 

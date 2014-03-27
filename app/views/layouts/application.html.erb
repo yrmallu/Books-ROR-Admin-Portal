@@ -36,11 +36,12 @@
             </ul>
         </div>
       <h5 class="sidebartitle">    </h5>
-      <ul class="nav nav-pills nav-stacked nav-bracket page-sidebar" data-no-turbolink>
-		<li class="active"><%= link_to '<i class="fa fa-home"></i>'.html_safe + "Dashboard", root_path %></li>
-		<li class="nav-parent"><a href=""><i class="glyphicon glyphicon-book"></i> <span>School</span></a>
-          <% unless current_user.blank?%>
-		  <ul class="children">
+      <ul class="nav nav-pills nav-stacked nav-bracket page-sidebar id="main-menu"" data-no-turbolink>
+		<li id="li_dashboard"><%= link_to '<i class="fa fa-home"></i>'.html_safe + "Dashboard", root_path %></li>
+		 <span class="arrow arrw-pos" container_li="li_dashboard"></span>
+		<li class="nav-parent" id="li_school"><a href=""><i class="glyphicon glyphicon-book"></i> <span>School</span></a>
+			<span class="arrow arrw-pos" container_li="li_school"></span>
+          <ul class="children">
 		      <% if can? :create, School %> 
 			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
 			  <%end%>
@@ -48,20 +49,21 @@
           </ul>
         </li>
 		
-		<%#= if current_user.role_id.eql?(1)%>
-		<li class="nav-parent"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
+		<% if current_user.role_id.eql?(1)%>
+		<li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
+			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
           <ul class="children">
              <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path %></li>
           </ul
         </li>
-		<li class="nav-parent"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
+		<li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
+			<span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Access Right", new_accessright_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right Listing", accessrights_path %></li>
           </ul
         </li>
-		<%#=end%>
 		<%end%>
       </ul>
     </div>

@@ -1,21 +1,6 @@
-$(document).ready(function() {
-	checked_list = [];
-	unchecked_list = [];
-	$('.user-check-box').click(function() {
-	    if ($(this).is(':checked')) {
-			checked_list.push($(this).val())
-			unchecked_list = jQuery.removeFromArray($(this).val(), unchecked_list);
-	    } else {
-			 unchecked_list.push($(this).val())
-			 checked_list = jQuery.removeFromArray($(this).val(), checked_list);
-	    }
-	});
-	
-	jQuery.removeFromArray = function(value, arr) {
-	    return jQuery.grep(arr, function(elem, index) {
-	        return elem !== value;
-	    });
-	};
-	
-	
+$(document).on("click",".user-check-box",function(){
+	if($("#users_table .user-check-box:checked").length > 0)
+		document.getElementById("delete_user").disabled=false;
+	else
+		document.getElementById("delete_user").disabled=true;  
 });

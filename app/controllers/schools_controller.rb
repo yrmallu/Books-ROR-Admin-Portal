@@ -20,7 +20,7 @@ class SchoolsController < ApplicationController
 
   def create
     @school = School.new(school_params)
-
+    @school.country = 'US'
     respond_to do |format|
       if @school.save
         format.html { 
@@ -36,6 +36,7 @@ class SchoolsController < ApplicationController
   end
 
   def update
+    @school.country = 'US'
     respond_to do |format|
       if @school.update(school_params)
         format.html { 
@@ -69,6 +70,10 @@ class SchoolsController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+  
+  def subregion_options
+    render partial: 'subregion_select'
   end
   
   private
