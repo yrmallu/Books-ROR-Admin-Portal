@@ -19,16 +19,26 @@
 				    </div>
 				  	<% end %>
 		            <div class="row">
+		                <div class="col-sm-6">
+		                    <div class="form-group">
+				     		   <%= label_tag :school_id, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
+				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="row">
 		                <div class="col-sm-3">
 		                    <div class="form-group">
-		                    	<%#= f.label :first_name, "First Name", :class=>"control-label" %><span class="asterisk">*</span>
-			    			    <%#= f.text_field :first_name, :required=>true,  :class=>"form-control" %>
-		                    </div>
+ 				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
+ 				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
 		                </div>
 		                <div class="col-sm-3">
 		                    <div class="form-group">
-				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
-				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
+				     		    <%= f.label :expiry_date, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
+							    <div class="input-group">
+				     		        <%= f.text_field :expiry_date, :class=>"form-control", :placeholder=>"yyyy-mm-dd",:id=>"datepicker" %>
+   			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+   			                    </div>
 		                    </div>
 		                </div>
 		            </div>
@@ -42,6 +52,10 @@
     </div>       
 </div>
 
-
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+});
+</script>
 
 

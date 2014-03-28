@@ -57,9 +57,9 @@
 					 
    				      <td data-no-turbolink>
    				      	<% if user.email == current_user.email %>
-   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user) %> 
+   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> 
    				      	<% else %>			
-						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user) %>
+						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>
 						<% end %> 
    				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %>
 					 </td>
