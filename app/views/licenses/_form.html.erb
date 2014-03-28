@@ -6,8 +6,8 @@
 	             <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
-	        	<%= form_for @license, :html=>{:class=>"form_validation"} do |f| %>
-				    <%#=f.hidden_field :role_id, :value=>@role_id%>
+	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
+				    <%=f.hidden_field :school_id, :value=>params[:id]%>
 				    <% if @license.errors.any? %>
 				    <div id="error_explanation">
 				        <h2><%= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -21,20 +21,28 @@
 		            <div class="row">
 		                <div class="col-sm-3">
 		                    <div class="form-group">
-		                    	<%#= f.label :first_name, "First Name", :class=>"control-label" %><span class="asterisk">*</span>
-			    			    <%#= f.text_field :first_name, :required=>true,  :class=>"form-control" %>
-		                    </div>
-		                </div>
+ 				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
+ 				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
+		                	</div>
+						</div>
+					</div>
+					<div class="row">
 		                <div class="col-sm-3">
 		                    <div class="form-group">
-				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
-				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
+				     		    <%= f.label :expiry_date, "License Expiration date", :class=>"control-label" %><span class="asterisk">*</span>
+							    <div class="input-group">
+				     		        <%= f.text_field :expiry_date, :class=>"form-control", :placeholder=>"yyyy-mm-dd",:id=>"datepicker" %>
+   			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+   			                    </div>
 		                    </div>
 		                </div>
 		            </div>
-	        </div>
+					<div id="id_license_info">
+					
+					</div>
+			</div>
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' } %>
+	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
 				<%= link_to 'Cancel', licenses_path, class: "btn btn-white btn-xs"%>
 	        </div>
 			<% end %>
@@ -42,6 +50,9 @@
     </div>       
 </div>
 
-
-
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+});
+</script>
 
