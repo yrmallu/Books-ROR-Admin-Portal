@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
+
   before_action :set_user, :only => [:show, :edit, :update, :destroy]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create] 
   
@@ -9,6 +10,7 @@ class UsersController < ApplicationController
   
   def index
     @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
+    set_bread_crumb @role_id
   end
   
   def show
@@ -16,9 +18,13 @@ class UsersController < ApplicationController
  
   def new
     @user = User.new
+
+    set_bread_crumb @role_id
   end
  
   def edit
+
+    set_bread_crumb @role_id
   end
  
   def create
@@ -45,6 +51,12 @@ class UsersController < ApplicationController
     @email_id = Base64.decode64(params[:email])
   	render :layout=>"login"
   end
+
+  def dashboard
+    
+    set_bread_crumb
+     
+  end  
   
   def set_new_password
     if params[:password] != ""

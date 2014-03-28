@@ -1,0 +1,29 @@
+  <% 
+    begin
+      @breadcrumb[:title]
+      breadcrumbError = false
+    rescue  
+      breadcrumbError = true
+    end  
+
+   %>
+
+  <% if !breadcrumbError then %>
+  <div class="pageheader">
+   <h2><i class="fa fa-table"></i> <%= @breadcrumb[:title] %></h2>
+   <div class="breadcrumb-wrapper">
+     <span class="label">You are here:</span>
+     <ol class="breadcrumb">
+        <% @breadcrumb[:breadcrumb].each_with_index do |(page, link), index|  %>
+          <% if index == @breadcrumb[:breadcrumb].size - 1 %>   
+            <li class="active"><%=page%></li>
+          <% else %>
+            <li><%= link_to page, link %></li>
+          <% end %>
+        <% end %>
+     </ol>
+   </div>
+  </div>
+  <% 
+    end
+  %> 

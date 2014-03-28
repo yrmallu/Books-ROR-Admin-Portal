@@ -27,4 +27,66 @@ class ApplicationController < ActionController::Base
     redirect_to root_url, :alert => exception.message
   end	
   
+
+  def set_bread_crumb(*extras)
+
+    if extras.empty? 
+      extra = ""
+    else
+      extra = "-#{extras.join('-')}"
+    end
+
+    selector = "#{params[:controller]}##{params[:action]}#{extra}"
+
+    case selector
+      when "users#dashboard"
+        @breadcrumb = {
+          :title=>"Dashboard",
+          :breadcrumb=>{
+            "Dashboard"=> ""
+          }
+        }
+        when "users#new-1"
+        @breadcrumb = {
+          :title=>"Add Web Admin",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => "1"),
+            "Add Web Admin"=> "",
+          }
+        }   
+        when "users#new-2"
+        @breadcrumb = {
+          :title=>"Add School Admin",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => "2"),
+            "Add School Admin"=> "",
+          }
+        }    
+       when "users#index-1"
+        @breadcrumb = {
+          :title=>"Web Admin List",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "Web Admin List"=> "",
+          }
+        }
+        when "users#index-2"
+        @breadcrumb = {
+          :title=>"School Admin List",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "School Admin List"=> "",
+          }
+        }    
+      else
+        @breadcrumb = {
+          :title=>"Dashboard",
+          :breadcrumb=>{
+            "Dashboard"=> ""
+          }
+        }  
+      end  
+  end 
 end

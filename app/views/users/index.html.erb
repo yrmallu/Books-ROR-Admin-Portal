@@ -1,27 +1,3 @@
-<% if @role_id.eql?('1')%>
-	<div class="pageheader">
-	   <h2><i class="fa fa-table"></i> Web Admin List</h2>
-	   <div class="breadcrumb-wrapper">
-	     <span class="label">You are here:</span>
-	     <ol class="breadcrumb">
-	         <li><%= link_to 'Dashboard', root_path %></li>
-	         <li class="active">Web Admin List</li>
-	     </ol>
-	   </div>
-	</div>
-<%elsif @role_id.eql?('2')%>
-	<div class="pageheader">
-	   <h2><i class="fa fa-table"></i> School Admin List</h2>
-	   <div class="breadcrumb-wrapper">
-	     <span class="label">You are here:</span>
-	     <ol class="breadcrumb">
-	         <li><%= link_to 'Dashboard', root_path %></li>
-	         <li class="active">School Admin List</li>
-	     </ol>
-	   </div>
-	</div>
-<%end%>
-
 <%= form_tag 'users/delete_user', remote: true do %>
   <div class="panel panel-default">
 	<div class="panel-body"> 

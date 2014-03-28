@@ -1,29 +1,3 @@
-<% if @role_id.eql?('1')%>
-   <div class="pageheader" data-no-turbolink>
-      <h2><i class="glyphicon glyphicon-book"></i> Add Web Admin </h2>
-      <div class="breadcrumb-wrapper">
-        <span class="label">You are here:</span>
-        <ol class="breadcrumb">
-            <li><%= link_to 'Dashboard', root_path %></li>
-            <li><%= link_to 'Web Admin List', users_path(:role_id => 1) %></li>
-            <li class="active">Add Web Admin </li>
-        </ol>
-      </div>
-   </div>
-<% elsif @role_id.eql?('2')%>
-   <div class="pageheader" data-no-turbolink>
-      <h2><i class="glyphicon glyphicon-book"></i> Add School Admin </h2>
-      <div class="breadcrumb-wrapper">
-        <span class="label">You are here:</span>
-        <ol class="breadcrumb">
-            <li><%= link_to 'Dashboard', root_path %></li>
-            <li><%= link_to 'School Admin List', users_path(:role_id => 2) %></li>
-            <li class="active">Add School Admin </li>
-        </ol>
-      </div>
-   </div>
-<%end%>
-
 <div class="row">
 	<div class="col-md-12">
 	    <div class="panel panel-default">
