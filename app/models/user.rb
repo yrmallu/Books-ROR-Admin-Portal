@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   has_many :user_accessrights
   belongs_to :user
   
-  store_accessor :user_info, :phone_number,:license_id,:user_level,:grade,:reading_ability,:reading_based_on,:profile_pic,:parent_name,:parent_email
+  store_accessor :userinfo, :phone_number,:license_id,:user_level,:grade,:reading_ability,:reading_based_on,:profile_pic,:parent_name,:parent_email
   
   
   def access_to_remove_or_add(options={})

@@ -2,9 +2,44 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, :only => [:show, :edit, :update, :destroy]
+  before_action :get_role_id, :only => [:new, :index] 
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
+  
+  def index
+    @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
+  end
+  
+  def show
+  end
+ 
+  def new
+    @user = User.new
+  end
+ 
+  def edit
+  end
+ 
+  def create
+    @user = User.new(user_params)
+      if @user.save
+        redirect_to @user, notice: 'User was successfully created.' 
+      else 
+        render :action=> 'new'
+	  end
+  end
+   
+  def update
+    if @user.update(user_params)
+      redirect_to @user, notice: 'User was successfully updated.'
+    end
+  end
+  
+  def destroy
+    @user.update_attributes(:delete_flag=>true)
+    redirect_to users_url
+  end
   
   def reset_password
     @email_id = Base64.decode64(params[:email])
@@ -43,38 +78,6 @@ class UsersController < ApplicationController
     end
   end
   
-  def index
-    @users = User.where("delete_flag is not true").order(:first_name).page params[:page]
-  end
-  
-  def show
-  end
- 
-  def new
-    @user = User.new
-  end
- 
-  def edit
-  end
- 
-  def create
-    @user = User.new(user_params)
-      if @user.save
-        redirect_to @user, notice: 'User was successfully created.' 
-      end
-  end
-  
-  def update
-    if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
-    end
-  end
-  
-  def destroy
-    @user.update_attributes(:delete_flag=>true)
-    redirect_to users_url
-  end
-  
   def delete_user
     User.where(id: params[:user_ids]).each do |user|
       user.update_attributes(delete_flag: true)
@@ -84,13 +87,17 @@ class UsersController < ApplicationController
     end  
   end
   
+  def get_role_id
+  	@role_id = params[:role_id]
+  end
+  
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
     end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number)
   end
+  
 end

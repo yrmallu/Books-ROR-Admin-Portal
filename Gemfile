@@ -18,7 +18,7 @@ gem 'sass-rails', '4.0.2'
 gem 'uglifier', '2.5.0'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '4.0.1'
+#gem 'coffee-rails', '4.0.1'
 
 gem 'kaminari', '0.15.1'
 
@@ -44,9 +44,6 @@ group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', '0.4.0',  require: false
 end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
 
 # Use unicorn as the app server
 # gem 'unicorn'

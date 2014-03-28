@@ -19,7 +19,8 @@ required_field = function(){
  				required: true,
  				minlength: 5,
  				equalTo: "#password"
- 			}
+ 			},
+			"user[phone_number]":{ number: true }
 		},
 		messages: {
 			id:"Select User Type.",
@@ -39,7 +40,8 @@ required_field = function(){
 				required: "Please provide a password",
 				minlength: "Your password must be at least 5 characters long.",
 				equalTo: "Please enter the same password as above."
-			}
+			},
+			"user[phone_number]":"Please enter only number."
 		}
 		});
 	}

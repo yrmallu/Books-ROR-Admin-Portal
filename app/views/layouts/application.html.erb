@@ -45,7 +45,7 @@
 		      <% if can? :create, School %> 
 			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
 			  <%end%>
-			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School Listing", schools_path %></li>
+			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
           </ul>
         </li>
 		
@@ -53,15 +53,24 @@
 		<li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
 			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
           <ul class="children">
-             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path %></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path %></li>
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id => 1) %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin List", users_path(:role_id => 1) %></li>
           </ul
         </li>
+		<%end%>
+		<li class="nav-parent" id="li_schooladmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "School Admin", root_path %>
+			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
+          <ul class="children">
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School Admin", new_user_path(:role_id => 2)%></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School Admin List", users_path(:role_id => 2) %></li>
+          </ul
+        </li>
+		<% if current_user.role_id.eql?(1)%>
 		<li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
 			<span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Access Right", new_accessright_path %></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right Listing", accessrights_path %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
           </ul
         </li>
 		<%end%>
