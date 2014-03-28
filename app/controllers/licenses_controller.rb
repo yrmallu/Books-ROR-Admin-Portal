@@ -28,6 +28,7 @@ class LicensesController < ApplicationController
 		 }  
 		 format.js {
               @license.save  
+			  get_license_by_school_id
 			  flash[:success] = "License created."
          }
 	end
@@ -49,8 +50,12 @@ class LicensesController < ApplicationController
     @license.destroy
     respond_to do |format|
       format.html { redirect_to licenses_url }
-      format.json { head :no_content }
+      format.json {  }
     end
+  end
+
+  def get_license_by_school_id
+  	@licenses = License.where("school_id = '#{params[:license][:school_id]}'").order("created_at DESC")
   end
 
   private
