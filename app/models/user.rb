@@ -1,11 +1,10 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-         
+  
   paginates_per 10
   max_paginates_per 10
+  
+  has_secure_password
+  before_save { self.email = email.downcase }
          
   has_many :user_classrooms    
   has_many :classrooms, :through => :user_classrooms
@@ -15,7 +14,7 @@ class User < ActiveRecord::Base
   has_many :user_accessrights
   belongs_to :user
   
-  store_accessor :user_info, :phone_number,:license_id,:user_level,:grade,:reading_ability,:reading_based_on,:profile_pic,:parent_name,:parent_email
+  store_accessor :userinfo, :phone_number,:license_id,:user_level,:grade,:reading_ability,:reading_based_on,:profile_pic,:parent_name,:parent_email
   
   
   def access_to_remove_or_add(options={})

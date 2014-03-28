@@ -13,14 +13,14 @@ BooksThatShow::Application.routes.draw do
   get '/schools/subregion_options' => 'schools#subregion_options'
   resources :roles
 
-  devise_for :users
-
-  #devise_for :users, :controllers => { :sessions => "sessions" }
-  
   resources :users do 
     collection do
-      post :user_create
       post :delete_user
+	  get :'dashboard'
+	  get :'forgot_password'
+	  get :'reset_password'
+	  post :'set_new_password'
+	  post :'email_for_password'
      end
   end
 
@@ -29,11 +29,20 @@ BooksThatShow::Application.routes.draw do
       post :delete_school
      end
   end
+  
+  
+  resources :sessions, only: [:new, :create, :destroy]
+  match '/signin',  to: 'sessions#new',         via: 'get'
+  match '/signout', to: 'sessions#destroy',     via: 'delete'
+  match '/forgot_password', to: 'users#forgot_password',     via: 'get'
+  match '/reset_password', to: 'users#reset_password',     via: 'get'
+  
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'schools#index'
+   root 'users#dashboard'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

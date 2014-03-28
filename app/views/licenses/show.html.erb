@@ -1,34 +1,25 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+	<div class="col-md-12">
+    	<div class="panel panel-default">
+        	<div class="panel-heading">
+            	<h4 class="panel-title">User Information</h4>
+        	</div>
+        	<div class="panel-body">
+            	<address>
+                	<strong>License Expiry date:</strong>
+                	<%= @license.expiry_date %>
+            	</address>
+            	<address>
+			    	<strong>Number Of Licenses:</strong>
+			    	<%= @license.no_of_licenses %>
+            	</address>
+            	<div data-no-turbolink>
+			        <%= link_to 'Edit', edit_license_path(@license), :class=>"btn btn-success btn-xs", data: { disable_with: 'Saving...' } %>
+					<%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+        	    </div>
+		    </div>
+        </div>
+    </div>
+</div>
 
-<p>
-  <strong>License group:</strong>
-  <%= @license.license_group_id %>
-</p>
 
-<p>
-  <strong>Datetime:</strong>
-  <%= @license.datetime %>
-</p>
-
-<p>
-  <strong>No of licenses:</strong>
-  <%= @license.no_of_licenses %>
-</p>
-
-<p>
-  <strong>Allocated to:</strong>
-  <%= @license.allocated_to %>
-</p>
-
-<p>
-  <strong>Used liscenses:</strong>
-  <%= @license.used_liscenses %>
-</p>
-
-<p>
-  <strong>School:</strong>
-  <%= @license.school_id %>
-</p>
-
-<%= link_to 'Edit', edit_license_path(@license) %> |
-<%= link_to 'Back', licenses_path %>

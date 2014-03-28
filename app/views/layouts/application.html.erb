@@ -24,7 +24,7 @@
             <div class="media userlogged">
 				<%= image_tag("loggeduser.png", :class=>"media-object")%>
                 <div class="media-body">
-                    <h4><%=current_user.first_name%></h4>
+                    <h4><%=current_user.first_name unless current_user.blank?%></h4>
                 </div>
             </div>
             <h5 class="sidebartitle actitle">Account</h5>
@@ -45,23 +45,38 @@
 		      <% if can? :create, School %> 
 			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
 			  <%end%>
-			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School Listing", schools_path %></li>
+			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
           </ul>
         </li>
+		
 		<% if current_user.role_id.eql?(1)%>
 		<li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
 			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
           <ul class="children">
+<<<<<<< HEAD
              <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
+=======
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id => 1) %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin List", users_path(:role_id => 1) %></li>
+>>>>>>> d1e175344476812eec19a486491c50c15a55be95
           </ul
         </li>
+		<%end%>
+		<li class="nav-parent" id="li_schooladmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "School Admin", root_path %>
+			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
+          <ul class="children">
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School Admin", new_user_path(:role_id => 2)%></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School Admin List", users_path(:role_id => 2) %></li>
+          </ul
+        </li>
+		<% if current_user.role_id.eql?(1)%>
 		<li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
 			<span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Access Right", new_accessright_path %></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right Listing", accessrights_path %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
           </ul
         </li>
 		<%end%>
@@ -77,11 +92,11 @@
             <div class="btn-group">
               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 				<%= image_tag("loggeduser.png")%>
-				<%=current_user.first_name%>
+				<%=current_user.first_name unless current_user.blank?%>
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
-				<li><%= link_to '<i class="glyphicon glyphicon-log-out"></i>'.html_safe + "Log Out", destroy_user_session_path, method: :delete %></li>
+				<li><%= link_to '<i class="glyphicon glyphicon-log-out"></i>'.html_safe + "Log Out", signout_path, method: :delete %></li>
               </ul>
             </div>
           </li>
@@ -94,9 +109,15 @@
         		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         	</div>
 	<% end %>
+  
+
+  <%= render 'breadcrumb/breadcrumb' %>
+
+
 	<%=yield %>
     </div>
   </div>
 </section>
+<%= debug(params) if Rails.env.development? %>
 </body>
 </html>

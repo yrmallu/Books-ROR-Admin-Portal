@@ -1,41 +1,58 @@
-<%= form_for(@license) do |f| %>
-  <% if @license.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@license.errors.count, "error") %> prohibited this license from being saved:</h2>
+<div class="row">
+	<div class="col-md-12">
+	    <div class="panel panel-default">
+	        <div class="panel-heading">
+	            <h4 class="panel-title">License Form</h4>
+	             <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	        </div>
+	        <div class="panel-body">
+	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
+				    <%=f.hidden_field :school_id, :value=>params[:id]%>
+				    <% if @license.errors.any? %>
+				    <div id="error_explanation">
+				        <h2><%= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2>
+				        <ul>
+				            <% @license.errors.full_messages.each do |msg| %>
+				                <li><%= msg %></li>
+				            <% end %>
+				        </ul>
+				    </div>
+				  	<% end %>
+		            <div class="row">
+		                <div class="col-sm-3">
+		                    <div class="form-group">
+ 				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
+ 				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
+		                	</div>
+						</div>
+					</div>
+					<div class="row">
+		                <div class="col-sm-3">
+		                    <div class="form-group">
+				     		    <%= f.label :expiry_date, "License Expiration date", :class=>"control-label" %><span class="asterisk">*</span>
+							    <div class="input-group">
+				     		        <%= f.text_field :expiry_date, :class=>"form-control", :placeholder=>"yyyy-mm-dd",:id=>"datepicker" %>
+   			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+   			                    </div>
+		                    </div>
+		                </div>
+		            </div>
+					<div id="id_license_info">
+					
+					</div>
+			</div>
+	        <div class="panel-footer" data-no-turbolink>
+	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
+				<%= link_to 'Cancel', licenses_path, class: "btn btn-white btn-xs"%>
+	        </div>
+			<% end %>
+	    </div>
+    </div>       
+</div>
 
-      <ul>
-      <% @license.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+});
+</script>
 
-  <div class="field">
-    <%= f.label :license_group_id %><br>
-    <%= f.number_field :license_group_id %>
-  </div>
-  <div class="field">
-    <%= f.label :datetime %><br>
-    <%= f.text_field :datetime %>
-  </div>
-  <div class="field">
-    <%= f.label :no_of_licenses %><br>
-    <%= f.number_field :no_of_licenses %>
-  </div>
-  <div class="field">
-    <%= f.label :allocated_to %><br>
-    <%= f.text_field :allocated_to %>
-  </div>
-  <div class="field">
-    <%= f.label :used_liscenses %><br>
-    <%= f.number_field :used_liscenses %>
-  </div>
-  <div class="field">
-    <%= f.label :school_id %><br>
-    <%= f.number_field :school_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
