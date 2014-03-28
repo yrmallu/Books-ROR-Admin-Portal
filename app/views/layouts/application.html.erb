@@ -103,9 +103,15 @@
         		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         	</div>
 	<% end %>
+  
+
+  <%= render 'breadcrumb/breadcrumb' %>
+
+
 	<%=yield %>
     </div>
   </div>
 </section>
+<%= debug(params) if Rails.env.development? %>
 </body>
 </html>

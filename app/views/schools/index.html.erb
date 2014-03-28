@@ -1,16 +1,4 @@
 
-<div class="pageheader">
-   <h2><i class="fa fa-table"></i> School List <!-- <span>Subtitle goes here...</span> --></h2>
-   <div class="breadcrumb-wrapper">
-     <span class="label">You are here:</span>
-     <ol class="breadcrumb">
-         <li><%= link_to 'Dashboard', root_path %></li>
-         <!-- <li><a href="buttons.html">UI Elements</a></li> -->
-         <li class="active">School List</li>
-     </ol>
-   </div>
-</div>
-
 <%= form_tag 'schools/delete_school', remote: true do %>
 <div class="panel panel-default">
 <div class="panel-body"> 
