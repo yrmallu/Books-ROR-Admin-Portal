@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140325061523) do
+ActiveRecord::Schema.define(version: 20140327123713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,13 +30,18 @@ ActiveRecord::Schema.define(version: 20140325061523) do
 
   create_table "books", force: true do |t|
     t.string   "title"
-    t.text     "description"
+    t.string   "description"
     t.string   "author"
-    t.string   "book_file_name"
-    t.integer  "chapters"
-    t.string   "book_unique_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "book_cover_file_name"
+    t.string   "book_cover_content_type"
+    t.integer  "book_cover_file_size"
+    t.datetime "book_cover_updated_at"
+    t.string   "epub_book_file_name"
+    t.string   "epub_book_content_type"
+    t.integer  "epub_book_file_size"
+    t.datetime "epub_book_updated_at"
   end
 
   create_table "classrooms", force: true do |t|
@@ -80,17 +85,6 @@ ActiveRecord::Schema.define(version: 20140325061523) do
     t.boolean  "delete_flag"
   end
 
-  create_table "studentinfos", force: true do |t|
-    t.string   "user_level"
-    t.string   "grade"
-    t.string   "reading_ability"
-    t.string   "profile_pic"
-    t.integer  "license_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "user_accessrights", force: true do |t|
     t.integer  "user_id"
     t.integer  "accessright_id"
@@ -104,13 +98,6 @@ ActiveRecord::Schema.define(version: 20140325061523) do
     t.integer "user_id"
     t.integer "classroom_id"
     t.integer "user_type"
-  end
-
-  create_table "userinfos", force: true do |t|
-    t.integer  "license_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

@@ -1,5 +1,4 @@
 $(document).ready(function () {
-	document.getElementById("delete_school").disabled=true; 
     $('.school-check-box').change(function () {
         var check = ($('.school-check-box').filter(":checked").length == $('.school-check-box').length);
         $('.select-all-school').prop("checked", check);
