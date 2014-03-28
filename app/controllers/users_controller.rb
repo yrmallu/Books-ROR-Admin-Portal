@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :set_user, :only => [:show, :edit, :update, :destroy]
-  before_action :get_role_id, :only => [:new, :index, :edit] 
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :create] 
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   

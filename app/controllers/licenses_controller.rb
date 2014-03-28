@@ -1,44 +1,38 @@
 class LicensesController < ApplicationController
   before_action :set_license, only: [:show, :edit, :update, :destroy]
 
-  # GET /licenses
-  # GET /licenses.json
   def index
     @licenses = License.all
   end
 
-  # GET /licenses/1
-  # GET /licenses/1.json
   def show
   end
 
-  # GET /licenses/new
   def new
     @license = License.new
   end
 
-  # GET /licenses/1/edit
-  def edit
+ def edit
   end
 
-  # POST /licenses
-  # POST /licenses.json
   def create
     @license = License.new(license_params)
-
-    respond_to do |format|
-      if @license.save
-        format.html { redirect_to @license, notice: 'License was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @license }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @license.errors, status: :unprocessable_entity }
-      end
-    end
+	respond_to do |format|
+    	format.html {
+			if @license.save
+				flash[:success] = "License created."
+			    redirect_to @license
+			else
+			    render 'new'
+			end
+		 }  
+		 format.js {
+              @license.save  
+			  flash[:success] = "License created."
+         }
+	end
   end
 
-  # PATCH/PUT /licenses/1
-  # PATCH/PUT /licenses/1.json
   def update
     respond_to do |format|
       if @license.update(license_params)
@@ -51,9 +45,7 @@ class LicensesController < ApplicationController
     end
   end
 
-  # DELETE /licenses/1
-  # DELETE /licenses/1.json
-  def destroy
+ def destroy
     @license.destroy
     respond_to do |format|
       format.html { redirect_to licenses_url }
@@ -69,6 +61,6 @@ class LicensesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def license_params
-      params.require(:license).permit(:license_group_id, :datetime, :no_of_licenses, :allocated_to, :used_liscenses, :school_id)
+      params.require(:license).permit(:no_of_licenses, :expiry_date, :school_id)
     end
 end
