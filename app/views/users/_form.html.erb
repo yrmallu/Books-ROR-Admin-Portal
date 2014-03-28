@@ -1,12 +1,39 @@
+<% if @role_id.eql?('1')%>
+   <div class="pageheader" data-no-turbolink>
+      <h2><i class="glyphicon glyphicon-book"></i> Add Web Admin </h2>
+      <div class="breadcrumb-wrapper">
+        <span class="label">You are here:</span>
+        <ol class="breadcrumb">
+            <li><%= link_to 'Dashboard', root_path %></li>
+            <li><%= link_to 'Web Admin List', users_path(:role_id => 1) %></li>
+            <li class="active">Add Web Admin </li>
+        </ol>
+      </div>
+   </div>
+<% elsif @role_id.eql?('2')%>
+   <div class="pageheader" data-no-turbolink>
+      <h2><i class="glyphicon glyphicon-book"></i> Add School Admin </h2>
+      <div class="breadcrumb-wrapper">
+        <span class="label">You are here:</span>
+        <ol class="breadcrumb">
+            <li><%= link_to 'Dashboard', root_path %></li>
+            <li><%= link_to 'School Admin List', users_path(:role_id => 2) %></li>
+            <li class="active">Add School Admin </li>
+        </ol>
+      </div>
+   </div>
+<%end%>
+
 <div class="row">
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	        <div class="panel-heading">
 	            <h4 class="panel-title">User Form</h4>
-	            <p>Please enter all fields.</p>
+	             <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
-	        	<%= form_for(@user, :html=>{:class=>"form_validation"}, :url => { :action => @user.new_record? ? 'user_create' : 'update' }) do |f| %>
+	        	<%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
+				    <%=f.hidden_field :role_id, :value=>@role_id%>
 				    <% if @user.errors.any? %>
 				    <div id="error_explanation">
 				        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -17,53 +44,13 @@
 				        </ul>
 				    </div>
 				  	<% end %>
-	            <div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-	                    	<%= f.label :first_name, "First Name", :class=>"control-label" %><span class="asterisk">*</span>
-		    			    <%= f.text_field :first_name, :required=>true,  :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-			     		   <%= f.label :last_name, "Last Name", :class=>"control-label" %><span class="asterisk">*</span>
-			     		   <%= f.text_field :last_name, :required=>true, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-				    		<%= f.label :username, "Username", :class=>"control-label"%><span class="asterisk">*</span>
-				    		<%= f.text_field :username, :required=>true, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-		   			    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
-		   			    	<%= f.text_field :email, :required=>true, :value => ' ', :class=>"form-control" %>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-			    		    <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
-			    			<%= f.password_field :password, :required=>true, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-			    			<%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
-			    			<%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                
-	            </div>
-	           
-	        </div><!-- panel-body -->
+	            <%= render 'common_fields', f: f%>
+				<% if @role_id.eql?('2')%>
+					<%#= render 'school_admin', f: f%>
+				<%end%>
+	        </div>
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' } %>
+	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' } %>
 				<%= link_to 'Cancel', users_path, class: "btn btn-white btn-xs"%>
 	        </div>
 			<% end %>
@@ -72,5 +59,13 @@
 </div>
 
 <script type="text/javascript">
-	showHideMenu('li_webadmin');
+	if( <%= @role_id.eql?('1')%>)
+	{
+	    showHideMenu('li_webadmin');	
+	}
+	else if(<%= @role_id.eql?('2')%>)
+	{
+	    showHideMenu('li_schooladmin');	
+	}
 </script>
+

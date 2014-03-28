@@ -4,28 +4,20 @@ class SchoolsController < ApplicationController
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
-  # GET /schools
-  # GET /schools.json
   def index
   end
 
-  # GET /schools/1
-  # GET /schools/1.json
   def show
   end
 
-  # GET /schools/new
   def new
     @school = School.new
 	  @licenses = @school.licenses.build()
   end
 
-  # GET /schools/1/edit
   def edit
   end
 
-  # POST /schools
-  # POST /schools.json
   def create
     @school = School.new(school_params)
     @school.country = 'US'
@@ -43,8 +35,6 @@ class SchoolsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /schools/1
-  # PATCH/PUT /schools/1.json
   def update
     @school.country = 'US'
     respond_to do |format|
@@ -61,8 +51,6 @@ class SchoolsController < ApplicationController
     end
   end
 
-  # DELETE /schools/1
-  # DELETE /schools/1.json
   def destroy
     #@school.destroy
     respond_to do |format|

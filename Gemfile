@@ -9,8 +9,6 @@ gem 'rails', '4.0.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '0.17.1'
 
-# Use devise for Authentication
-gem 'devise', '3.2.4'
 gem 'cancan', '1.6.10'
 
 # Use SCSS for stylesheets
@@ -20,14 +18,16 @@ gem 'sass-rails', '4.0.2'
 gem 'uglifier', '2.5.0'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '4.0.1'
+#gem 'coffee-rails', '4.0.1'
 
 gem 'kaminari', '0.15.1'
 
 gem 'annotate', '2.6.2'
 
+# Use ActiveModel has_secure_password
+gem 'bcrypt-ruby', '3.1.5'
+ 
 gem 'carmen-rails'
-
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -44,9 +44,6 @@ group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', '0.4.0',  require: false
 end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
 
 # Use unicorn as the app server
 # gem 'unicorn'

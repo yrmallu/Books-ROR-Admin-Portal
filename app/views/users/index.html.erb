@@ -1,20 +1,36 @@
-<div class="pageheader">
-   <h2><i class="fa fa-table"></i> Web Admin List <!-- <span>Subtitle goes here...</span> --></h2>
-   <div class="breadcrumb-wrapper">
-     <span class="label">You are here:</span>
-     <ol class="breadcrumb">
-         <li><%= link_to 'Dashboard', root_path %></li>
-         <!-- <li><a href="buttons.html">UI Elements</a></li> -->
-         <li class="active">Web Admin List</li>
-     </ol>
-   </div>
-</div>
+<% if @role_id.eql?('1')%>
+	<div class="pageheader">
+	   <h2><i class="fa fa-table"></i> Web Admin List</h2>
+	   <div class="breadcrumb-wrapper">
+	     <span class="label">You are here:</span>
+	     <ol class="breadcrumb">
+	         <li><%= link_to 'Dashboard', root_path %></li>
+	         <li class="active">Web Admin List</li>
+	     </ol>
+	   </div>
+	</div>
+<%elsif @role_id.eql?('2')%>
+	<div class="pageheader">
+	   <h2><i class="fa fa-table"></i> School Admin List</h2>
+	   <div class="breadcrumb-wrapper">
+	     <span class="label">You are here:</span>
+	     <ol class="breadcrumb">
+	         <li><%= link_to 'Dashboard', root_path %></li>
+	         <li class="active">School Admin List</li>
+	     </ol>
+	   </div>
+	</div>
+<%end%>
 
 <%= form_tag 'users/delete_user', remote: true do %>
   <div class="panel panel-default">
 	<div class="panel-body"> 
 	  <div class="index_page_btns" data-no-turbolink>
-		<%=link_to 'Add Web Admin', new_user_path, :class=>"btn btn-success btn-xs"%>
+		<% if @role_id.eql?('1')%>
+			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
+		<%elsif @role_id.eql?('2')%>
+		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
+		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	  </div>
 	 
@@ -41,7 +57,7 @@
 					 
    				      <td data-no-turbolink>
    				      	<% if user.email == current_user.email %>
-   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_registration_path(user) %> 
+   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user) %> 
    				      	<% else %>			
 						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user) %>
 						<% end %> 
@@ -60,5 +76,12 @@
 <% end %>		
 
 <script type="text/javascript">
-	showHideMenu('li_webadmin');	
+	if( <%= @role_id.eql?('1')%>)
+	{
+	    showHideMenu('li_webadmin');	
+	}
+	else if(<%= @role_id.eql?('2')%>)
+	{
+	    showHideMenu('li_schooladmin');	
+	}
 </script>
