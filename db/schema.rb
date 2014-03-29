@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20140327123713) do
-=======
-ActiveRecord::Schema.define(version: 20140327061656) do
->>>>>>> d1e175344476812eec19a486491c50c15a55be95
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,7 +28,6 @@ ActiveRecord::Schema.define(version: 20140327061656) do
     t.integer "role_id"
   end
 
-<<<<<<< HEAD
   create_table "books", force: true do |t|
     t.string   "title"
     t.string   "description"
@@ -49,8 +44,6 @@ ActiveRecord::Schema.define(version: 20140327061656) do
     t.datetime "epub_book_updated_at"
   end
 
-=======
->>>>>>> d1e175344476812eec19a486491c50c15a55be95
   create_table "classrooms", force: true do |t|
     t.integer  "code"
     t.string   "name"
