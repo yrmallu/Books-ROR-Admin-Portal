@@ -4,3 +4,8 @@ $(document).on("click",".user-check-box",function(){
 	else
 		document.getElementById("delete_user").disabled=true;  
 });
+
+
+jQuery(document).ready(function(){
+  $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+});

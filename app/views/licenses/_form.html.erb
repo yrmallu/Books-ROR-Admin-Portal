@@ -7,7 +7,7 @@
 	        </div>
 	        <div class="panel-body">
 	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
-				    <%=f.hidden_field :school_id, :value=>params[:id]%>
+				    <%= f.hidden_field :school_id, :value=>params[:school_id]%>
 				    <% if @license.errors.any? %>
 				    <div id="error_explanation">
 				        <h2><%= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -37,22 +37,16 @@
 		                    </div>
 		                </div>
 		            </div>
-					<div id="id_license_info">
 					
-					</div>
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
 				<%= link_to 'Cancel', licenses_path, class: "btn btn-white btn-xs"%>
 	        </div>
+			
 			<% end %>
 	    </div>
     </div>       
 </div>
 
-<script type="text/javascript">
-jQuery(document).ready(function(){
-  $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
-});
-</script>
-
+	

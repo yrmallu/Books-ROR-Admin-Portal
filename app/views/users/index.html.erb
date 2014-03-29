@@ -6,6 +6,8 @@
 			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.eql?('2')%>
 		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
+		<%elsif @role_id.eql?('3')%>
+		    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>	
 		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	  </div>
@@ -38,6 +40,14 @@
 						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>
 						<% end %> 
    				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %>
+						<% unless @role_id.eql?('1')%>  
+						    <%= hidden_field_tag :user_id, user.id%>
+						    <button class="btn btn-primary btn-xs assign_milestone" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
+						        Assign License
+						    </button>
+							<!-- <button type="button" data-input='<%#=fc.id%>' data-toggle="modal" data-target="#myModal" class="fc_delayed btn btn-danger btn-cons btn-sm btn-small">Delayed</button> -->
+							
+						<%end%>  
 					 </td>
                  </tr>
 				 <% end %>
@@ -49,7 +59,26 @@
 		<%= paginate @users %>
 	</div>
  </div>		  
-<% end %>		
+<% end %>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Assign License</h4>
+      </div>
+      <div class="modal-body">
+		  <div id="school_licenses_list"></div>
+	  </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Assign</button>
+      </div> -->
+    </div>
+  </div>
+</div>		
 
 <script type="text/javascript">
 	if( <%= @role_id.eql?('1')%>)
@@ -60,4 +89,16 @@
 	{
 	    showHideMenu('li_schooladmin');	
 	}
+
+$( ".assign_milestone" ).click(function() {
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input')},
+function(data) {
+	         
+             if(data)
+              {
+			   jQuery("#school_licenses_list").html(data);
+             }
+      });
+});
 </script>
+

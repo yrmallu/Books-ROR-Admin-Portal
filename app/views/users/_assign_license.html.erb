@@ -1,0 +1,25 @@
+<div class="row">
+	<div class="col-md-12">
+	    <div class="panel panel-default">
+	       <div class="panel-body">
+	        	<%= form_tag update_user_license_users_path(:id=>@user_id), :class=>"form_validation"  do %>
+				    <%#= hidden_field_tag :id, @user_id%>
+				    <div class="row">
+		                <div class="col-sm-3">
+		                    <div class="form-group">
+								<%= label_tag "license_id", "License", :class=>"control-label" %><span class="asterisk">*</span>
+		    					<%= select_tag :license_id, options_from_collection_for_select(@licenses, 'id', 'expiry_date'), {:prompt=>"Select License", :class=>"form-control", :required=>true}%>
+							</div>
+		                </div>
+		            </div>
+			</div>
+	        <div class="panel-footer" data-no-turbolink>
+	            <%= submit_tag "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        </div>
+			<% end %>
+	    </div>
+    </div>       
+</div>
+
+	
