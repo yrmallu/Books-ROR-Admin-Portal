@@ -53,7 +53,9 @@ class LicensesController < ApplicationController
   end
   
  def destroy
+    p "sid===", params[:school_id]
     @license.destroy
+	@licenses = License.where("school_id = '#{params[:school_id]}'").order("created_at DESC")
     respond_to do |format|
       format.html { redirect_to licenses_url }
       format.js {  }

@@ -2,15 +2,20 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-
+  before_action :get_all_schools, :only=> [:new, :edit]
+  
   before_action :set_user, :only => [:show, :edit, :update, :destroy]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create] 
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-    @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
-    set_bread_crumb @role_id
+    unless @role_id.blank?
+      @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
+    else
+	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+	end
+	set_bread_crumb @role_id
   end
   
   def show
@@ -18,12 +23,10 @@ class UsersController < ApplicationController
  
   def new
     @user = User.new
-
     set_bread_crumb @role_id
   end
  
   def edit
-
     set_bread_crumb @role_id
   end
  
@@ -37,7 +40,7 @@ class UsersController < ApplicationController
   end
    
   def update
-    if @user.update(user_params)
+    if @user.update_attributes(user_params)
       redirect_to @user, notice: 'User was successfully updated.'
     end
   end
@@ -47,15 +50,28 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
+  def get_user_school_licenses
+    @user_id = params[:id] 
+	user = User.find(params[:id])
+	@licenses = License.where(" school_id = '#{user.school_id}'")
+    render :partial=>"assign_license"
+  end
+  
+  def update_user_license
+    p "user to update===",@user = User.find(params[:id])
+	p "exp date===", params[:expiry_date]
+	if @user.update_attributes(user_license_params)
+      redirect_to @user, notice: 'User was successfully updated.'
+    end
+  end
+  
   def reset_password
     @email_id = Base64.decode64(params[:email])
   	render :layout=>"login"
   end
 
   def dashboard
-    
     set_bread_crumb
-     
   end  
   
   def set_new_password
@@ -100,7 +116,7 @@ class UsersController < ApplicationController
   end
   
   def get_role_id
-  	p "role_id=====",@role_id = params[:role_id]
+  	@role_id = params[:role_id]
   end
   
   private
@@ -109,7 +125,11 @@ class UsersController < ApplicationController
     end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id)
+  end
+  
+  def user_license_params
+    params.require(:user).permit(:license_expiry_date, :license_id)
   end
   
 end

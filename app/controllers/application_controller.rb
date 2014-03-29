@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
     @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
+  def get_all_schools
+    @schools = School.where("delete_flag is not true").order("created_at DESC")
+  end
+  
   def get_accessright
     if current_user.role_id.eql?(1)
       @accessrights = Accessright.where("id > 4")	

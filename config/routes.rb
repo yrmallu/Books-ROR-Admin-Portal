@@ -21,6 +21,8 @@ BooksThatShow::Application.routes.draw do
 	  get :'reset_password'
 	  post :'set_new_password'
 	  post :'email_for_password'
+	  get :'get_user_school_licenses'
+	  post :'update_user_license'
      end
   end
 
