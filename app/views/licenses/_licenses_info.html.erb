@@ -1,23 +1,25 @@
-<div class="row">
-	<div class="col-md-12">
-    	<div class="panel panel-default">
-        	<div class="panel-heading">
-            	<h4 class="panel-title">Licenses Details</h4>
-        	</div>
-        	<div class="panel-body">
-            	<address>
-			    	<strong>Number Of Liscenses :</strong>
-			    	<%= @license.no_of_licenses %>
-            	</address>
-            	<!-- <address>
-			    	<strong>Licenses Used:</strong>
-			    	<%#= @license.expiry_date %>
-            	</address> -->
-            	<address>
-                	<strong>License Expiration Date:</strong>
-                	<%= @license.expiry_date %>
-            	</address>
-		    </div>
-        </div>
-    </div>
+<div class="table-responsive" id="licenses_table">
+    <table class="table" >
+        <thead>
+            <tr>
+                <th>Number Of Liscenses</th>
+				<!-- <th>License Used</th> -->
+                <th>License Expiration Date</th>
+				<th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+		    <% @licenses.each do |lic| %>
+                <tr class="odd gradeX">
+                    <td class=""><%= lic.no_of_licenses %></td>
+					<td class=""><%#= lic.used_licenses %></td>
+                    <td class=""><%= lic.expiry_date %></td>
+					<td>
+					    <%= link_to '<i title="Edit License" class="fa fa-pencil"></i>'.html_safe, edit_license_path(:id=>lic, :school_id=>lic.school_id ), :remote=>true%> 
+					    <%= link_to '<i title="Archive License" class="glyphicon glyphicon-trash"></i>'.html_safe, lic, method: :delete, data: { confirm: 'Are you sure?' }, :remote=>true %>						
+		           </td> 
+			   </tr>
+		    <% end %>
+		</tbody>
+	</table>
 </div>

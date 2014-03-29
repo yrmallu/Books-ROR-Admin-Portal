@@ -1,5 +1,5 @@
 class LicensesController < ApplicationController
-  before_action :set_license, only: [:show, :edit, :update, :destroy]
+  before_action :set_license, only: [:show, :edit, :destroy]
 
   def index
     @licenses = License.all
@@ -9,10 +9,11 @@ class LicensesController < ApplicationController
   end
 
   def new
+    @licenses = License.where("school_id = '#{params[:school_id]}'").order("created_at DESC")
     @license = License.new
   end
 
- def edit
+  def edit
   end
 
   def create
@@ -28,29 +29,39 @@ class LicensesController < ApplicationController
 		 }  
 		 format.js {
               @license.save  
+			  get_license_by_school_id
 			  flash[:success] = "License created."
          }
 	end
   end
 
   def update
+    @license = License.find(params[:id])
+	@licenses = License.where("school_id = '#{params[:license][:school_id]}'").order("created_at DESC")
     respond_to do |format|
-      if @license.update(license_params)
-        format.html { redirect_to @license, notice: 'License was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @license.errors, status: :unprocessable_entity }
-      end
+      format.html {
+                     if @license.update_attributes(license_params)
+                        redirect_to @license, notice: 'License was successfully updated.' 
+                      else
+                        render 'new'    
+                      end 
+                  }   
+      format.js {
+                  @license.update_attributes(license_params) 
+                }                         
     end
   end
-
+  
  def destroy
     @license.destroy
     respond_to do |format|
       format.html { redirect_to licenses_url }
-      format.json { head :no_content }
+      format.js {  }
     end
+  end
+
+  def get_license_by_school_id
+  	@licenses = License.where("school_id = '#{params[:license][:school_id]}'").order("created_at DESC")
   end
 
   private
