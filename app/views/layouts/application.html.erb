@@ -53,8 +53,9 @@
 		<li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
 			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
           <ul class="children">
-             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id => 1) %></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin List", users_path(:role_id => 1) %></li>
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
           </ul
         </li>
 		<%end%>

@@ -43,4 +43,5 @@ BooksThatShow::Application.configure do
       password: "kalyanicue" 
     }
   
+  Paperclip.options[:command_path] = "/usr/local/bin/"
 end

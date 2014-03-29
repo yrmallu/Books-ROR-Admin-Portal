@@ -24,10 +24,15 @@ gem 'kaminari', '0.15.1'
 
 gem 'annotate', '2.6.2'
 
+# provides country and subregion information
+gem 'carmen-rails', '1.0.1'
+
+# provide uploading functionality 
+gem 'paperclip', '4.1.1'
+
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '3.1.5'
- 
-gem 'carmen-rails'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -51,8 +56,6 @@ end
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
 group :development do
  gem 'letter_opener', '1.2.0'
 end
@@ -64,9 +67,7 @@ group :development, :test do
 end
 
 group :test do
-  #gem 'cucumber-rails', '1.4.0', :require => false
   gem 'capybara', '2.2.1'
   gem 'database_cleaner', '1.2.0'
   gem 'email_spec', '1.5.0'
-  gem 'shoulda-matchers', '2.5.0'
 end
