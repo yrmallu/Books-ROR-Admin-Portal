@@ -12,7 +12,7 @@
 		    <% @licenses.each do |lic| %>
                 <tr class="odd gradeX">
                     <td class=""><%= lic.no_of_licenses %></td>
-					<td class=""><%#= lic.used_licenses %></td>
+					<!-- <td class=""><%#= lic.used_licenses %></td> -->
                     <td class=""><%= lic.expiry_date %></td>
 					<td>
 					    <%= link_to '<i title="Edit License" class="fa fa-pencil"></i>'.html_safe, edit_license_path(:id=>lic, :school_id=>lic.school_id), :remote=>true%> 

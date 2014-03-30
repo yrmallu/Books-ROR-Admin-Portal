@@ -41,8 +41,8 @@ class UsersController < ApplicationController
    
   def update
     if @user.update_attributes(user_params)
-	  @license = License.find(params[:user][:license_id]) 
-	  @license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
+	  #@license = License.find(params[:user][:license_id]) 
+	  #@license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
       redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
     end
   end
