@@ -5,7 +5,6 @@ class CreateClassrooms < ActiveRecord::Migration
       t.string :name
       t.string :cover_image
       t.string :secret_key
-     # t.hstore :classroom_count
 
       t.timestamps
     end

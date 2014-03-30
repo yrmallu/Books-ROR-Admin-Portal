@@ -1,35 +1,54 @@
-<h1>Listing classrooms</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Code</th>
-      <th>Name</th>
-      <th>Cover image</th>
-      <th>Secret key</th>
-      <th>Classroom count</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @classrooms.each do |classroom| %>
-      <tr>
-        <td><%= classroom.code %></td>
-        <td><%= classroom.name %></td>
-        <td><%= classroom.cover_image %></td>
-        <td><%= classroom.secret_key %></td>
-        <td><%= classroom.classroom_count %></td>
-        <td><%= link_to 'Show', classroom %></td>
-        <td><%= link_to 'Edit', edit_classroom_path(classroom) %></td>
-        <td><%= link_to 'Destroy', classroom, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Classroom', new_classroom_path %>
+<%= form_tag 'classrooms/delete_classroom', remote: true do %>
+<div class="panel panel-default">
+	<div class="panel-body"> 
+		<div class="index_page_btns" data-no-turbolink>
+       		<%=link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
+			<% if can? :create, Classroom %> <%=link_to 'Add Classroom', new_classroom_path, :class=>"btn btn-success btn-xs"%> <%end%>
+			<%=link_to 'Renew', new_classroom_path, :class=>"btn btn-success btn-xs"%>
+			<%=submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
+	 	</div>
+	 <div class="table-responsive">
+		<table class="table" id="classroom_table">
+            <thead>
+                <tr>
+                	<th><%= check_box_tag 'classroom_id[]', '', false, :class => "select-all-classroom" %></th>
+                    <th>Classroom Code</th>
+                    <th>Classroom Name</th>
+                    <th>Cover image</th>
+                    <th>Secret key</th>
+                    <th>Teacher count</th>
+                    <th>Student count</th>
+					<th>Actions</th>
+                 </tr>
+              </thead>
+              <tbody>
+				 <% @classrooms.each do |classroom| %>
+                 	<tr class="odd gradeX">
+                 	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "classroom-check-box" %></td>	
+                      <td class=""><%= classroom.code %></td>
+                      <td class=""><%= classroom.name %></td>
+                      <td class=""><%= classroom.cover_image %></td>
+                      <td class="center "><%= classroom.secret_key %></td>
+                      <td class="center "><%= classroom.teacher_count %></td>
+                      <td class="center "><%= classroom.student_count %></td>
+   				      <td data-no-turbolink>
+						  <% if can? :update, Classroom %>
+						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(classroom) %> 						  <%end%>
+   				   	      <% if can? :destroy, Classroom %> 
+						      <%= link_to '<i title="Archive Classroom" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: 'Are you sure?' } %> 
+					      <%end%>
+					</td>
+                   </tr>
+				 <% end %>
+             </tbody>
+    	</table>
+	</div>
+	<div data-no-turbolink>
+		<%= paginate @classrooms %>
+	</div>	
+</div>		  
+<% end %>
+<script type="text/javascript">
+showHideMenu('li_school');
+</script>

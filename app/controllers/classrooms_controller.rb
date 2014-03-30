@@ -4,7 +4,7 @@ class ClassroomsController < ApplicationController
   # GET /classrooms
   # GET /classrooms.json
   def index
-    @classrooms = Classroom.all
+    @classrooms = Classroom.order("created_at DESC").page params[:page]
   end
 
   # GET /classrooms/1
@@ -61,6 +61,16 @@ class ClassroomsController < ApplicationController
     end
   end
 
+  # DELETE checked classroom
+  def delete_classroom
+    Classroom.where(id: params[:classroom_ids]).each do |classroom|
+      classroom.destroy
+    end
+    respond_to do |format|
+      format.js
+    end  
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_classroom
@@ -69,6 +79,6 @@ class ClassroomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def classroom_params
-      params.require(:classroom).permit(:code, :name, :cover_image, :secret_key, :classroom_count)
+      params.require(:classroom).permit(:code, :name, :cover_image, :secret_key, :classroom_count, :teacher_count, :student_count)
     end
 end

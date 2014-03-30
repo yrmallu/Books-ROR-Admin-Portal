@@ -1,29 +1,42 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Code:</strong>
-  <%= @classroom.code %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @classroom.name %>
-</p>
-
-<p>
-  <strong>Cover image:</strong>
-  <%= @classroom.cover_image %>
-</p>
-
-<p>
-  <strong>Secret key:</strong>
-  <%= @classroom.secret_key %>
-</p>
-
-<p>
-  <strong>Classroom count:</strong>
-  <%= @classroom.classroom_count %>
-</p>
-
-<%= link_to 'Edit', edit_classroom_path(@classroom) %> |
-<%= link_to 'Back', classrooms_path %>
+<div class="row">
+	<div class="col-md-12">
+    	<div class="panel panel-default">
+        	<div class="panel-heading">
+            	<h4 class="panel-title">Classroom Information</h4>
+        	</div>
+        	<div class="panel-body">
+            	<address>
+                	<strong>Code:</strong>
+                	<%= @classroom.code %>
+            	</address>
+            	<address>
+			    	<strong>Name:</strong>
+			    	<%= @classroom.name %>
+            	</address>
+            	<address>
+			    	<strong>Cover Image:</strong>
+			    	<%= @classroom.cover_image %>
+            	</address>
+            	<address>
+			    	<strong>Secret Key:</strong>
+			    	<%= @classroom.secret_key %>
+            	</address>
+            	<address>
+			    	<strong>Teacher Count:</strong>
+			    	<%= @classroom.teacher_count %>
+            	</address>
+            	<address>
+			    	<strong>Student Count:</strong>
+			    	<%= @classroom.student_count %>
+            	</address>
+			    <div data-no-turbolink>
+			    	<%= link_to 'Edit', edit_classroom_path(@classroom), :class=>"btn btn-success btn-xs", data: { disable_with: 'Saving...' } %>
+					<%= link_to 'Cancel', classrooms_path, class: "btn btn-white btn-xs"%>
+        	    </div>
+		    </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	showHideMenu('li_school');	
+</script>
