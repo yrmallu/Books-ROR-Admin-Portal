@@ -21,7 +21,7 @@
 	                </div>
 	                <div class="col-sm-3">
 	                    <div class="form-group">
-							<% unless @role_id.eql?('1')%>
+							<% if !@role_id.eql?('1')%>
 								<%#= render 'school_admin', f: f%>
 								<%= f.label :school_id, "School", :class=>"control-label" %><span class="asterisk">*</span>
 								<%= f.select :school_id, options_for_select(@schools.collect {|s| [ s.name, s.id ]}, :selected=>f.object.school_id), {:prompt => "Select School"}, {:class => "form-control", :required=>true}%>
@@ -48,7 +48,7 @@
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 			    		    <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
-			    			<%= f.password_field :password, :required=>true, :class=>"form-control" %>
+			    			<%= f.password_field :password, :required=>true, :class=>"form-control class_password" %>
 	                    </div>
 	                </div>
 	                <div class="col-sm-3">

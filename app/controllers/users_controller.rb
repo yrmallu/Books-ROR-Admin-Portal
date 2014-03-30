@@ -4,8 +4,8 @@ class UsersController < ApplicationController
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :get_all_schools, :only=> [:new, :edit]
   
-  before_action :set_user, :only => [:show, :edit, :update, :destroy]
-  before_action :get_role_id, :only => [:new, :index, :edit, :show, :create] 
+  before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password ]
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
       if @user.save
-        redirect_to @user, notice: 'User was successfully created.' 
+        redirect_to user_path(:id=>@user, :role_id=>params[:user][:role_id]), notice: 'User created.' 
       else 
         render :action=> 'new'
 	  end
@@ -41,30 +41,32 @@ class UsersController < ApplicationController
    
   def update
     if @user.update_attributes(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+	  @license = License.find(params[:user][:license_id]) 
+	  @license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
+      redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
     end
   end
   
   def destroy
     @user.update_attributes(:delete_flag=>true)
-    redirect_to users_url
+    redirect_to users_path(:role_id => @user.role_id), notice: 'User deleted.' 
   end
   
   def get_user_school_licenses
-    @user_id = params[:id] 
-	user = User.find(params[:id])
-	@licenses = License.where(" school_id = '#{user.school_id}'")
+    @licenses = License.where(" school_id = '#{@user.school_id}' AND expiry_date > '#{Time.now.to_date}' ")
     render :partial=>"assign_license"
   end
   
-  def update_user_license
-    p "user to update===",@user = User.find(params[:id])
-	p "exp date===", params[:expiry_date]
-	if @user.update_attributes(user_license_params)
-      redirect_to @user, notice: 'User was successfully updated.'
-    end
+  def change_user_password
+    render :partial=>"change_password"
   end
   
+  def update_new_password
+	if @user.update_attributes(change_password_params)
+      redirect_to users_path(:role_id => @user.role_id), notice: 'User password changed.'
+    end
+  end
+   
   def reset_password
     @email_id = Base64.decode64(params[:email])
   	render :layout=>"login"
@@ -106,14 +108,14 @@ class UsersController < ApplicationController
     end
   end
   
-  def delete_user
-    User.where(id: params[:user_ids]).each do |user|
-      user.update_attributes(delete_flag: true)
-    end
-    respond_to do |format|
-      format.js
-    end  
-  end
+  # def delete_user
+#     User.where(id: params[:user_ids]).each do |user|
+#       user.update_attributes(delete_flag: true)
+#     end
+#     respond_to do |format|
+#       format.js
+#     end  
+#   end
   
   def get_role_id
   	@role_id = params[:role_id]
@@ -125,11 +127,11 @@ class UsersController < ApplicationController
     end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id)
   end
   
-  def user_license_params
-    params.require(:user).permit(:license_expiry_date, :license_id)
+  def change_password_params
+    params.require(:user).permit(:password, :password_confirmation)
   end
   
 end
