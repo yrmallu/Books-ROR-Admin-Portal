@@ -21,7 +21,7 @@ class LicensesController < ApplicationController
 	respond_to do |format|
     	format.html {
 			if @license.save
-				flash[:success] = "License created."
+				#flash[:success] = "License created."
 			    redirect_to @license
 			else
 			    render 'new'
@@ -30,7 +30,7 @@ class LicensesController < ApplicationController
 		 format.js {
               @license.save  
 			  get_license_by_school_id
-			  flash[:success] = "License created."
+			  #flash[:success] = "License created."
          }
 	end
   end
@@ -41,7 +41,7 @@ class LicensesController < ApplicationController
     respond_to do |format|
       format.html {
                      if @license.update_attributes(license_params)
-                        redirect_to @license, notice: 'License was successfully updated.' 
+                        redirect_to @license
                       else
                         render 'new'    
                       end 
@@ -54,6 +54,7 @@ class LicensesController < ApplicationController
   
  def destroy
     @license.destroy
+	@licenses = License.where("school_id = '#{params[:school_id]}'").order("created_at DESC")
     respond_to do |format|
       format.html { redirect_to licenses_url }
       format.js {  }

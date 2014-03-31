@@ -1,4 +1,4 @@
-<%= form_tag 'users/delete_user', remote: true do %>
+<%#= form_tag 'users/delete_user', remote: true do %>
   <div class="panel panel-default">
 	<div class="panel-body"> 
 	  <div class="index_page_btns" data-no-turbolink>
@@ -6,6 +6,8 @@
 			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.eql?('2')%>
 		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
+		<%elsif @role_id.eql?('3')%>
+		    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>	
 		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	  </div>
@@ -17,8 +19,9 @@
                 	<th></th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Username</th>
                     <th>Email</th>
+					<th>Phone Number</th>
+					<th>License Expiration Date</th>
 					<th>Actions</th>
                  </tr>
               </thead>
@@ -28,17 +31,28 @@
                  	  <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
                       <td class=""><%= user.first_name %></td>
                       <td class=""><%= user.last_name %></td>
-                      <td class=""><%= user.username %></td>
                       <td class="center "><%= user.email %></td>
+					  <td class=""><%= user.phone_number %></td>
+					  <td class=""><%= user.license_expiry_date %></td>
 					 
    				      <td data-no-turbolink>
    				      	<% if user.email == current_user.email %>
-   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> 
+   				      		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>  | 
    				      	<% else %>			
-						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>
+						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> | 
 						<% end %> 
-   				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %>
-					 </td>
+   				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %> | 
+						<% unless @role_id.eql?('1')%>  
+						    <%= hidden_field_tag :user_id, user.id%>
+							<button class="btn btn-primary btn-xs assign_milestone" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
+						        Assign License
+						    </button> | 
+						<%end%>  
+						<button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%=user.id%>' >
+					       Change Password
+					    </button>
+						<%#= link_to '<i title="Change Password" class="fa fa-lock"></i>'.html_safe, '', :class=>"", data: { toggle: "modal", target: "#myModal"} %>
+					</td>
                  </tr>
 				 <% end %>
         </tbody>
@@ -49,7 +63,43 @@
 		<%= paginate @users %>
 	</div>
  </div>		  
-<% end %>		
+<%#= end %>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Assign License</h4>
+      </div>
+      <div class="modal-body">
+		  <div id="school_licenses_list"></div>
+	  </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Assign</button>
+      </div> -->
+    </div>
+  </div>
+</div>		
+
+
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+      </div>
+      <div class="modal-body">
+		  <div id="change_user_password_info"></div>
+	  </div>
+    </div>
+  </div>
+</div>	
+
+
 
 <script type="text/javascript">
 	if( <%= @role_id.eql?('1')%>)
@@ -60,4 +110,32 @@
 	{
 	    showHideMenu('li_schooladmin');	
 	}
+	else if(<%= @role_id.eql?('3')%>)
+	{
+	    showHideMenu('li_teacher');	
+	}
+
+$( ".assign_milestone" ).click(function() {
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input')},
+function(data) {
+	         
+             if(data)
+              {
+			   jQuery("#school_licenses_list").html(data);
+             }
+      });
+});
+
+$( ".change_password" ).click(function() {
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input')},
+function(data) {
+	         
+             if(data)
+              {
+			   jQuery("#change_user_password_info").html(data);
+             }
+      });
+});
+
 </script>
+

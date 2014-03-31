@@ -2,15 +2,20 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-
-  before_action :set_user, :only => [:show, :edit, :update, :destroy]
-  before_action :get_role_id, :only => [:new, :index, :edit, :show, :create] 
+  before_action :get_all_schools, :only=> [:new, :edit]
+  
+  before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password ]
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-    @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
-    set_bread_crumb @role_id
+    unless @role_id.blank?
+      @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
+    else
+	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+	end
+	set_bread_crumb @role_id
   end
   
   def show
@@ -18,44 +23,59 @@ class UsersController < ApplicationController
  
   def new
     @user = User.new
-
     set_bread_crumb @role_id
   end
  
   def edit
-
     set_bread_crumb @role_id
   end
  
   def create
     @user = User.new(user_params)
       if @user.save
-        redirect_to @user, notice: 'User was successfully created.' 
+  	    #user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :reset_pass_url => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :link => "http://"+request.env['HTTP_HOST']+"/users/?"+@user.id.to_s+"/edit?role_id="+@role_id.to_s, :url =>  "http://"+request.env['HTTP_HOST'] } 
+  	    #UserMailer.welcome_email(user_info).deliver
+        redirect_to user_path(:id=>@user, :role_id=>params[:user][:role_id]), notice: 'User created.' 
       else 
         render :action=> 'new'
 	  end
   end
    
   def update
-    if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+    if @user.update_attributes(user_params)
+	  #@license = License.find(params[:user][:license_id]) 
+	  #@license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
+      redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
     end
   end
   
   def destroy
     @user.update_attributes(:delete_flag=>true)
-    redirect_to users_url
+    redirect_to users_path(:role_id => @user.role_id), notice: 'User deleted.' 
   end
   
+  def get_user_school_licenses
+    @licenses = License.where(" school_id = '#{@user.school_id}' AND expiry_date > '#{Time.now.to_date}' ")
+    render :partial=>"assign_license"
+  end
+  
+  def change_user_password
+    render :partial=>"change_password"
+  end
+  
+  def update_new_password
+	if @user.update_attributes(change_password_params)
+      redirect_to users_path(:role_id => @user.role_id), notice: 'User password changed.'
+    end
+  end
+   
   def reset_password
     @email_id = Base64.decode64(params[:email])
   	render :layout=>"login"
   end
 
   def dashboard
-    
     set_bread_crumb
-     
   end  
   
   def set_new_password
@@ -90,17 +110,17 @@ class UsersController < ApplicationController
     end
   end
   
-  def delete_user
-    User.where(id: params[:user_ids]).each do |user|
-      user.update_attributes(delete_flag: true)
-    end
-    respond_to do |format|
-      format.js
-    end  
-  end
+  # def delete_user
+#     User.where(id: params[:user_ids]).each do |user|
+#       user.update_attributes(delete_flag: true)
+#     end
+#     respond_to do |format|
+#       format.js
+#     end  
+#   end
   
   def get_role_id
-  	p "role_id=====",@role_id = params[:role_id]
+  	@role_id = params[:role_id]
   end
   
   private
@@ -109,7 +129,11 @@ class UsersController < ApplicationController
     end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id)
+  end
+  
+  def change_password_params
+    params.require(:user).permit(:password, :password_confirmation)
   end
   
 end

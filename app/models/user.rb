@@ -13,9 +13,15 @@ class User < ActiveRecord::Base
   belongs_to :role
   has_many :user_accessrights
   belongs_to :user
+  #before_save :update_license_count
   
-  store_accessor :userinfo, :phone_number,:license_id,:user_level,:grade,:reading_ability,:reading_based_on,:profile_pic,:parent_name,:parent_email
+  store_accessor :userinfo, :phone_number, :license_id, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic, :parent_name, :parent_email
   
+  
+  # def update_license_count
+#     p "current lic====", user.license_id
+# 	p "old lic ====", user.license_id_was	
+#   end
   
   def access_to_remove_or_add(options={})
     options[:accessright].each do |access|

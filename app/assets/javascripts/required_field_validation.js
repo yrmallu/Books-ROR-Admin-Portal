@@ -9,6 +9,11 @@ required_field = function(){
 			"session[password]":{ required: true, minlength: 5 },
 			"license[expiry_date]":{required: true} ,
 			"license[no_of_licenses]":{ required: true, number: true },
+			"user[school_id]":{required: true} ,
+			"user[first_name]":{required: true} ,
+			"user[email]":{ email:true, required: true} ,
+			"user[password]":{ minlength: 5, required: true} ,
+			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} ,
             email: {
 				required:true,
 				email:true
@@ -45,7 +50,19 @@ required_field = function(){
 			},
 			"user[phone_number]":"Please enter only number.",
 			"license[expiry_date]":"Please enter license expiration date.",
-			"license[no_of_licenses]":"Please enter only number."
+			"license[no_of_licenses]":"Please enter only number.",
+			"user[school_id]":"Select School.",
+			"user[first_name]":"First Name can't be blank.",
+			"user[email]":"Enter a valid email address.",
+			"user[password]":{
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long."
+			},
+			"user[password_confirmation]": {
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long.",
+				equalTo: "Please enter the same password as above."
+			}
 		}
 		});
 	}
