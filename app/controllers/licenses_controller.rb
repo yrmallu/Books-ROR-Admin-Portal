@@ -37,7 +37,7 @@ class LicensesController < ApplicationController
 
   def update
     @license = License.find(params[:id])
-	@licenses = License.where("school_id = '#{params[:license][:school_id]}'").order("created_at DESC")
+	  @licenses = License.where("school_id = '#{params[:license][:school_id]}'").order("created_at DESC")
     respond_to do |format|
       format.html {
                      if @license.update_attributes(license_params)
