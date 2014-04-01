@@ -2,8 +2,7 @@
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	        <div class="panel-heading">
-	            <h4 class="panel-title">User Form</h4>
-	             <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	        	<p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
 	        	<%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
@@ -21,11 +20,11 @@
 	            <%= render 'common_fields', f: f%>
 	        </div>
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' } %>
+	            <%= f.submit "Save", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' } %>
 				<% if @role_id.eql?('1')%>
 					<%= link_to 'Cancel', users_path(:role_id => 1), class: "btn btn-white btn-xs"%>
 				<% elsif @role_id.eql?('2')%>
-				    <%= link_to 'Cancel', users_path(:role_id => 2), class: "btn btn-white btn-xs"%>
+				    <%= link_to 'Cancel', users_path(:role_id => 2, :school_id => session[:school_id]), class: "btn btn-white btn-xs"%>
 				<%end%>	
 	        </div>
 			<% end %>
@@ -40,7 +39,11 @@
 	}
 	else if(<%= @role_id.eql?('2')%>)
 	{
-	    showHideMenu('li_schooladmin');	
+	    showHideMenu('li_school');	
+	}
+	else if(<%= @role_id.eql?('3')%>)
+	{
+	    showHideMenu('li_teacher');	
 	}
 </script>
 

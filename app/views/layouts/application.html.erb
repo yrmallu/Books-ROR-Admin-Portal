@@ -47,6 +47,7 @@
 			  <%end%>
 			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
 			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Classroom List", classrooms_path %></li>
+			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Student List", users_path(:role_id => 4) %></li>
           </ul>
         </li>
 		
@@ -60,13 +61,6 @@
           </ul
         </li>
 		<%end%>
-		<li class="nav-parent" id="li_schooladmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "School Admin", root_path %>
-			<span class="arrow arrw-pos" container_li="li_schooladmin"></span>
-          <ul class="children">
-             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School Admin", new_user_path(:role_id => 2)%></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School Admin List", users_path(:role_id => 2) %></li>
-          </ul
-        </li>
 		<li class="nav-parent" id="li_teacher"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Teacher", root_path %>
 			<span class="arrow arrw-pos" container_li="li_teacher"></span>
           <ul class="children">
