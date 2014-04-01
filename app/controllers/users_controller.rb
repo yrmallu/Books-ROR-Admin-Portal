@@ -3,7 +3,6 @@ class UsersController < ApplicationController
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :get_all_schools, :only=> [:new, :edit]
-  
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
   
@@ -36,11 +35,13 @@ class UsersController < ApplicationController
  
   def create
     @user = User.new(user_params)
+	path = request.env['HTTP_HOST']
     @user.school_id = session[:school_id]
       if @user.save
-        redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>params[:user][:role_id]), notice: 'User was successfully created.' 
-  	    #user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :reset_pass_url => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :link => "http://"+request.env['HTTP_HOST']+"/users/?"+@user.id.to_s+"/edit?role_id="+@role_id.to_s, :url =>  "http://"+request.env['HTTP_HOST'] } 
+        redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>params[:user][:role_id]), notice: 'User created.' 
+  	    #user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :reset_pass_url => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :link => "http://"+request.env['HTTP_HOST']+"/users/"+@user.id.to_s+"/edit?role_id="+params[:user][:role_id].to_s, :url =>  "http://"+request.env['HTTP_HOST'] } 
   	    #UserMailer.welcome_email(user_info).deliver
+		@user.welcome_email(path)
         #redirect_to user_path(:id=>@user, :role_id=>params[:user][:role_id]), notice: 'User created.' 
       else 
         render :action=> 'new'
@@ -48,11 +49,13 @@ class UsersController < ApplicationController
   end
    
   def update
+    path = request.env['HTTP_HOST']
     if @user.update_attributes(user_params)
 	  #@license = License.find(params[:user][:license_id]) 
 	  #@license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
-      redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
-    end
+	  redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
+      @user.user_details_change_email(current_user.first_name, path)
+	end
   end
   
   def destroy

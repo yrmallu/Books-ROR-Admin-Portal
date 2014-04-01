@@ -20,7 +20,7 @@
 	            <%= render 'common_fields', f: f%>
 	        </div>
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' } %>
+	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
 				<% if @role_id.eql?('1')%>
 					<%= link_to 'Cancel', users_path(:role_id => 1), class: "btn btn-white btn-xs"%>
 				<% elsif @role_id.eql?('2')%>

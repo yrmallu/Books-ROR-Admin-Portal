@@ -16,7 +16,7 @@
                     <td class=""><%= lic.expiry_date %></td>
 					<td>
 					    <%= link_to '<i title="Edit License" class="fa fa-pencil"></i>'.html_safe, edit_license_path(:id=>lic, :school_id=>lic.school_id), :remote=>true%> 
-					    <%= link_to '<i title="Archive License" class="glyphicon glyphicon-trash"></i>'.html_safe, lic, :school_id=>lic.school_id, method: :delete, data: { confirm: 'Are you sure?' }, :remote=>true %>						
+					    <%= link_to '<i title="Archive License" class="glyphicon glyphicon-trash"></i>'.html_safe, lic, method: :delete, data: { confirm: 'Are you sure?' }, :remote=>true %>						
 		           </td> 
 			   </tr>
 		    <% end %>
