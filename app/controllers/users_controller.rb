@@ -38,7 +38,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.school_id = session[:school_id]
       if @user.save
-        redirect_to users_path(:id=>@user, :school_id=> params[:user][:school_id], :role_id=>params[:user][:role_id]), notice: 'User was successfully created.' 
+        redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>params[:user][:role_id]), notice: 'User was successfully created.' 
   	    #user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :reset_pass_url => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :link => "http://"+request.env['HTTP_HOST']+"/users/?"+@user.id.to_s+"/edit?role_id="+@role_id.to_s, :url =>  "http://"+request.env['HTTP_HOST'] } 
   	    #UserMailer.welcome_email(user_info).deliver
         #redirect_to user_path(:id=>@user, :role_id=>params[:user][:role_id]), notice: 'User created.' 
