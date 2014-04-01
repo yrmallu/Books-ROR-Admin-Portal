@@ -10,11 +10,13 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-    unless @role_id.blank?
+    if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
-    else
-	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
-	end
+    elsif !@role_id.blank? && !params[:school_id].blank?
+      @users = User.where("delete_flag is not true AND role_id = '#{@role_id}' AND school_id = '#{params[:school_id]}'").order("created_at DESC").page params[:page]
+	  else
+	   @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+	  end
 	set_bread_crumb @role_id
   end
   
@@ -22,6 +24,8 @@ class UsersController < ApplicationController
   end
  
   def new
+    session[:school_id] = nil
+    session[:school_id] = params[:school_id] 
     @user = User.new
     set_bread_crumb @role_id
   end
@@ -32,8 +36,9 @@ class UsersController < ApplicationController
  
   def create
     @user = User.new(user_params)
+    @user.school_id = session[:school_id]
       if @user.save
-        redirect_to @user, notice: 'User was successfully created.' 
+        redirect_to users_path(:school_id=> @user.school_id, :role_id=> @user.role_id ), notice: 'User was successfully created.' 
       else 
         render :action=> 'new'
 	  end

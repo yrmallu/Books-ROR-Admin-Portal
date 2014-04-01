@@ -1,9 +1,11 @@
 class User < ActiveRecord::Base
+  validates_uniqueness_of :email
   
   paginates_per 10
   max_paginates_per 10
-  
+ 
   has_secure_password
+ 
   before_save { self.email = email.downcase }
          
   has_many :user_classrooms    

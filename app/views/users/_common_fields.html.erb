@@ -19,23 +19,6 @@
 		    			    <%= f.text_field :phone_number, :class=>"form-control" %>
 	                    </div>
 	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-							<% unless @role_id.eql?('1')%>
-								<%#= render 'school_admin', f: f%>
-								<%= f.label :school_id, "School", :class=>"control-label" %><span class="asterisk">*</span>
-								<%= f.select :school_id, options_for_select(@schools.collect {|s| [ s.name, s.id ]}, :selected=>f.object.school_id), {:prompt => "Select School"}, {:class => "form-control", :required=>true}%>
-							<%end%>
-		                </div>
-		            </div>
-	            </div>
-				<div class="row">
-	                <!-- <div class="col-sm-3">
-	                    <div class="form-group">
-				    		<%#= f.label :username, "Username", :class=>"control-label"%>
-				    		<%#= f.text_field :username, :class=>"form-control" %>
-	                    </div>
-	                </div> -->
 	                <div class="col-sm-6">
 	                    <div class="form-group">
 		   			    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
@@ -43,6 +26,14 @@
 	                    </div>
 	                </div>
 	            </div>
+			  <!-- <div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+				    		<%#= f.label :username, "Username", :class=>"control-label"%>
+				    		<%#= f.text_field :username, :class=>"form-control" %>
+	                    </div>
+	                </div> 
+	            </div>-->
 				<% unless ('edit').eql?action_name%>
 	            <div class="row">
 	                <div class="col-sm-3">

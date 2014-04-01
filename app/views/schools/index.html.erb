@@ -46,7 +46,9 @@
    				   	      <% if can? :destroy, School %> 
 						      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: 'Are you sure?' } %> 
 					      <%end%>
-						  <%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> 
+						  <%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%>
+						  <%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
+						  <%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>2), :class=>"btn btn-success btn-xs"%>	
 					</td>
                  </tr>
 				 <% end %>
