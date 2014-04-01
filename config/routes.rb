@@ -20,13 +20,14 @@ BooksThatShow::Application.routes.draw do
   resources :users do 
     collection do
       post :delete_user
-	    get :'dashboard'
-	    get :'forgot_password'
-	    get :'reset_password'
-	    post :'set_new_password'
-	    post :'email_for_password'
-	    get :'get_user_school_licenses'
-	    post :'update_user_license'
+	  #post :'update_user_license'
+	  get :'change_user_password'
+	  get :'dashboard'
+	  get :'forgot_password'
+	  get :'reset_password'
+	  post :'set_new_password'
+	  post :'email_for_password'
+	  get :'get_user_school_licenses'
      end
   end
 

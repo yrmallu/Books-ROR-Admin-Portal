@@ -13,7 +13,7 @@ required_field = function(){
 			"user[first_name]":{required: true} ,
 			"user[email]":{ email:true, required: true} ,
 			"user[password]":{ minlength: 5, required: true} ,
-			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "user[password]"} ,
+			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} ,
             email: {
 				required:true,
 				email:true

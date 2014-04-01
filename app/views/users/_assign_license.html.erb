@@ -2,24 +2,33 @@
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	       <div class="panel-body">
-	        	<%= form_tag update_user_license_users_path(:id=>@user_id), :class=>"form_validation"  do %>
-				    <%#= hidden_field_tag :id, @user_id%>
+			   <%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
+	        	<%#= form_tag update_user_license_users_path(:id=>@user.id), :class=>"form_validation"  do %>
 				    <div class="row">
-		                <div class="col-sm-3">
+		                <div class="col-sm-6">
 		                    <div class="form-group">
-								<%= label_tag "license_id", "License", :class=>"control-label" %><span class="asterisk">*</span>
-		    					<%= select_tag :license_id, options_from_collection_for_select(@licenses, 'id', 'expiry_date'), {:prompt=>"Select License", :class=>"form-control", :required=>true}%>
-							</div>
+								<%= f.label :license_id, "License", :class=>"control-label" %><span class="asterisk">*</span>
+		    					<%= f.select :license_id, options_for_select(@licenses.collect {|m| [ m.expiry_date, m.id ] }, :selected=>f.object.license_id), {:prompt=>"Select License"}, {:class=>"form-control class_licenses", :required=>true}%>
+								 <%=f.hidden_field :license_expiry_date%>
+						    </div>
 		                </div>
 		            </div>
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= submit_tag "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
+				<button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
 	        </div>
 			<% end %>
 	    </div>
     </div>       
 </div>
 
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $('.class_licenses').change(function() {
+		$('#user_license_expiry_date').val($(".class_licenses :selected").text()); 
+    });	
+});
+</script>
 	
