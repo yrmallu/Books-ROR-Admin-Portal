@@ -1,4 +1,4 @@
-BooksThatShow::Application.routes.draw do
+BooksThatGrow::Application.routes.draw do
   resources :books
 
   resources :classrooms do

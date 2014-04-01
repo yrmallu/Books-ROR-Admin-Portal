@@ -2,7 +2,8 @@ class UserMailer < ActionMailer::Base
   default from: 'notifications@example.com'
   
   def welcome_email(user_info)
- 	email = user_info[:email]
+ 	#email = user_info[:email]
+	email = 'kalyani.bagale@cuelogic.co.in'
     @username = user_info[:username]
     @link =  user_info[:link]
     @url  = user_info[:url]
@@ -12,7 +13,7 @@ class UserMailer < ActionMailer::Base
   
   def forgot_password_email(user_info)
   	#email = user_info[:email]
-	email = 'bagale.kalyani@gmail.com'
+	email = 'kalyani.bagale@cuelogic.co.in'
 	@username = user_info[:username]
     @link =  user_info[:link]
     @url  = user_info[:url]

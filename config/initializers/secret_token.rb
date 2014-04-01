@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-BooksThatShow::Application.config.secret_key_base = '71b6096050edb6cba5bfa554ab98fecc8a19bd039e4c1274bf237b10268d11a0d02d379a18cb17a78be185d7fe6d4443b12349e3a495c23b1574757a7a6761bd'
+BooksThatGrow::Application.config.secret_key_base = '71b6096050edb6cba5bfa554ab98fecc8a19bd039e4c1274bf237b10268d11a0d02d379a18cb17a78be185d7fe6d4443b12349e3a495c23b1574757a7a6761bd'

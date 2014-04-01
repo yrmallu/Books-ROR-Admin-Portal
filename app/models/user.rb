@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   belongs_to :role
   has_many :user_accessrights
   belongs_to :user
+  has_one :license
   #before_save :update_license_count
   
   store_accessor :userinfo, :phone_number, :license_id, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic, :parent_name, :parent_email
