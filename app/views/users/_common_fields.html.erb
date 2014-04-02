@@ -22,7 +22,8 @@
 	                <div class="col-sm-6">
 	                    <div class="form-group">
 		   			    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
-		   			    	<%= f.text_field :email, :required=>true, :class=>"form-control" %>
+		   			    	<%= f.text_field :email, :required=>true, :class=>"form-control email_validation" %>
+							<span class="help-inline error_box"></span>
 	                    </div>
 	                </div>
 	            </div>

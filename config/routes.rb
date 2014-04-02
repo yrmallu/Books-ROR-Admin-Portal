@@ -28,6 +28,7 @@ BooksThatGrow::Application.routes.draw do
 	  post :'set_new_password'
 	  post :'email_for_password'
 	  get :'get_user_school_licenses'
+	  get :'email_validation'
      end
   end
 

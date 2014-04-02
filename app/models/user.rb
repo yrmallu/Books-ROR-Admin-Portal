@@ -14,10 +14,12 @@ class User < ActiveRecord::Base
   has_many :user_accessrights
   belongs_to :user
   has_one :license
-  #before_save :update_license_count
   
   store_accessor :userinfo, :phone_number, :license_id, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic, :parent_name, :parent_email
   
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}
+    
   def welcome_email(path)
     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s, :login_url =>  "http://"+path } 
 	UserMailer.welcome_email(user_info).deliver
@@ -25,24 +27,29 @@ class User < ActiveRecord::Base
   
   def user_details_change_email(current_user, path)
     changed_vals = Array.new  
-	if !self.first_name.eql?(self.first_name_was)
+	if !self.first_name != (self.first_name_was)
 	  changed_vals << "First Name " 
-	elsif !self.last_name != (self.last_name_was)	 
+	end
+    if !self.last_name != (self.last_name_was)	 
 	  changed_vals << "Last Name "
-	elsif !self.email != (self.email_was)	 
+	end
+	if !self.email != (self.email_was)	 
 	  changed_vals << "Email "
       user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :new_email => self.email , :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s, :login_url =>  "http://"+path } 
   	  UserMailer.user_email_changed(user_info).deliver
 	end
-
-    user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :changed_values => changed_vals , :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s, :login_url =>  "http://"+path } 
-	UserMailer.user_details_changed(user_info).deliver
+    # if userinfo_changed? 
+# 	  changed_vals << "Phone Number "
+# 	end
+	# if self.password_digest_changed?
+#       user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s, :login_url =>  "http://"+path } 
+# 	  UserMailer.user_password_changed(user_info).deliver
+# 	end
+    unless changed_vals.empty?	
+      user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :changed_values => changed_vals , :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s, :login_url =>  "http://"+path } 
+	  UserMailer.user_details_changed(user_info).deliver
+    end
   end
-  
-  # def update_license_count
-#     p "current lic====", user.license_id
-# 	p "old lic ====", user.license_id_was	
-#   end
   
   def access_to_remove_or_add(options={})
     options[:accessright].each do |access|

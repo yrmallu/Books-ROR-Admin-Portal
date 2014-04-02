@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-BooksThatShow::Application.load_tasks
+BooksThatGrow::Application.load_tasks
