@@ -49,9 +49,10 @@ class UsersController < ApplicationController
   def update
     path = request.env['HTTP_HOST']
     if @user.update_attributes(user_params)
-	  #@license = License.find(params[:user][:license_id]) 
-	  #@license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
-	  redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
+	  @license = License.find(params[:user][:license_id]) 
+	  @license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1, :role_id => params[:user][:role_id], :count => params[:user][:count])
+	  redirect_to  users_path(:role_id=>@user.role_id, :school_id=>@license.school_id), notice: 'User updated.' 
+	  
 	  if params[:user][:assign_lic].blank?
         @user.user_details_change_email(current_user.first_name, path)
 	  end
@@ -67,8 +68,9 @@ class UsersController < ApplicationController
   end
   
   def get_user_school_licenses
-    @licenses = License.where(" school_id = '#{@user.school_id}' AND expiry_date > '#{Time.now.to_date}' ")
-    render :partial=>"assign_license"
+    @licenses = License.where(" school_id = '#{@user.school_id}' AND expiry_date > '#{Time.now.to_date}' AND delete_flag is not true ")
+    @role_id = @user.role_id
+	render :partial=>"assign_license"
   end
   
   def change_user_password
@@ -150,7 +152,7 @@ class UsersController < ApplicationController
   end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :COUNT)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id)
   end
   
   def change_password_params
