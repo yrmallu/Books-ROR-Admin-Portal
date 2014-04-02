@@ -1,9 +1,9 @@
-BooksThatShow::Application.routes.draw do
+BooksThatGrow::Application.routes.draw do
   resources :books
 
   resources :classrooms do
     collection do
-      post :delete_classroom
+      post 'delete_classroom'
     end
   end
 
@@ -19,21 +19,22 @@ BooksThatShow::Application.routes.draw do
 
   resources :users do 
     collection do
-      post :delete_user
+      post 'delete_user'
 	  #post :'update_user_license'
-	  get :'change_user_password'
-	  get :'dashboard'
-	  get :'forgot_password'
-	  get :'reset_password'
-	  post :'set_new_password'
-	  post :'email_for_password'
-	  get :'get_user_school_licenses'
+	  get 'change_user_password'
+	  get 'dashboard'
+	  get 'forgot_password'
+	  get 'reset_password'
+	  post 'set_new_password'
+	  post 'email_for_password'
+	  get 'get_user_school_licenses'
+	  get 'email_validation'
      end
   end
 
   resources :schools do 
     collection do
-      post :delete_school
+      post 'delete_school'
      end
   end
   get '/schools/subregion_options' => 'schools#subregion_options'

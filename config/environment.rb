@@ -2,4 +2,4 @@
 require File.expand_path('../application', __FILE__)
 
 # Initialize the Rails application.
-BooksThatShow::Application.initialize!
+BooksThatGrow::Application.initialize!

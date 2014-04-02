@@ -3,18 +3,19 @@ class UsersController < ApplicationController
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :get_all_schools, :only=> [:new, :edit]
-  
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-    unless @role_id.blank?
+    if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
-    else
-	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
-	end
+    elsif !@role_id.blank? && !params[:school_id].blank?
+      @users = User.where("delete_flag is not true AND role_id = '#{@role_id}' AND school_id = '#{params[:school_id]}'").order("created_at DESC").page params[:page]
+	  else
+	   @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+	  end
 	set_bread_crumb @role_id
   end
   
@@ -22,6 +23,8 @@ class UsersController < ApplicationController
   end
  
   def new
+    session[:school_id] = nil
+    session[:school_id] = params[:school_id] 
     @user = User.new
     set_bread_crumb @role_id
   end
@@ -32,21 +35,30 @@ class UsersController < ApplicationController
  
   def create
     @user = User.new(user_params)
+	path = request.env['HTTP_HOST']
+    @user.school_id = session[:school_id]
       if @user.save
-  	    #user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :reset_pass_url => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :link => "http://"+request.env['HTTP_HOST']+"/users/?"+@user.id.to_s+"/edit?role_id="+@role_id.to_s, :url =>  "http://"+request.env['HTTP_HOST'] } 
-  	    #UserMailer.welcome_email(user_info).deliver
-        redirect_to user_path(:id=>@user, :role_id=>params[:user][:role_id]), notice: 'User created.' 
+        redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
+  	    @user.welcome_email(path)
+        #redirect_to user_path(:id=>@user, :role_id=>params[:user][:role_id]), notice: 'User created.' 
       else 
         render :action=> 'new'
 	  end
   end
    
   def update
+    path = request.env['HTTP_HOST']
     if @user.update_attributes(user_params)
 	  #@license = License.find(params[:user][:license_id]) 
 	  #@license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
-      redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
-    end
+	  redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
+	  if params[:user][:assign_lic].blank?
+        @user.user_details_change_email(current_user.first_name, path)
+	  end
+	else
+	  render :action=> 'new'
+	  #redirect_to  edit_user_path(:id=>@user.id), notice: 'Email already exist.'
+	end
   end
   
   def destroy
@@ -123,13 +135,22 @@ class UsersController < ApplicationController
   	@role_id = params[:role_id]
   end
   
+  def email_validation
+     @check_unique_email = User.where("email = '#{params[:email]}' and id != #{params[:id]}")
+     unless (@check_unique_email.blank?)
+        render :text => "This email is already in use."
+      else
+        render :text => "avaiable"
+     end
+   end
+  
   private
-    def set_user
-      @user = User.find(params[:id])
-    end
+  def set_user
+    @user = User.find(params[:id])
+  end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :COUNT)
   end
   
   def change_password_params

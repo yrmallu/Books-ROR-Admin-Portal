@@ -1,5 +1,5 @@
 class LicensesController < ApplicationController
-  before_action :set_license, only: [:show, :edit, :destroy]
+  before_action :set_license, only: [:show, :edit, :destroy, :update]
 
   def index
     @licenses = License.all
@@ -9,16 +9,22 @@ class LicensesController < ApplicationController
   end
 
   def new
-    @licenses = License.where("school_id = '#{params[:school_id]}'").order("created_at DESC")
+    @licenses = License.where("school_id = 5 AND delete_flag is not true").order("created_at DESC").page params[:page]
     @license = License.new
   end
 
   def edit
+    p "school_id=====", params[:school_id]
+	@school_id = params[:school_id]
   end
 
   def create
+<<<<<<< HEAD
     @license = License.new(license_params)
 	  respond_to do |format|
+=======
+   respond_to do |format|
+>>>>>>> 7b02b15db6b3bf5446ecd5e12724f0adf994af78
     	format.html {
 			if @license.save
 				#flash[:success] = "License created."
@@ -29,7 +35,7 @@ class LicensesController < ApplicationController
 		 }  
 		 format.js {
               @license.save  
-			  get_license_by_school_id
+			  #get_licenses_list
 			  #flash[:success] = "License created."
          }
 	end
@@ -38,6 +44,7 @@ class LicensesController < ApplicationController
   def update
     @license = License.find(params[:id])
 	  @licenses = License.where("school_id = '#{params[:license][:school_id]}'").order("created_at DESC")
+
     respond_to do |format|
       format.html {
                      if @license.update_attributes(license_params)
@@ -47,31 +54,30 @@ class LicensesController < ApplicationController
                       end 
                   }   
       format.js {
-                  @license.update_attributes(license_params) 
-                }                         
+	              @license.update_attributes(license_params) 
+				}                         
     end
   end
   
  def destroy
-    @license.destroy
-	@licenses = License.where("school_id = '#{params[:school_id]}'").order("created_at DESC")
-    respond_to do |format|
+    #@license.destroy
+	@license.update_attributes(:delete_flag=>true)
+	get_licenses_list
+	respond_to do |format|
       format.html { redirect_to licenses_url }
       format.js {  }
     end
   end
 
-  def get_license_by_school_id
-  	@licenses = License.where("school_id = '#{params[:license][:school_id]}'").order("created_at DESC")
+  def get_licenses_list
+    @licenses = License.where("school_id = '#{@license.school_id}' AND delete_flag is not true").order("created_at DESC").page params[:page]
   end
-
+  
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_license
       @license = License.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def license_params
       params.require(:license).permit(:no_of_licenses, :expiry_date, :school_id)
     end
