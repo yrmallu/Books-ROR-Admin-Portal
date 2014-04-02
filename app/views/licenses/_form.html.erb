@@ -7,7 +7,7 @@
 	        </div>
 	        <div class="panel-body">
 	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
-					<%= f.hidden_field :school_id, :value=>params[:school_id].blank? ? @school : params[:school_id]%>
+					<%= f.hidden_field :school_id, :value=>@school_id %>
 				    <% if @license.errors.any? %>
 				    <div id="error_explanation">
 				        <h2><%= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2>
