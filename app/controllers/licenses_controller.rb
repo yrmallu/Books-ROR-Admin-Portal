@@ -71,8 +71,6 @@ class LicensesController < ApplicationController
     end
   end
 
-  
-  
   private
     def set_license
       @license = License.find(params[:id])
