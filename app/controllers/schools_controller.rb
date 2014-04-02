@@ -1,6 +1,8 @@
 class SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy]
   before_action :get_schools, only: [:index]
+
+  before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   

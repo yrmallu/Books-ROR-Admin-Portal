@@ -1,5 +1,7 @@
 class ClassroomsController < ApplicationController
   before_action :set_classroom, only: [:show, :edit, :update, :destroy]
+  
+  before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
 
   # GET /classrooms
   # GET /classrooms.json
