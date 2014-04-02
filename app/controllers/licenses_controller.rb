@@ -18,7 +18,7 @@ class LicensesController < ApplicationController
 
   def create
     @license = License.new(license_params)
-	respond_to do |format|
+	  respond_to do |format|
     	format.html {
 			if @license.save
 				#flash[:success] = "License created."
