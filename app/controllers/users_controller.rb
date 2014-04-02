@@ -52,7 +52,9 @@ class UsersController < ApplicationController
 	  #@license = License.find(params[:user][:license_id]) 
 	  #@license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1)
 	  redirect_to  users_path(:role_id=>@user.role_id), notice: 'User updated.' 
-      @user.user_details_change_email(current_user.first_name, path)
+	  if params[:user][:assign_lic].blank?
+        @user.user_details_change_email(current_user.first_name, path)
+	  end
 	else
 	  render :action=> 'new'
 	  #redirect_to  edit_user_path(:id=>@user.id), notice: 'Email already exist.'
@@ -148,7 +150,7 @@ class UsersController < ApplicationController
   end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id)
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :COUNT)
   end
   
   def change_password_params

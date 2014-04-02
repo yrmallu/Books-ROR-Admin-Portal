@@ -27,21 +27,21 @@ class User < ActiveRecord::Base
   
   def user_details_change_email(current_user, path)
     changed_vals = Array.new  
-	if !self.first_name != (self.first_name_was)
+	unless self.first_name != (self.first_name_was)
 	  changed_vals << "First Name " 
 	end
-    if !self.last_name != (self.last_name_was)	 
+    unless self.last_name != (self.last_name_was)	 
 	  changed_vals << "Last Name "
 	end
-	if !self.email != (self.email_was)	 
+	unless self.email != (self.email_was)	 
 	  changed_vals << "Email "
       user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :new_email => self.email , :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s, :login_url =>  "http://"+path } 
   	  UserMailer.user_email_changed(user_info).deliver
 	end
-    # if userinfo_changed? 
+    # unless userinfo_changed? 
 # 	  changed_vals << "Phone Number "
 # 	end
-	# if self.password_digest_changed?
+	# unless self.password_digest_changed?
 #       user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s, :login_url =>  "http://"+path } 
 # 	  UserMailer.user_password_changed(user_info).deliver
 # 	end

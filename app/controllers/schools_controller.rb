@@ -52,10 +52,13 @@ class SchoolsController < ApplicationController
   end
 
   def destroy
-    #@school.destroy
     respond_to do |format|
       format.html { 
 	  			      @school.update_attributes(:delete_flag=>true)
+					  @licenses = @school.licenses
+					  @licenses.each do |license|
+					    license.update_attributes(:delete_flag=>true)
+					  end
 				      flash[:success] = "School deleted." 
   				      redirect_to schools_url	
 				  }
@@ -77,12 +80,10 @@ class SchoolsController < ApplicationController
   end
   
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_school
       @school = School.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def school_params
       params.require(:school).permit(:code, :name, :address, :city, :district, :state, :country, :phone,:licenses_attributes=> [:id,:license_group_id,:expiry_date,:no_of_licenses,:school_id])
     end

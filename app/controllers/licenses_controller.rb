@@ -9,16 +9,17 @@ class LicensesController < ApplicationController
   end
 
   def new
-    @licenses = License.where("school_id = '#{params[:school_id]}'").order("created_at DESC")
+    @licenses = License.where("school_id = 5 AND delete_flag is not true").order("created_at DESC").page params[:page]
     @license = License.new
   end
 
   def edit
+    p "school_id=====", params[:school_id]
+	@school_id = params[:school_id]
   end
 
   def create
-    @license = License.new(license_params)
-	respond_to do |format|
+   respond_to do |format|
     	format.html {
 			if @license.save
 				#flash[:success] = "License created."
@@ -29,14 +30,14 @@ class LicensesController < ApplicationController
 		 }  
 		 format.js {
               @license.save  
-			  get_licenses_list
+			  #get_licenses_list
 			  #flash[:success] = "License created."
          }
 	end
   end
 
   def update
-    get_licenses_list
+    #get_licenses_list
     respond_to do |format|
       format.html {
                      if @license.update_attributes(license_params)
@@ -46,14 +47,14 @@ class LicensesController < ApplicationController
                       end 
                   }   
       format.js {
-                  @license.update_attributes(license_params) 
-				  @license = License.new
-                }                         
+	              @license.update_attributes(license_params) 
+				}                         
     end
   end
   
  def destroy
-    @license.destroy
+    #@license.destroy
+	@license.update_attributes(:delete_flag=>true)
 	get_licenses_list
 	respond_to do |format|
       format.html { redirect_to licenses_url }
@@ -62,7 +63,7 @@ class LicensesController < ApplicationController
   end
 
   def get_licenses_list
-    @licenses = License.where("school_id = '#{@license.school_id}'").order("created_at DESC")
+    @licenses = License.where("school_id = '#{@license.school_id}' AND delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
   private

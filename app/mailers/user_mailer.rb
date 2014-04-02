@@ -48,8 +48,8 @@ class UserMailer < ActionMailer::Base
   end
   
   def forgot_password_email(user_info)
-  	#@email = user_info[:email]
-	@email = 'kalyani.bagale@cuelogic.co.in'
+  	@email = user_info[:email]
+	#@email = 'kalyani.bagale@cuelogic.co.in'
 	@username = user_info[:username]
     @link =  user_info[:link]
     @url  = user_info[:url]
