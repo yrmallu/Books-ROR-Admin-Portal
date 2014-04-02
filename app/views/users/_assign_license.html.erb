@@ -5,6 +5,8 @@
 			   <%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
 	        	<%#= form_tag update_user_license_users_path(:id=>@user.id), :class=>"form_validation"  do %>
 				<%= f.hidden_field :assign_lic, :value=>""%>
+				<%= f.hidden_field :role_id, :value=>@role_id%>
+				<%= f.hidden_field :count, :value=>1%>
 				    <div class="row">
 		                <div class="col-sm-6">
 		                    <div class="form-group">
@@ -27,6 +29,7 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
+	$('#user_assign_lic').val("true"); 
     $('.class_licenses').change(function() {
 		$('#user_license_expiry_date').val($(".class_licenses :selected").text());
 		$('#user_assign_lic').val("true"); 

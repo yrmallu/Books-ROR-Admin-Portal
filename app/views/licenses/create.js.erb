@@ -4,7 +4,7 @@ $('#license_no_of_licenses').val('');
 $('#datepicker').val('');
 
 <% @license = License.new %>
-<% @licenses = License.where("school_id = '5' AND delete_flag is not true").order("created_at DESC")%>
+<%#= @licenses = License.where("school_id = '5' AND delete_flag is not true").order("created_at DESC")%>
 
 $('#id_license').html('<%= j(render "form") %>');
 $('#id_license_info').html('<%= j(render "licenses_info") %>')
