@@ -202,7 +202,7 @@ class ApplicationController < ActionController::Base
           :breadcrumb=>{
             "Dashboard"=> root_path,
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => "4"),
-            "Edit student info"=> "",
+            "Edit Student info"=> "",
           }
         }
         when "users#index-4"
