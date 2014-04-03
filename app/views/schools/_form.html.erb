@@ -3,7 +3,7 @@
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	        <div class="panel-heading">
-	            <h4 class="panel-title">School Form</h4>
+	            <!-- <h4 class="panel-title">School Form</h4> -->
 	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
@@ -82,14 +82,13 @@
 	                
 	                
 	            </div>
-				<%=f.fields_for :licenses,@licenses do |lic|%>
-	            <div class="row">
+				<%#=f.fields_for :licenses,@licenses do |lic|%>
+	            <!-- <div class="row">
 					<div class="col-sm-6">
 	                    <div class="form-group">
-							<%= lic.label :expiry_date, :class=>"control-label"  %>
+							<%#= lic.label :expiry_date, :class=>"control-label"  %>
 							<div class="input-group">
-								<%= lic.text_field :expiry_date, :class=>"form-control", :placeholder=>"yyyy-mm-dd", :id=>"datepicker" %>
-			                  <!-- <input type="text" class="form-control" placeholder="mm/dd/yyyy" id="datepicker"> -->
+								<%#= lic.text_field :expiry_date, :class=>"form-control", :placeholder=>"yyyy-mm-dd", :id=>"datepicker" %>
 			                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 			                </div>
 						</div>
@@ -98,12 +97,12 @@
 	            <div class="row">
 					<div class="col-sm-6">
 	                    <div class="form-group">
-						  	<%= lic.label :no_of_licenses, :class=>"control-label"  %>
-							<%= lic.text_field :no_of_licenses, :class=>"form-control" %>
+						  	<%#= lic.label :no_of_licenses, :class=>"control-label"  %>
+							<%#= lic.text_field :no_of_licenses, :class=>"form-control" %>
 			    	    </div>
 	                </div>
-				</div>
-				<%end%>	
+				</div> -->
+				<%#=end%>	
 	        </div><!-- panel-body -->
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' } %>

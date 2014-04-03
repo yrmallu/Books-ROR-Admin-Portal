@@ -4,7 +4,6 @@ class CreateLicenses < ActiveRecord::Migration
       t.integer :license_group_id
       t.date :expiry_date
       t.integer :no_of_licenses
-     # t.hstore :allocated_to
       t.integer :used_liscenses
       t.integer :school_id
 

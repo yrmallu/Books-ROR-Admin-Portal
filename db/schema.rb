@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140402055126) do
+ActiveRecord::Schema.define(version: 20140403090359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,15 +55,14 @@ ActiveRecord::Schema.define(version: 20140402055126) do
   end
 
   create_table "licenses", force: true do |t|
-    t.integer  "license_group_id"
     t.date     "expiry_date"
     t.integer  "no_of_licenses"
-    t.integer  "used_liscenses"
+    t.integer  "used_liscenses",     default: 0
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.hstore   "allocated_to"
     t.boolean  "delete_flag"
+    t.string   "license_batch_name"
   end
 
   create_table "roles", force: true do |t|
@@ -115,6 +114,7 @@ ActiveRecord::Schema.define(version: 20140402055126) do
     t.datetime "updated_at"
     t.hstore   "userinfo"
     t.string   "password_digest"
+    t.integer  "license_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

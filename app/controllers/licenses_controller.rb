@@ -36,7 +36,6 @@ class LicensesController < ApplicationController
 		format.js {
               @license.save 
               refresh_licenses_list
-              
     }
 	end
   end
@@ -57,7 +56,6 @@ class LicensesController < ApplicationController
       format.js {
 	              @license.update_attributes(license_params) 
                 refresh_licenses_list
-
 				}                         
     end
   end
@@ -77,7 +75,7 @@ class LicensesController < ApplicationController
     end
 
     def license_params
-      params.require(:license).permit(:no_of_licenses, :expiry_date, :school_id)
+      params.require(:license).permit(:no_of_licenses, :expiry_date, :school_id, :license_batch_name)
     end
 
     def refresh_licenses_list

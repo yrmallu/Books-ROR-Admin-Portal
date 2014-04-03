@@ -14,6 +14,7 @@ required_field = function(){
 			"user[email]":{ email:true, required: true} ,
 			"user[password]":{ minlength: 5, required: true} ,
 			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} ,
+			"license[license_batch_name]":{required: true} ,
             email: {
 				required:true,
 				email:true
@@ -34,6 +35,7 @@ required_field = function(){
 			"school[name]": "School Name can't be blank.",
 			"school[phone]": "Please enter only number.",
 			"session[email]": "Enter a valid email address.",
+			"license[license_batch_name]":"Please enter license batch name.",
 			"session[password]": {
 								required: "Please provide a password.",
 								minlength: "Your password must be at least 5 characters long."

@@ -19,15 +19,21 @@
 				    </div>
 				  	<% end %>
 		            <div class="row">
+		                <div class="col-sm-6">
+		                    <div class="form-group">
+ 				     		   <%= f.label :license_batch_name, "License Batch Name", :class=>"control-label" %><span class="asterisk">*</span>
+ 				     		   <%= f.text_field :license_batch_name, :required=>true, :class=>"form-control" %>
+		                	</div>
+						</div>
+					</div>
+					<div class="row">
 		                <div class="col-sm-3">
 		                    <div class="form-group">
  				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
  				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
 		                	</div>
 						</div>
-					</div>
-					<div class="row">
-		                <div class="col-sm-3">
+					    <div class="col-sm-3">
 		                    <div class="form-group">
 				     		    <%= f.label :expiry_date, "License Expiration date", :class=>"control-label" %><span class="asterisk">*</span>
 							    <div class="input-group">

@@ -48,17 +48,13 @@ class UsersController < ApplicationController
    
   def update
     path = request.env['HTTP_HOST']
-    if @user.update_attributes(user_params)
-	  @license = License.find(params[:user][:license_id]) 
-	  @license.update_attributes(:used_liscenses => @license.used_liscenses.to_i + 1, :role_id => params[:user][:role_id], :count => params[:user][:count])
-	  redirect_to  users_path(:role_id=>@user.role_id, :school_id=>@license.school_id), notice: 'User updated.' 
-	  
-	  if params[:user][:assign_lic].blank?
-        @user.user_details_change_email(current_user.first_name, path)
-	  end
+	if @user.update_attributes(user_params)
+	  redirect_to  users_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
+	  # unless  @send_mail.blank?
+# 	    @user.user_details_change_email(current_user.first_name, path)
+# 	  end
 	else
 	  render :action=> 'new'
-	  #redirect_to  edit_user_path(:id=>@user.id), notice: 'Email already exist.'
 	end
   end
   
@@ -68,9 +64,8 @@ class UsersController < ApplicationController
   end
   
   def get_user_school_licenses
-    @licenses = License.where(" school_id = '#{@user.school_id}' AND expiry_date > '#{Time.now.to_date}' AND delete_flag is not true ")
-    @role_id = @user.role_id
-	render :partial=>"assign_license"
+    p "query===",@licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
+    render :partial=>"assign_license"
   end
   
   def change_user_password
@@ -148,11 +143,11 @@ class UsersController < ApplicationController
   
   private
   def set_user
-    @user = User.find(params[:id])
+    @user = User.where("id = #{params[:id]}").last
   end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id)
   end
   
   def change_password_params

@@ -46,7 +46,7 @@
    				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %> | 
 						<% unless @role_id.eql?('1')%>  
 						    <%= hidden_field_tag :user_id, user.id%>
-							<button class="btn btn-primary btn-xs assign_milestone" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
+							<button class="btn btn-primary btn-xs assign_license" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
 						        Assign License
 						    </button> | 
 						<%end%>  
@@ -121,8 +121,8 @@
 	    showHideMenu('li_teacher');	
 	}
 
-$( ".assign_milestone" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input')},
+$( ".assign_license" ).click(function() {
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true"},
 function(data) {
 	         
              if(data)
@@ -133,7 +133,7 @@ function(data) {
 });
 
 $( ".change_password" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input')},
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), no_mail:"true"},
 function(data) {
 	         
              if(data)

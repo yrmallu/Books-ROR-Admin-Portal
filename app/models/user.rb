@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   
   has_secure_password
   before_save { self.email = email.downcase }
+  store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic, :parent_name, :parent_email
          
   has_many :user_classrooms    
   has_many :classrooms, :through => :user_classrooms
@@ -12,10 +13,24 @@ class User < ActiveRecord::Base
   belongs_to :school
   belongs_to :role
   has_many :user_accessrights
-  belongs_to :user
-  has_one :license
+  #belongs_to :user
+  belongs_to :license
+  before_update :update_license_count
   
-  store_accessor :userinfo, :phone_number, :license_id, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic, :parent_name, :parent_email
+  def update_license_count
+    if self.license_id_was.blank?
+	  assign_new_lic
+	elsif self.license_id != (self.license_id_was)
+	  @old_license = License.find(self.license_id_was) 
+	  @old_license.update_attributes(:used_liscenses=> @old_license.used_liscenses.to_i - 1)
+	  assign_new_lic
+	end	
+  end
+  
+  def assign_new_lic
+    @new_license = License.find(self.license_id)
+    @new_license.update_attributes(:used_liscenses=> @new_license.used_liscenses.to_i + 1)
+  end
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}

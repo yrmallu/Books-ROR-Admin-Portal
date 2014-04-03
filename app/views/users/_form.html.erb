@@ -7,7 +7,7 @@
 	        <div class="panel-body">
 	        	<%= form_for @user, :html=>{:class=>"form_validation user_form"} do |f| %>
 				    <%=f.hidden_field :role_id, :value=>@role_id%>
-				    <% if @user.errors.any? %>
+					<% if @user.errors.any? %>
 				    <div id="error_explanation">
 				        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
 				        <ul>
@@ -28,6 +28,7 @@
 				<%end%>	
 	        </div>
 			<% end %>
+			<%= hidden_field_tag :send_mail, @send_mail%>
 	    </div>
     </div>       
 </div>
