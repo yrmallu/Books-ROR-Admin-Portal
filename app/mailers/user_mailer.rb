@@ -44,7 +44,7 @@ class UserMailer < ActionMailer::Base
     @link =  user_info[:link]
     @login_url  = user_info[:login_url]
 	@reset_pass_url = user_info[:reset_pass_url]
-	mail(to: @email, subject: 'Books That Grow Account Password changed..')
+	mail(to: @email, subject: 'Books That Grow Account Password changed.')
   end
   
   def forgot_password_email(user_info)

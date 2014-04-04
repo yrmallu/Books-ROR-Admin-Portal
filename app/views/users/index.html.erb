@@ -116,9 +116,9 @@
 	{
 	    showHideMenu('li_teacher');	
 	}
-	else if(<%= @role_id.eql?('3')%>)
+	else if(<%= @role_id.eql?('4')%>)
 	{
-	    showHideMenu('li_teacher');	
+	    showHideMenu('li_student');	
 	}
 
 $( ".assign_license" ).click(function() {
@@ -133,7 +133,7 @@ function(data) {
 });
 
 $( ".change_password" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), no_mail:"true"},
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input')},
 function(data) {
 	         
              if(data)

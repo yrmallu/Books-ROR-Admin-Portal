@@ -40,7 +40,6 @@ class UsersController < ApplicationController
       if @user.save
         redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
   	    @user.welcome_email(path)
-        #redirect_to user_path(:id=>@user, :role_id=>params[:user][:role_id]), notice: 'User created.' 
       else 
         render :action=> 'new'
 	  end
@@ -50,21 +49,26 @@ class UsersController < ApplicationController
     path = request.env['HTTP_HOST']
 	if @user.update_attributes(user_params)
 	  redirect_to  users_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
-	  # unless  @send_mail.blank?
-# 	    @user.user_details_change_email(current_user.first_name, path)
-# 	  end
+	  if  params[:send_mail].blank?
+	    @user.user_details_change_email(current_user.first_name, path)
+	  end
 	else
 	  render :action=> 'new'
 	end
   end
   
   def destroy
-    @user.update_attributes(:delete_flag=>true)
-    redirect_to users_path(:role_id => @user.role_id), notice: 'User deleted.' 
+    unless @user.license.blank?
+  	  @user.remove_license(@user.license_id)
+	  @user.update_attributes(:license_id=>"")
+	end
+	  @user.update_attributes(:delete_flag=>true)
+	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.' 
   end
   
   def get_user_school_licenses
-    p "query===",@licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
+    @no_mail = params[:no_mail] unless params[:no_mail].blank?
+    @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
   

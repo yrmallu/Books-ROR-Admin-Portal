@@ -48,7 +48,10 @@
 					      <%end%>
 						  <%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> | 
 						  <%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
-						  <%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>2), :class=>"btn btn-success btn-xs"%> 
+						  <%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>2), :class=>"btn btn-primary btn-xs"%> |
+						<button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
+					        License Details
+					    </button> 
 				     </td>
                  </tr>
 				 <% end %>
@@ -62,6 +65,33 @@
 </div>		  
 <% end %>		  
 
+
+<div class="modal fade" id="school_license_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">License Details</h4>
+      </div>
+      <div class="modal-body">
+		  <div id="schoolwise_licenses_list"></div>
+	  </div>
+    </div>
+  </div>
+</div>	
+
+
 <script type="text/javascript">
-	showHideMenu('li_school');	
+	showHideMenu('li_school');
+	
+	$( ".license_details" ).click(function() {
+	          jQuery.get("<%=url_for(:controller=>'schools',:action=>'get_schoolwise_license_list')%>",{ id : $(this).attr('data-input')},
+	function(data) {
+	         
+	             if(data)
+	              {
+				   jQuery("#schoolwise_licenses_list").html(data);
+	             }
+	      });
+	});	
 </script>

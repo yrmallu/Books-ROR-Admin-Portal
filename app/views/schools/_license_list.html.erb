@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+    <div class="panel-body"> 
+	    <div class="table-responsive">
+		    <table class="table" id="license_detail_table">
+                <thead>
+                    <tr>
+                	    <th>License Batch Name</th>
+                        <th>Expiry Date</th>
+                        <th>Total Licenses</th>
+					    <th>Unused Licenses</th>
+					    <th>Admin Accounts</th>
+					    <th>Teacher Accounts</th>
+					    <th>Student Accounts</th>
+                    </tr>
+                </thead>
+                <tbody>
+				    <% @licenses.each do |lic| %>
+                        <tr class="odd gradeX">
+                 	        <td class=""><%= lic.license_batch_name %></td>
+                            <td class=""><%= lic.expiry_date %></td>
+                            <td class="center "><%= lic.no_of_licenses %></td>
+					        <td class=""><%= lic.used_liscenses %></td>
+					        <td class=""><%= @admin_licenses.blank? ? 0 : @admin_licenses %></td>
+					        <td class=""><%= @teacher_licenses.blank? ? 0 : @teacher_licenses %></td>
+					        <td class=""><%= @student_licenses.blank? ? 0 : @student_licenses %></td>
+                        </tr>
+				   <% end %>
+                </tbody>
+            </table>
+	    </div>
+	    <div data-no-turbolink>
+		    <%= paginate @licenses %>
+	    </div>
+    </div>		  
+</div>

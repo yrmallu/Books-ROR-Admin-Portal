@@ -20,7 +20,6 @@ BooksThatGrow::Application.routes.draw do
   resources :users do 
     collection do
       post 'delete_user'
-	  #post :'update_user_license'
 	  get 'change_user_password'
 	  get 'dashboard'
 	  get 'forgot_password'
@@ -35,6 +34,7 @@ BooksThatGrow::Application.routes.draw do
   resources :schools do 
     collection do
       post 'delete_school'
+	  get 'get_schoolwise_license_list'
      end
   end
   get '/schools/subregion_options' => 'schools#subregion_options'
