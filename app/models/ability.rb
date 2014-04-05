@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-      if user.role_id.eql?(1)
+      if user.is_web_admin?
         can :manage, :all
       else 
         user_rights = user.user_permission_names.collect{|i| i.name}

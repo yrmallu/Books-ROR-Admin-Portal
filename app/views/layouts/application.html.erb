@@ -42,16 +42,16 @@
 		<li class="nav-parent" id="li_school"><a href=""><i class="glyphicon glyphicon-book"></i> <span>School</span></a>
 			<span class="arrow arrw-pos" container_li="li_school"></span>
           <ul class="children">
-		      <% if can? :create, School %> 
+		      <%#= if can? :create, School %> 
 			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
-			  <%end%>
+			  <%#=end%>
 			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
 			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Classroom List", classrooms_path %></li>
 			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Student List", users_path(:role_id => 4) %></li>
           </ul>
         </li>
 		
-		<% if current_user.role_id.eql?(1)%>
+		<%#= if current_user.is_web_admin? %>
 		<li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
 			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
           <ul class="children">
@@ -60,15 +60,15 @@
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
           </ul
         </li>
-		<%end%>
-		<li class="nav-parent" id="li_teacher"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Teacher", root_path %>
+		<%#=end%>
+		<!-- <li class="nav-parent" id="li_teacher"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Teacher", root_path %>
 			<span class="arrow arrw-pos" container_li="li_teacher"></span>
           <ul class="children">
-             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Teacher", new_user_path(:role_id => 3)%></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Teacher List", users_path(:role_id => 3) %></li>
+             <li><%#= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Teacher", new_user_path(:role_id => 3)%></li>
+            <li><%#= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Teacher List", users_path(:role_id => 3) %></li>
           </ul
-        </li>
-		<% if current_user.role_id.eql?(1)%>
+        </li> -->
+		<%#= if current_user.is_web_admin?%>
 		<li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
 			<span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
@@ -76,7 +76,7 @@
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
           </ul
         </li>
-		<%end%>
+		<%#=end%>
       </ul>
     </div>
   </div>

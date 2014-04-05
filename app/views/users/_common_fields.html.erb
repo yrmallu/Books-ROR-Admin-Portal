@@ -27,27 +27,52 @@
 	                    </div>
 	                </div>
 	            </div>
-			  <!-- <div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-				    		<%#= f.label :username, "Username", :class=>"control-label"%>
-				    		<%#= f.text_field :username, :class=>"form-control" %>
+				<% unless ('new').eql?action_name%>
+				    <% unless (@role_id.eql?('1') || @user.license_expiry_date.blank?)%>
+					    <div class="row">
+					        <div class="col-sm-3">
+						        <div class="form-group">
+							        <%= f.label :license_expiry_date, "License Expiry Date", :class=>"control-label"%>
+								    <%= f.text_field :license_expiry_date, :class=>"form-control", :readonly=>true %>
+						        </div>
+						    </div> 
+				        </div>
+				    <%end%>
+			    <%end%>
+			    <% unless ('edit').eql?action_name%>
+	                <div class="row">
+	                    <div class="col-sm-3">
+	                        <div class="form-group">
+			    		        <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
+			    			    <%= f.password_field :password, :required=>true, :class=>"form-control class_password" %>
+	                        </div>
 	                    </div>
-	                </div> 
-	            </div>-->
-				<% unless ('edit').eql?action_name%>
-	            <div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-			    		    <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
-			    			<%= f.password_field :password, :required=>true, :class=>"form-control class_password" %>
+	                    <div class="col-sm-3">
+	                        <div class="form-group">
+			    			    <%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
+			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
+	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-			    			<%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
-			    			<%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	            </div>
+			    <%end%>
+				<% if @role_id.eql?('3')%>
+				    <div class="row">
+					    <div class="col-sm-3">
+						    <div class="form-group">
+						        <%= label_tag 'can_manage', "Can Manage Student Licenses", :class=>"control-label"%>
+								<%= hidden_field_tag :accessright, 0 %>
+							    <%= check_box_tag('accessright', @accessright.id,["edit"].include?(action_name) ? ( @existing_access_right.include?(@accessright.id.to_s)) : false, :class=>"class_accessright")%>
+							</div>
+						</div> 
+				    </div>
 				<%end%>
+				<%#= hidden_field_tag :accessright_checked %>
+				
+<script type="text/javascript">
+// jQuery(document).ready(function(){
+// $('#accessright_checked').val($("input[type='checkbox']").val());				
+// $( ".class_accessright" ).on( "click", function() {
+//   $('#accessright_checked').val($( "input:checked" ).val());
+// });
+// });
+</script> 

@@ -7,9 +7,9 @@
 		<%elsif @role_id.eql?('2')%>
 		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.eql?('3')%>
-		    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
+		    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.eql?('4')%>
-		    <%=link_to 'Add Student', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>    	
+		    <%=link_to 'Add Student', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>    	
 		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	  </div>
@@ -44,6 +44,7 @@
 						  <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> | 
 						<% end %> 
    				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %> | 
+						  <%= link_to '<i title="Remove License" class="fa fa-minus-square"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %> | 
 						<% unless @role_id.eql?('1')%>  
 						    <%= hidden_field_tag :user_id, user.id%>
 							<button class="btn btn-primary btn-xs assign_license" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
@@ -112,14 +113,6 @@
 	{
 	    showHideMenu('li_school');	
 	}
-	else if(<%= @role_id.eql?('3')%>)
-	{
-	    showHideMenu('li_teacher');	
-	}
-	else if(<%= @role_id.eql?('4')%>)
-	{
-	    showHideMenu('li_student');	
-	}
 
 $( ".assign_license" ).click(function() {
           jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true"},
@@ -145,3 +138,6 @@ function(data) {
 
 </script>
 
+
+
+				

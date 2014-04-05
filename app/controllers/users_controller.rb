@@ -3,8 +3,9 @@ class UsersController < ApplicationController
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :get_all_schools, :only=> [:new, :edit]
-  before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password ]
+  before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
+  before_action :get_manage_student_accessright, :only => [:new, :edit]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -26,10 +27,11 @@ class UsersController < ApplicationController
     session[:school_id] = nil
     session[:school_id] = params[:school_id] 
     @user = User.new
-    set_bread_crumb @role_id
+	set_bread_crumb @role_id
   end
  
   def edit
+    @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
     set_bread_crumb @role_id
   end
  
@@ -37,17 +39,30 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 	path = request.env['HTTP_HOST']
     @user.school_id = session[:school_id]
-      if @user.save
-        redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-  	    @user.welcome_email(path)
-      else 
-        render :action=> 'new'
-	  end
+	if @user.save
+	  unless params[:accessright].eql?('0')
+	    @user.assign_accessright(params[:accessright]) 
+  	  end
+	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
+	  @user.welcome_email(path)
+    else 
+      render :action=> 'new'
+	end
   end
    
   def update
     path = request.env['HTTP_HOST']
 	if @user.update_attributes(user_params)
+	  #p "accessid===",params[:accessright]
+	  if params[:accessright].eql?('0')
+	    @accessright_exist = @user.user_accessrights.last
+	    @accessright_exist.update_attributes(:accessright_id=>params[:accessright], :access_flag=>true, :role_id=>@user.role_id)
+	  else
+	    @accessright_exist = @user.user_accessrights.where("accessright_id = #{params[:accessright]}").last
+		if @accessright_exist.blank?
+	      @user.user_accessrights.create(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id) 
+	    end
+      end 
 	  redirect_to  users_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
 	    @user.user_details_change_email(current_user.first_name, path)
@@ -60,10 +75,23 @@ class UsersController < ApplicationController
   def destroy
     unless @user.license.blank?
   	  @user.remove_license(@user.license_id)
-	  @user.update_attributes(:license_id=>"")
+	  remove_license_from_user
 	end
 	  @user.update_attributes(:delete_flag=>true)
 	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.' 
+  end
+  
+  def get_manage_student_accessright
+    @accessright = Accessright.where("name = 'Can Manage Student'").last
+  end
+  
+  def remove_license
+     remove_license_from_user
+	 redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
+  end
+  
+  def remove_license_from_user 
+    @user.update_attributes(:license_id=>"", :license_expiry_date=>"")
   end
   
   def get_user_school_licenses
@@ -144,6 +172,7 @@ class UsersController < ApplicationController
         render :text => "avaiable"
      end
    end
+  
   
   private
   def set_user
