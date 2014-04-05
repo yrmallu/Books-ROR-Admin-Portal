@@ -2,10 +2,11 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-  before_action :get_all_schools, :only=> [:new, :edit]
+  #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
+  before_action :get_classrooms, :only => [:new]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -26,13 +27,13 @@ class UsersController < ApplicationController
   def new
     session[:school_id] = nil
     session[:school_id] = params[:school_id] 
-    @user = User.new
+	@user = User.new
 	set_bread_crumb @role_id
   end
  
   def edit
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
-    set_bread_crumb @role_id
+	set_bread_crumb @role_id
   end
  
   def create
@@ -43,8 +44,12 @@ class UsersController < ApplicationController
 	  unless params[:accessright].eql?('0')
 	    @user.assign_accessright(params[:accessright]) 
   	  end
+	  @array_classroom_ids = params[:classroom_ids].split(',') unless params[:classroom_ids].blank?
+	  @array_classroom_ids.each do |classroom_id|
+	    @user.user_classrooms.create(:classroom_id=> classroom_id)
+	  end
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  @user.welcome_email(path)
+	  #@user.welcome_email(path)
     else 
       render :action=> 'new'
 	end
@@ -65,7 +70,7 @@ class UsersController < ApplicationController
       end 
 	  redirect_to  users_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
-	    @user.user_details_change_email(current_user.first_name, path)
+	    #@user.user_details_change_email(current_user.first_name, path)
 	  end
 	else
 	  render :action=> 'new'
