@@ -31,3 +31,15 @@ $(document).on("click","#school_country",function(){
     url = "/schools/subregion_options?parent_region=#{country_code}"
     select_wrapper.load(url)
 });
+
+function validateform()
+{
+	var flag = true;
+	var ext = $('#file').val().split('.').pop().toLowerCase();
+	if ($.inArray(ext,['xls']) == -1)
+	{
+		alert("Please upload xls file");
+		flag = false;
+	}
+	return flag;
+}
