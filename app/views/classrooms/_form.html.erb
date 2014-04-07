@@ -7,6 +7,7 @@
 	        </div>
 	        <div class="panel-body">
 				<%= form_for(@classroom, :html=>{:class=>"form_validation"} ) do |f| %>
+				    <%=f.hidden_field :school_id, :value=>@school_id%>
 				    <% if @classroom.errors.any? %>
 				    <div id="error_explanation">
 				        <h4><%= pluralize(@classroom.errors.count, "error") %> prohibited this classroom from being saved:</h4>

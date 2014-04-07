@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
-  before_action :get_classrooms, :only => [:new, :edit]
+  #before_action :get_classrooms, :only => [:new, :edit]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
