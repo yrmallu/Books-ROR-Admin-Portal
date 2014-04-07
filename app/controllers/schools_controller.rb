@@ -71,6 +71,15 @@ class SchoolsController < ApplicationController
     render partial: 'subregion_select'
   end
   
+  def check_school_name_uniqueness
+     @check_unique_name = School.where("name = '#{params[:name]}' and id != #{params[:id]}")
+     unless (@check_unique_name.blank?)
+        render :text => "This name is already in use."
+      else
+        render :text => "avaiable"
+     end
+   end
+  
   private
     def set_school
       @school = School.find(params[:id])

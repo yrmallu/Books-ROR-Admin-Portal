@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
   
   
   def get_schools
-    p "changes for classroom"
     @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
@@ -23,7 +22,7 @@ class ApplicationController < ActionController::Base
   end
   
   def get_school_by_id
-    @school = School.find(params[:school_id])
+    @school = School.find(params[:school_id]) unless params[:school_id].blank?
   end
   
   def get_accessright
@@ -33,8 +32,10 @@ class ApplicationController < ActionController::Base
   end
   
   def get_classrooms
-    @school = School.find(params[:school_id])
-    @classrooms = @school.classrooms
+    unless params[:school_id].blank?
+      @school = School.find(params[:school_id])
+      @classrooms = @school.classrooms
+    end
   end
   
   rescue_from CanCan::AccessDenied do |exception|
