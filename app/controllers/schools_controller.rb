@@ -25,49 +25,32 @@ class SchoolsController < ApplicationController
   def create
     @school = School.new(school_params)
     @school.country = 'US'
-    respond_to do |format|
-      if @school.save
-        format.html { 
-						flash[:success] = "School created."
-						redirect_to @school  
-					}
-        format.json { render action: 'show', status: :created, location: @school }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @school.errors, status: :unprocessable_entity }
-      end
-    end
+    if @school.save
+	  flash[:success] = "School created."
+	  redirect_to @school  
+    else
+      render :action=> 'new'
+	end
   end
 
   def update
     @school.country = 'US'
-    respond_to do |format|
-      if @school.update(school_params)
-        format.html { 
-						flash[:success] = "School updated." 
-						redirect_to @school
-					}
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @school.errors, status: :unprocessable_entity }
-      end
+    if @school.update(school_params)
+  	  flash[:success] = "School updated." 
+	  redirect_to @school
+    else
+      render :action=> 'edit'
     end
   end
 
   def destroy
-    respond_to do |format|
-      format.html { 
-	  			      @school.update_attributes(:delete_flag=>true)
-					  @licenses = @school.licenses
-					  @licenses.each do |license|
-					    license.update_attributes(:delete_flag=>true)
-					  end
-				      flash[:success] = "School deleted." 
-  				      redirect_to schools_url	
-				  }
-      format.json { head :no_content }
+    @school.update_attributes(:delete_flag=>true)
+    @licenses = @school.licenses
+    @licenses.each do |license|
+      license.update_attributes(:delete_flag=>true)
     end
+    flash[:success] = "School deleted." 
+    redirect_to schools_url	
   end
   
   def get_schoolwise_license_list

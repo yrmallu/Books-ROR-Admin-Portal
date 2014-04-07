@@ -7,7 +7,7 @@
 	        </div>
 	        <div class="panel-body">
 				<%= form_for(@classroom, :html=>{:class=>"form_validation"} ) do |f| %>
-				    <%=f.hidden_field :school_id, :value=>@school_id%>
+				    <%=f.hidden_field :school_id, :value=>@school.id%>
 				    <% if @classroom.errors.any? %>
 				    <div id="error_explanation">
 				        <h4><%= pluralize(@classroom.errors.count, "error") %> prohibited this classroom from being saved:</h4>
@@ -18,54 +18,27 @@
 				        </ul>
 				    </div>
 				  	<% end %>
-	            <div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-	                    	<%= f.label :code, "Classroom Code", :class=>"control-label" %><span class="asterisk">*</span> </br>
-	                    	<%= f.text_field :code, :autofocus => true, :required=>true, :class=>"form-control" %>
+	                <div class="row">
+						<% if params["action"] == "edit"%> 
+	                    <div class="col-sm-3">
+	                        <div class="form-group">
+	                    	    <%= f.label :code, "Classroom Code", :class=>"control-label" %><span class="asterisk">*</span> </br>
+	                    	    <%= @classroom.code %>
+	                        </div>
 	                    </div>
-	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-			     		   <%= f.label :name, "Classroom Name", :class=>"control-label" %><span class="asterisk">*</span>
-			     		   <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control" %>
+						<%end%>
+	                    <div class="col-sm-3">
+	                        <div class="form-group">
+			     		        <%= f.label :name, "Classroom Name", :class=>"control-label" %><span class="asterisk">*</span>
+			     		        <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control" %>
+	                        </div>
 	                    </div>
-	                </div>
-	            </div>
-	            <div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-				    		<%= f.label :cover_image, "School District", :class=>"control-label"%>
-				    		<%= f.text_field :cover_image, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-		   			    	<%= f.label :secret_key, :class=>"control-label"%>
-		   			    	<%= f.text_field :secret_key, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="row">
-	            	<div class="col-sm-3">
-	                	<div class="form-group">
-			    		    <%= f.label :teacher_count, :class=>"control-label" %>
-			    			<%= f.text_field :teacher_count, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-			    		    <%= f.label :student_count, :class=>"control-label" %>
-			    			<%= f.text_field :student_count, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	            </div>
-	        </div><!-- panel-body -->
-	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
-				<%= link_to 'Cancel', classrooms_path, class: "btn btn-white btn-xs"%>
-	        </div>
-			<% end %>
+	               </div>
+	               <div class="panel-footer" data-no-turbolink>
+	                   <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
+				       <%= link_to 'Cancel', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
+	               </div>
+			   <% end %>
 	    </div>
     </div>       
 </div>

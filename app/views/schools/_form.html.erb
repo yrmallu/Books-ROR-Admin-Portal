@@ -8,6 +8,7 @@
 	        </div>
 	        <div class="panel-body">
 				<%= form_for(@school, :html=>{:class=>"form_validation"} ) do |f| %>
+				    <%=f.hidden_field :school_id, :value=>@school.id%>
 				    <% if @school.errors.any? %>
 				    <div id="error_explanation">
 				        <h4><%= pluralize(@school.errors.count, "error") %> prohibited this school from being saved:</h4>
@@ -82,28 +83,7 @@
 	                
 	                
 	            </div>
-				<%#=f.fields_for :licenses,@licenses do |lic|%>
-	            <!-- <div class="row">
-					<div class="col-sm-6">
-	                    <div class="form-group">
-							<%#= lic.label :expiry_date, :class=>"control-label"  %>
-							<div class="input-group">
-								<%#= lic.text_field :expiry_date, :class=>"form-control", :placeholder=>"yyyy-mm-dd", :id=>"datepicker" %>
-			                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-			                </div>
-						</div>
-	                </div>
-				</div>
-	            <div class="row">
-					<div class="col-sm-6">
-	                    <div class="form-group">
-						  	<%#= lic.label :no_of_licenses, :class=>"control-label"  %>
-							<%#= lic.text_field :no_of_licenses, :class=>"form-control" %>
-			    	    </div>
-	                </div>
-				</div> -->
-				<%#=end%>	
-	        </div><!-- panel-body -->
+	        </div>
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
 				<%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
@@ -115,14 +95,6 @@
 
 <script type="text/javascript">
 	showHideMenu('li_school');
-	   
-jQuery(document).ready(function(){
-    
-   // Date Picker
-  //jQuery('#datepicker').datepicker();
-  $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
- 
-});
 </script>
 
 

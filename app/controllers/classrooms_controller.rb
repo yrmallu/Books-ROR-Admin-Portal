@@ -1,10 +1,11 @@
 class ClassroomsController < ApplicationController
-  before_action :set_classroom, only: [:show, :edit, :update, :destroy]
   
+  before_action :set_classroom, only: [:show, :edit, :update, :destroy]
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
-
+  before_action :get_school_by_id, only: [:new, :index, :edit]
+  
   def index
-    @classrooms = Classroom.order("created_at DESC").page params[:page]
+    @classrooms = Classroom.where("school_id = '#{params[:school_id]}' AND delete_flag is not true").order("created_at DESC").page params[:page]
   end
 
   def show
@@ -19,36 +20,24 @@ class ClassroomsController < ApplicationController
 
   def create
     @classroom = Classroom.new(classroom_params)
-
-    respond_to do |format|
-      if @classroom.save
-        format.html { redirect_to @classroom, notice: 'Classroom was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @classroom }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @classroom.errors, status: :unprocessable_entity }
-      end
-    end
+    if @classroom.save
+      redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom created.'
+	else
+      render :action=> 'new'
+	end
   end
 
   def update
-    respond_to do |format|
-      if @classroom.update(classroom_params)
-        format.html { redirect_to @classroom, notice: 'Classroom was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @classroom.errors, status: :unprocessable_entity }
-      end
+    if @classroom.update(classroom_params)
+      redirect_to classroom_path(:school_id=> @classroom.school_id), notice: 'Classroom updated.'
+    else
+      render :action=> 'edit'
     end
   end
 
   def destroy
-    @classroom.destroy
-    respond_to do |format|
-      format.html { redirect_to classrooms_url }
-      format.json { head :no_content }
-    end
+    @classroom.update_attributes(:delete_flag=>true)
+    redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom deleted.' 
   end
 
   def delete_classroom
@@ -64,8 +53,8 @@ class ClassroomsController < ApplicationController
     def set_classroom
       @classroom = Classroom.find(params[:id])
     end
-
+	
     def classroom_params
-      params.require(:classroom).permit(:code, :name, :cover_image, :secret_key, :classroom_count, :teacher_count, :student_count, :school_id)
+      params.require(:classroom).permit(:code, :name, :school_id)
     end
 end
