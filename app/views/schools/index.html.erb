@@ -48,6 +48,7 @@
 					        License Details
 					    </button> |
 						<%= link_to '<i title="Add Classroom" class="fa fa-users"></i>'.html_safe, new_classroom_path(:school_id=>school)%> 
+						<%=link_to 'Student List', users_path(:school_id=>school, :role_id=>4), :class=>"btn btn-primary btn-xs"%> 
 				     </td>
                  </tr>
 				 <% end %>

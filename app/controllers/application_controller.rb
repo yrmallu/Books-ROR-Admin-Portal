@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
   
   def get_school_by_id
-    @school = School.find(params[:school_id])
+    @school = School.find(params[:school_id]) unless params[:school_id].blank?
   end
   
   def get_accessright
@@ -33,8 +33,10 @@ class ApplicationController < ActionController::Base
   end
   
   def get_classrooms
-    @school = School.find(params[:school_id])
-    @classrooms = @school.classrooms
+    unless params[:school_id].blank?
+      @school = School.find(params[:school_id])
+      @classrooms = @school.classrooms
+    end
   end
   
   rescue_from CanCan::AccessDenied do |exception|

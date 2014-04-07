@@ -31,7 +31,8 @@
 	                <div class="col-sm-9">
 	                    <div class="form-group">
 			     		   <%= f.label :name, "School Name", :class=>"control-label" %><span class="asterisk">*</span>
-			     		   <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control" %>
+			     		   <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control school_name_unique" %>
+						   <span class="help-inline error_box"></span>
 	                    </div>
 	                </div>
 	            </div>
@@ -95,6 +96,8 @@
 
 <script type="text/javascript">
 	showHideMenu('li_school');
+	
+	school_unique = "<%= url_for :controller=> 'schools', :action => 'check_school_name_uniqueness', :id=> action_name.eql?("edit") ? @school.id : 0%>"	
 </script>
 
 

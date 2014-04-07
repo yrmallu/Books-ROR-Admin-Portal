@@ -87,6 +87,15 @@ class SchoolsController < ApplicationController
     redirect_to :schools, :notice => "Imported Successfully."
   end 
 
+  def check_school_name_uniqueness
+     @check_unique_name = School.where("name = '#{params[:name]}' and id != #{params[:id]}")
+     unless (@check_unique_name.blank?)
+        render :text => "This name is already in use."
+      else
+        render :text => "avaiable"
+     end
+   end
+  
   private
     def set_school
       @school = School.find(params[:id])

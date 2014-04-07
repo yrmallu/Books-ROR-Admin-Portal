@@ -7,7 +7,7 @@
 	        <div class="panel-body">
 	        	<%= form_for @user, :html=>{:class=>"form_validation user_form"} do |f| %>
 				    <%=f.hidden_field :role_id, :value=>@role_id%>
-					<%=f.hidden_field :school_id, :value=>@school.id%>
+					<%=f.hidden_field :school_id, :value=>@school.id unless params[:school_id].blank?%>
 					<% if @user.errors.any? %>
 				    <div id="error_explanation">
 				        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
@@ -23,11 +23,13 @@
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
 				<% if @role_id.eql?('1')%>
-					<%= link_to 'Cancel', users_path(:role_id => 1, :school_id => @school.id), class: "btn btn-white btn-xs"%>
+					<%= link_to 'Cancel', users_path(:role_id => 1), class: "btn btn-white btn-xs"%>
 				<% elsif @role_id.eql?('2')%>
 				    <%= link_to 'Cancel', users_path(:role_id => 2, :school_id => @school.id), class: "btn btn-white btn-xs"%>
 				<% elsif @role_id.eql?('3')%>
 				    <%= link_to 'Cancel', users_path(:role_id => 3, :school_id => @school.id), class: "btn btn-white btn-xs"%>
+				<% elsif @role_id.eql?('4')%>
+				    <%= link_to 'Cancel', users_path(:role_id => 4, :school_id => @school.id), class: "btn btn-white btn-xs"%>	
 				<%end%>
 	        </div>
 			<% end %>
