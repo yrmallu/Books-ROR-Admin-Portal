@@ -1,7 +1,6 @@
 class SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list]
   before_action :get_schools, only: [:index]
-
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
@@ -14,7 +13,7 @@ class SchoolsController < ApplicationController
 
   def new
     @school = School.new
-	  @licenses = @school.licenses.build()
+	#@licenses = @school.licenses.build()
   end
 
   def edit
@@ -69,13 +68,10 @@ class SchoolsController < ApplicationController
   end
   
   def get_schoolwise_license_list
-     @license_assign_count = []
+    @license_assign_count = []
     @licenses = @school.licenses.where("delete_flag is not true").order("created_at DESC").page params[:page]
-	p "school admin cnt====", @licenses_allocated = User.select("role_id, school_id, count(license_id) as total_license_count").group("role_id, school_id").having("school_id =?", params[:id])
+	@licenses_allocated = User.select("role_id, school_id, count(license_id) as total_license_count").group("role_id, school_id").having("school_id =?", params[:id])
     @licenses_allocated.each{|x|  @license_assign_count << x.total_license_count}
-	@admin_licenses = @license_assign_count[0]
-	@teacher_licenses = @license_assign_count[1]
-	@student_licenses = @license_assign_count[2]
 	render :partial=>"license_list"
   end
   
