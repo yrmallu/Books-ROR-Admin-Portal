@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   
   
   def get_schools
+    p "changessss"
     @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
