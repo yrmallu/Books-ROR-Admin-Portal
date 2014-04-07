@@ -26,11 +26,11 @@ class SchoolsController < ApplicationController
     @school = School.new(school_params)
     @school.country = 'US'
     if @school.save
-	  flash[:success] = "School created."
+  	  flash[:success] = "School created."
 	  redirect_to @school  
     else
       render :action=> 'new'
-	end
+    end
   end
 
   def update
@@ -40,7 +40,7 @@ class SchoolsController < ApplicationController
 	  redirect_to @school
     else
       render :action=> 'edit'
-    end
+	end
   end
 
   def destroy

@@ -17,21 +17,17 @@
 			    	<strong>Phone Number:</strong>
 			    	<%= @user.phone_number %>
             	</address>
-				<!-- <address>
-			    	<strong>Username:</strong>
-			    	<%#= @user.username %>
-            	</address> -->
-            	<address>
+				<address>
 			    	<strong>Email:</strong>
 			    	<%= @user.email %>
             	</address>
 			    <div data-no-turbolink>
-			        <%= link_to 'Edit', edit_user_path(@user, :role_id => @user.role_id, :school_id=>@school.id), :class=>"btn btn-success btn-xs" %>
-					<% if @user.role_id.eql?('1')%>
+			        <%= link_to 'Edit', edit_user_path(:id=>@user, :role_id => @user.role_id, :school_id=>@school.id), :class=>"btn btn-success btn-xs" %>
+					<% if @role_id.eql?('1')%>
 						<%= link_to 'Cancel', users_path(:role_id => 1, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
-					<% elsif @user.role_id.eql?('2')%>
+					<% elsif @role_id.eql?('2')%>
 					    <%= link_to 'Cancel', users_path(:role_id => 2, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
-					<% elsif @user.role_id.eql?('3')%>
+					<% elsif @role_id.eql?('3')%>
 					    <%= link_to 'Cancel', users_path(:role_id => 3, :school_id=>@school.id), class: "btn btn-white btn-xs"%>	
 					<%end%>
         	    </div>
