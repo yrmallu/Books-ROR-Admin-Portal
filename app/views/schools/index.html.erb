@@ -21,9 +21,6 @@
                     <th>City</th>
 					<th>State</th>
                     <th>Country</th>
-					<!-- <th>Licenses In Use</th>
-					<th>Unused Licenses</th>
-					<th>Expiration Date</th> -->
 					<th>Actions</th>
                  </tr>
               </thead>
@@ -37,10 +34,7 @@
                       <td class="center "><%= school.city %></td>
                       <td class="center "><%= school.state %></td>
 					  <td class="center "><%= school.country %></td>
-					  <!-- <td class="center "></td>
-					  <td class="center "></td>
-					  <td class="center "></td> -->
-   				      <td data-no-turbolink>
+				      <td data-no-turbolink>
 						  <% if can? :update, School %>
 						      <%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %> |  						  <%end%>
    				   	      <% if can? :destroy, School %> 
@@ -49,6 +43,7 @@
 						  <%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> | 
 						  <%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
 						  <%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>2), :class=>"btn btn-primary btn-xs"%> |
+						  <%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>3), :class=>"btn btn-primary btn-xs"%> |
 						<button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
 					        License Details
 					    </button> 

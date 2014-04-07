@@ -21,6 +21,18 @@ class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}
   
+  def is_web_admin?
+  	 self.role.name.eql?("Web Admin") unless self.role.blank?
+  end
+  
+  def is_school_admin?
+  	 self.role.name.eql?("School Admin") unless self.role.blank?
+  end
+  
+  def assign_accessright(accessright_id)
+    self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?
+  end
+  
   def update_license_count
     if self.license_id_was.blank?
 	  assign_new_license unless self.license_id.blank?
