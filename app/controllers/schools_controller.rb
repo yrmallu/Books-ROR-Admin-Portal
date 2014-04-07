@@ -1,3 +1,6 @@
+require 'roo'
+require 'csv'
+
 class SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list]
   before_action :get_schools, only: [:index]
@@ -92,6 +95,19 @@ class SchoolsController < ApplicationController
     render partial: 'subregion_select'
   end
   
+  def download_school_list
+    send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+  end
+  
+  def import_list
+    
+  end
+
+  def import
+    School.import(params[:file])
+    redirect_to :schools, :notice => "Imported Successfully."
+  end 
+
   private
     def set_school
       @school = School.find(params[:id])

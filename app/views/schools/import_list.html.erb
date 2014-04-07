@@ -1,0 +1,9 @@
+<div class="panel panel-default">
+	<div class="panel-body"> 
+		<h2>Import Schools</h2>  
+		<%= form_tag import_schools_path, multipart: true do %>  
+	  		<%= file_field_tag :file %>  
+	  		<%= submit_tag "Import", :onclick => "return validateform();" %>  
+		<% end %>
+	</div>
+</div>	
