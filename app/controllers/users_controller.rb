@@ -184,7 +184,7 @@ class UsersController < ApplicationController
   
   private
   def set_user
-    @user = User.where("id = #{params[:id]}").last
+    @user = User.where("id = '#{params[:id]}' ").last
   end
  
   def user_params

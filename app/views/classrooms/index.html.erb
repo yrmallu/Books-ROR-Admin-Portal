@@ -1,11 +1,11 @@
-<%= form_tag 'classrooms/delete_classroom', remote: true do %>
+<%#= form_tag 'classrooms/delete_classroom', remote: true do %>
 <div class="panel panel-default">
 	<div class="panel-body"> 
 		<div class="index_page_btns" data-no-turbolink>
-       		<%=link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
-			<%=link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
+       		<%= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
+			<%= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<% if can? :create, Classroom %> <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> <%end%>
-			<%=submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	 	</div>
 	 <div class="table-responsive">
 		<table class="table" id="classroom_table">
@@ -14,15 +14,23 @@
                 	<th><%= check_box_tag 'classroom_id[]', '', false, :class => "select-all-classroom" %></th>
                     <th>Classroom Code</th>
                     <th>Classroom Name</th>
+					<th>School Year</th>
+					<!-- <th>Number Of Teachers</th>
+					<th>Number Of Students</th> -->
                     <th>Actions</th>
                  </tr>
               </thead>
               <tbody>
 				 <% @classrooms.each do |classroom| %>
-                 	<tr class="odd gradeX">
+				    <tr class="odd gradeX">
                  	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "classroom-check-box" %></td>	
                       <td class=""><%= classroom.code %></td>
                       <td class=""><%= classroom.name %></td>
+					  <td class="">
+						  <% unless classroom.school_year_start_date.blank? || classroom.school_year_end_date.blank? %>
+						      <%= classroom.school_year_start_date.year %> - <%= classroom.school_year_end_date.year %>
+						  <%end%>
+				      </td>
                       <td data-no-turbolink>
 						  <% if can? :update, Classroom %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
@@ -40,7 +48,8 @@
 		<%= paginate @classrooms %>
 	</div>	
 </div>		  
-<% end %>
+<%#= end %>
+
 <script type="text/javascript">
 showHideMenu('li_school');
 </script>

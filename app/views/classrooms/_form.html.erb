@@ -6,7 +6,7 @@
 	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
-				<%= form_for(@classroom, :html=>{:class=>"form_validation"} ) do |f| %>
+				<%= form_for(@classroom, :html=>{:class=>"form_validation classroom_form"} ) do |f| %>
 				    <%=f.hidden_field :school_id, :value=>@school.id%>
 				    <% if @classroom.errors.any? %>
 				    <div id="error_explanation">
@@ -19,7 +19,7 @@
 				    </div>
 				  	<% end %>
 	                <div class="row">
-						<% if params["action"] == "edit"%> 
+						<% if action_name.eql?("edit")%> 
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
 	                    	    <%= f.label :code, "Classroom Code", :class=>"control-label" %><span class="asterisk">*</span> </br>
@@ -27,20 +27,42 @@
 	                        </div>
 	                    </div>
 						<%end%>
-	                    <div class="col-sm-3">
+	                    <div class="col-sm-6">
 	                        <div class="form-group">
 			     		        <%= f.label :name, "Classroom Name", :class=>"control-label" %><span class="asterisk">*</span>
 			     		        <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control" %>
 	                        </div>
 	                    </div>
 	               </div>
-	               <div class="panel-footer" data-no-turbolink>
-	                   <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
-				       <%= link_to 'Cancel', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
-	               </div>
-			   <% end %>
-	    </div>
-    </div>       
+	               <div class="row">
+				       <div class="col-sm-3">
+	                       <div class="form-group">
+	                           <%= f.label :school_year_start_date, "School Start Year", :class=>"control-label" %>
+							   <%unless f.object.school_year_start_date.blank? %>
+	                    	       <%=f.select(:school_year_start_date, @dates.collect {|d| [d.to_s,d.to_s]}, {:prompt => "Select School Start Year", :selected=>f.object.school_year_start_date.year}, {:class => "form-control"} )%>
+							   <%else%>
+							       <%=f.select(:school_year_start_date, @dates.collect {|d| [d.to_s,d.to_s]}, {:prompt => "Select School Start Year"}, {:class => "form-control"} )%>
+							   <%end%>	   
+	                       </div>
+	                   </div>
+					   <div class="col-sm-3">
+	                       <div class="form-group">
+			     	           <%= f.label :school_year_end_date, "School End Year", :class=>"control-label" %>
+							   <%unless f.object.school_year_end_date.blank? %>
+			     		           <%=f.select(:school_year_end_date, @dates.collect {|d| [d.to_s,d.to_s]}, {:prompt => "Select School End Year", :selected=>f.object.school_year_end_date.year}, {:class => "form-control"} )%>
+							   <%else%>
+							       <%=f.select(:school_year_end_date, @dates.collect {|d| [d.to_s,d.to_s]}, {:prompt => "Select School End Year"}, {:class => "form-control"} )%>
+							   <%end%>	
+							   <div id="id_end_msg" style="display:none" class="error">End date should be greater than start date</div>   	                       </div>
+	                   </div>
+	              </div>
+		    </div>  
+	        <div class="panel-footer" data-no-turbolink>
+	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
+				<%= link_to 'Cancel', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
+	       </div>
+ 	       <% end %>
+	</div>    
 </div>
 
 <script type="text/javascript">
