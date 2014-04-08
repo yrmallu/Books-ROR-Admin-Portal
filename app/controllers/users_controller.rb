@@ -34,6 +34,7 @@ class UsersController < ApplicationController
   def edit
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
 	set_bread_crumb @role_id
+  @classrooms = @user.classrooms if @user && @user.classrooms
   end
  
   def create
@@ -56,6 +57,7 @@ class UsersController < ApplicationController
   end
    
   def update
+    binding.pry
     path = request.env['HTTP_HOST']
 	if @user.update_attributes(user_params)
 	  #p "accessid===",params[:accessright]
