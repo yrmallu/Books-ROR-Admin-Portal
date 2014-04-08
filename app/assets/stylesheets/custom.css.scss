@@ -6,8 +6,12 @@
   }
 }
 
+textarea {resize:vertical;}
+
+.logopanel h1 {font-size: 28px !important;}
 .error_box{ font-weight: normal; line-height: 20px; color: #B94A48; display: block; }
 .error_message{ color: #B94A48;margin-top: 2px;}
+.error{margin-left: 0px;color: #B94A48;margin-top: 2px;font-weight: 400;}
 
 .form_validation label.error, .form_validation input.submit { margin-left: 0px; color: #B94A48; margin-top: 2px; font-weight: 400;}
 
