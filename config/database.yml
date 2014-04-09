@@ -9,7 +9,7 @@ development:
   database: BookThatGrow_development
   pool: 5
   host: localhost
-  username: postgres
+  username: apple
   password: cuelogic  
 
 # Warning: The database defined as "test" will be erased and
@@ -21,7 +21,7 @@ test:
   database: BookThatGrow_test
   pool: 5
   host: localhost
-  username: postgres
+  username: apple
   password: cuelogic 
 
 production:
@@ -30,5 +30,5 @@ production:
   database: BookThatGrow_production
   pool: 5
   host: localhost
-  username: postgres
+  username: apple
   password: cuelogic 

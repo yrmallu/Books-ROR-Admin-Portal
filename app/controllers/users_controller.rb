@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
+  #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
@@ -26,7 +27,8 @@ class UsersController < ApplicationController
  
   def new
     @user = User.new
-	set_bread_crumb @role_id
+  	set_bread_crumb @role_id
+    @assigned_classrooms = []
   end
  
   def edit
@@ -34,21 +36,19 @@ class UsersController < ApplicationController
 	#@already_assigned_classrooms = @user.user_classrooms
 	#@already_assigned_classrooms.each{ |classroom| @existing_classrooms = classroom.id}
     set_bread_crumb @role_id
+    @assigned_classrooms = @user.classrooms if @user && @user.classrooms
+
   end
  
   def create
     @user = User.new(user_params)
-	path = request.env['HTTP_HOST']
+	  path = request.env['HTTP_HOST']
     if @user.save
 	  unless params[:accessright].eql?('0')
 	    @user.assign_accessright(params[:accessright]) 
-  	  end
-	  unless params[:classroom_ids].blank?
-	    @array_classroom_ids = params[:classroom_ids].split(',') 
-	    @array_classroom_ids.each do |classroom_id|
-	      @user.user_classrooms.create(:classroom_id=> classroom_id)
-	    end
-	  end	
+  	end
+    array_classroom_ids = params[:classroom_ids].split(' ') 
+	  array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id) } unless array_classroom_ids.blank?
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
 	  #@user.welcome_email(path)
     else 
@@ -71,6 +71,11 @@ class UsersController < ApplicationController
 # 	      end
 #         end
 	  end 
+    array_classroom_ids = params[:classroom_ids].split(' ') 
+    unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
+      @user.user_classrooms.delete_all
+      array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id) }
+    end 
 	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
 	    #@user.user_details_change_email(current_user.first_name, path)
