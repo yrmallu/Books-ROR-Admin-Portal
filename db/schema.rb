@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407093033) do
+ActiveRecord::Schema.define(version: 20140408054528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(version: 20140407093033) do
     t.hstore   "classroom_count"
     t.integer  "school_id"
     t.boolean  "delete_flag"
+    t.date     "school_year_start_date"
+    t.date     "school_year_end_date"
   end
 
   create_table "licenses", force: true do |t|
