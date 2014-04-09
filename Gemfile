@@ -24,6 +24,8 @@ gem 'kaminari', '0.15.1'
 
 gem 'annotate', '2.6.2'
 
+gem 'roo', '1.13.2'
+
 # provides country and subregion information
 gem 'carmen-rails', '1.0.1'
 

@@ -38,6 +38,11 @@ BooksThatGrow::Application.routes.draw do
     collection do
       post 'delete_school'
 	  get 'get_schoolwise_license_list'
+	  get 'download_school_list'
+      post 'import'
+      get 'import_list'
+	  get 'get_schoolwise_license_list'
+	  get 'check_school_name_uniqueness'
      end
   end
   get '/schools/subregion_options' => 'schools#subregion_options'

@@ -20,9 +20,9 @@
                             <td class=""><%= lic.expiry_date %></td>
                             <td class="center "><%= lic.no_of_licenses %></td>
 					        <td class=""><%= lic.used_liscenses %></td>
-					        <td class=""><%= @admin_licenses.blank? ? 0 : @admin_licenses %></td>
-					        <td class=""><%= @teacher_licenses.blank? ? 0 : @teacher_licenses %></td>
-					        <td class=""><%= @student_licenses.blank? ? 0 : @student_licenses %></td>
+					        <td class=""><%= @license_assign_count[0].blank? ? 0 : @license_assign_count[0] %></td>
+					        <td class=""><%= @license_assign_count[1].blank? ? 0 : @license_assign_count[1] %></td>
+					        <td class=""><%= @license_assign_count[2].blank? ? 0 : @license_assign_count[2] %></td>
                         </tr>
 				   <% end %>
                 </tbody>

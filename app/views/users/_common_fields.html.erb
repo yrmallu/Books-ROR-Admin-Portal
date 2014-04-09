@@ -1,3 +1,4 @@
+	                 
 
 <script>
     $(function () {
@@ -6,7 +7,7 @@
     });
   $(document).ready(function() {
 
-  	$('.remove').click(function(e) {
+    $('.remove').click(function(e) {
       classroom_ids = $("#classroom_ids").val().split(" ");
       $('#assigned_classroom_id option:selected').each(function(){
         classroom_ids.removeByValue(this.value)
@@ -14,144 +15,25 @@
       $('#assigned_classroom_id option:selected').remove();
       $("#classroom_ids").val(classroom_ids.join(" "));
       $('#assigned_classroom_div').children('div .lbjs').remove();
-    	$('select#assigned_classroom_id').listbox({'searchbar': true});
+      $('select#assigned_classroom_id').listbox({'searchbar': true});
     });
 
     $('.add').on('click', function(){
       selected_ids = []
       var selectedOpts = $('#all_classroom_id option:selected').clone();
-  		selectedOpts.each(function(i){
-    		if($("#assigned_classroom_id option[value='"+this.value+"']").length <= 0){
-        	$('#assigned_classroom_id').append(this);
+      selectedOpts.each(function(i){
+        if($("#assigned_classroom_id option[value='"+this.value+"']").length <= 0){
+          $('#assigned_classroom_id').append(this);
           selected_ids.push(this.value);
         }
-  		});
+      });
       $("#classroom_ids").val($.merge($("#classroom_ids").val().split(" "), selected_ids).join(" "));
       $('#assigned_classroom_div').children('div .lbjs').remove();
       $('select#assigned_classroom_id').listbox({'searchbar': true});
     });
   });
-  </script>
 
-  <style>
-  	.lbjs {
-			float: left;
-		}
-		.lbjs:last-of-type {
-			margin-left: 20px;
-		}
- 	</style>
-<div class="row">
-  <div class="col-sm-3">
-    <div class="form-group">
-    	<%= f.label :first_name, "First Name", :class=>"control-label" %><span class="asterisk">*</span>
-			<%= f.text_field :first_name, :required=>true,  :class=>"form-control" %>
-    </div>
-  </div>
-  <div class="col-sm-3">
-    <div class="form-group">
- 		  <%= f.label :last_name, "Last Name", :class=>"control-label" %>
- 		  <%= f.text_field :last_name, :class=>"form-control" %>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-sm-3">
-    <div class="form-group">
-    	<%= f.label :phone_number, "Phone Number", :class=>"control-label" %>
-			<%= f.text_field :phone_number, :class=>"form-control" %>
-    </div>
-  </div>
-  <div class="col-sm-6">
-    <div class="form-group">
-	    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
-	    	<%= f.text_field :email, :required=>true, :class=>"form-control email_validation" %>
-			<span class="help-inline error_box"></span>
-    </div>
-  </div>
-</div>
-<% unless ('new').eql?action_name%>
-  <% unless (@role_id.eql?('1') || @user.license_expiry_date.blank?)%>
-    <div class="row">
-        <div class="col-sm-3">
-	        <div class="form-group">
-		        <%= f.label :license_expiry_date, "License Expiry Date", :class=>"control-label"%>
-			    <%= f.text_field :license_expiry_date, :class=>"form-control", :readonly=>true %>
-	        </div>
-	    </div> 
-      </div>
-  <%end%>
-<%end%>
-<% unless ('edit').eql?action_name%>
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="form-group">
-        <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
-	  	  <%= f.password_field :password, :required=>true, :class=>"form-control class_password" %>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <div class="form-group">
-		    <%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
-		    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
-      </div>
-    </div>
-  </div>
-<%end%>
-<% if @role_id.eql?('3')%>
-  <div class="row">
-    <div class="col-sm-3">
-	    <div class="form-group">
-        <%= label_tag 'can_manage', "Can Manage Student Licenses", :class=>"control-label"%>
-				<%= hidden_field_tag :accessright, 0 %>
-	    	<%= check_box_tag('accessright', @accessright.id,["edit"].include?(action_name) ? ( @existing_access_right.include?(@accessright.id.to_s)) : false, :class=>"class_accessright")%>
-			</div>
-		</div> 
-	</div>
-<%end%>
-<% unless @role_id.eql?('1')%>
-  <%= hidden_field_tag 'classroom_ids', @classrooms.map{|c| c.id }  %>
-  <div class="row">
-    <div class="col-sm-9">
-      <div class="form-group">
-				<div style="float:left;" id="assigned_classroom_div">
-					<%= select_tag "assigned_classroom_id", options_from_collection_for_select(@classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
-				</div>
-				<div style="float:left; vertical-align:middle; height:300px; padding:110px;">
-					<a href="#Remove" class="remove"> Remove >> </a><br />
-					<a href="#Add" class="add"> << Add </a>
-				</div>
-				<div style="float:left;" id="all_classroom_div">
-					<%= select_tag "all_classroom_id", options_from_collection_for_select(Classroom.all, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
-				</div>
-			</div>
-		</div> 
-	</div>
-<%end%>
-
-				
-<script type="text/javascript">
-// selectedClassrooms = [];
-
-
-
-
-// $(document).ready(function() {
-//   $('#classroom_id').multiSelect({
-//     afterSelect: function(values){
-// 	  values = parseInt(values);	
-// 	  selectedClassrooms.push(values);
-// 	  $('#classroom_ids').val(selectedClassrooms.join(','));
-//     },
-//     afterDeselect: function(values){
-// 	  values = parseInt(values);
-// 	  selectedClassrooms.removeByValue(values);
-// 	  $('#classroom_ids').val(selectedClassrooms.join(','));
-//     }
-//   });
-// });
-
-Array.prototype.removeByValue = function(val) {
+  Array.prototype.removeByValue = function(val) {
     for(var i=0; i<this.length; i++) {
         if(this[i] == val) {
             this.splice(i, 1);
@@ -159,4 +41,134 @@ Array.prototype.removeByValue = function(val) {
         }
     }
 }
-</script> 
+</script>
+
+  <style>
+    .lbjs {
+      float: left;
+    }
+    .lbjs:last-of-type {
+      margin-left: 20px;
+    }
+  </style>
+  
+
+              <div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+	                    	<%= f.label :first_name, "First Name", :class=>"control-label" %><span class="asterisk">*</span>
+		    			    <%= f.text_field :first_name, :required=>true,  :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+			     		   <%= f.label :last_name, "Last Name", :class=>"control-label" %>
+			     		   <%= f.text_field :last_name, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+	                    	<%= f.label :phone_number, "Phone Number", :class=>"control-label" %>
+		    			    <%= f.text_field :phone_number, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+		   			    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
+		   			    	<%= f.text_field :email, :required=>true, :class=>"form-control email_validation" %>
+							<span class="help-inline error_box"></span>
+	                    </div>
+	                </div>
+	            </div>
+				<% unless ('new').eql?action_name%>
+				    <% unless (@role_id.eql?('1') || @user.license_expiry_date.blank?)%>
+					    <div class="row">
+					        <div class="col-sm-3">
+						        <div class="form-group">
+							        <%= f.label :license_expiry_date, "License Expiry Date", :class=>"control-label"%>
+								    <%= f.text_field :license_expiry_date, :class=>"form-control", :readonly=>true %>
+						        </div>
+						    </div> 
+				        </div>
+				    <%end%>
+			    <%end%>
+			    <% unless ('edit').eql?action_name%>
+	                <div class="row">
+	                    <div class="col-sm-3">
+	                        <div class="form-group">
+			    		        <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
+			    			    <%= f.password_field :password, :required=>true, :class=>"form-control class_password" %>
+	                        </div>
+	                    </div>
+	                    <div class="col-sm-3">
+	                        <div class="form-group">
+			    			    <%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
+			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
+	                        </div>
+	                    </div>
+	                </div>
+			    <%end%>
+				<% if params[:role_id] == "4" %>
+				<div class="row">
+	                <div class="col-sm-3">
+	                    <div class="form-group">
+	                    	<%= f.label :parent_name, :class=>"control-label" %>
+		    			    <%= f.text_field :parent_name, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+		   			    	<%= f.label :parent_email, :class=>"control-label"%>
+		   			    	<%= f.text_field :parent_email, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+	            <div id="parent_field"></div>  
+				<div class="row">
+	            	<div class="col-sm-3">
+	                	<div class="form-group">
+	                    	<%= f.label :grade, "Grade Level", :class=>"control-label" %>
+		    			    <%= f.text_field :grade, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+		   			    	<%= f.label :reading_ability, "Reading Level", :class=>"control-label"%>
+		   			    	<%= f.text_field :reading_ability, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div>
+				<% end %>
+				<% if @role_id.eql?('3')%>
+				    <div class="row">
+					    <div class="col-sm-3">
+						    <div class="form-group">
+						        <%= label_tag 'can_manage', "Can Manage Student Licenses", :class=>"control-label"%>
+								<%= hidden_field_tag :accessright, 0 %>
+							    <%= check_box_tag('accessright', @accessright.id,["edit"].include?(action_name) ? ( @existing_access_right.include?(@accessright.id.to_s)) : false, :class=>"class_accessright")%>
+							</div>
+						</div> 
+				    </div>
+				<%end%>
+				<% unless @role_id.eql?('1')%>
+        <%= hidden_field_tag 'classroom_ids', @assigned_classrooms.map{|c| c.id }  %>
+        <div class="row">
+          <div class="col-sm-9">
+            <div class="form-group">
+              <div style="float:left;" id="assigned_classroom_div">
+                <%= select_tag "assigned_classroom_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+              </div>
+              <div style="float:left; vertical-align:middle; height:300px; padding:110px;">
+                <a href="#Remove" class="remove"> Remove >> </a><br />
+                <a href="#Add" class="add"> << Add </a>
+              </div>
+              <div style="float:left;" id="all_classroom_div">
+                <%= select_tag "all_classroom_id", options_from_collection_for_select(Classroom.all, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+              </div>
+            </div>
+          </div> 
+        </div>
+      <%end%>
+            

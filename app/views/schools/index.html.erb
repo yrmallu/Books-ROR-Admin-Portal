@@ -1,10 +1,10 @@
 
-<%= form_tag 'schools/delete_school', remote: true do %>
+<%#= form_tag 'schools/delete_school', remote: true do %>
 <div class="panel panel-default">
 <div class="panel-body"> 
 	<div class="index_page_btns" data-no-turbolink>
-        <%=link_to 'Import School List', new_school_path, :class=>"btn btn-success btn-xs"%>
-		<%=link_to 'Download Sample', new_school_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
+		<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
 		<% if can? :create, School %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
 		<%=link_to 'Renew', new_school_path, :class=>"btn btn-success btn-xs"%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
@@ -46,7 +46,9 @@
 						  <%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>3), :class=>"btn btn-primary btn-xs"%> |
 						<button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
 					        License Details
-					    </button> 
+					    </button> |
+						<%= link_to '<i title="Add Classroom" class="fa fa-users"></i>'.html_safe, new_classroom_path(:school_id=>school)%> 
+						<%=link_to 'Student List', users_path(:school_id=>school, :role_id=>4), :class=>"btn btn-primary btn-xs"%> 
 				     </td>
                  </tr>
 				 <% end %>
@@ -58,7 +60,7 @@
 		<%= paginate @schools %>
 	</div>	
 </div>		  
-<% end %>		  
+<%#= end %>		  
 
 
 <div class="modal fade" id="school_license_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
