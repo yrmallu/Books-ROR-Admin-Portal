@@ -15,8 +15,9 @@
                     <th>Classroom Code</th>
                     <th>Classroom Name</th>
 					<th>School Year</th>
-					<!-- <th>Number Of Teachers</th>
-					<th>Number Of Students</th> -->
+					<th>Number Of School Admins</th>
+					<th>Number Of Teachers</th>
+					<th>Number Of Students</th>
                     <th>Actions</th>
                  </tr>
               </thead>
@@ -31,6 +32,9 @@
 						      <%= classroom.school_year_start_date.year %> - <%= classroom.school_year_end_date.year %>
 						  <%end%>
 				      </td>
+					  <td class=""><%=  %></td>
+					  <td class=""><%=  %></td>
+					  <td class=""><%=  %></td>
                       <td data-no-turbolink>
 						  <% if can? :update, Classroom %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
