@@ -6,7 +6,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: BookThatGrow_development
+  database: books_that_grow_v1_0_1
   pool: 5
   host: localhost
   username: postgres
@@ -27,8 +27,8 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: BookThatGrow_production
+  database: books_that_grow_v1_0_1
   pool: 5
-  host: localhost
+  host: 54.204.45.104
   username: postgres
-  password: cuelogic 
+  password: cueepub86 

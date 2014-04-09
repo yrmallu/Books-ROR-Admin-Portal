@@ -47,10 +47,12 @@ class UsersController < ApplicationController
 	  unless params[:accessright].eql?('0')
 	    @user.assign_accessright(params[:accessright]) 
   	end
-    array_classroom_ids = params[:classroom_ids].split(' ') 
+	unless params[:classroom_ids].blank?
+      array_classroom_ids = params[:classroom_ids].split(' ') 
 	  array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+	end  
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  #@user.welcome_email(path)
+	  @user.welcome_email(path)
     else 
       render :action=> 'new'
 	end
@@ -95,7 +97,7 @@ class UsersController < ApplicationController
   end
   
   def get_school_specific_classrooms
-    @school_specific_classrooms = @school.classrooms("delete_flag is not true")	
+    @school_specific_classrooms = @school.classrooms("delete_flag is not true")	unless params[:school_id].blank? 
   end
   
   def get_manage_student_accessright

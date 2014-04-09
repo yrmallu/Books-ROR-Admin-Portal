@@ -143,7 +143,9 @@
 				    </div>
 				<%end%>
 				<% unless @role_id.eql?('1')%>
-        <%= hidden_field_tag 'classroom_ids', @assigned_classrooms.map{|c| c.id }  %>
+		<% unless @assigned_classrooms.blank?%>		
+            <%= hidden_field_tag 'classroom_ids', @assigned_classrooms.map{|c| c.id }  %>
+			
         <div class="row">
           <div class="col-sm-9">
             <div class="form-group">
@@ -158,7 +160,8 @@
                 <%= select_tag "all_classroom_id", options_from_collection_for_select(@school_specific_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
               </div>
             </div>
-          </div> 
+          </div>
+		  <%end%> 
         </div>
       <%end%>
             
