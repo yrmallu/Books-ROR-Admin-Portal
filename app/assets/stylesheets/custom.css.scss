@@ -6,6 +6,13 @@
   }
 }
 
+.lbjs {
+  float: left;
+}
+.lbjs:last-of-type {
+  margin-left: 20px;
+}
+
 textarea {resize:vertical;}
 
 .logopanel h1 {font-size: 28px !important;}

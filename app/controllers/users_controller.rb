@@ -8,6 +8,7 @@ class UsersController < ApplicationController
   before_action :get_manage_student_accessright, :only => [:new, :edit]
   before_action :get_classrooms, :only => [:new]
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show]
+  before_action :get_school_specific_classrooms, :only => [:new, :edit]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -37,7 +38,6 @@ class UsersController < ApplicationController
 	#@already_assigned_classrooms.each{ |classroom| @existing_classrooms = classroom.id}
     set_bread_crumb @role_id
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-
   end
  
   def create
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 	    @user.assign_accessright(params[:accessright]) 
   	end
     array_classroom_ids = params[:classroom_ids].split(' ') 
-	  array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id) } unless array_classroom_ids.blank?
+	  array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
 	  #@user.welcome_email(path)
     else 
@@ -92,6 +92,10 @@ class UsersController < ApplicationController
 	end
 	  @user.update_attributes(:delete_flag=>true)
 	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.' 
+  end
+  
+  def get_school_specific_classrooms
+    @school_specific_classrooms = @school.classrooms("delete_flag is not true")	
   end
   
   def get_manage_student_accessright
