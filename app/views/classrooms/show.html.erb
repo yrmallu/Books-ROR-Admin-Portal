@@ -14,6 +14,18 @@
 			    	<%= @classroom.name %>
             	</address>
             	<address>
+			    	<strong>Number Of School Admins:</strong>
+			    	<%= @role_wise_count[0].blank? ? 0 : @role_wise_count[0] %>
+            	</address>
+            	<address>
+			    	<strong>Number Of Teachers:</strong>
+			    	<%= @role_wise_count[1].blank? ? 0 : @role_wise_count[1] %>
+            	</address>
+            	<address>
+			    	<strong>Number Of Students:</strong>
+			    	<%= @role_wise_count[2].blank? ? 0 : @role_wise_count[2] %>
+            	</address>
+            	<address>
 			    	<strong>School Start Year:</strong>
 			    	<%= @classroom.school_year_start_date.year unless @classroom.school_year_start_date.blank? %>
             	</address>

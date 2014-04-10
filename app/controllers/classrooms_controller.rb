@@ -6,7 +6,7 @@ class ClassroomsController < ApplicationController
   before_action :get_school_year_range, only: [:new, :edit]
   before_action :get_complete_date, only: [:create, :update]
   before_action :get_school_specific_users, :only => [:new, :edit]
-  
+   
   def index
     # @classrooms = Classroom.joins(:users).select("users.role_id as role_id, classrooms.id as id, classrooms.name as name, classrooms.school_year_start_date as school_year_start_date, classrooms.school_year_end_date as school_year_end_date, classrooms.code as code, classrooms.school_id as school_id, count(user_classrooms.user_id) as total_users_count").group("classrooms.id,users.role_id, classrooms.school_id").having("classrooms.delete_flag is not true and classrooms.school_id = '#{params[:school_id]}' ").page params[:page]
 #     @classroom_details = {}
@@ -33,25 +33,21 @@ class ClassroomsController < ApplicationController
   end
 
   def edit
-    @assigned_teachers = @classroom.users if @classroom && @classroom.users
-	@assigned_students = @classroom.users if @classroom && @classroom.users
+    @role_wise_count = []
+    @assigned_teachers = @classroom.users.includes(:role).where("delete_flag is not true AND (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
+	@assigned_students = @classroom.users.includes(:role).where("delete_flag is not true AND name='Student'").references(:role) if @classroom && @classroom.users
+    @role_wise_users = @classroom.users.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
+	@role_wise_users.each{|x| @role_wise_count << x.total_users_count} 
   end
 
   def create
     @classroom = Classroom.new(classroom_params)
 	if @classroom.save
-  	  unless params[:selected_ids].blank?
-        array_teacher_ids = params[:selected_ids].split(' ') 
-  	    array_teacher_ids.each do |teacher_id|
-		  @user = User.find(teacher_id)  
-		  @classroom.user_classrooms.create(:user_id=> @user.id, :role_id=>@user.role_id) unless array_teacher_ids.blank?
-		end
-  	  end
-  	  unless params[:student_selected_ids].blank?
-        array_student_ids = params[:student_selected_ids].split(' ') 
-  	    array_student_ids.each do |student_id|
-		  @user = User.find(student_id)  
-		  @classroom.user_classrooms.create(:user_id=> @user.id, :role_id=>@user.role_id) unless array_student_ids.blank?
+  	  array_selected_ids = params[:selected_ids].split(' ').concat(params[:student_selected_ids].split(' ') )  
+  	  unless array_selected_ids.blank?
+	    array_selected_ids.each do |user_id|
+		  @user = User.find(user_id)  
+		  @classroom.user_classrooms.create(:user_id=> @user.id, :role_id=>@user.role_id) 
 		end
   	  end
       redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom created.'
@@ -62,19 +58,11 @@ class ClassroomsController < ApplicationController
 
   def update
     if @classroom.update(classroom_params)
-      array_teacher_ids = params[:selected_ids].split(' ') 
-      unless array_teacher_ids.blank? && @classroom.users.pluck(:id) == array_teacher_ids
+	  array_selected_ids = params[:selected_ids].split(' ').concat(params[:student_selected_ids].split(' ') ) 
+      unless array_selected_ids.blank? && @classroom.users.pluck(:id) == array_selected_ids
         @classroom.user_classrooms.destroy_all
-        array_teacher_ids.each do |teacher_id| 
-		  @user = User.find(teacher_id) 
-		  @classroom.user_classrooms.create(:user_id=> @user.id, :role_id=>@user.role_id) 
-		end
-      end
-	  array_student_ids = params[:student_selected_ids].split(' ')
-      unless array_student_ids.blank? && @classroom.users.pluck(:id) == array_student_ids
-        @classroom.user_classrooms.destroy_all
-        array_student_ids.each do |student_id| 
-		  @user = User.find(student_id) 
+        array_selected_ids.each do |user_id| 
+		  @user = User.find(user_id) 
 		  @classroom.user_classrooms.create(:user_id=> @user.id, :role_id=>@user.role_id) 
 		end
       end
@@ -108,10 +96,10 @@ class ClassroomsController < ApplicationController
   end
   
   def get_school_specific_users
-    @school_specific_teachers = @school.users("delete_flag is not true AND (role_id = 2 OR role_id = 3) ") unless params[:school_id].blank? 
-	@school_specific_students = @school.users("delete_flag is not true AND role_id = 4 ") unless params[:school_id].blank? 
+    @school_specific_teachers = @school.users.includes(:role).where("delete_flag is not true AND (name='School Admin' OR name='Teacher') ").references(:role) unless params[:school_id].blank? 
+    @school_specific_students = @school.users.includes(:role).where("delete_flag is not true AND name='Student'").references(:role) unless params[:school_id].blank?
   end
-  
+
   private
     def set_classroom
       @classroom = Classroom.find(params[:id])
