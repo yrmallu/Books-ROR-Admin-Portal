@@ -47,12 +47,12 @@ class UsersController < ApplicationController
 	  unless params[:accessright].eql?('0')
 	    @user.assign_accessright(params[:accessright]) 
   	end
-	unless params[:classroom_ids].blank?
-      array_classroom_ids = params[:classroom_ids].split(' ') 
+	unless params[:selected_ids].blank?
+      array_classroom_ids = params[:selected_ids].split(' ') 
 	  array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
 	end  
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  @user.welcome_email(path)
+	  #@user.welcome_email(path)
     else 
       render :action=> 'new'
 	end
@@ -73,10 +73,10 @@ class UsersController < ApplicationController
 # 	      end
 #         end
 	  end 
-    array_classroom_ids = params[:classroom_ids].split(' ') 
+    array_classroom_ids = params[:selected_ids].split(' ') 
     unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-      @user.user_classrooms.delete_all
-      array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id) }
+      @user.user_classrooms.destroy_all
+      array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) }
     end 
 	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
