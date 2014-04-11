@@ -13,3 +13,16 @@
 //= require turbolinks
 //= require_tree .
 
+
+var minus_link;
+
+minus_link = function()  {
+	
+	$(".remove_fields").click(function(e){
+		e.preventDefault(); 
+    	return false;
+	}).css("visibility", "hidden");
+}
+
+$(document).ready(minus_link);
+$(document).on('page:load', minus_link);

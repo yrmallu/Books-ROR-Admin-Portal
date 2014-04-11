@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   
   has_secure_password
   before_save { self.email = email.downcase }
-  store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic, :parent_name, :parent_email
+  store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic
          
   has_many :user_classrooms    
   has_many :classrooms, :through => :user_classrooms
@@ -13,10 +13,13 @@ class User < ActiveRecord::Base
   belongs_to :school
   belongs_to :role
   has_many :user_accessrights
+  has_one :reading_grade
+  has_many :parents
   #belongs_to :user
   belongs_to :license
   before_update :update_license_count
   #before_update :send_user_mail
+  accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}

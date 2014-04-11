@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140410071038) do
+ActiveRecord::Schema.define(version: 20140411123332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,12 @@ ActiveRecord::Schema.define(version: 20140410071038) do
     t.datetime "epub_book_updated_at"
   end
 
+  create_table "classroom_books", force: true do |t|
+    t.integer "classroom_id"
+    t.integer "book_id"
+    t.integer "user_id"
+  end
+
   create_table "classrooms", force: true do |t|
     t.integer  "code"
     t.string   "name"
@@ -67,6 +73,28 @@ ActiveRecord::Schema.define(version: 20140410071038) do
     t.datetime "updated_at"
     t.boolean  "delete_flag"
     t.string   "license_batch_name"
+  end
+
+  create_table "notes", force: true do |t|
+    t.integer "user_id"
+    t.integer "book_id"
+    t.text    "note_data"
+  end
+
+  create_table "parents", force: true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reading_grades", force: true do |t|
+    t.string   "grade_short"
+    t.string   "grade_name"
+    t.string   "grade_name_short"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "roles", force: true do |t|
@@ -98,10 +126,29 @@ ActiveRecord::Schema.define(version: 20140410071038) do
     t.integer  "role_id"
   end
 
+  create_table "user_books", id: false, force: true do |t|
+    t.integer "id",                 limit: 8
+    t.hstore  "reading_percentage"
+    t.hstore  "last_reading_info"
+    t.integer "user_id",            limit: 8
+    t.string  "device_id"
+    t.integer "book_id"
+  end
+
   create_table "user_classrooms", force: true do |t|
     t.integer "user_id"
     t.integer "classroom_id"
     t.integer "role_id"
+  end
+
+  create_table "userlevel_settings", force: true do |t|
+    t.integer "book_id"
+    t.integer "user_id"
+    t.integer "book_changed_id"
+    t.integer "classroom_id"
+    t.integer "teacher_id"
+    t.string  "userlevel",       limit: 25
+    t.integer "status"
   end
 
   create_table "users", force: true do |t|
