@@ -48,6 +48,8 @@ class ApplicationController < ActionController::Base
   end
 
   def parse_spreadsheet(file, obj, role, save_list)
+    require 'roo'
+
     spreadsheet = Roo::Excel.new(file, nil, :ignore)
    
     header = spreadsheet.row(1).map{|h| h.to_sym.try(:downcase)}
@@ -55,14 +57,9 @@ class ApplicationController < ActionController::Base
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       row.merge!(:role_id => role) if role && !role.blank?
-      binding.pry
       data_obj = obj.new(row)
-      binding.pry
       if save_list
-        if data_obj.valid?
-          data_obj.save
-          data_list << data_obj
-        end
+        data_obj.valid? ? data_obj.save : data_list << data_obj
       else
         error_hash = {:is_valid => data_obj.valid?, :error_messages  => data_obj.errors.full_messages}
         data_list << [data_obj, error_hash]
@@ -73,24 +70,19 @@ class ApplicationController < ActionController::Base
   end
 
   def parse_csv(file, obj, role, save_list)
-    binding.pry
+    require 'csv'
     data_list = []
     CSV.foreach(file, headers: true, :header_converters => lambda { |h| h.to_sym.try(:downcase) }) do |row|
       row = row.to_hash
       row.merge!(:role_id => role) if role && !role.blank?
-      binding.pry
       data_obj = obj.new(row)
       if save_list
-        if data_obj.valid?
-          data_obj.save
-          data_list << data_obj
-        end
+        data_obj.valid? ? data_obj.save : data_list << data_obj
       else
         error_hash = {:is_valid => data_obj.valid?, :error_messages  => data_obj.errors.full_messages}
         data_list << [data_obj, error_hash]
       end
     end
-    binding.pry
     data_list
   end
 

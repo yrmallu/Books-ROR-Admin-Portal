@@ -1,5 +1,4 @@
-require 'roo'
-require 'csv'
+
 
 class SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list], except: [:save_school_list]
@@ -86,11 +85,19 @@ class SchoolsController < ApplicationController
   end
 
   def import
-    File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
-      file.write(params[:file].read)
-      session[:file] = file.path
+    flash[:notice] = ""
+    begin
+      File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
+        file.write(params[:file].read)
+        session[:file] = file.path
+      end
+      @schools = get_file_data(session[:file], School, save = false)
+    rescue ActiveRecord::UnknownAttributeError => e
+      FileUtils.rm data_file
+      flash[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
+      params['commit']=nil
+      render 'import_list'
     end
-    @schools = get_file_data(session[:file], School, save = false)
   end 
 
   def save_school_list

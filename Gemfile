@@ -66,8 +66,8 @@ group :development, :test do
   gem 'rspec-rails', '2.14.1'  
   gem 'factory_girl_rails', '4.4.1'
   gem 'debugger', '1.6.6'
-  gem 'pry'
-  gem 'hirb'
+  gem 'pry', '0.9.12.6'
+  gem 'hirb', '0.7.1'
 end
 
 group :test do

@@ -210,20 +210,20 @@ class UsersController < ApplicationController
   end
 
   def import
-    binding.pry
-    data_file = ""
-    @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
-    File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
-      file.write(params[:file].read)
-      data_file = file
-      session[:file] = file.path
-    end
-    @users = get_file_data(session[:file], User, save = false, @role_id)
-    binding.pry
-    rescue StandardError do
-      binding.pry
+    flash[:notice].clear
+    begin
+      data_file = ""
+      @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
+      File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
+        file.write(params[:file].read)
+        data_file = file
+        session[:file] = file.path
+      end
+      @users = get_file_data(session[:file], User, save = false, @role_id)
+    rescue ActiveRecord::UnknownAttributeError => e
       FileUtils.rm data_file
-      flash[:notice] = 'not properly formated file please refer sample sheets before uploading'
+      @list_type = params[:list_type]
+      flash[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
       params['commit']=nil
       render 'import_list'
     end
