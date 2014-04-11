@@ -194,52 +194,69 @@ class UsersController < ApplicationController
      end
    end
   
-  def download_school_admin_list
-    send_file "#{Rails.root}/public/download_school_admin_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
-  end
-
-  def download_teacher_list
-    send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
-  end
-
-  def download_student_list
-    send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
-  end
-
-  def import_list
-    @list_type = params[:list_type]
-  end
-
-  def import
-    flash[:notice].clear
-    begin
-      data_file = ""
-      @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
-      File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
-        file.write(params[:file].read)
-        data_file = file
-        session[:file] = file.path
+  def download_sample_list
+      if params[:list_type] == "school_admin"
+        if params[:format] == "xls"
+          send_file "#{Rails.root}/public/download_school_admin_list.xls", :type => "application/vnd.ms-excel", :filename => "school_admin_list.xls", :stream => false    
+        else
+          send_file "#{Rails.root}/public/download_school_admin_list.csv", :type => "application/vnd.ms-excel", :filename => "school_admin_list.csv", :stream => false    
+        end
+      elsif params[:list_type] == "teacher"
+        if params[:format] == "xls"
+          send_file "#{Rails.root}/public/download_teacher_list.xls", :type => "application/vnd.ms-excel", :filename => "teacher_list.xls", :stream => false    
+        else
+          send_file "#{Rails.root}/public/download_teacher_list.csv", :type => "application/vnd.ms-excel", :filename => "teacher_list.csv", :stream => false    
+        end
+      else
+        if params[:format] == "xls"
+          send_file "#{Rails.root}/public/download_student_list.xls", :type => "application/vnd.ms-excel", :filename => "school_admin_list.xls", :stream => false    
+        else
+          send_file "#{Rails.root}/public/download_student_list.csv", :type => "application/vnd.ms-excel", :filename => "school_admin_list.csv", :stream => false    
+        end
       end
-      @users = get_file_data(session[:file], User, save = false, @role_id)
-    rescue ActiveRecord::UnknownAttributeError => e
-      FileUtils.rm data_file
-      @list_type = params[:list_type]
-      flash[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
-      params['commit']=nil
-      render 'import_list'
-    end
-	end
-  end
 
-  def save_user_list
-    @users =  get_file_data(session[:file], User, save = true, params[:role_id])
-    FileUtils.rm session[:file]
-    session[:file] = ""
-    flash[:success] = "School's list saved successfully." 
-    redirect_to users_path, :notice => "Users Created."
-    def get_all_reading_grades
-    @reading_grades = ReadingGrade.all
-  end
+    end
+
+    def download_teacher_list
+      send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+    end
+
+    def download_student_list
+      send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+    end
+
+    def import_list
+      @list_type = params[:list_type]
+    end
+
+    def import
+      flash[:notice].clear
+      begin
+        data_file = ""
+        @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
+        File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
+          file.write(params[:file].read)
+          data_file = file
+          session[:file] = file.path
+        end
+        @users = get_file_data(session[:file], User, save = false, @role_id)
+      rescue ActiveRecord::UnknownAttributeError => e
+        FileUtils.rm data_file
+        @list_type = params[:list_type]
+        flash[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
+        params['commit']=nil
+        render 'import_list'
+      end
+    end
+
+    def save_user_list
+    
+      @users =  get_file_data(session[:file], User, save = true, params[:role_id])
+      FileUtils.rm session[:file]
+      session[:file] = ""
+      flash[:success] = "School's list saved successfully." 
+      redirect_to users_path, :notice => "Users Created."
+    end
   
   def delete_parent
     @user = User.find(params[:id])
