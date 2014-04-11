@@ -1,0 +1,48 @@
+<%#= form_tag 'users/delete_user', remote: true do %>
+  <div class="panel panel-default">
+	<div class="panel-body"> 
+	 <div class="table-responsive">
+		<table class="table" id="users_table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+					<th>Phone Number</th>
+					<th>Valid</th>
+					<th>Errors</th>
+                 </tr>
+              </thead>
+              <tbody>
+				 <% @users.each do |user_arr| %>
+				 	<% user = user_arr.first %>
+					<% error_hash = user_arr.last %>
+	                  <tr class="odd gradeX <%= 'redrow' unless error_hash[:is_valid] -%>">
+	                      <td class=""><%= user.first_name %></td>
+	                      <td class=""><%= user.last_name %></td>
+	                      <td class="center "><%= user.email %></td>
+						  <td class=""><%= user.phone_number %></td>
+						  <td><%= error_hash[:is_valid] %></td>
+						  <td><%= error_hash[:error_messages].each{|message| puts "#{message.first} <br />" unless message.blank? } %></td>
+	                 </tr>
+				<% end %>
+        </tbody>
+    </table>
+	</div>
+
+	<div class="panel-footer">
+	         <div width="50%" style="border : 1px solid #CCCCCC; border-radius : 10px; float :left; padding: 30px;">
+	         	<p>Let me save all the valid users only</p>
+	         	<div style="text-align: center;">
+	         		<%= link_to "Save", {:action => :save_user_list, :role_id => @role_id}, :method => 'post' %>
+	         	</div>	
+	         </div>
+	         <div width="50%" align="right" style="border : 1px solid #CCCCCC; border-radius : 10px; float: right; padding: 30px;">
+	         	<p>Let me Correct all the data and upload the List again </p>
+	         	<div style="text-align: center;">
+	         		<%= link_to "Upload Again", :action => :import_list, :method => 'post' %>
+	         	</div>	
+	         </div>
+	     </div>
+	
+ </div>		  

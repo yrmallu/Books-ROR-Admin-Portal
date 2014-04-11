@@ -9,3 +9,4 @@ $(document).on("click",".user-check-box",function(){
 jQuery(document).ready(function(){
   $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
 });
+

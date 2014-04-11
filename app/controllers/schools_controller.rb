@@ -2,7 +2,7 @@ require 'roo'
 require 'csv'
 
 class SchoolsController < ApplicationController
-  before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list]
+  before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list], except: [:save_school_list]
   before_action :get_schools, only: [:index]
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
   
@@ -79,13 +79,25 @@ class SchoolsController < ApplicationController
   end
   
   def import_list
-    
+    session[:file] = ""
   end
 
   def import
-    School.import(params[:file])
-    redirect_to :schools, :notice => "Imported Successfully."
+    File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
+      file.write(params[:file].read)
+      session[:file] = file.path
+    end
+    @schools = get_file_data(session[:file], School, save = false)
   end 
+
+  def save_school_list
+    # require 'fileutils'
+    @schools =  get_file_data(session[:file], School, save = true)
+    FileUtils.rm session[:file]
+    session[:file] = ""
+    flash[:success] = "School's list saved successfully." 
+    redirect_to schools_url 
+  end
 
   def check_school_name_uniqueness
      @check_unique_name = School.where("name = '#{params[:name]}' and id != #{params[:id]}")

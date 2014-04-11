@@ -1,65 +1,67 @@
 
 <%#= form_tag 'schools/delete_school', remote: true do %>
 <div class="panel panel-default">
-<div class="panel-body"> 
-	<div class="index_page_btns" data-no-turbolink>
-		<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
-		<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
-		<% if can? :create, School %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
-		<%=link_to 'Renew', new_school_path, :class=>"btn btn-success btn-xs"%>
-		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
-	 </div>
-	 
-	 <div class="table-responsive">
-		<table class="table" id="school_table">
-            <thead>
-                <tr>
-                	<th><%= check_box_tag 'school_id[]', '', false, :class => "select-all-school" %></th>
-                    <th>School Code</th>
-                    <th>School Name</th>
-                    <th>District</th>
-                    <th>City</th>
-					<th>State</th>
-                    <th>Country</th>
-					<th>Actions</th>
-                 </tr>
-              </thead>
-              <tbody>
-				 <% @schools.each do |school| %>
-                 <tr class="odd gradeX">
-                 	  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "school-check-box" %></td>	
-                      <td class=""><%= school.code %></td>
-                      <td class=""><%= school.name %></td>
-                      <td class=""><%= school.district %></td>
-                      <td class="center "><%= school.city %></td>
-                      <td class="center "><%= school.state %></td>
-					  <td class="center "><%= school.country %></td>
-				      <td data-no-turbolink>
-						  <% if can? :update, School %>
-						      <%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %> |  						  <%end%>
-   				   	      <% if can? :destroy, School %> 
+	<div class="panel-body"> 
+		<div class="index_page_btns" data-no-turbolink>
+			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
+			<% if can? :create, School %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
+			<%=link_to 'Renew', new_school_path, :class=>"btn btn-success btn-xs"%>
+			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
+		</div>
+		 
+		<div class="table-responsive">
+			<table class="table" id="school_table">
+	            <thead>
+	                <tr>
+	                	<th><%= check_box_tag 'school_id[]', '', false, :class => "select-all-school" %></th>
+	                    <th>School Code</th>
+	                    <th>School Name</th>
+	                    <th>District</th>
+	                    <th>City</th>
+						<th>State</th>
+	                    <th>Country</th>
+						<th>Actions</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+					<% @schools.each do |school| %>
+		                <tr class="odd gradeX">
+		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "school-check-box" %></td>	
+		                  <td class=""><%= school.code %></td>
+		                  <td class=""><%= school.name %></td>
+		                  <td class=""><%= school.district %></td>
+		                  <td class="center "><%= school.city %></td>
+		                  <td class="center "><%= school.state %></td>
+						  <td class="center "><%= school.country %></td>
+						  <td data-no-turbolink>
+						  	<% if can? :update, School %>
+						    	<%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %> |  
+						    <%end%>
+					   	    <% if can? :destroy, School %> 
 						      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: 'Are you sure?' } %> |
-					      <%end%>
-						  <%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> | 
-						  <%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
-						  <%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>2), :class=>"btn btn-primary btn-xs"%> |
-						  <%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>3), :class=>"btn btn-primary btn-xs"%> |
-						<button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
-					        License Details
-					    </button> |
-						<%= link_to '<i title="Add Classroom" class="fa fa-users"></i>'.html_safe, new_classroom_path(:school_id=>school)%> 
-						<%=link_to 'Student List', users_path(:school_id=>school, :role_id=>4), :class=>"btn btn-primary btn-xs"%> 
-				     </td>
-                 </tr>
-				 <% end %>
-        </tbody>
-    </table>
-</div>
+					      	<%end%>
+							<%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> | 
+							<%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
+							<%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>2), :class=>"btn btn-primary btn-xs"%> |
+							<%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>3), :class=>"btn btn-primary btn-xs"%> |
+							<button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
+							    License Details
+							</button> |
+							<%= link_to '<i title="Add Classroom" class="fa fa-users"></i>'.html_safe, new_classroom_path(:school_id=>school)%> 
+							<%=link_to 'Student List', users_path(:school_id=>school, :role_id=>4), :class=>"btn btn-primary btn-xs"%> 
+						   </td>
+		                </tr>
+					<% end %>
+	        	</tbody>
+	    	</table>
+		</div>
 
-	<div data-no-turbolink>
-		<%= paginate @schools %>
+		<div data-no-turbolink>
+			<%= paginate @schools %>
+		</div>	
 	</div>	
-</div>		  
+</div>	  
 <%#= end %>		  
 
 

@@ -5,13 +5,19 @@
 		<% if @role_id.eql?('1')%>
 			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.eql?('2')%>
+			<%=link_to 'Import School Admin List', import_list_users_path(:list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
 		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.eql?('3')%>
+			<%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
 		    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.eql?('4')%>
+			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
 		    <%=link_to 'Add Student', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>    	
 		<%end%>
-		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	  </div>
 	 
 	 <div class="table-responsive">

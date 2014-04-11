@@ -34,14 +34,14 @@ $(document).on("click","#school_country",function(){
 
 function validateform()
 {
-	var flag = true;
-	var ext = $('#file').val().split('.').pop().toLowerCase();
-	if ($.inArray(ext,['xls']) == -1)
-	{
-		alert("Please upload xls file");
-		flag = false;
-	}
-	return flag;
+    var flag = true;
+    var ext = $('#file').val().split('.').pop().toLowerCase();
+    if ($.inArray(ext,['xls', 'csv']) == -1) {
+      alert("Please upload xls or csv files only");
+      flag = false;
+    }
+
+  return flag;
 }
 
 

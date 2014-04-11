@@ -12,13 +12,14 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
+
     if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
     elsif !@role_id.blank? && !params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id}' AND school_id = '#{params[:school_id]}'").order("created_at DESC").page params[:page]
-	else
-	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
-	end
+	  else
+	    @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+	  end
 	set_bread_crumb @role_id
   end
   
@@ -73,7 +74,7 @@ class UsersController < ApplicationController
 	  end 
     array_classroom_ids = params[:classroom_ids].split(' ') 
     unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-      @user.user_classrooms.delete_all
+      @user.user_classrooms.destroy_all
       array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id) }
     end 
 	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
@@ -186,6 +187,50 @@ class UsersController < ApplicationController
      end
    end
   
+  def download_school_admin_list
+    send_file "#{Rails.root}/public/download_school_admin_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+  end
+
+  def download_teacher_list
+    send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+  end
+
+  def download_student_list
+    send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+  end
+
+  def import_list
+    @list_type = params[:list_type]
+  end
+
+  def import
+    binding.pry
+    data_file = ""
+    @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
+    File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
+      file.write(params[:file].read)
+      data_file = file
+      session[:file] = file.path
+    end
+    @users = get_file_data(session[:file], User, save = false, @role_id)
+    binding.pry
+    rescue StandardError do
+      binding.pry
+      FileUtils.rm data_file
+      flash[:notice] = 'not properly formated file please refer sample sheets before uploading'
+      params['commit']=nil
+      render 'import_list'
+    end
+  end
+
+  def save_user_list
+    
+    @users =  get_file_data(session[:file], User, save = true, params[:role_id])
+    FileUtils.rm session[:file]
+    session[:file] = ""
+    flash[:success] = "School's list saved successfully." 
+    redirect_to users_path, :notice => "Users Created."
+  end
   
   private
   def set_user

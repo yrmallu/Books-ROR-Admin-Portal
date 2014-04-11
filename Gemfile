@@ -67,6 +67,7 @@ group :development, :test do
   gem 'factory_girl_rails', '4.4.1'
   gem 'debugger', '1.6.6'
   gem 'pry'
+  gem 'hirb'
 end
 
 group :test do
