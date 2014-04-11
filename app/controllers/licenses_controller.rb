@@ -11,7 +11,6 @@ class LicensesController < ApplicationController
   def new
     @licenses = License.where("school_id = #{params[:school_id]} AND delete_flag is not true").order("created_at DESC").page params[:page]
     @license = License.new
-
     @school_id = params["school_id"]
   end
 
@@ -22,9 +21,7 @@ class LicensesController < ApplicationController
 
   def create
    @license = License.new(license_params)
-   
    @school_id = license_params[:school_id]
-
    respond_to do |format|
     	format.html {
 			if @license.save
@@ -42,9 +39,7 @@ class LicensesController < ApplicationController
 
   def update
     @license = License.find(params[:id])
-	  
     @school_id = @license.school_id
-
     respond_to do |format|
       format.html {
                       if @license.update_attributes(license_params)
@@ -55,7 +50,7 @@ class LicensesController < ApplicationController
                   }   
       format.js {
 	              @license.update_attributes(license_params) 
-                refresh_licenses_list
+                  refresh_licenses_list
 				}                         
     end
   end
