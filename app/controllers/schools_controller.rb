@@ -9,6 +9,9 @@ class SchoolsController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
+    @school_admin = Role.where("name = 'School Admin'").last
+	@teacher = Role.where("name = 'Teacher'").last
+	@student = Role.where("name = 'Student'").last
   end
 
   def show

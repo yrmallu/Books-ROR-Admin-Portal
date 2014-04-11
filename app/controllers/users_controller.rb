@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
-  before_action :get_role_id, :only => [:new, :index, :edit, :show, :create, :destroy] 
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :destroy] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
   before_action :get_classrooms, :only => [:new]
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show]
@@ -14,9 +14,9 @@ class UsersController < ApplicationController
   
   def index
     if !@role_id.blank? && params[:school_id].blank?
-      @users = User.where("delete_flag is not true AND role_id = '#{@role_id}'").order("created_at DESC").page params[:page]
+      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
     elsif !@role_id.blank? && !params[:school_id].blank?
-      @users = User.where("delete_flag is not true AND role_id = '#{@role_id}' AND school_id = '#{params[:school_id]}'").order("created_at DESC").page params[:page]
+      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}' AND school_id = '#{params[:school_id]}'").order("created_at DESC").page params[:page]
 	else
 	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
 	end
@@ -73,10 +73,10 @@ class UsersController < ApplicationController
 # 	      end
 #         end
 	  end 
-    array_classroom_ids = params[:selected_ids].split(' ') 
+    array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
     unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
       @user.user_classrooms.destroy_all
-      array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) }
+      array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
     end 
 	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
@@ -180,7 +180,7 @@ class UsersController < ApplicationController
 #   end
   
   def get_role_id
-  	@role_id = params[:role_id]
+  	@role_id = Role.where("id = '#{params[:role_id]}' ").last
   end
   
   def email_validation

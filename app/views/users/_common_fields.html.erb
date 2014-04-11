@@ -28,7 +28,7 @@
 	                </div>
 	            </div>
 				<% unless ('new').eql?action_name%>
-				    <% unless (@role_id.eql?('1') || @user.license_expiry_date.blank?)%>
+				    <% unless (@role_id.name.eql?('Web Admin') || @user.license_expiry_date.blank?)%>
 					    <div class="row">
 					        <div class="col-sm-3">
 						        <div class="form-group">
@@ -55,7 +55,7 @@
 	                    </div>
 	                </div>
 			    <%end%>
-				<% if @role_id.eql?('4')%>
+				<% if @role_id.name.eql?('Student')%>
 				<div class="row">
 	                <div class="col-sm-3">
 	                    <div class="form-group">
@@ -86,7 +86,7 @@
 	                </div>
 	            </div>
 				<% end %>
-				<% if @role_id.eql?('3')%>
+				<% if @role_id.name.eql?('Teacher')%>
 				    <div class="row">
 					    <div class="col-sm-3">
 						    <div class="form-group">
@@ -97,7 +97,7 @@
 						</div> 
 				    </div>
 				<%end%>
-		<% unless @role_id.eql?('1')%>
+		<% unless @role_id.name.eql?('Web Admin')%>
 		    <%= hidden_field_tag 'selected_ids', @assigned_classrooms.map{|c| c.id }  %>
 		        <div class="row">
                     <div class="col-sm-9">

@@ -2,9 +2,11 @@
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	        <div class="panel-heading">
-	            <!-- <h4 class="panel-title">License Form</h4> -->
-	             <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+                <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
+			<!-- <div id="id_create_license" class="alert_license_success hide">License Added</div>	
+			<div id="id_update_license" class="alert_license_success hide">License updated</div>	
+			<div id="id_archive_license" class="alert_license_success hide">License archived</div> -->
 	        <div class="panel-body">
 	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
 					<%= f.hidden_field :school_id, :value=>@school_id %>
@@ -43,7 +45,6 @@
 		                    </div>
 		                </div>
 		            </div>
-					
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
@@ -55,4 +56,13 @@
     </div>       
 </div>
 
+<script type="text/javascript">
+$(document).ready(function() {
+	showHideMenu('li_school');
+	// $('#id_create_license').removeClass('show').addClass('hide');
+	// $('#id_update_license').removeClass('show').addClass('hide');
+	// $('#id_archive_license').removeClass('show').addClass('hide');
+	
+});
+</script>
 	
