@@ -32,7 +32,7 @@ BooksThatGrow::Application.routes.draw do
       get 'get_user_accessright'
       post 'update_user_accessright'
 
-      get 'download_school_admin_list'
+      get 'download_sample_list'
       get 'import_list'
       post 'import'
       post 'save_user_list'

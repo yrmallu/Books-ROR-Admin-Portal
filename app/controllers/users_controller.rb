@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     @user = User.new
   	set_bread_crumb @role_id
     @assigned_classrooms = []
+    @school_specific_classrooms = []
   end
  
   def edit
@@ -193,8 +194,29 @@ class UsersController < ApplicationController
      end
    end
   
-  def download_school_admin_list
-    send_file "#{Rails.root}/public/download_school_admin_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+  def download_sample_list
+    binding.pry
+    
+    if params[:list_type] == "school_admin"
+      if params[:format] == "xls"
+        send_file "#{Rails.root}/public/download_school_admin_list.xls", :type => "application/vnd.ms-excel", :filename => "school_admin_list.xls", :stream => false    
+      else
+        send_file "#{Rails.root}/public/download_school_admin_list.csv", :type => "application/vnd.ms-excel", :filename => "school_admin_list.csv", :stream => false    
+      end
+    elsif params[:list_type] == "teacher"
+      if params[:format] == "xls"
+        send_file "#{Rails.root}/public/download_teacher_list.xls", :type => "application/vnd.ms-excel", :filename => "teacher_list.xls", :stream => false    
+      else
+        send_file "#{Rails.root}/public/download_teacher_list.csv", :type => "application/vnd.ms-excel", :filename => "teacher_list.csv", :stream => false    
+      end
+    else
+      if params[:format] == "xls"
+        send_file "#{Rails.root}/public/download_student_list.xls", :type => "application/vnd.ms-excel", :filename => "school_admin_list.xls", :stream => false    
+      else
+        send_file "#{Rails.root}/public/download_student_list.csv", :type => "application/vnd.ms-excel", :filename => "school_admin_list.csv", :stream => false    
+      end
+    end
+
   end
 
   def download_teacher_list

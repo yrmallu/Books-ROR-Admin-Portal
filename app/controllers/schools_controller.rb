@@ -77,7 +77,11 @@ class SchoolsController < ApplicationController
   end
   
   def download_school_list
-    send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+    if params[:format] == "xls"
+      send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
+    else
+      send_file "#{Rails.root}/public/download_school_list.csv", :type => "application/vnd.ms-excel", :filename => "school_list.csv", :stream => false
+    end
   end
   
   def import_list
