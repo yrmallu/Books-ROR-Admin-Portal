@@ -14,7 +14,6 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-
     if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
     elsif !@role_id.blank? && !params[:school_id].blank?
@@ -41,7 +40,6 @@ class UsersController < ApplicationController
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
 	set_bread_crumb @role_id
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-
   end
  
   def create
@@ -230,10 +228,10 @@ class UsersController < ApplicationController
       params['commit']=nil
       render 'import_list'
     end
+	end
   end
 
   def save_user_list
-    
     @users =  get_file_data(session[:file], User, save = true, params[:role_id])
     FileUtils.rm session[:file]
     session[:file] = ""
