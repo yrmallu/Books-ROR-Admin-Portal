@@ -6,6 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
     User.create(first_name: 'web', last_name: 'admin', username: 'webadmin',email: 'webadmin@cuelogic.co.in', password: '12345678', password_confirmation: '12345678', role_id: 1)
+	User.create(first_name: 'web', last_name: 'jbuhle', username: 'jbuhle',email: 'jasonbuhle@gmail.com', password: 'jbuhle', password_confirmation: 'jbuhle', role_id: 1)
 	#User.create(first_name: 'school', last_name: 'admin', username: 'schooladmin',email: 'schooladmin@cuelogic.co.in', password: '12345678', password_confirmation: '12345678', role_id: 2)
 	#User.create(first_name: 'teacher', last_name: 'user', username: 'teacheruser',email: 'teacher@cuelogic.co.in', password: '12345678', password_confirmation: '12345678', role_id: 3)
 	

@@ -6,6 +6,15 @@
   }
 }
 
+.lbjs {
+  float: left;
+}
+.lbjs:last-of-type {
+  margin-left: 20px;
+}
+
+.alert_license_success{ background-color: #dff0d8;border-color: #d6e9c6;color: #3c763d;padding: 10px !important;}
+
 textarea {resize:vertical;}
 
 .logopanel h1 {font-size: 28px !important;}

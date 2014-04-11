@@ -18,7 +18,6 @@ class ApplicationController < ActionController::Base
   end
   
   def get_all_schools
-    p "in demo1"
     @schools = School.where("delete_flag is not true").order("created_at DESC")
   end
   

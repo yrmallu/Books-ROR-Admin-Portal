@@ -14,12 +14,24 @@
 			    	<%= @classroom.name %>
             	</address>
             	<address>
+			    	<strong>Number Of School Admins:</strong>
+			    	<%= @role_wise_count[0].blank? ? 0 : @role_wise_count[0] %>
+            	</address>
+            	<address>
+			    	<strong>Number Of Teachers:</strong>
+			    	<%= @role_wise_count[1].blank? ? 0 : @role_wise_count[1] %>
+            	</address>
+            	<address>
+			    	<strong>Number Of Students:</strong>
+			    	<%= @role_wise_count[2].blank? ? 0 : @role_wise_count[2] %>
+            	</address>
+            	<address>
 			    	<strong>School Start Year:</strong>
-			    	<%= @classroom.school_year_start_date.year %>
+			    	<%= @classroom.school_year_start_date.year unless @classroom.school_year_start_date.blank? %>
             	</address>
             	<address>
 			    	<strong>School End Year:</strong>
-			    	<%= @classroom.school_year_end_date.year %>
+			    	<%= @classroom.school_year_end_date.year unless @classroom.school_year_end_date.blank?  %>
             	</address>
             	<div data-no-turbolink>
 			    	<%= link_to 'Edit', edit_classroom_path(@classroom, :school_id=>@classroom.school_id), :class=>"btn btn-success btn-xs", data: { disable_with: 'Saving...' } %>

@@ -2,22 +2,22 @@
   <div class="panel panel-default">
 	<div class="panel-body"> 
 	  <div class="index_page_btns" data-no-turbolink>
-		<% if @role_id.eql?('1')%>
-			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
-		<%elsif @role_id.eql?('2')%>
+		<% if @role_id.name.eql?('Web Admin')%>
+			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id.id), :class=>"btn btn-success btn-xs"%>
+		<%elsif @role_id.name.eql?('School Admin')%>
+		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Import School Admin List', import_list_users_path(:list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
-		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
-		<%elsif @role_id.eql?('3')%>
-			<%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
+		<%elsif @role_id.name.eql?('Teacher')%>
+		    <%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
-		    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
-		<%elsif @role_id.eql?('4')%>
-			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Add Teacher', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+		<%elsif @role_id.name.eql?('Student')%>
+		    <%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample', download_school_list_schools_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
-		    <%=link_to 'Add Student', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>    	
+			<%=link_to 'Add Student', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>    	
 		<%end%>
-		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' } %>
+		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	  </div>
 	 
 	 <div class="table-responsive">
@@ -41,7 +41,7 @@
                       <td class="center "><%= user.email %></td>
 					  <td class=""><%= user.phone_number %></td>
 					  <td data-no-turbolink>
-   				      	<% if user.email == current_user.email %>
+   				      <% if user.email == current_user.email %>
 						    <%unless @school.blank?%>
    				      		    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %>  | 
 							<%else%>
@@ -116,11 +116,11 @@
 
 
 <script type="text/javascript">
-	if( <%= @role_id.eql?('1')%>)
+	if( <%= @role_id.name.eql?('Web Admin')%>)
 	{
 	    showHideMenu('li_webadmin');	
 	}
-	else if(<%= @role_id.eql?('2')%>)
+	else if(<%= @role_id.name.eql?('School Admin')%>)
 	{
 	    showHideMenu('li_school');	
 	}

@@ -1,59 +1,4 @@
-	                 
-
-<script>
-    $(function () {
-      $('select#assigned_classroom_id').listbox({'searchbar': true});
-      $('select#all_classroom_id').listbox({'searchbar': true});
-    });
-  $(document).ready(function() {
-
-    $('.remove').click(function(e) {
-      classroom_ids = $("#classroom_ids").val().split(" ");
-      $('#assigned_classroom_id option:selected').each(function(){
-        classroom_ids.removeByValue(this.value)
-      });
-      $('#assigned_classroom_id option:selected').remove();
-      $("#classroom_ids").val(classroom_ids.join(" "));
-      $('#assigned_classroom_div').children('div .lbjs').remove();
-      $('select#assigned_classroom_id').listbox({'searchbar': true});
-    });
-
-    $('.add').on('click', function(){
-      selected_ids = []
-      var selectedOpts = $('#all_classroom_id option:selected').clone();
-      selectedOpts.each(function(i){
-        if($("#assigned_classroom_id option[value='"+this.value+"']").length <= 0){
-          $('#assigned_classroom_id').append(this);
-          selected_ids.push(this.value);
-        }
-      });
-      $("#classroom_ids").val($.merge($("#classroom_ids").val().split(" "), selected_ids).join(" "));
-      $('#assigned_classroom_div').children('div .lbjs').remove();
-      $('select#assigned_classroom_id').listbox({'searchbar': true});
-    });
-  });
-
-  Array.prototype.removeByValue = function(val) {
-    for(var i=0; i<this.length; i++) {
-        if(this[i] == val) {
-            this.splice(i, 1);
-            break;
-        }
-    }
-}
-</script>
-
-  <style>
-    .lbjs {
-      float: left;
-    }
-    .lbjs:last-of-type {
-      margin-left: 20px;
-    }
-  </style>
-  
-
-              <div class="row">
+               <div class="row">
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 	                    	<%= f.label :first_name, "First Name", :class=>"control-label" %><span class="asterisk">*</span>
@@ -83,7 +28,7 @@
 	                </div>
 	            </div>
 				<% unless ('new').eql?action_name%>
-				    <% unless (@role_id.eql?('1') || @user.license_expiry_date.blank?)%>
+				    <% unless (@role_id.name.eql?('Web Admin') || @user.license_expiry_date.blank?)%>
 					    <div class="row">
 					        <div class="col-sm-3">
 						        <div class="form-group">
@@ -141,7 +86,7 @@
 	                </div>
 	            </div>
 				<% end %>
-				<% if @role_id.eql?('3')%>
+				<% if @role_id.name.eql?('Teacher')%>
 				    <div class="row">
 					    <div class="col-sm-3">
 						    <div class="form-group">
@@ -152,23 +97,23 @@
 						</div> 
 				    </div>
 				<%end%>
-				<% unless @role_id.eql?('1')%>
-			    	<%= hidden_field_tag 'classroom_ids', @assigned_classrooms.map{|c| c.id }  %>
-			        <div class="row">
-			          <div class="col-sm-9">
-			            <div class="form-group">
-			              <div style="float:left;" id="assigned_classroom_div">
-			                <%= select_tag "assigned_classroom_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
-			              </div>
-			              <div style="float:left; vertical-align:middle; height:300px; padding:110px;">
-			                <a href="#Remove" class="remove"> Remove >> </a><br />
-			                <a href="#Add" class="add"> << Add </a>
-			              </div>
-			              <div style="float:left;" id="all_classroom_div">
-			                <%= select_tag "all_classroom_id", options_from_collection_for_select(Classroom.all, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
-			              </div>
-			            </div>
-			          </div> 
-			        </div>
-			    <%end%>
-			            
+		<% unless @role_id.name.eql?('Web Admin')%>
+		    <%= hidden_field_tag 'selected_ids', @assigned_classrooms.map{|c| c.id }  %>
+		        <div class="row">
+                    <div class="col-sm-9">
+                        <div class="form-group">
+                            <div style="float:left;" id="assigned_div">
+                                <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+                            </div>
+                            <div style="float:left; vertical-align:middle; height:300px; padding:110px;">
+                                <a href="#Remove" class="remove"> Remove >> </a><br />
+                                <a href="#Add" class="add"> << Add </a>
+                            </div>
+                            <div style="float:left;" id="all_div">
+                                <%= select_tag "all_present_id", options_from_collection_for_select(@school_specific_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+                            </div>
+                        </div>
+                    </div>
+		        </div>
+        <%end%>
+            

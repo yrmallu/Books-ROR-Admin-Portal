@@ -34,6 +34,28 @@
 	                        </div>
 	                    </div>
 	               </div>
+	               <% if action_name.eql?("edit")%> 
+				   <div class="row">
+						<div class="col-sm-3">
+	                        <div class="form-group">
+	                    	    <%= label_tag "teachers_count", "Number Of School Admins", :class=>"control-label" %> : 
+								<%= @role_wise_count[0].blank? ? 0 : @role_wise_count[0] %>
+	                        </div>
+	                    </div>
+						<div class="col-sm-3">
+	                        <div class="form-group">
+	                    	    <%= label_tag "teachers_count", "Number Of Teachers", :class=>"control-label" %> : 
+								<%= @role_wise_count[1].blank? ? 0 : @role_wise_count[1] %>
+	                        </div>
+	                    </div>
+						<div class="col-sm-6">
+	                        <div class="form-group">
+			     		        <%= label_tag "students_count", "Number Of Teachers", :class=>"control-label" %> :
+								<%= @role_wise_count[2].blank? ? 0 : @role_wise_count[2] %>
+	                        </div>
+	                    </div>
+	               </div>
+				   <%end%>
 	               <div class="row">
 				       <div class="col-sm-3">
 	                       <div class="form-group">
@@ -56,7 +78,43 @@
 							   <div id="id_end_msg" style="display:none" class="error">End date should be greater than start date</div>   	                       </div>
 	                   </div>
 	              </div>
-		    </div>  
+				  <%= hidden_field_tag 'selected_ids', @assigned_teachers.map{|c| c.id }  %>
+	  		        <div class="row">
+	                      <div class="col-sm-9">
+	                          <div class="form-group">
+	                              <div style="float:left;" id="assigned_div">
+									  <%= label_tag "teachers", "Teachers", :class=>"control-label" %>
+	                                  <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+	                              </div>
+	                              <div style="float:left; vertical-align:middle; height:300px; padding:110px;">
+	                                  <a href="#Remove" class="remove"> Remove >> </a><br />
+	                                  <a href="#Add" class="add"> << Add </a>
+	                              </div>
+	                              <div style="float:left;" id="all_div">
+									  <%= select_tag "all_present_id", options_from_collection_for_select(@school_specific_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+	                              </div>
+	                          </div>
+	                      </div>
+	  		        </div>
+  				  <%= hidden_field_tag 'student_selected_ids', @assigned_students.map{|c| c.id }  %>
+  	  		        <div class="row">
+  	                      <div class="col-sm-9">
+  	                          <div class="form-group">
+  	                              <div style="float:left;" id="student_assigned_div">
+									  <%= label_tag "studnts", "Students", :class=>"control-label" %>
+  	                                  <%= select_tag "student_assigned_id", options_from_collection_for_select(@assigned_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+  	                              </div>
+  	                              <div style="float:left; vertical-align:middle; height:300px; padding:110px;">
+  	                                  <a href="#Remove" class="remove"> Remove >> </a><br />
+  	                                  <a href="#Add" class="add"> << Add </a>
+  	                              </div>
+  	                              <div style="float:left;" id="all_student_div">
+  	                                  <%= select_tag "all_student_id", options_from_collection_for_select(@school_specific_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+  	                              </div>
+  	                          </div>
+  	                      </div>
+  	  		        </div>
+			</div>  
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
 				<%= link_to 'Cancel', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
@@ -67,6 +125,8 @@
 
 <script type="text/javascript">
 	showHideMenu('li_school');
+	
+    
 </script>
 
 

@@ -38,7 +38,7 @@ jQuery(document).ready(function() {
   	    "bAutoWidth": false,
   	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
   	   "aoColumnDefs": [
-  	               { "bSortable": false, "aTargets": [3] },
+  	               { "bSortable": false, "aTargets": [7] },
  				   { "bSortable": false, "aTargets": [0] }]
   	 });
 	 

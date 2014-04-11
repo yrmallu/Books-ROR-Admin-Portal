@@ -2,8 +2,8 @@ class UserMailer < ActionMailer::Base
   default from: 'notifications@example.com'
   
   def welcome_email(user_info)
- 	#@email = user_info[:email]
-	@email = 'kalyani.bagale@cuelogic.co.in'
+ 	@email = user_info[:email]
+	#@email = 'kalyani.bagale@cuelogic.co.in'
     @username = user_info[:username]
     @link =  user_info[:link]
     @login_url  = user_info[:login_url]
@@ -12,8 +12,8 @@ class UserMailer < ActionMailer::Base
   end
   
   def user_details_changed(user_info)
- 	#@email = user_info[:email]
-	@email = 'kalyani.bagale@cuelogic.co.in'
+ 	@email = user_info[:email]
+	#@email = 'kalyani.bagale@cuelogic.co.in'
     @username = user_info[:username]
 	@logged_in_user = user_info[:current_user]
 	@changed_values = user_info[:changed_values]
@@ -24,8 +24,8 @@ class UserMailer < ActionMailer::Base
   end
   
   def user_email_changed(user_info)
- 	#@email = user_info[:email]
-	@email = 'kalyani.bagale@cuelogic.co.in'
+ 	@email = user_info[:email]
+	#@email = 'kalyani.bagale@cuelogic.co.in'
     @username = user_info[:username]
 	@logged_in_user = user_info[:current_user]
 	@new_email = user_info[:new_email]
@@ -36,8 +36,8 @@ class UserMailer < ActionMailer::Base
   end
   
   def user_password_changed(user_info)
- 	#@email = user_info[:email]
-	@email = 'kalyani.bagale@cuelogic.co.in'
+ 	@email = user_info[:email]
+	#@email = 'kalyani.bagale@cuelogic.co.in'
     @username = user_info[:username]
 	@logged_in_user = user_info[:current_user]
 	@new_email = user_info[:new_email]
