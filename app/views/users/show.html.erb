@@ -17,15 +17,26 @@
 			    	<strong>Phone Number:</strong>
 			    	<%= @user.phone_number %>
             	</address>
-				<% unless @role_id.eql?('1')%>
+				<% unless @role_id.name.eql?('Web Admin')%>
 				<address>
 			    	<strong>License Expiration Date:</strong>
 			    	<%= @user.license_expiry_date %>
             	</address>
 				<%end%>
+				<address>
 			    	<strong>Email:</strong>
 			    	<%= @user.email %>
             	</address>
+				<% if @role_id.name.eql?('Student')%>
+					<address>
+				    	<strong>Student Grade:</strong>
+				    	<%= @grade %>
+	            	</address>
+					<address>
+				    	<strong>Student Reading Ability:</strong>
+				    	<%= @reading %>
+	            	</address>
+				<%end%>
 			    <div data-no-turbolink>
 					<% unless @role_id.name.eql?('Web Admin')%>
 			            <%= link_to 'Edit', edit_user_path(@user, :role_id => @user.role_id, :school_id=>@school.id), :class=>"btn btn-success btn-xs" %>

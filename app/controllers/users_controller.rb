@@ -8,6 +8,8 @@ class UsersController < ApplicationController
   before_action :get_manage_student_accessright, :only => [:new, :edit]
   before_action :get_classrooms, :only => [:new]
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show]
+  before_action :get_school_specific_classrooms, :only => [:new, :edit]
+  before_action :get_all_reading_grades, :only => [:new, :edit]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -24,35 +26,35 @@ class UsersController < ApplicationController
   end
   
   def show
+    @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
+	@reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
   end
  
   def new
     @user = User.new
   	set_bread_crumb @role_id
     @assigned_classrooms = []
-    @school_specific_classrooms = []
+	@parent = @user.parents.build
   end
  
   def edit
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
-	#@already_assigned_classrooms = @user.user_classrooms
-	#@already_assigned_classrooms.each{ |classroom| @existing_classrooms = classroom.id}
-    set_bread_crumb @role_id
+	set_bread_crumb @role_id
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
 
   end
  
   def create
     @user = User.new(user_params)
-	  path = request.env['HTTP_HOST']
+	path = request.env['HTTP_HOST']
     if @user.save
 	  unless params[:accessright].eql?('0')
 	    @user.assign_accessright(params[:accessright]) 
-  	end
-	unless params[:selected_ids].blank?
-      array_classroom_ids = params[:selected_ids].split(' ') 
-	  array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-	end  
+  	  end
+	  unless params[:selected_ids].blank?
+        array_classroom_ids = params[:selected_ids].split(' ') 
+	    array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+	  end  
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
 	  #@user.welcome_email(path)
     else 
@@ -195,8 +197,6 @@ class UsersController < ApplicationController
    end
   
   def download_sample_list
-    binding.pry
-    
     if params[:list_type] == "school_admin"
       if params[:format] == "xls"
         send_file "#{Rails.root}/public/download_school_admin_list.xls", :type => "application/vnd.ms-excel", :filename => "school_admin_list.xls", :stream => false    
@@ -216,9 +216,8 @@ class UsersController < ApplicationController
         send_file "#{Rails.root}/public/download_student_list.csv", :type => "application/vnd.ms-excel", :filename => "school_admin_list.csv", :stream => false    
       end
     end
-
   end
-
+  
   def download_teacher_list
     send_file "#{Rails.root}/public/download_school_list.xls", :type => "application/vnd.ms-excel", :filename => "school_list.xls", :stream => false
   end
@@ -253,11 +252,26 @@ class UsersController < ApplicationController
 
   def save_user_list
     
-    @users =  get_file_data(session[:file], User, save = true, params[:role_id])
-    FileUtils.rm session[:file]
-    session[:file] = ""
-    flash[:success] = "School's list saved successfully." 
-    redirect_to users_path, :notice => "Users Created."
+      @users =  get_file_data(session[:file], User, save = true, params[:role_id])
+      FileUtils.rm session[:file]
+      session[:file] = ""
+      flash[:success] = "School's list saved successfully." 
+      redirect_to users_path, :notice => "Users Created."
+    end
+  
+  def get_all_reading_grades
+    @reading_grades = ReadingGrade.all
+  end
+  
+  def delete_parent
+    @user = User.find(params[:id])
+    @parent = Parent.find(params[:parent_id])
+    @parent.destroy
+  	respond_to do |format|
+ 		format.html {
+ 	 	}
+ 		format.js{}
+  	end
   end
   
   private
@@ -266,7 +280,7 @@ class UsersController < ApplicationController
   end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :parent_name, :parent_email, :grade, :reading_ability)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :parents_attributes=>[:id,:name,:email,:_destroy])
   end
   
   def change_password_params

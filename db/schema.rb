@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140410071038) do
+ActiveRecord::Schema.define(version: 20140411123332) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,22 @@ ActiveRecord::Schema.define(version: 20140410071038) do
     t.datetime "updated_at"
     t.boolean  "delete_flag"
     t.string   "license_batch_name"
+  end
+
+  create_table "parents", force: true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reading_grades", force: true do |t|
+    t.string   "grade_short"
+    t.string   "grade_name"
+    t.string   "grade_name_short"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "roles", force: true do |t|

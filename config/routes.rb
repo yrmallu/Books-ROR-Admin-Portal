@@ -36,8 +36,8 @@ BooksThatGrow::Application.routes.draw do
       get 'import_list'
       post 'import'
       post 'save_user_list'
-      
-    end
+	  get 'delete_parent'
+     end
   end
 
   resources :schools do 

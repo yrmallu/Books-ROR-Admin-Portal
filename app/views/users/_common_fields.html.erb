@@ -55,36 +55,36 @@
 	                    </div>
 	                </div>
 			    <%end%>
-				<% if params[:role_id] == "4" %>
-				<div class="row">
-	                <div class="col-sm-3">
-	                    <div class="form-group">
-	                    	<%= f.label :parent_name, :class=>"control-label" %>
-		    			    <%= f.text_field :parent_name, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                <div class="col-sm-6">
-	                    <div class="form-group">
-		   			    	<%= f.label :parent_email, :class=>"control-label"%>
-		   			    	<%= f.text_field :parent_email, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	            </div>
-	            <div id="parent_field"></div>  
+				<% if @role_id.name.eql?('Student')%>
+				
+	        	<%=f.fields_for :parents,@parent do |fb|%>     
+	        		<%=render 'parent_fields', f: fb%>
+	        	<%end%>
+				<%= link_to_add_fields "Add More Parent Details", f, :parents %>
+			  
+				<!-- <div id="parent_field"></div>   -->
 				<div class="row">
 	            	<div class="col-sm-3">
 	                	<div class="form-group">
 	                    	<%= f.label :grade, "Grade Level", :class=>"control-label" %>
-		    			    <%= f.text_field :grade, :class=>"form-control" %>
+		    			    <%= f.select :grade, options_for_select(@reading_grades.collect {|g| [ g.grade_name, g.id ] }, :selected=>f.object.grade), {:prompt=>"Select Grade Level", :class=>"form-control"} %>
 	                    </div>
 	                </div>
 	                <div class="col-sm-6">
 	                    <div class="form-group">
-		   			    	<%= f.label :reading_ability, "Reading Level", :class=>"control-label"%>
-		   			    	<%= f.text_field :reading_ability, :class=>"form-control" %>
+	                    	<%= f.label :reading_ability, "Reading Ability", :class=>"control-label" %>
+		    			    <%= f.select :reading_ability, options_for_select(@reading_grades.collect {|g| [ g.grade_name, g.id ] }, :selected=>f.object.reading_ability), {:prompt=>"Select Reading Ability", :class=>"form-control"}%>
 	                    </div>
 	                </div>
 	            </div>
+				<div class="row">
+	            	<div class="col-sm-3">
+	                	<div class="form-group">
+				            <%= f.label :assign_reading_based_on, "Reading Based On", :class=>"control-label" %>
+							<%= f.select :assign_reading_based_on, [["Grade level","grade"],["Reading Ability","reading"]], {:prompt => "Select Reading Based On"}, {:class=>"form-control"}%>
+				        </div>
+				    </div>
+				</div>
 				<% end %>
 				<% if @role_id.name.eql?('Teacher')%>
 				    <div class="row">
@@ -103,9 +103,10 @@
                     <div class="col-sm-9">
                         <div class="form-group">
                             <div style="float:left;" id="assigned_div">
+								<%= label_tag 'classrooms', "Classrooms", :class=>"control-label"%>
                                 <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
                             </div>
-                            <div style="float:left; vertical-align:middle; height:300px; padding:110px;">
+                            <div class="assign_arrows">
                                 <a href="#Remove" class="remove"> Remove >> </a><br />
                                 <a href="#Add" class="add"> << Add </a>
                             </div>
