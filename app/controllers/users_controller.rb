@@ -258,6 +258,10 @@ class UsersController < ApplicationController
       redirect_to users_path, :notice => "Users Created."
     end
   
+  def get_all_reading_grades
+    @reading_grades = ReadingGrade.all
+  end
+  
   def delete_parent
     @user = User.find(params[:id])
     @parent = Parent.find(params[:parent_id])
