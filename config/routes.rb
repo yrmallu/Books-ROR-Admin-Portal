@@ -31,6 +31,7 @@ BooksThatGrow::Application.routes.draw do
 	  get 'remove_license'
    	  get 'get_user_accessright'
       post 'update_user_accessright'
+	  get 'delete_parent'
      end
   end
 

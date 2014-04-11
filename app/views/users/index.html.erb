@@ -23,6 +23,13 @@
                     <th>Last Name</th>
                     <th>Email</th>
 					<th>Phone Number</th>
+					<%unless @role_id.name.eql?('Web Admin')%>
+					    <th>License Expiration Date</th>
+					<%end%>
+					<%if @role_id.name.eql?('Student')%>
+					    <th>Grade</th>
+					    <th>Reading Level</th>
+					<%end%>
 					<th>Actions</th>
                  </tr>
               </thead>
@@ -34,6 +41,13 @@
                       <td class=""><%= user.last_name %></td>
                       <td class="center "><%= user.email %></td>
 					  <td class=""><%= user.phone_number %></td>
+					  <%unless @role_id.name.eql?('Web Admin')%>
+					      <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
+					  <%end%>
+  					  <%if @role_id.name.eql?('Student')%>
+					      <td class=""><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></td>
+					      <td class=""><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></td>
+  					  <%end%>
 					  <td data-no-turbolink>
    				      <% if user.email == current_user.email %>
 						    <%unless @school.blank?%>
@@ -50,7 +64,7 @@
 						<% end %> 
    				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %> | 
 						  <%= link_to '<i title="Remove License" class="fa fa-minus-square"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %> | 
-						<% unless @role_id.eql?('1')%>  
+						<% unless  @role_id.name.eql?('Web Admin')%>  
 						    <%= hidden_field_tag :user_id, user.id%>
 							<button class="btn btn-primary btn-xs assign_license" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
 						        Assign License
