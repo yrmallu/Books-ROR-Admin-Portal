@@ -4,12 +4,12 @@ class UsersController < ApplicationController
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
-  before_action :get_role_id, :only => [:new, :index, :edit, :show, :destroy] 
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :destroy, :delete_parent] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
   before_action :get_classrooms, :only => [:new]
-  before_action :get_school_by_id, :only => [:new, :edit, :index, :show]
-  before_action :get_school_specific_classrooms, :only => [:new, :edit]
-  before_action :get_all_reading_grades, :only => [:new, :edit]
+  before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent]
+  before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent]
+  before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
 	    array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
 	  end  
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  #@user.welcome_email(path)
+	  @user.welcome_email(path)
     else 
       render :action=> 'new'
 	end
@@ -265,7 +265,8 @@ class UsersController < ApplicationController
   
   def delete_parent
     @user = User.find(params[:id])
-    @parent = Parent.find(params[:parent_id])
+    @assigned_classrooms = @user.classrooms if @user && @user.classrooms
+	@parent = Parent.find(params[:parent_id])
     @parent.destroy
   	respond_to do |format|
  		format.html {

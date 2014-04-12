@@ -56,7 +56,7 @@
              <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id =>Role.where("name='Web Admin'").last) %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path(:role_id => Role.where("name='Web Admin'").last) %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
-          </ul
+          </ul>
         </li>
 		<%#=end%>
 		<%#= if current_user.is_web_admin?%>
@@ -65,7 +65,7 @@
           <ul class="children">
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Access Right", new_accessright_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
-          </ul
+          </ul>
         </li>
 		<%#=end%>
       </ul>
@@ -95,7 +95,7 @@
 	<% flash.each do |key, value| %>
 		<div class="alert alert-<%= key %>"> <%= value %>
         		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        	</div>
+        </div>
 	<% end %>
   
 

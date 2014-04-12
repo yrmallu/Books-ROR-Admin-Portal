@@ -1,3 +1,8 @@
+//$.validator.addMethod("contact_email_required", $.validator.methods.required, "Email can't be blank.");
+$.validator.addMethod("parent_email_valid", $.validator.methods.email, "Please enter a valid email.");
+$.validator.addClassRules("class_parent_email", {parent_email_valid:true});
+
+
 var required_field;
 required_field = function(){
 	$(".form_validation").validate({
