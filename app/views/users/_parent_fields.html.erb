@@ -9,10 +9,16 @@
 	                <div class="col-sm-6">
 	                    <div class="form-group">
 		   			    	<%= f.label :email, 'Parent Email', :class=>"control-label"%>
-		   			    	<%= f.text_field :email, :class=>"form-control" %>
+		   			    	<%= f.text_field :email, :class=>"form-control class_parent_email" %>
+		                </div>
+		            </div>
+					<div class="col-sm-3">
+					   <div class="form-group">		
+						    <br><br>
+							<%=link_to "delete", delete_parent_users_path(:id=>@user, :parent_id=>f.object.id, :role_id=>4, :school_id=>params[:school_id]), :remote => true if (action_name.eql?('edit') && !f.object.id.blank?)%>
 	                    </div>
 	                </div>
-					<%#=link_to "delete", delete_parent_users_path(:id=>@user, :parent_id=>f.object.id), :remote => true %>
+					
 	            </div>
 			    <%=f.hidden_field(:id)%>
 			    <%=f.hidden_field :_destroy%>

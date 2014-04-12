@@ -28,20 +28,18 @@ ActiveRecord::Schema.define(version: 20140411123332) do
     t.integer "role_id"
   end
 
-  create_table "books", force: true do |t|
-    t.string   "title"
-    t.string   "description"
-    t.string   "author"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "book_cover_file_name"
-    t.string   "book_cover_content_type"
-    t.integer  "book_cover_file_size"
-    t.datetime "book_cover_updated_at"
-    t.string   "epub_book_file_name"
-    t.string   "epub_book_content_type"
-    t.integer  "epub_book_file_size"
-    t.datetime "epub_book_updated_at"
+  create_table "books", id: false, force: true do |t|
+    t.integer "id",             limit: 8
+    t.string  "title"
+    t.text    "description"
+    t.string  "author"
+    t.hstore  "preview_name"
+    t.string  "book_file_name"
+    t.integer "chapters"
+    t.string  "book_unique_id"
+    t.hstore  "thumb_name"
+    t.string  "cover"
+    t.string  "interest_level", limit: 60
   end
 
   create_table "classroom_books", force: true do |t|
@@ -89,7 +87,7 @@ ActiveRecord::Schema.define(version: 20140411123332) do
     t.datetime "updated_at"
   end
 
-  create_table "reading_grades", force: true do |t|
+ create_table "reading_grades", force: true do |t|
     t.string   "grade_short"
     t.string   "grade_name"
     t.string   "grade_name_short"
@@ -133,6 +131,7 @@ ActiveRecord::Schema.define(version: 20140411123332) do
     t.integer "user_id",            limit: 8
     t.string  "device_id"
     t.integer "book_id"
+    t.string  "reading_info"
   end
 
   create_table "user_classrooms", force: true do |t|

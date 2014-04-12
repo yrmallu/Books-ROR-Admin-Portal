@@ -1,1 +1,2 @@
-//$('#parent_info').html('<%#= j(render 'parent_fields', :f=>@user) %>');
+//$('#parent_info').html('<%#= j(render 'form') %>');
+window.location = '<%= j(edit_user_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id)) %>'
