@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-
+  
   include SessionsHelper
   hide_action :current_user
 
@@ -26,9 +26,10 @@ class ApplicationController < ActionController::Base
   end
   
   def get_accessright
-    if current_user.role_id.eql?(1)
-      @accessrights = Accessright.where("id > 4")	
-	end
+    # if current_user.role_id.eql?(1)
+#       @accessrights = Accessright.where("id > 4")	
+# 	end
+    @accessrights = Accessright.all
   end
   
   def get_classrooms
@@ -86,10 +87,13 @@ class ApplicationController < ActionController::Base
     data_list
   end
 
-  rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, :alert => exception.message
-  end	
+  # rescue_from CanCan::AccessDenied do |exception|
+#     redirect_to root_url, :alert => exception.message
+#   end	
   
+  rescue_from CanCan::Unauthorized do |exception|
+    redirect_to root_url, :alert => exception.message
+  end
 
   def set_bread_crumb(*extras)
 

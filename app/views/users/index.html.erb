@@ -3,19 +3,27 @@
 	<div class="panel-body"> 
 	  <div class="index_page_btns" data-no-turbolink>
 		<% if @role_id.name.eql?('Web Admin')%>
-			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id.id), :class=>"btn btn-success btn-xs"%>
+		    <% if can? :create, :users %>
+			    <%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id.id), :class=>"btn btn-success btn-xs"%>
+			<%end%>
 		<%elsif @role_id.name.eql?('School Admin')%>
-		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+		    <% if can? :create, :users %>
+		        <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+			<%end%>
 			<%=link_to 'Import School Admin List', import_list_users_path(:list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "school_admin", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 		<%elsif @role_id.name.eql?('Teacher')%>
-		    <%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
+		    <% if can? :create, :users %>
+			    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+		    <%end%>	
 			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "teacher", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
-			<%=link_to 'Add Teacher', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.name.eql?('Student')%>
-		    <%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
+			<% if can? :create, :users %>
+			    <%=link_to 'Add Student', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+			<%end%>
+			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "student", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
-			<%=link_to 'Add Student', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>    	
 		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	  </div>

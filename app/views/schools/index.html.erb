@@ -6,7 +6,7 @@
 			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 			
-			<% if can? :create, School %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
+			<% if can? :create, :schools %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
 			<%=link_to 'Renew', new_school_path, :class=>"btn btn-success btn-xs"%>
 			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
 		</div>
@@ -36,21 +36,33 @@
 		                  <td class="center "><%= school.state %></td>
 						  <td class="center "><%= school.country %></td>
 						  <td data-no-turbolink>
-						  	<% if can? :update, School %>
-						    	<%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %> |  
+						  	<% if can? :update, :schools %>
+						    	<%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %>  
 						    <%end%>
-					   	    <% if can? :destroy, School %> 
-						      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: 'Are you sure?' } %> |
+					   	    <% if can? :destroy, :schools %> 
+						      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: 'Are you sure?' } %> 
 					      	<%end%>
-							<%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> | 
+							<% if can? :create, :licenses %> 
+							   <%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> 
+							<%end%>
 							<%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
-							<%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>@school_admin.id), :class=>"btn btn-primary btn-xs"%> |
-							<%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>@teacher.id), :class=>"btn btn-primary btn-xs"%> |
-							<%=link_to 'Student List', users_path(:school_id=>school, :role_id=>@student.id), :class=>"btn btn-primary btn-xs"%> |
-							<button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
+							<% if can? :read, :users %>
+							    <%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>@school_admin.id), :class=>"btn btn-primary btn-xs"%> 
+							<%end%>
+							<% if can? :read, :users %>
+							    <%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>@teacher.id), :class=>"btn btn-primary btn-xs"%>
+							<%end%>
+							<% if can? :read, :users %>
+							    <%=link_to 'Student List', users_path(:school_id=>school, :role_id=>@student.id), :class=>"btn btn-primary btn-xs"%> 
+							<%end%>
+							<% if can? :read, :licenses %> 
+							    <button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
 							    License Details
-							</button> |
-							<%= link_to '<i title="Add Classroom" class="fa fa-users"></i>'.html_safe, new_classroom_path(:school_id=>school)%> 
+							</button> 
+							<%end%>
+							<% if can? :read, :classrooms %>
+							    <%= link_to '<i title="Classroom List" class="fa fa-users"></i>'.html_safe, classrooms_path(:school_id=>school)%> 
+						   <%end%>		
 						   </td>
 		                </tr>
 					<% end %>

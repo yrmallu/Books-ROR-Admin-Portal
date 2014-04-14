@@ -4,7 +4,9 @@
 		<div class="index_page_btns" data-no-turbolink>
        		<%= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<%= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
-			<% if can? :create, Classroom %> <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> <%end%>
+			<% if can? :create, :classrooms %> 
+			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
+			<%end%>
 			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	 	</div>
 	 <div class="table-responsive">
@@ -36,10 +38,10 @@
 					  <td class=""><%=  %></td>
 					  <td class=""><%=  %></td>
                       <td data-no-turbolink>
-						  <% if can? :update, Classroom %>
+						  <% if can? :update, :classrooms %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
 						  <%end%>
-   				   	      <% if can? :destroy, Classroom %> 
+   				   	      <% if can? :destroy, :classrooms %> 
 						      <%= link_to '<i title="Archive Classroom" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: 'Are you sure?' } %> 
 					      <%end%>
 					</td>

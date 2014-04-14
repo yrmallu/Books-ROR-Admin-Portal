@@ -9,10 +9,12 @@ gem 'rails', '4.0.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '0.17.1'
 
-gem 'cancan', '1.6.10'
+#gem 'cancan', '1.6.10'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '4.0.2'
+
+gem 'cancan', github: 'ryanb/cancan', branch: '2.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '2.5.0'
