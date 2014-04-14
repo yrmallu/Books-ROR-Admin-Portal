@@ -44,13 +44,13 @@
 					      	<%end%>
 							<%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> | 
 							<%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
-							<%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>2), :class=>"btn btn-primary btn-xs"%> |
-							<%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>3), :class=>"btn btn-primary btn-xs"%> |
+							<%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>@school_admin.id), :class=>"btn btn-primary btn-xs"%> |
+							<%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>@teacher.id), :class=>"btn btn-primary btn-xs"%> |
+							<%=link_to 'Student List', users_path(:school_id=>school, :role_id=>@student.id), :class=>"btn btn-primary btn-xs"%> |
 							<button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
 							    License Details
 							</button> |
 							<%= link_to '<i title="Add Classroom" class="fa fa-users"></i>'.html_safe, new_classroom_path(:school_id=>school)%> 
-							<%=link_to 'Student List', users_path(:school_id=>school, :role_id=>4), :class=>"btn btn-primary btn-xs"%> 
 						   </td>
 		                </tr>
 					<% end %>
