@@ -881,6 +881,7 @@ h4, .h4 {
 
 .modal-dialog {
    border: 0;
+   width: 800px;
 }
 
 .modal-content {

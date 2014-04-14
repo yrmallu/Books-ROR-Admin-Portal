@@ -14,7 +14,7 @@
 			<%=link_to 'Add Teacher', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.name.eql?('Student')%>
 		    <%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
-			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "student", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
+			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "student", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
 			<%=link_to 'Add Student', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>    	
 		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>

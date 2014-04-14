@@ -36,7 +36,7 @@ function validateform()
 {
     var flag = true;
     var ext = $('#file').val().split('.').pop().toLowerCase();
-    if ($.inArray(ext,['xls', 'csv']) == -1) {
+    if ($.inArray(ext,['xls', 'csv', 'xlsx']) == -1) {
       alert("Please upload xls or csv files only");
       flag = false;
     }

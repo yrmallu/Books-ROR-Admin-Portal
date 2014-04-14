@@ -64,12 +64,14 @@ class SchoolsController < ApplicationController
   end
   
   def delete_school
-    School.where(id: params[:school_ids]).each do |school|
-      school.update_attributes(delete_flag: true)
-    end
-    respond_to do |format|
-      format.js
-    end
+    binding.pry
+    # School.where(id: params[:school_ids]).each do |school|
+    #   school.update_attributes(delete_flag: true)
+    # end
+    # respond_to do |format|
+    #   format.js
+    # end
+    redirect_to schools_url 
   end
   
   def subregion_options
@@ -121,6 +123,13 @@ class SchoolsController < ApplicationController
         render :text => "avaiable"
      end
    end
+
+  def update_license_expiration_date
+    # binding.pry
+    params[:license_expiry_date].each{|k,v| License.find(k).update_attributes(:expiry_date => v) if v && !v.blank? } if params[:license_expiry_date] && !params[:license_expiry_date].blank?
+    params[:license_ids].each{|lic| License.find(lic).update_attributes(:expiry_date => nil) } if params[:license_ids] && !params[:license_ids].blank?
+    redirect_to schools_url 
+  end
   
   private
     def set_school
