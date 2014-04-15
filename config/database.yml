@@ -22,7 +22,7 @@ test:
   database: BookThatGrow_test
   pool: 5
   host: localhost
-  username: apple
+  username: postgres
   password: cuelogic 
 
 production:
@@ -31,5 +31,6 @@ production:
   database: books_that_grow_v1_0_1
   pool: 5
   host: 54.204.45.104
-  username: apple
-  password: cueepub86 
+  username: postgres
+  password: cueepub86
+  port: 5432 
