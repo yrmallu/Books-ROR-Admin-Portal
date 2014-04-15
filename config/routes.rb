@@ -32,6 +32,7 @@ BooksThatGrow::Application.routes.draw do
       get 'get_user_accessright'
       post 'update_user_accessright'
 
+      post 'assign_license'
       get 'download_sample_list'
       get 'import_list'
       post 'import'
@@ -50,6 +51,7 @@ BooksThatGrow::Application.routes.draw do
       post 'save_school_list'
       get 'get_schoolwise_license_list'
       get 'check_school_name_uniqueness'
+      post 'update_license_expiration_date'
     end
   end
   get '/schools/subregion_options' => 'schools#subregion_options'

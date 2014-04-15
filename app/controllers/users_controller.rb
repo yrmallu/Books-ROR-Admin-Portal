@@ -119,10 +119,15 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
+    binding.pry
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
   
+  def assign_license
+    binding.pry
+  end
+
   def change_user_password
     render :partial=>"change_password"
   end
@@ -251,13 +256,12 @@ class UsersController < ApplicationController
   end
 
   def save_user_list
-    
-      @users =  get_file_data(session[:file], User, save = true, params[:role_id])
-      FileUtils.rm session[:file]
-      session[:file] = ""
-      flash[:success] = "School's list saved successfully." 
-      redirect_to users_path, :notice => "Users Created."
-    end
+    @users =  get_file_data(session[:file], User, save = true, params[:role_id])
+    FileUtils.rm session[:file]
+    session[:file] = ""
+    flash[:success] = "School's list saved successfully." 
+    redirect_to users_path, :notice => "Users Created."
+  end
   
   def get_all_reading_grades
     @reading_grades = ReadingGrade.all

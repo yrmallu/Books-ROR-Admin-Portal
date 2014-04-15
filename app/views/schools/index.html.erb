@@ -1,5 +1,5 @@
 
-<%#= form_tag 'schools/delete_school', remote: true do %>
+<%= form_tag 'schools/delete_school' do %>
 <div class="panel panel-default">
 	<div class="panel-body"> 
 		<div class="index_page_btns" data-no-turbolink>
@@ -75,7 +75,7 @@
 		</div>	
 	</div>	
 </div>	  
-<%#= end %>		  
+<% end %>		  
 
 
 <div class="modal fade" id="school_license_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -93,7 +93,7 @@
 </div>	
 
 <div class="modal fade" id="download_list_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width:800px;">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
