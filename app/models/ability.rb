@@ -7,10 +7,11 @@ class Ability
       else 
         user_rights = user.user_permission_names.collect{|i| i.name}
 		p "final accessrights=====",user_rights
-		can :create, :users, :role_id => user.role_id if user_rights.include?("Create Web Admin")
-		can :create, :users, :role_id => user.role_id if user_rights.include?("Create School Admin")
- 		can :create, :users, :role_id => user.role_id if user_rights.include?("Create Teacher")
- 		can :create, :users, :role_id => user.role_id if user_rights.include?("Create Student")
+
+		can :create, :users, :role_id => 1 if user_rights.include?("Create Web Admin")
+		can :create, :users, :role_id => 2 if user_rights.include?("Create School Admin")
+ 		can :create, :users, :role_id => 3 if user_rights.include?("Create Teacher")
+ 		can :create, :users, :role_id => 2 if user_rights.include?("Create Student")
 		#can :create, :users, :role_id => user.role_id if user_rights.include?("Can Manage Student")
 		
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View Web Admin")
