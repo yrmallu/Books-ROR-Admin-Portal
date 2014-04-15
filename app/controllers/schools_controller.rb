@@ -1,5 +1,3 @@
-
-
 class SchoolsController < ApplicationController
   before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list], except: [:save_school_list]
   before_action :get_schools, only: [:index]

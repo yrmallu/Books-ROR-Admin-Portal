@@ -14,15 +14,16 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-
     if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+	  set_bread_crumb(@role_id.id)
     elsif !@role_id.blank? && !params[:school_id].blank?
-      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}' AND school_id = '#{params[:school_id]}'").order("created_at DESC").page params[:page]
+      @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+	  set_bread_crumb(@role_id.id, @school.id)
 	else
 	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
 	end
-	set_bread_crumb @role_id
+	
   end
   
   def show
@@ -32,16 +33,19 @@ class UsersController < ApplicationController
  
   def new
     @user = User.new
-  	set_bread_crumb @role_id
+	unless params[:school_id].blank?
+	  set_bread_crumb(@role_id.id, @school.id)
+	else
+	  set_bread_crumb(@role_id.id)
+	end
     @assigned_classrooms = []
 	@parent = @user.parents.build
   end
  
   def edit
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
-	set_bread_crumb @role_id
+	set_bread_crumb(@role_id.id, @school.id)
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-
   end
  
   def create
@@ -63,6 +67,7 @@ class UsersController < ApplicationController
   end
    
   def update
+    p "alala baba update la ekdacha"
     path = request.env['HTTP_HOST']
 	if @user.update_attributes(user_params)
 	  #p "accessid===",params[:accessright]
@@ -251,13 +256,12 @@ class UsersController < ApplicationController
   end
 
   def save_user_list
-    
-      @users =  get_file_data(session[:file], User, save = true, params[:role_id])
-      FileUtils.rm session[:file]
-      session[:file] = ""
-      flash[:success] = "School's list saved successfully." 
-      redirect_to users_path, :notice => "Users Created."
-    end
+    @users =  get_file_data(session[:file], User, save = true, params[:role_id])
+    FileUtils.rm session[:file]
+    session[:file] = ""
+    flash[:success] = "School's list saved successfully." 
+    redirect_to users_path, :notice => "Users Created."
+  end
   
   def get_all_reading_grades
     @reading_grades = ReadingGrade.all
