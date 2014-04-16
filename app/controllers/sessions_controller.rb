@@ -18,7 +18,6 @@ class SessionsController < ApplicationController
        end
 	 else
 	   if @user && @user.authenticate(params[:session][:password]) && (@user.license_expiry_date.to_s > "#{Time.now.to_date.to_s}")
-         # Storing session in user_id
          session[:user_id] = @user.id
          redirect_to dashboard_users_path
        else

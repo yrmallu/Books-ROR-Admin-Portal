@@ -124,7 +124,6 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
-    binding.pry
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
