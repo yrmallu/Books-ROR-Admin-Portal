@@ -1,10 +1,11 @@
 $('#license_license_batch_name').val('');
 $('#license_no_of_licenses').val('');
 $('#datepicker').val('');
+
 $('#id_license').html('<%= j(render "form") %>');
 $('#id_license_info').html('<%= j(render "licenses_info") %>')
 $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
 
-$('#id_create_license').removeClass('hide').addClass('show');
-$('#id_update_license').removeClass('show').addClass('hide');
-$('#id_archive_license').removeClass('show').addClass('hide');
+// $('#id_create_license').removeClass('hide').addClass('show');
+// $('#id_update_license').removeClass('show').addClass('hide');
+// $('#id_archive_license').removeClass('show').addClass('hide');

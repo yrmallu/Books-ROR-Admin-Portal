@@ -12,6 +12,7 @@ class LicensesController < ApplicationController
     @licenses = License.where("school_id = #{params[:school_id]} AND delete_flag is not true").order("created_at DESC").page params[:page]
     @license = License.new
     @school_id = params["school_id"]
+	set_bread_crumb(@school_id)
   end
 
   def edit
@@ -56,9 +57,9 @@ class LicensesController < ApplicationController
   end
   
  def destroy
-     @license.update_attributes(:delete_flag=>true)
-	   @licenses = License.where("school_id = '#{@license.school_id}' AND delete_flag is not true").order("created_at DESC").page params[:page]
-	   respond_to do |format|
+   @license.update_attributes(:delete_flag=>true)
+   @licenses = License.where("school_id = '#{@license.school_id}' AND delete_flag is not true").order("created_at DESC").page params[:page]
+   respond_to do |format|
       format.html { redirect_to licenses_url }
       format.js {  }
     end

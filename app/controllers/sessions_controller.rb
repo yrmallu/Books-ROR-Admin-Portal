@@ -7,23 +7,25 @@ class SessionsController < ApplicationController
  
   def create
     redirect_to signin_path,:notice=>"Invalid email/password combination" and return if (params[:session][:email].blank? || params[:session][:password].blank?)
-    @user = User.find_by("(email = '#{params[:session][:email].downcase}') and (delete_flag is null or delete_flag is false)")
-    #@user = User.find_by(email: params[:session][:email].downcase)
-    if @user && @user.authenticate(params[:session][:password])
-      # Storing session in user_id
-      session[:user_id] = @user.id
-	  
-	  # for sending welcome mail after signin
-	  #UserMailer.welcome_email(@user).deliver
-	  
-	 # flash[:success] = "You are successfully loggedin as #{@user.firstname}."
-      redirect_to dashboard_users_path
-    else
-      #flash.now[:error] = 'Invalid email/password combination'
-      #render 'new'
-	  flash[:error] = "Invalid email/password combination"
-      redirect_to signin_path
-    end
+     @user = User.find_by("(email = '#{params[:session][:email].downcase}') AND (delete_flag is null OR delete_flag is false)")
+	 if @user.role.name.eql?("Web Admin")
+	   if @user && @user.authenticate(params[:session][:password]) 
+         session[:user_id] = @user.id
+         redirect_to dashboard_users_path
+       else
+	     flash[:error] = "Invalid email/password combination"
+         redirect_to signin_path
+       end
+	 else
+	   if @user && @user.authenticate(params[:session][:password]) && (@user.license_expiry_date.to_s > "#{Time.now.to_date.to_s}")
+         # Storing session in user_id
+         session[:user_id] = @user.id
+         redirect_to dashboard_users_path
+       else
+	     flash[:error] = "Invalid email/password combination OR license must have expired."
+         redirect_to signin_path
+       end
+	 end
   end
   
   def destroy

@@ -36,7 +36,7 @@
             </ul>
         </div>
       <h5 class="sidebartitle">    </h5>
-      <ul class="nav nav-pills nav-stacked nav-bracket page-sidebar id="main-menu"" data-no-turbolink>
+      <ul class="nav nav-pills nav-stacked nav-bracket page-sidebar" id="main-menu" data-no-turbolink>
 		<li id="li_dashboard"><%= link_to '<i class="fa fa-home"></i>'.html_safe + "Dashboard", root_path %></li>
 		 <span class="arrow arrw-pos" container_li="li_dashboard"></span>
 		
@@ -101,7 +101,7 @@
     <div class="contentpanel">
 	<% flash.each do |key, value| %>
 		<div class="alert alert-<%= key %>"> <%= value %>
-        		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
 	<% end %>
   

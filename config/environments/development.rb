@@ -40,7 +40,7 @@ BooksThatGrow::Application.configure do
       authentication: "plain",
       enable_starttls_auto: true,
 	  user_name: ENV["GMAIL_USERNAME"],
-      password: ENV["GMAIL_PASSWORD"]
+      password: ENV["GMAIL_PASSWORD"] 
     }
   
   Paperclip.options[:command_path] = "/usr/local/bin/"
