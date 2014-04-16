@@ -8,10 +8,9 @@ development:
   encoding: unicode
   database: books_that_grow_v1_0_1
   pool: 5
-  host: 192.168.10.37
+  host: localhost
   username: postgres
-  password: pg2014  
-  port: 5433
+  password: cueepub86  
 
 
 # Warning: The database defined as "test" will be erased and
