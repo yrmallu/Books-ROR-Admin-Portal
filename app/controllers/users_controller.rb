@@ -60,7 +60,7 @@ class UsersController < ApplicationController
 	    array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
 	  end  
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  @user.welcome_email(path)
+	  #@user.welcome_email(path)
     else 
       render :action=> 'new'
 	end
