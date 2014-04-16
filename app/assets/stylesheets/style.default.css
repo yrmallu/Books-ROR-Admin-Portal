@@ -7,6 +7,7 @@ URL: http://themepixels.com/
 @import url('bootstrap-override.css');
 @import url('jquery-ui-1.10.3.css');
 @import url('font-awesome.min.css');
+@import url('btg_icon_font.css');
 @import url('animate.min.css');
 @import url('animate.delay.css');
 @import url('toggles.css');
@@ -33,6 +34,8 @@ input,select,textarea {
 }
 
 a:focus, a:active { outline: none; }
+
+a:hover{text-decoration:none;}
 
 h1,h2,h3,h4,h5 {
    font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;

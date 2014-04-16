@@ -43,5 +43,6 @@ BooksThatGrow::Application.configure do
       password: ENV["GMAIL_PASSWORD"] 
     }
   
-  Paperclip.options[:command_path] = "/usr/local/bin/"
+  #Paperclip.options[:command_path] = "/usr/local/bin/"
+  Paperclip.options[:command_path] = "/Users/cuelogic/ImageMagick-6.8.8/bin/"
 end
