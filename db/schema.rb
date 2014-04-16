@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140416074959) do
+ActiveRecord::Schema.define(version: 20140416122721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,11 +60,6 @@ ActiveRecord::Schema.define(version: 20140416074959) do
     t.boolean  "delete_flag"
     t.date     "school_year_start_date"
     t.date     "school_year_end_date"
-  end
-
-  create_table "htest", id: false, force: true do |t|
-    t.text   "t"
-    t.hstore "h", default: "hstore((ARRAY[]::character varying[])::text[])"
   end
 
   create_table "licenses", force: true do |t|
@@ -174,6 +169,10 @@ ActiveRecord::Schema.define(version: 20140416074959) do
     t.string   "password_digest"
     t.integer  "license_id"
     t.string   "assign_reading_based_on"
+    t.string   "photos_file_name"
+    t.string   "photos_content_type"
+    t.integer  "photos_file_size"
+    t.datetime "photos_updated_at"
   end
 
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree

@@ -23,7 +23,6 @@ class UsersController < ApplicationController
 	else
 	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
 	end
-	
   end
   
   def show
@@ -129,7 +128,7 @@ class UsersController < ApplicationController
   end
   
   def assign_license
-    binding.pry
+    #binding.pry
   end
 
   def change_user_password
@@ -289,7 +288,7 @@ class UsersController < ApplicationController
   end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :parents_attributes=>[:id,:name,:email,:_destroy])
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :photos, :parents_attributes=>[:id,:name,:email,:_destroy])
   end
   
   def change_password_params
