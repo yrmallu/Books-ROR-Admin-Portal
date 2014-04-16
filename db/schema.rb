@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140407093033) do
+ActiveRecord::Schema.define(version: 20140414075926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,14 +34,6 @@ ActiveRecord::Schema.define(version: 20140407093033) do
     t.string   "author"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "book_cover_file_name"
-    t.string   "book_cover_content_type"
-    t.integer  "book_cover_file_size"
-    t.datetime "book_cover_updated_at"
-    t.string   "epub_book_file_name"
-    t.string   "epub_book_content_type"
-    t.integer  "epub_book_file_size"
-    t.datetime "epub_book_updated_at"
   end
 
   create_table "classrooms", force: true do |t|
@@ -54,6 +46,31 @@ ActiveRecord::Schema.define(version: 20140407093033) do
     t.hstore   "classroom_count"
     t.integer  "school_id"
     t.boolean  "delete_flag"
+    t.date     "school_year_start_date"
+    t.date     "school_year_end_date"
+  end
+
+  create_table "images", force: true do |t|
+    t.string   "name"
+    t.string   "book_cover_file_name"
+    t.string   "book_cover_content_type"
+    t.integer  "book_cover_file_size"
+    t.datetime "book_cover_updated_at"
+    t.string   "book_cover_large_file_name"
+    t.string   "book_cover_large_content_type"
+    t.integer  "book_cover_large_file_size"
+    t.datetime "book_cover_large_updated_at"
+    t.string   "preview_book_image_file_name"
+    t.string   "preview_book_image_content_type"
+    t.integer  "preview_book_image_file_size"
+    t.datetime "preview_book_image_updated_at"
+    t.string   "epub_book_file_name"
+    t.string   "epub_book_content_type"
+    t.integer  "epub_book_file_size"
+    t.datetime "epub_book_updated_at"
+    t.integer  "book_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "licenses", force: true do |t|
@@ -65,6 +82,22 @@ ActiveRecord::Schema.define(version: 20140407093033) do
     t.datetime "updated_at"
     t.boolean  "delete_flag"
     t.string   "license_batch_name"
+  end
+
+  create_table "parents", force: true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reading_grades", force: true do |t|
+    t.string   "grade_short"
+    t.string   "grade_name"
+    t.string   "grade_name_short"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "roles", force: true do |t|
@@ -84,7 +117,7 @@ ActiveRecord::Schema.define(version: 20140407093033) do
     t.string   "phone"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "delete_flag"
+    t.boolean  "delete_flag", default: false
   end
 
   create_table "user_accessrights", force: true do |t|
@@ -107,8 +140,8 @@ ActiveRecord::Schema.define(version: 20140407093033) do
     t.string   "last_name"
     t.string   "username"
     t.date     "license_expiry_date"
-    t.boolean  "delete_flag",         default: false
-    t.string   "email",               default: "",    null: false
+    t.boolean  "delete_flag",             default: false
+    t.string   "email",                   default: "",    null: false
     t.integer  "device_id"
     t.integer  "role_id"
     t.integer  "school_id"
@@ -117,6 +150,7 @@ ActiveRecord::Schema.define(version: 20140407093033) do
     t.hstore   "userinfo"
     t.string   "password_digest"
     t.integer  "license_id"
+    t.string   "assign_reading_based_on"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

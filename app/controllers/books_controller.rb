@@ -4,7 +4,8 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    @books = Book.all
+    #@books = Book.all
+    @books = Book.order("created_at DESC").page params[:page]
   end
 
   # GET /books/1
@@ -15,6 +16,7 @@ class BooksController < ApplicationController
   # GET /books/new
   def new
     @book = Book.new
+    @images = @book.images.build
   end
 
   # GET /books/1/edit
@@ -61,15 +63,16 @@ class BooksController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book
-      @book = Book.find(params[:id])
+      @book = Book.includes(:images).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:title, :description, :author, :book_cover, :epub_book)
+      params.require(:book).permit(:id, :title, :description, :author, :images_attributes=> [:name,:book_cover,:book_cover_large,:preview_book_image,:epub_book,:book_id])
     end
 end

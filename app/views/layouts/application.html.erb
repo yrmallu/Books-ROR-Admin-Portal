@@ -55,7 +55,7 @@
           <ul class="children">
              <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id =>1) %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path(:role_id => 1) %></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
+            <!-- <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li> -->
           </ul
         </li>
 		<%#=end%>
@@ -65,6 +65,13 @@
           <ul class="children">
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Access Right", new_accessright_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
+          </ul
+        </li>
+        <li class="nav-parent" id="li_book"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Book</span></a>
+			<span class="arrow arrw-pos" container_li="li_accessright"></span>
+          <ul class="children">
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Book List", books_path %></li>
           </ul
         </li>
 		<%#=end%>
