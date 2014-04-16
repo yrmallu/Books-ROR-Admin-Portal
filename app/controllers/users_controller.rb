@@ -99,6 +99,14 @@ class UsersController < ApplicationController
 	  @user.update_attributes(:delete_flag=>true)
 	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.' 
   end
+
+
+  def delete_user
+    User.where(id: params[:user_ids]).each do |user|
+      user.update_attributes(delete_flag: true)
+    end
+   redirect_to users_path
+  end
   
   def get_school_specific_classrooms
     @school_specific_classrooms = @school.classrooms("delete_flag is not true")	unless params[:school_id].blank? 
@@ -119,14 +127,11 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
-    binding.pry
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
   
-  def assign_license
-    binding.pry
-  end
+  
 
   def change_user_password
     render :partial=>"change_password"
@@ -179,14 +184,6 @@ class UsersController < ApplicationController
     end
   end
   
-  # def delete_user
-#     User.where(id: params[:user_ids]).each do |user|
-#       user.update_attributes(delete_flag: true)
-#     end
-#     respond_to do |format|
-#       format.js
-#     end  
-#   end
   
   def get_role_id
   	@role_id = Role.where("id = '#{params[:role_id]}' ").last

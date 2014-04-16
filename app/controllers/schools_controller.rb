@@ -64,13 +64,9 @@ class SchoolsController < ApplicationController
   end
   
   def delete_school
-    binding.pry
-    # School.where(id: params[:school_ids]).each do |school|
-    #   school.update_attributes(delete_flag: true)
-    # end
-    # respond_to do |format|
-    #   format.js
-    # end
+    School.where(id: params[:school_ids]).each do |school|
+      school.update_attributes(delete_flag: true)
+    end
     redirect_to schools_url 
   end
   

@@ -62,6 +62,11 @@ ActiveRecord::Schema.define(version: 20140414075926) do
     t.date     "school_year_end_date"
   end
 
+  create_table "htest", id: false, force: true do |t|
+    t.text   "t"
+    t.hstore "h", default: "hstore((ARRAY[]::character varying[])::text[])"
+  end
+
   create_table "licenses", force: true do |t|
     t.date     "expiry_date"
     t.integer  "no_of_licenses"

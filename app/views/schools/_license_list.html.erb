@@ -14,6 +14,7 @@
                 $(".datepicker").attr("disabled", "disabled");
             }else{
                 $(".datepicker").removeAttr("disabled");
+                $('.license-check-box').prop("checked", false);
             }        
         });
         // enable/disable delete button whether any check-box is checked or not
@@ -35,7 +36,7 @@
 		    <table class="table" id="license_detail_table">
                 <thead>
                     <tr>
-                        <th><%= check_box_tag 'license_id', '', false, :class => "select-all-licenses" %></th>
+                        <th> Remove all &nbsp;<%= check_box_tag 'license_id', '', false, :class => "select-all-licenses" %></th>
                 	    <th>License Batch Name</th>
                         <th>Expiry Date</th>
                         <th>Total Licenses</th>
