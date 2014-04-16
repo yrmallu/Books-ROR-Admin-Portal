@@ -289,7 +289,7 @@ class UsersController < ApplicationController
   end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :parents_attributes=>[:id,:name,:email,:_destroy])
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :parents_attributes=>[:id,:name,:email,:_destroy])
   end
   
   def change_password_params
