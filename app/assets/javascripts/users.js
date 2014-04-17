@@ -1,9 +1,35 @@
-$(document).on("click",".user-check-box",function(){
-	if($("#users_table .user-check-box:checked").length > 0)
-		document.getElementById("delete_user").disabled=false;
-	else
-		document.getElementById("delete_user").disabled=true;  
+$(document).ready(function () {
+    $('.user-check-box').change(function () {
+        var check = ($('.user-check-box').filter(":checked").length == $('.user-check-box').length);
+        $('.select-all-user').prop("checked", check);
+    });
+	// enable/disable delete button whether select-all check-box is checked or not
+    $('.select-all-user').click(function () {
+        if($("#users_table .user-check-box:checked").length > 0)
+			document.getElementById("delete_user").disabled=true;
+		else
+			document.getElementById("delete_user").disabled=false;  
+    });
+	// enable/disable delete button whether any check-box is checked or not
+    $('.user-check-box').click(function () {
+       if($("#users_table .user-check-box:checked").length > 0)
+			document.getElementById("delete_user").disabled=false;
+		else
+			document.getElementById("delete_user").disabled=true;  
+    }); 
 });
+	
+// select-all check-box functionality
+$(document).on("click",".select-all-user",function(){
+	$('.user-check-box').prop('checked', $(this).is(':checked'));
+});
+
+// $(document).on("click",".user-check-box",function(){
+// 	if($("#users_table .user-check-box:checked").length > 0)
+// 		document.getElementById("delete_user").disabled=false;
+// 	else
+// 		document.getElementById("delete_user").disabled=true;  
+// });
 
 
 jQuery(document).ready(function(){

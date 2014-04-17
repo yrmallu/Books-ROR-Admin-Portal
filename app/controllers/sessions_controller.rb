@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
 	 if @user.role.name.eql?("Web Admin")
 	   if @user && @user.authenticate(params[:session][:password]) 
          session[:user_id] = @user.id
-         redirect_to dashboard_users_path
+         redirect_to schools_path
        else
 	     flash[:error] = "Invalid email/password combination"
          redirect_to signin_path

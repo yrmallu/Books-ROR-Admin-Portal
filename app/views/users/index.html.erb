@@ -31,7 +31,7 @@
 		<table class="table" id="users_table">
             <thead>
                 <tr>
-                	<th></th>
+                	<th>Remove all &nbsp; <%= check_box_tag 'user_id[]', '', false, :class => "select-all-user" %></th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -64,29 +64,30 @@
 					  <td data-no-turbolink>
    				      <% if user.email == current_user.email %>
 						    <%unless @school.blank?%>
-   				      		    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %>  | 
+   				      		    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %>  
 							<%else%>
-							    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>  |
+							    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> 
 							<%end%>	
    				      	<% else %>	
 						    <%unless @school.blank?%>		
-						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %> |
+						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %> 
 						    <%else%>
-						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> |
+						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>
 						    <% end %> 
 						<% end %> 
-   				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %> | 
-						  <%= link_to '<i title="Remove License" class="fa fa-minus-square"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %> | 
+   				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %>  
 						<% unless  @role_id.name.eql?('Web Admin')%>  
 						    <%= hidden_field_tag :user_id, user.id%>
-							<button class="btn btn-primary btn-xs assign_license" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
+							<!-- <button class="btn btn-primary btn-xs assign_license" data-toggle="modal" data-target="#myModal" data-input='<%#=user.id%>' >
 						        Assign License
-						    </button> | 
-						<%end%>  
-						<button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%=user.id%>' >
+						    </button> --> 
+							<%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
+						<%end%>
+						<%= link_to '<i title="Remove License" class="fa fa-minus-square"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %>   
+						<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
 					       Change Password
-					    </button>
-						<%#= link_to '<i title="Change Password" class="fa fa-lock"></i>'.html_safe, '', :class=>"", data: { toggle: "modal", target: "#myModal"} %>
+					    </button> -->
+						<%= link_to '<i title="Change Password" class="fa fa-lock increase_size"></i>'.html_safe, '', :class=>"change_password", data: { toggle: "modal", target: "#changePassword", input: user.id} %>
 					</td>
                  </tr>
 				 <% end %>

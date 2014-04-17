@@ -92,23 +92,23 @@
 				        </div>
 				    </div>
 				</div>
-                 <div class="row">
+                 <!-- <div class="row">
                     <div class="col-md-6">
 					   <table class="">
 			   			    <tr>
 			   				    <td>
-			   					    <div class="student-img"><%image = ( ["edit", "update"].include?(action_name)) ? (f.photos.blank? ? "missin.png" : f.photos.url) : 'missin.png'  %>
-			   					    <%= image_tag(image,:alt=>"your image",:class=>"",:border=>"1") %></div>
+			   					    <div class="student-img"><%#=image = ( ["edit", "update"].include?(action_name)) ? (f.photos.blank? ? "missin.png" : f.photos.url) : 'missin.png'  %>
+			   					    <%#= image_tag(image,:alt=>"your image",:class=>"",:border=>"1") %></div>
 			   				    </td>
 			   			    </tr>
 			   			    <tr>
 			   				    <td>
-			   					    <%= f.file_field :photos%>
+			   					    <%#= f.file_field :photos%>
 			   				    </td>
 			   			    </tr>
 			   		    </table>
                     </div> 
-                </div>
+                </div> -->
 				<% end %>
 				<% if @role_id.name.eql?('Teacher')%>
 				    <div class="row">

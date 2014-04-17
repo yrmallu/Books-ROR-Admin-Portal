@@ -14,7 +14,6 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-
     if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
 	  set_bread_crumb(@role_id.id)
@@ -47,7 +46,6 @@ class UsersController < ApplicationController
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
 	set_bread_crumb(@role_id.id, @school.id)
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-
   end
  
   def create
@@ -61,6 +59,7 @@ class UsersController < ApplicationController
         array_classroom_ids = params[:selected_ids].split(' ') 
 	    array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
 	  end  
+	  add_user_level_setting if @user.role.name.eql?('Student')
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
 	  #@user.welcome_email(path)
     else 
@@ -88,6 +87,7 @@ class UsersController < ApplicationController
       @user.user_classrooms.destroy_all
       array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
     end 
+	  add_user_level_setting if @user.role.name.eql?('Student')
 	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
 	    #@user.user_details_change_email(current_user.first_name, path)
@@ -106,12 +106,22 @@ class UsersController < ApplicationController
 	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.' 
   end
 
-
+  def add_user_level_setting 
+    if @user.assign_reading_based_on.eql?('grade')
+	  user_level = @user.grade
+	elsif @user.assign_reading_based_on.eql?('reading')
+	  user_level = @user.reading_ability
+	end
+    UserlevelSettings.create(:user_id=>@user.id, :teacher_id=>current_user.id, :status=>1, :school_id=>@user.school_id, :userlevel=>user_level, :reference=>'t_portal')
+  end
+  
   def delete_user
-    User.where(id: params[:user_ids]).each do |user|
+    deleted_user = ''
+	User.where(id: params[:user_ids]).each do |user|
+	  deleted_user = user
       user.update_attributes(delete_flag: true)
     end
-   redirect_to users_path
+    redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
   end
   
   def get_school_specific_classrooms
@@ -133,13 +143,11 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
-    binding.pry
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
   
   def assign_license
-    binding.pry
   end
 
   def change_user_password
@@ -192,15 +200,6 @@ class UsersController < ApplicationController
  	  redirect_to signin_path
     end
   end
-  
-  # def delete_user
-#     User.where(id: params[:user_ids]).each do |user|
-#       user.update_attributes(delete_flag: true)
-#     end
-#     respond_to do |format|
-#       format.js
-#     end  
-#   end
   
   def get_role_id
   	@role_id = Role.where("id = '#{params[:role_id]}' ").last
