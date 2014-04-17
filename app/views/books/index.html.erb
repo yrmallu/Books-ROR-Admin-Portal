@@ -1,0 +1,47 @@
+<%#= form_tag 'schools/delete_school', remote: true do %>
+<div class="panel panel-default">
+	<div class="panel-body"> 
+		<div class="index_page_btns" data-no-turbolink>
+			<% if can? :create, Book %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>
+			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>
+		</div>
+		 
+		 <div class="table-responsive">
+			<table class="table" id="book_table">
+	            <thead>
+	                <tr>
+	            		<th><%= check_box_tag 'book_id[]', '', false, :class => "select-all-book" %></th>
+                    	<th>Title</th>
+                    	<th>Author</th>
+                    	<th>Description</th>
+						<th>Actions</th>	
+	                </tr>
+	            </thead>
+	            <tbody>
+					<% @books.each do |book| %>
+                 		<tr class="odd gradeX">
+                   			<td class=""><%= check_box_tag 'book_ids[]', book.id, false, :class => "book-check-box" %></td>
+                      		<td class="center"><%= book.title %></td>
+                      		<td class="center"><%= book.author %></td>
+                      		<td class="center"><%= book.description %></td>
+      						<td data-no-turbolink>
+  								<% if can? :update, Book %>
+						      		<%= link_to '<i title="Edit Book" class="fa fa-pencil"></i>'.html_safe, edit_book_path(book) %> 						  
+						  		<%end%>
+   				   	      		<% if can? :destroy, Classroom %> 
+						      		<%= link_to '<i title="Delete Book" class="glyphicon glyphicon-trash"></i>'.html_safe, book, method: :delete, data: { confirm: 'Are you sure?' } %> 
+					      		<%end%>
+    						</td>
+                 		</tr>
+					<% end %>	
+	        	</tbody>
+	    	</table>
+		</div>
+	</div>
+</div>		  
+<%#= end %>		  
+
+
+<script type="text/javascript">
+	showHideMenu('li_book');
+</script>

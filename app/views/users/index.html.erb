@@ -1,7 +1,7 @@
-<%#= form_tag 'users/delete_user', remote: true do %>
-<div class="panel panel-default">
-    <div class="panel-body"> 
-	    <div class="index_page_btns" data-no-turbolink>
+<%= form_tag 'users/delete_user', remote: true do %>
+  <div class="panel panel-default">
+	<div class="panel-body"> 
+	  <div class="index_page_btns" data-no-turbolink>
 		<% if @role_id.name.eql?('Web Admin')%>
 		    <% if can? :create, :users %>
 			    <%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id.id), :class=>"btn btn-success btn-xs"%>
@@ -93,12 +93,12 @@
             </tbody>
         </table>
 	</div>
+
 	<div data-no-turbolink>
 		    <%= paginate @users %>
 	</div>
-    </div>	
-</div>	 	  
-<%#= end %>
+ </div>		  
+<% end %>
 
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

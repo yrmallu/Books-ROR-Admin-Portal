@@ -40,9 +40,10 @@ BooksThatGrow::Application.configure do
       authentication: "plain",
       enable_starttls_auto: true,
 	  user_name: ENV["GMAIL_USERNAME"],
-      password: ENV["GMAIL_PASSWORD"] 
+      password: ENV["GMAIL_PASSWORD"]
     }
   
-  #Paperclip.options[:command_path] = "/usr/local/bin/"
-  Paperclip.options[:command_path] = "/Users/cuelogic/ImageMagick-6.8.8/bin/"
+  # Paperclip.options[:command_path] = "/usr/local/bin/"
+
+  Paperclip.options[:command_path] = "/Users/apple/ImageMagick-6.8.8/bin/"
 end

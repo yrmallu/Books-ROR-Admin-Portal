@@ -49,6 +49,11 @@ gem 'turbolinks', '2.2.1'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '2.0.4'
 
+gem 'epub-parser', '0.1.5'
+
+gem 'rubyzip', :git => 'git://github.com/davidhooey/rubyzip.git'
+# gem 'rubyzip', '~> 1.1.3', :require => 'zip'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', '0.4.0',  require: false

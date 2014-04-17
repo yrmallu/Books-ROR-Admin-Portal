@@ -14,6 +14,7 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
+
     if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
 	  set_bread_crumb(@role_id.id)
@@ -23,6 +24,7 @@ class UsersController < ApplicationController
 	else
 	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
 	end
+	set_bread_crumb @role_id
   end
   
   def show
@@ -45,6 +47,7 @@ class UsersController < ApplicationController
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
 	set_bread_crumb(@role_id.id, @school.id)
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
+
   end
  
   def create
@@ -66,7 +69,6 @@ class UsersController < ApplicationController
   end
    
   def update
-    p "alala baba update la ekdacha"
     path = request.env['HTTP_HOST']
 	if @user.update_attributes(user_params)
 	  #p "accessid===",params[:accessright]
@@ -103,6 +105,14 @@ class UsersController < ApplicationController
 	  @user.update_attributes(:delete_flag=>true)
 	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.' 
   end
+
+
+  def delete_user
+    User.where(id: params[:user_ids]).each do |user|
+      user.update_attributes(delete_flag: true)
+    end
+   redirect_to users_path
+  end
   
   def get_school_specific_classrooms
     @school_specific_classrooms = @school.classrooms("delete_flag is not true")	unless params[:school_id].blank? 
@@ -123,12 +133,13 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
+    binding.pry
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
   
   def assign_license
-    #binding.pry
+    binding.pry
   end
 
   def change_user_password
