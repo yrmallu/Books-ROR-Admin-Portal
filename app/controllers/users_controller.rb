@@ -17,8 +17,10 @@ class UsersController < ApplicationController
 
     if !@role_id.blank? && params[:school_id].blank?
       @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+	  set_bread_crumb(@role_id.id)
     elsif !@role_id.blank? && !params[:school_id].blank?
-      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}' AND school_id = '#{params[:school_id]}'").order("created_at DESC").page params[:page]
+      @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+	  set_bread_crumb(@role_id.id, @school.id)
 	else
 	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
 	end
@@ -32,14 +34,18 @@ class UsersController < ApplicationController
  
   def new
     @user = User.new
-  	set_bread_crumb @role_id
+	unless params[:school_id].blank?
+	  set_bread_crumb(@role_id.id, @school.id)
+	else
+	  set_bread_crumb(@role_id.id)
+	end
     @assigned_classrooms = []
 	@parent = @user.parents.build
   end
  
   def edit
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
-	set_bread_crumb @role_id
+	set_bread_crumb(@role_id.id, @school.id)
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
 
   end
@@ -56,7 +62,7 @@ class UsersController < ApplicationController
 	    array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
 	  end  
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  @user.welcome_email(path)
+	  #@user.welcome_email(path)
     else 
       render :action=> 'new'
 	end
@@ -127,11 +133,14 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
+    binding.pry
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
   
-  
+  def assign_license
+    binding.pry
+  end
 
   def change_user_password
     render :partial=>"change_password"
@@ -184,6 +193,14 @@ class UsersController < ApplicationController
     end
   end
   
+  # def delete_user
+#     User.where(id: params[:user_ids]).each do |user|
+#       user.update_attributes(delete_flag: true)
+#     end
+#     respond_to do |format|
+#       format.js
+#     end  
+#   end
   
   def get_role_id
   	@role_id = Role.where("id = '#{params[:role_id]}' ").last
@@ -282,7 +299,7 @@ class UsersController < ApplicationController
   end
  
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :parents_attributes=>[:id,:name,:email,:_destroy])
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :photos, :parents_attributes=>[:id,:name,:email,:_destroy])
   end
   
   def change_password_params

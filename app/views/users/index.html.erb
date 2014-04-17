@@ -26,9 +26,8 @@
 			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "student", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
 		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
-	  </div>
-	 
-	 <div class="table-responsive">
+	</div>
+	<div class="table-responsive">
 		<table class="table" id="users_table">
             <thead>
                 <tr>
@@ -91,12 +90,12 @@
 					</td>
                  </tr>
 				 <% end %>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 	</div>
 
 	<div data-no-turbolink>
-		<%= paginate @users %>
+		    <%= paginate @users %>
 	</div>
  </div>		  
 <% end %>

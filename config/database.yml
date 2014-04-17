@@ -25,11 +25,12 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: BookThatGrow_development
+  database: books_that_grow_v1_0_1
   pool: 5
   host: localhost
-  username: apple
-  password: cuelogic  
+  username: postgres
+  password: cueepub86  
+  
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

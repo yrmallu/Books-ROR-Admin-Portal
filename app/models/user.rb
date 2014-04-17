@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   
   has_secure_password
   before_save { self.email = email.downcase }
-  store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on, :profile_pic
+  store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on
          
   has_many :user_classrooms    
   has_many :classrooms, :through => :user_classrooms
@@ -23,6 +23,14 @@ class User < ActiveRecord::Base
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}
+  
+  has_attached_file :photos, :styles => { :medium => "300x300>",  :thumb => "100x100>" },
+                               :url  => "/users/images/:id/:style/:basename.:extension",
+                               :path => ":rails_root/public/users/images/:id/:style/:basename.:extension"
+							   
+  validates_attachment_size :photos, :less_than => 5.megabytes
+  validates_attachment_content_type :photos, :content_type => /\Aimage\/.*\Z/
+  						   
   
   def is_web_admin?
   	 self.role.name.eql?("Web Admin") unless self.role.blank?

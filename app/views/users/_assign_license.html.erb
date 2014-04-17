@@ -1,23 +1,23 @@
 <div class="row">
 	<div class="col-md-12">
 	    <div class="panel panel-default">
-		    <%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
-		       <div class="panel-body">
-				   <%= hidden_field_tag :send_mail, @no_mail%>
-				       <div class="row">
-			               <div class="col-sm-6">
-			                   <div class="form-group">
-						           <%= f.label :license_id, "License", :class=>"control-label" %><span class="asterisk">*</span>
-			    				   <%= f.select :license_id, options_for_select(@licenses.collect {|m| [ m.get_license_batch_name_date, m.id ] }, :selected=>f.object.license_id), {:prompt=>"Select License"}, {:class=>"form-control class_licenses", :required=>true}%>
-								   <%= f.hidden_field :license_expiry_date %>
-							  </div>
-			               </div>
-			           </div>
-				</div>
-		        <div class="panel-footer" data-no-turbolink>
-		            <%= f.submit "Save", class: "btn btn-primary btn-xs" %>
-					<button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
-		        </div>
+	       <%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
+		   <div class="panel-body">
+			   <%= hidden_field_tag :send_mail, @no_mail%>
+			       <div class="row">
+		               <div class="col-sm-6">
+		                   <div class="form-group">
+					           <%= f.label :license_id, "License", :class=>"control-label" %><span class="asterisk">*</span>
+		    				   <%= f.select :license_id, options_for_select(@licenses.collect {|m| [ m.get_license_batch_name_date, m.id ] }, :selected=>f.object.license_id), {:prompt=>"Select License"}, {:class=>"form-control class_licenses", :required=>true}%>
+							   <%= f.hidden_field :license_expiry_date%>
+						  </div>
+		               </div>
+		           </div>
+			</div>
+	        <div class="panel-footer" data-no-turbolink>
+	            <%= f.submit "Save", class: "btn btn-primary btn-xs"%>
+				<button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+	        </div>
 			<% end %>
 	    </div>
     </div>       

@@ -17,7 +17,7 @@
 <section>
   <div class="leftpanel">
     <div class="logopanel">
-        <h1><span>[</span> BTG <span>]</span></h1>
+		<h3 style="margin:0"> <%= image_tag("logo.png")%> Books That Grow </h3>
     </div>
     <div class="leftpanelinner">
         <div class="visible-xs hidden-sm hidden-md hidden-lg">   
@@ -36,51 +36,51 @@
             </ul>
         </div>
       <h5 class="sidebartitle">    </h5>
-      <ul class="nav nav-pills nav-stacked nav-bracket page-sidebar id="main-menu"" data-no-turbolink>
+      <ul class="nav nav-pills nav-stacked nav-bracket page-sidebar" id="main-menu" data-no-turbolink>
 		<li id="li_dashboard"><%= link_to '<i class="fa fa-home"></i>'.html_safe + "Dashboard", root_path %></li>
 		 <span class="arrow arrw-pos" container_li="li_dashboard"></span>
+		
+		
 		<li class="nav-parent" id="li_school"><a href=""><i class="glyphicon glyphicon-book"></i> <span>School</span></a>
 			<span class="arrow arrw-pos" container_li="li_school"></span>
           <ul class="children">
-		      <%#= if can? :create, School %> 
+		      <% if can? :create, :schools %>
 			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
-			  <%#=end%>
-			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
+			  <%end%>
+			  <% if can? :read, :schools %>
+			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
+			 <%end%>
          </ul>
         </li>
 		
-		<%#= if current_user.is_web_admin? %>
 		<li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
 			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
           <ul class="children">
-             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id =>1) %></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path(:role_id => 1) %></li>
-            <!-- <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li> -->
-          </ul
+			 <% if can? :create, :users %> 
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id =>Role.where("name='Web Admin'").last) %></li>
+			 <%end%> 
+			 <% if can? :read, :users %> 
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path(:role_id => Role.where("name='Web Admin'").last) %></li>
+			 <%end%>
+             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
+          </ul>
         </li>
-		<%#=end%>
-		<%#= if current_user.is_web_admin?%>
+		
+		<% if current_user.is_web_admin?%>
 		<li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
 			<span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Access Right", new_accessright_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
-          </ul
+          </ul>
         </li>
-        <li class="nav-parent" id="li_book"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Book</span></a>
-			<span class="arrow arrw-pos" container_li="li_accessright"></span>
-          <ul class="children">
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Book List", books_path %></li>
-          </ul
-        </li>
-		<%#=end%>
+		<%end%>
       </ul>
     </div>
   </div>
   <div class="mainpanel">
     <div class="headerbar">
-      <a class="menutoggle"><i class="fa fa-bars"></i></a>
+      <!-- <a class="menutoggle"><i class="fa fa-bars"></i></a> -->
       <div class="header-right">
         <ul class="headermenu">
           <li>
@@ -101,8 +101,8 @@
     <div class="contentpanel">
 	<% flash.each do |key, value| %>
 		<div class="alert alert-<%= key %>"> <%= value %>
-        		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        	</div>
+        	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        </div>
 	<% end %>
   
 
@@ -113,6 +113,6 @@
     </div>
   </div>
 </section>
-<%= debug(params) if Rails.env.development? %>
+<%#= debug(params) if Rails.env.development? %>
 </body>
 </html>

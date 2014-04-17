@@ -29,7 +29,7 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-					<% @schools.each do |school| %>
+					<% @schools.try(:each) do |school| %>
 		                <tr class="odd gradeX">
 		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "school-check-box" %></td>	
 		                  <td class=""><%= school.code %></td>
@@ -46,26 +46,26 @@
 						      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: 'Are you sure?' } %> 
 					      	<%end%>
 							<% if can? :create, :licenses %> 
-							   <%= link_to '<i title="Add License" class="glyphicon glyphicon-tag"></i>'.html_safe, new_license_path(:school_id=>school)%> 
+							   <%= link_to '<i title="Add License" class="btg btg-lisence"></i>'.html_safe, new_license_path(:school_id=>school)%> 
 							<%end%>
 							<%#= link_to '<i title="School Admin List" class="glyphicon glyphicon-tag"></i>'.html_safe, users_path(:school_id=>school, :role_id=>2)%> 
 							<% if can? :read, :users %>
-							    <%=link_to 'School Admin List', users_path(:school_id=>school, :role_id=>@school_admin.id), :class=>"btn btn-primary btn-xs"%> 
+							    <%=link_to '<i title="School Admin List" class="btg btg-admin"></i>'.html_safe, users_path(:school_id=>school, :role_id=>@school_admin.id)%> 
 							<%end%>
 							<% if can? :read, :users %>
-							    <%=link_to 'Teacher List', users_path(:school_id=>school, :role_id=>@teacher.id), :class=>"btn btn-primary btn-xs"%>
+							    <%=link_to '<i title="Teacher List" class="btg btg-teacher"></i>'.html_safe, users_path(:school_id=>school, :role_id=>@teacher.id)%>
 							<%end%>
 							<% if can? :read, :users %>
-							    <%=link_to 'Student List', users_path(:school_id=>school, :role_id=>@student.id), :class=>"btn btn-primary btn-xs"%> 
-							<%end%>
-							<% if can? :read, :licenses %> 
-							    <button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
-							    License Details
-							</button> 
+							    <%=link_to '<i title="Student List" class="btg btg-student"></i>'.html_safe, users_path(:school_id=>school, :role_id=>@student.id)%> 
 							<%end%>
 							<% if can? :read, :classrooms %>
-							    <%= link_to '<i title="Classroom List" class="fa fa-users"></i>'.html_safe, classrooms_path(:school_id=>school)%> 
-						   <%end%>		
+							    <%= link_to '<i title="Classroom List" class="btg btg-classroom"></i>'.html_safe, classrooms_path(:school_id=>school)%> 
+						   <%end%>
+						<% if can? :read, :licenses %> 
+						    <button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
+						    License Details
+						    </button>	
+						<%end%>	
 						   </td>
 		                </tr>
 					<% end %>
