@@ -10,7 +10,7 @@ development:
   pool: 5
   host: localhost
   username: postgres
-  password: cueepub86  
+  password: cueepub86 
 
 
 # Warning: The database defined as "test" will be erased and
