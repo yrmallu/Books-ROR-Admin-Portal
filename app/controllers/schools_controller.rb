@@ -55,8 +55,9 @@ class SchoolsController < ApplicationController
   def get_schoolwise_license_list
     @license_assign_count = []
     @licenses = @school.licenses.where("delete_flag is not true").order("created_at DESC").page params[:page]
-	@licenses_allocated = User.select("role_id, school_id, count(license_id) as total_license_count").group("role_id, school_id").having("school_id =?", params[:id])
-    @licenses_allocated.each{|x|  @license_assign_count << x.total_license_count}
+	@licenses_allocated = User.select("school_id, license_id, role_id, count(license_id) as total_license_count").group("role_id,license_id, school_id").having("school_id =?", params[:id])
+	#@licenses_allocated.each{|x|  p x.school_id,x.license_id, x.role_id,  x.total_license_count}
+	@licenses_allocated.each{|x|  @license_assign_count << x.total_license_count}
 	render :partial=>"license_list"
   end
   
@@ -118,9 +119,8 @@ class SchoolsController < ApplicationController
    end
 
   def update_license_expiration_date
-    # binding.pry
-    params[:license_expiry_date].each{|k,v| License.find(k).update_attributes(:expiry_date => v) if v && !v.blank? } if params[:license_expiry_date] && !params[:license_expiry_date].blank?
-    params[:license_ids].each{|lic| License.find(lic).update_attributes(:expiry_date => nil) } if params[:license_ids] && !params[:license_ids].blank?
+    params[:license_expiry_date].each{|k,v| License.find(k).update_attributes(:expiry_date => v, :used_liscenses => 0) if v && !v.blank? } if params[:license_expiry_date] && !params[:license_expiry_date].blank?
+    #params[:license_ids].each{|lic| License.find(lic).update_attributes(:expiry_date => nil) } if params[:license_ids] && !params[:license_ids].blank?
     redirect_to schools_url 
   end
   

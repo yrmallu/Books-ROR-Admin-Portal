@@ -1,31 +1,31 @@
 <script>
     jQuery(document).ready(function(){
       $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
-
-      $('.license-check-box').change(function () {
-        var check = ($('.license-check-box').filter(":checked").length == $('.license-check-box').length);
-        $('.select-all-licenses').prop("checked", check);
-        });
-        // enable/disable delete button whether select-all check-box is checked or not
-        $('.select-all-licenses').click(function () {
-            if($(this).is(':checked')){
-                $('.license-check-box').prop("checked", "checked");
-                $(".datepicker").val($(".datepicker").attr('placeholder'));
-                $(".datepicker").attr("disabled", "disabled");
-            }else{
-                $(".datepicker").removeAttr("disabled");
-            }        
-        });
-        // enable/disable delete button whether any check-box is checked or not
-        $('.license-check-box').click(function () {
-            if($(this).is(':checked')){
-               $(this).closest('tr').find('.datepicker').val($(this).closest('tr').find('.datepicker').attr('placeholder'));
-               $(this).closest('tr').find('.datepicker').attr('disabled','disabled');
-            } else{
-               $(this).closest('tr').find('.datepicker').removeAttr("disabled");
-           }
-        });
-    });
+     
+    //   $('.license-check-box').change(function () {
+    //     var check = ($('.license-check-box').filter(":checked").length == $('.license-check-box').length);
+    //     $('.select-all-licenses').prop("checked", check);
+    //     });
+    //     // enable/disable delete button whether select-all check-box is checked or not
+    //     $('.select-all-licenses').click(function () {
+    //         if($(this).is(':checked')){
+    //             $('.license-check-box').prop("checked", "checked");
+    //             $(".datepicker").val($(".datepicker").attr('placeholder'));
+    //             $(".datepicker").attr("disabled", "disabled");
+    //         }else{
+    //             $(".datepicker").removeAttr("disabled");
+    //         }        
+    //     });
+    //     // enable/disable delete button whether any check-box is checked or not
+    //     $('.license-check-box').click(function () {
+    //         if($(this).is(':checked')){
+    //            $(this).closest('tr').find('.datepicker').val($(this).closest('tr').find('.datepicker').attr('placeholder'));
+    //            $(this).closest('tr').find('.datepicker').attr('disabled','disabled');
+    //         } else{
+    //            $(this).closest('tr').find('.datepicker').removeAttr("disabled");
+    //        }
+    //     });
+});
 </script>
 
 <div class="panel panel-default">
@@ -35,7 +35,7 @@
 		    <table class="table" id="license_detail_table">
                 <thead>
                     <tr>
-                        <th><%= check_box_tag 'license_id', '', false, :class => "select-all-licenses" %></th>
+                        <!-- <th><%#= check_box_tag 'license_id', '', false, :class => "select-all-licenses" %></th> -->
                 	    <th>License Batch Name</th>
                         <th>Expiry Date</th>
                         <th>Total Licenses</th>
@@ -49,14 +49,14 @@
                 <tbody>
 				    <% @licenses.each do |lic| %>
                         <tr class="odd gradeX">
-                            <td class=""><%= check_box_tag 'license_ids[]', lic.id, false, :class => "license-check-box" %></td>   
+                            <!-- <td class=""><%#= check_box_tag 'license_ids[]', lic.id, false, :class => "license-check-box" %></td>    -->
                  	        <td class=""><%= lic.license_batch_name %></td>
                             <td class=""><%= lic.expiry_date %></td>
                             <td class="center "><%= lic.no_of_licenses %></td>
-					        <td class=""><%= lic.used_liscenses %></td>
-					        <td class=""><%= @license_assign_count[0].blank? ? 0 : @license_assign_count[0] %></td>
-					        <td class=""><%= @license_assign_count[1].blank? ? 0 : @license_assign_count[1] %></td>
-					        <td class=""><%= @license_assign_count[2].blank? ? 0 : @license_assign_count[2] %></td>
+					        <td class=""><%= lic.no_of_licenses - lic.used_liscenses %></td>
+					        <td class=""><%#= @license_assign_count[0].blank? ? 0 : @license_assign_count[0] %></td>
+					        <td class=""><%#= @license_assign_count[1].blank? ? 0 : @license_assign_count[1] %></td>
+					        <td class=""><%#= @license_assign_count[2].blank? ? 0 : @license_assign_count[2] %></td>
                             <td><%= text_field_tag "license_expiry_date[#{lic.id}]","" ,:class=>"form-control datepicker", :placeholder=>"yyyy-mm-dd" %></td>
                         </tr>
 				   <% end %>
