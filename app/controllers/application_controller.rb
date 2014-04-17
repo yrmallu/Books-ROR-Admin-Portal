@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  
+  require 'socket'
+
   include SessionsHelper
   hide_action :current_user
 
@@ -11,7 +12,20 @@ class ApplicationController < ActionController::Base
   end
   
   helper_method :current_user
+  helper_method :local_ip
   
+  
+
+  def local_ip
+    orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
+    
+    UDPSocket.open do |s|
+      s.connect '64.233.187.99', 1
+      s.addr.last
+    end
+  ensure
+    Socket.do_not_reverse_lookup = orig
+  end
   
   def get_schools
     if current_user.is_web_admin?

@@ -93,11 +93,13 @@ def parse_epub(path)
     # we can to in normal after saving 
     css_tags = []
     js_tags = []
+    binding.pry
+    path_with_ip = path.split("/")
 
     list_files.each do |k, v|
-      if k.split("/").last.split(".").last == "css" 
+      if v.split("/").last.split(".").last == "css" 
        css_tags <<  "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + v + "\" />"
-      elsif k.split("/").last.split(".").last == "js"
+      elsif v.split("/").last.split(".").last == "js"
         js_tags << "<script type=\"text/javascript\" src=\"" + v + "\"></script>"
       end
     end 
@@ -106,19 +108,23 @@ def parse_epub(path)
     style_tag = "<style type=\"text/css\"> .disallowselection {  -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: -moz-none;-ms-user-select: none; user-select: none; background: red; } </style>"
     re << style_tag
 
+    re << "<div id=\"content\"> <div class=\"story_content\" id=\"story_content\">" 
+        
+       
+
     list_files.keys.each do |x|
       next if !xhtml_files.include?(File.basename(x))
       # binding.pry
       div_id = x.split("/").last.split(".").first
-      start_div = " <div id=\"" + div_id + "\" class=\"bookchapterholder\">"
-      re << start_div
+      book_chapter_holder_div = " <div id=\"" + div_id + "\" class=\"bookchapterholder\"> </div>"
+      re << book_chapter_holder_div
       p "writing to an html",list_files[x], re
       File.open(list_files[x], "r") {|file|  @body_doc = Nokogiri::HTML(file.read)} 
       File.open(list_files[x], "r") {|file| re << @body_doc.xpath("//body").to_html}
       re.slice! "<body>"
       re.slice! "</body>"
-      re << "</div>"
     end
+    re << "</div> </div>"
     re << js_tags.join(" ")
     # book_id = ""
     # path.split("/").each{|val| id = val if val.to_i > 0}
