@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:dcterms="http://purl.org/dc/terms/" version="3.0" xml:lang="en"
+	unique-identifier="pub-identifier">
+	<metadata>
+		<dc:identifier id="pub-identifier">urn:isbn:9781449328030</dc:identifier>
+		<meta id="meta-identifier" property="dcterms:identifier">urn:isbn:9781449328030</meta>
+		<dc:title id="pub-title">Cinderella</dc:title>
+		<meta property="dcterms:title" id="meta-title">Cinderella</meta>
+		<dc:language id="pub-language">en</dc:language>
+		<meta property="dcterms:language" id="meta-language">en</meta>
+		<meta property="dcterms:modified">2012-02-20T22:17:24Z</meta>
+		<meta property="dcterms:contributor">Cuelogic Technology Pvt. Ltd.</meta>
+		<dc:contributor>Cuelogic Technology Pvt. Ltd.</dc:contributor>
+		<meta property="dcterms:contributor">Charles Perrault</meta>
+		<dc:contributor>Charles Perrault</dc:contributor>
+			<meta id="meta-creator12" property="dcterms:creator">Charles Perrault</meta>
+			<dc:creator id="pub-creator12">Charles Perrault</dc:creator>
+	</metadata>
+	<manifest>
+		<item media-type="text/css" id="style_css" href="css/style.css"/>
+		<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
+		<item id="cover_image" properties="cover_image" href="covers/cover.jpg" media-type="image/jpeg"/>
+		<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+		<item id="choose_level" href="choose_level.xhtml" media-type="application/xhtml+xml"/>
+		<item id="about_book" media-type="application/xhtml+xml" href="about_book.xhtml"/>
+		<item id="coverpage" properties="nav" media-type="application/xhtml+xml" href="coverpage.xhtml"/>
+		<item id="welcome" href="welcome.xhtml" media-type="application/xhtml+xml"/>
+		<item id="story1" href="story1.xhtml" media-type="application/xhtml+xml"/>
+		<item id="clear_data" href="clear_data.xhtml" media-type="application/xhtml+xml"/>
+	</manifest>
+	<spine toc="ncx">
+		<!-- <itemref idref="cover" linear="no"/> -->
+		<!-- <itemref idref="choose_level"/> -->
+		<itemref idref="about_book"/>
+		<!-- <itemref idref="coverpage"/> -->
+		<itemref idref="welcome"/>
+		<itemref idref="story1"/>
+		<itemref idref="chapter_1"/>
+		<itemref idref="chapter_2"/>
+		<itemref idref="chapter_3"/>
+		<itemref idref="chapter_4"/>
+		<itemref idref="chapter_5"/>
+		<itemref idref="chapter_6"/>
+		<itemref idref="chapter_7"/>
+		<!--<itemref idref="clear_data"/>-->
+	</spine>
+</package>
