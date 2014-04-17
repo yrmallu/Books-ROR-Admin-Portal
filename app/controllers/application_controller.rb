@@ -2,8 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  require 'socket'
-
+  
   include SessionsHelper
   hide_action :current_user
 
@@ -28,16 +27,7 @@ class ApplicationController < ActionController::Base
   end
   
   def get_schools
-    if current_user.is_web_admin?
-	  @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page] 
-	else
-	  school = current_user.school
-	  if school.delete_flag != true
-	    @schools = current_user.school 
-	  else
-	    @schools = nil
-	  end
-	end
+    @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
   def get_all_schools
@@ -119,30 +109,46 @@ class ApplicationController < ActionController::Base
   end
 
   def set_bread_crumb(*extras)
-    parameters = []
+
     if extras.empty? 
       extra = ""
     else
-     extra = "#{extras.join(",")}"
+      extra = "-#{extras.join('-')}"
     end
 
-    #p "extras=====",parameters = extra.split(",")
-	selector =  parameters.empty? ? "#{params[:controller]}##{params[:action]}" : (("classrooms").eql?("#{params[:controller]}") || ("licenses").eql?("#{params[:controller]}")) ? "#{params[:controller]}##{params[:action]}" : "#{params[:controller]}##{params[:action]}".concat("-"+parameters[0])  
-    
+    selector = "#{params[:controller]}##{params[:action]}#{extra}"
+
     case selector
 
-      when "users#dashboard"
+      when "classrooms#index"
         @breadcrumb = {
-          :title=>"Dashboard",
+          :title=>"Classroom List",
           :breadcrumb=>{
-            "Dashboard"=> ""
+            "Dashboard"=> root_path,
+            "Classroom List"=> "",
           }
         }
-		
-       when "schools#index"
+      when "classrooms#new"
+        @breadcrumb = {
+          :title=>"Add new classroom",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "Add new classroom"=> "",
+          }
+        }
+      when "classrooms#edit"
+        @breadcrumb = {
+          :title=>"Edit classroom info",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "Classroom List"=> classrooms_path,
+            "Edit classroom info"=> "",
+          }
+        } 
+
+      when "schools#index"
         @breadcrumb = {
           :title=>"School List",
-		  :icon=>"fa fa-table",
           :breadcrumb=>{
             "Dashboard"=> root_path,
             "School List"=> "",
@@ -151,16 +157,15 @@ class ApplicationController < ActionController::Base
       when "schools#new"
         @breadcrumb = {
           :title=>"Add new school",
-		  :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "Dashboard"=> root_path,
             "Add new school"=> "",
           }
         }
+
       when "schools#edit"
         @breadcrumb = {
           :title=>"Edit school info",
-		  :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "Dashboard"=> root_path,
             "School List"=> schools_path,
@@ -168,84 +173,81 @@ class ApplicationController < ActionController::Base
           }
         }
 
-
-      when "users#new-2"
-	  @breadcrumb = {
-        :title=>"Add School Admin",
-		:icon=>"fa fa-user",
-        :breadcrumb=>{
-          "Dashboard"=> root_path,
-          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-          "Add School Admin"=> "",
+      when "users#dashboard"
+        @breadcrumb = {
+          :title=>"Dashboard",
+          :breadcrumb=>{
+            "Dashboard"=> ""
+          }
         }
-      }    
-      when "users#index-2"
-      @breadcrumb = {
-        :title=>"School Admin List",
-		:icon=>"fa fa-user",
-        :breadcrumb=>{
-          "Dashboard"=> root_path,
-		  "School Admin List"=> "",
-        }
-      }
-      when "users#edit-2"
-      @breadcrumb = {
-        :title=>"Edit school admin info",
-		:icon=>"fa fa-user",
-        :breadcrumb=>{
-          "Dashboard"=> root_path,
-          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-          "Edit school admin info"=> "",
-        }
-      }
-
-	  
-      when "users#new-1"
-		@breadcrumb = {
+        when "users#new-1"
+        @breadcrumb = {
           :title=>"Add Web Admin",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
-            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => "1"),
             "Add Web Admin"=> "",
           }
         }   
         when "users#index-1"
         @breadcrumb = {
           :title=>"Web Admin List",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
-			"School Listing" => schools_path,	
             "Web Admin List"=> "",
           }
         }
+
         when "users#edit-1"
         @breadcrumb = {
           :title=>"Edit web admin info",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
-            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => "1"),
             "Edit web admin info"=> "",
           }
         }   
 
 
+        when "users#new-2"
+        @breadcrumb = {
+          :title=>"Add School Admin",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => "2"),
+            "Add School Admin"=> "",
+          }
+        }    
+        when "users#index-2"
+        @breadcrumb = {
+          :title=>"School Admin List",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "School Admin List"=> "",
+          }
+        }
+        when "users#edit-2"
+        @breadcrumb = {
+          :title=>"Edit school admin info",
+          :breadcrumb=>{
+            "Dashboard"=> root_path,
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => "2"),
+            "Edit school admin info"=> "",
+          }
+        }  
+
         when "users#new-3"
         @breadcrumb = {
           :title=>"Add Teacher",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
-            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => "3"),
             "Add Teacher"=> "",
           }
         }
         when "users#index-3"
         @breadcrumb = {
           :title=>"Teacher List",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
             "Teacher List"=> "",
@@ -254,87 +256,40 @@ class ApplicationController < ActionController::Base
         when "users#edit-3"
         @breadcrumb = {
           :title=>"Edit teacher info",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
-            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => "3"),
             "Edit teacher info"=> "",
           }
         }
 
-
         when "users#new-4"
         @breadcrumb = {
           :title=>"Add Student",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
-            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => "4"),
             "Add Student"=> "",
           }
         }
         when "users#edit-4"
         @breadcrumb = {
           :title=>"Edit student info",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
-            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => "4"),
             "Edit Student info"=> "",
           }
         }
         when "users#index-4"
         @breadcrumb = {
           :title=>"Student List",
-		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Dashboard"=> root_path,
             "Student List"=> "",
           }
         }
-		
-        when "classrooms#index"
-          @breadcrumb = {
-            :title=>"Classroom List",
-			:icon=>"fa fa-users",
-            :breadcrumb=>{
-              "Dashboard"=> root_path,
-              "Classroom List"=> "",
-            }
-          }
-        when "classrooms#new"
-		  @breadcrumb = {
-            :title=>"Add new classroom",
-			:icon=>"fa fa-users",
-            :breadcrumb=>{
-              "Dashboard"=> root_path,
-			  "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Add new classroom"=> "",
-            }
-          }
-        when "classrooms#edit"
-          @breadcrumb = {
-            :title=>"Edit classroom info",
-			:icon=>"fa fa-users",
-            :breadcrumb=>{
-              "Dashboard"=> root_path,
-              "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Edit classroom info"=> "",
-            }
-          } 
-		  
-		  
-         when "licenses#new"
-  		  @breadcrumb = {
-            :title=>"Add License",
-  			:icon=>"fa fa-tag",
-              :breadcrumb=>{
-              "Dashboard"=> root_path,
-  			  "School List"=> (url_for :controller => 'schools', :action => 'index', :school_id => parameters[0]),
-              "Add new license"=> "",
-              }
-            }
-         
+
       else
         @breadcrumb = {
           :title=>"Dashboard",
