@@ -82,7 +82,7 @@ def parse_epub(path)
     # we can to in normal after saving 
     css_tags = []
     js_tags = []
-    ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/books/js/#{js} \"></script>" }
+    ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/js/#{js} \"></script>" }
     binding.pry
     path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
     list_files.each do |k, v|
