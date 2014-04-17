@@ -95,9 +95,9 @@ def parse_epub(path)
     js_tags = []
 
     list_files.each do |k, v|
-      if k.split("/").last.split(".").last == "css" 
+      if v.split("/").last.split(".").last == "css" 
        css_tags <<  "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + v + "\" />"
-      elsif k.split("/").last.split(".").last == "js"
+      elsif v.split("/").last.split(".").last == "js"
         js_tags << "<script type=\"text/javascript\" src=\"" + v + "\"></script>"
       end
     end 
