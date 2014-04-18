@@ -5,6 +5,7 @@ class AccessrightsController < ApplicationController
   before_action :role_accessright, :only=>[:edit, :check_role_accessright]
   
   def new
+    set_bread_crumb
   end
     
   def index
