@@ -88,3 +88,9 @@
   font-size:24px;
   vertical-align: middle;
 }
+.btg-lisence-cancel:before {
+  content: "j";
+  font-size:22px;
+  vertical-align: middle;
+}
+

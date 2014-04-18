@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 	else
 	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
 	end
-	set_bread_crumb @role_id
+	
   end
   
   def show

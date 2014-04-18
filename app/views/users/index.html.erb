@@ -83,7 +83,7 @@
 						    </button> --> 
 							<%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
 						<%end%>
-						<%= link_to '<i title="Remove License" class="fa fa-minus-square"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %>   
+						<%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %>   
 						<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
 					       Change Password
 					    </button> -->
