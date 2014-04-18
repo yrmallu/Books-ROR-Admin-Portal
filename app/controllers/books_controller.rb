@@ -29,10 +29,11 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     # binding.pry
+    @book.book_unique_id = Time.now.to_i.to_s
     respond_to do |format|
       if @book.save
         # binding.pry
-        parse_epub @book.images.find_by_epub_book_content_type("application/epub+zip").epub_book.path
+        parse_epub @book, @book.images.find_by_epub_book_content_type("application/epub+zip").epub_book.path
         # binding.pry
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
         format.json { render action: 'show', status: :created, location: @book }
@@ -43,7 +44,7 @@ class BooksController < ApplicationController
     end
   end
 
-def parse_epub(path)
+def parse_epub(book, path)
     list_file_names = Array.new
     file_name = ""
     preview_splash_path = ""
@@ -53,7 +54,7 @@ def parse_epub(path)
     spine_files = []
     arr = path.split("/")
     arr.pop
-    dir_name = FileUtils.mkdir_p(Time.now.to_i.to_s)
+    dir_name = FileUtils.mkdir_p(book.book_unique_id)
     dest_path = "#{Rails.root}/public/books/#{dir_name.first}"
     binding.pry
     RubyZip::File.open(path) { |zip_file|
