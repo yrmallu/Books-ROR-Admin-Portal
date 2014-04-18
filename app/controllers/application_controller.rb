@@ -5,17 +5,23 @@ class ApplicationController < ActionController::Base
   
   include SessionsHelper
   hide_action :current_user
-
+  
+  before_filter :authentication_check
+  USER, PASSWORD = 'books-that-grow', 'qwerty123'
+    
+  helper_method :current_user
+  helper_method :local_ip
+  
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
   
-  helper_method :current_user
-  helper_method :local_ip
+  def authentication_check
+    authenticate_or_request_with_http_basic do |user, password|
+      user == USER && password == PASSWORD
+    end
+  end
   
-  before_filter :authentication_check
-  USER, PASSWORD = 'books-that-grow', 'qwerty123'
-
   def local_ip
     orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
     
@@ -104,12 +110,6 @@ class ApplicationController < ActionController::Base
   # rescue_from CanCan::AccessDenied do |exception|
 #     redirect_to root_url, :alert => exception.message
 #   end	
-  
-  def authentication_check
-    authenticate_or_request_with_http_basic do |user, password|
-      user == USER && password == PASSWORD
-    end
-  end
   
   rescue_from CanCan::Unauthorized do |exception|
     redirect_to root_url, :alert => exception.message
