@@ -69,6 +69,10 @@ group :development do
  gem 'letter_opener', '1.2.0'
 end
 
+group :production do
+   gem 'rails_12factor'
+end
+
 group :development, :test do
   gem 'rspec-rails', '2.14.1'  
   gem 'factory_girl_rails', '4.4.1'
