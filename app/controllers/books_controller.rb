@@ -29,6 +29,7 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.book_unique_id = Time.now.to_i.to_s
+    binding.pry
     respond_to do |format|
       if @book.save
         parse_epub @book, @book.images.find_by_epub_book_content_type("application/epub+zip").epub_book.path
