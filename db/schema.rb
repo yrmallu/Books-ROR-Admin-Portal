@@ -174,7 +174,7 @@ ActiveRecord::Schema.define(version: 20140417104030) do
     t.integer  "userlevel"
     t.string   "reference"
     t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "updated_at",      default: "now()"
   end
 
   create_table "users", force: true do |t|

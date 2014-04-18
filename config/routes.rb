@@ -7,6 +7,16 @@ BooksThatGrow::Application.routes.draw do
     end
   end
 
+  namespace :api do
+    resources :books do 
+      collection do
+        get 'read'
+        get 'table_of_content'
+      end
+    end
+
+  end
+
   resources :licenses
 
   resources :accessrights do
