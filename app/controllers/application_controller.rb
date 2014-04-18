@@ -340,7 +340,7 @@ class ApplicationController < ActionController::Base
          when "licenses#new"
   		  @breadcrumb = {
             :title=>"Add License",
-  			:icon=>"fa fa-tag",
+  			:icon=>"btg btg-lisence",
               :breadcrumb=>{
               "School List"=> schools_path,
   			  "School List"=> (url_for :controller => 'schools', :action => 'index', :school_id => parameters[0]),

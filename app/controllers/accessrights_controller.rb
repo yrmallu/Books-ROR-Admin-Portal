@@ -42,7 +42,7 @@ class AccessrightsController < ApplicationController
   end
 	
   def get_role_accessright
-    @roles = Role.includes(:accessrights).where("name = 'Web Admin' OR name ='School Admin' OR name = 'Teacher'")
+    @roles = Role.includes(:accessrights).where("name ='School Admin' OR name = 'Teacher'")
   end
 
 end
