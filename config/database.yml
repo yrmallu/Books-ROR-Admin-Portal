@@ -29,7 +29,7 @@ production:
   encoding: unicode
   database: books_that_grow_v1_0_1
   pool: 5
-  host: localhost
+  host: 54.204.45.104
   username: postgres
   password: cueepub86
   port: 5432 
