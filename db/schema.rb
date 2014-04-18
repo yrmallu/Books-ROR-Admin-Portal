@@ -28,24 +28,12 @@ ActiveRecord::Schema.define(version: 20140417104030) do
     t.integer "role_id"
   end
 
-  create_table "books", id: false, force: true do |t|
-    t.integer "id",             limit: 8
-    t.string  "title"
-    t.text    "description"
-    t.string  "author"
-    t.hstore  "preview_name"
-    t.string  "book_file_name"
-    t.integer "chapters"
-    t.string  "book_unique_id"
-    t.hstore  "thumb_name"
-    t.string  "cover"
-    t.string  "interest_level", limit: 60
-  end
-
-  create_table "classroom_books", force: true do |t|
-    t.integer "classroom_id"
-    t.integer "book_id"
-    t.integer "user_id"
+  create_table "books", force: true do |t|
+    t.string   "title"
+    t.string   "description"
+    t.string   "author"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "classrooms", force: true do |t|
@@ -96,12 +84,6 @@ ActiveRecord::Schema.define(version: 20140417104030) do
     t.string   "license_batch_name"
   end
 
-  create_table "notes", force: true do |t|
-    t.integer "user_id"
-    t.integer "book_id"
-    t.text    "note_data"
-  end
-
   create_table "parents", force: true do |t|
     t.string   "name"
     t.string   "email"
@@ -147,16 +129,6 @@ ActiveRecord::Schema.define(version: 20140417104030) do
     t.integer  "role_id"
   end
 
-  create_table "user_books", id: false, force: true do |t|
-    t.integer "id",                 limit: 8
-    t.hstore  "reading_percentage"
-    t.hstore  "last_reading_info"
-    t.integer "user_id",            limit: 8
-    t.string  "device_id"
-    t.integer "book_id"
-    t.string  "reading_info"
-  end
-
   create_table "user_classrooms", force: true do |t|
     t.integer "user_id"
     t.integer "classroom_id"
@@ -174,7 +146,7 @@ ActiveRecord::Schema.define(version: 20140417104030) do
     t.integer  "userlevel"
     t.string   "reference"
     t.datetime "created_at"
-    t.datetime "updated_at",      default: "now()"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
@@ -201,23 +173,5 @@ ActiveRecord::Schema.define(version: 20140417104030) do
 
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
   add_index "users", ["school_id"], name: "index_users_on_school_id", using: :btree
-
-  create_table "users_bk", id: false, force: true do |t|
-    t.integer  "id",                  limit: 8, default: "nextval('users_id_seq'::regclass)", null: false
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "username"
-    t.date     "license_expiry_date"
-    t.boolean  "delete_flag",                   default: false
-    t.string   "email",                         default: "",                                  null: false
-    t.integer  "device_id"
-    t.integer  "role_id"
-    t.integer  "school_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.hstore   "userinfo"
-    t.string   "password_digest"
-    t.integer  "license_id"
-  end
 
 end
