@@ -28,13 +28,10 @@ class BooksController < ApplicationController
   # POST /books.json
   def create
     @book = Book.new(book_params)
-    # binding.pry
     @book.book_unique_id = Time.now.to_i.to_s
     respond_to do |format|
       if @book.save
-        # binding.pry
         parse_epub @book, @book.images.find_by_epub_book_content_type("application/epub+zip").epub_book.path
-        # binding.pry
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
         format.json { render action: 'show', status: :created, location: @book }
       else
@@ -56,7 +53,6 @@ def parse_epub(book, path)
     arr.pop
     dir_name = FileUtils.mkdir_p(book.book_unique_id)
     dest_path = "#{Rails.root}/public/books/#{dir_name.first}"
-    binding.pry
     RubyZip::File.open(path) { |zip_file|
       zip_file.each { |f|
         next if f.name =~ /__MACOSX/ or f.name =~ /\.DS_Store/ #or !f.file?
@@ -84,7 +80,6 @@ def parse_epub(book, path)
     css_tags = []
     js_tags = []
     ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/js/#{js} \"></script>" }
-    binding.pry
     path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
     list_files.each do |k, v|
       ip_path = v.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
