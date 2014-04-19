@@ -44,6 +44,6 @@ BooksThatGrow::Application.configure do
       }
     
    #Paperclip.options[:command_path] = "/usr/local/bin/"
-
-   Paperclip.options[:command_path] = "/Users/apple/ImageMagick-6.8.8/bin/"
+   # Paperclip.options[:command_path] = "/Users/apple/ImageMagick-6.8.8/bin/"
+   Paperclip.options[:command_path] = "/opt/ImageMagick/bin/convert"
 end
