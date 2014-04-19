@@ -61,7 +61,7 @@ class UsersController < ApplicationController
 	  end  
 	  add_user_level_setting if @user.role.name.eql?('Student')
 	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  #@user.welcome_email(path)
+	  @user.welcome_email(path)
     else 
       render :action=> 'new'
 	end
