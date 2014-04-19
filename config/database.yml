@@ -3,6 +3,16 @@
 #
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem 'sqlite3'
+
+# development:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: BookThatGrow_development
+#   pool: 5
+#   host: localhost
+#   username: apple
+#   password: cuelogic  
+  
 development:
   adapter: postgresql
   encoding: unicode

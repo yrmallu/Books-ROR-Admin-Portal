@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140418134603) do
+ActiveRecord::Schema.define(version: 20140419121059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,17 +29,25 @@ ActiveRecord::Schema.define(version: 20140418134603) do
   end
 
   create_table "books", force: true do |t|
-    t.string  "title"
-    t.text    "description"
-    t.string  "author"
-    t.hstore  "preview_name"
-    t.string  "book_file_name"
-    t.integer "chapters"
-    t.string  "book_unique_id"
-    t.hstore  "thumb_name"
-    t.string  "cover"
-    t.string  "interest_level", limit: 60
-    t.string  "delete_flag",    limit: 2
+    t.string   "title"
+    t.text     "description"
+    t.string   "author"
+    t.hstore   "preview_name"
+    t.string   "book_file_name"
+    t.integer  "chapters"
+    t.string   "book_unique_id"
+    t.hstore   "thumb_name"
+    t.string   "cover"
+    t.string   "interest_level",          limit: 60
+    t.string   "delete_flag",             limit: 2
+    t.string   "book_cover_file_name"
+    t.string   "book_cover_content_type"
+    t.integer  "book_cover_file_size"
+    t.datetime "book_cover_updated_at"
+    t.string   "epub_file_name"
+    t.string   "epub_content_type"
+    t.integer  "epub_file_size"
+    t.datetime "epub_updated_at"
   end
 
   create_table "classroom_books", force: true do |t|
@@ -106,6 +114,17 @@ ActiveRecord::Schema.define(version: 20140418134603) do
     t.string   "name"
     t.string   "email"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "preview_images", force: true do |t|
+    t.integer  "book_id"
+    t.string   "preview_image"
+    t.string   "preview_image_file_name"
+    t.string   "preview_image_content_type"
+    t.integer  "preview_image_file_size"
+    t.datetime "preview_image_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
