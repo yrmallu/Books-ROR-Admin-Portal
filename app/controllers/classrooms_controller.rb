@@ -81,12 +81,12 @@ class ClassroomsController < ApplicationController
   end
 
   def delete_classroom
+    deleted_classroom = ''
     Classroom.where(id: params[:classroom_ids]).each do |classroom|
+	  deleted_classroom = classroom
       classroom.destroy
     end
-    respond_to do |format|
-      format.js
-    end  
+	redirect_to classrooms_path(:school_id=> deleted_classroom.school_id)
   end
   
   def get_school_year_range

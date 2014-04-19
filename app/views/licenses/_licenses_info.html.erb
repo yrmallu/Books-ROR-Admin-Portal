@@ -6,7 +6,7 @@
                     <tr>
 						<th>Batch Name</th>
 	                    <th>Number Of Liscenses</th>
-					    <!-- <th>License Used</th> -->
+					    <th>Licenses Used</th>
 	                    <th>License Expiration Date</th>
 					    <th>Action</th>
                     </tr>
@@ -16,7 +16,7 @@
 	                    <tr class="odd gradeX">
 							<td class=""><%= lic.license_batch_name %></td>
 	                        <td class=""><%= lic.no_of_licenses %></td>
-						    <!-- <td class=""><%#= lic.used_licenses %></td> -->
+						    <td class=""><%= lic.used_liscenses %></td>
 	                        <td class=""><%= lic.expiry_date %></td>
 						    <td>
 								<% if can? :update, :licenses %> 

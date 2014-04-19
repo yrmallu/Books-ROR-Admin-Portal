@@ -1,4 +1,4 @@
-<%#= form_tag 'classrooms/delete_classroom', remote: true do %>
+<%= form_tag 'classrooms/delete_classroom' do %>
 <div class="panel panel-default">
 	<div class="panel-body"> 
 		<div class="index_page_btns" data-no-turbolink>
@@ -7,14 +7,14 @@
 			<% if can? :create, :classrooms %> 
 			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
 			<%end%>
-			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_element',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	 	</div>
 	 <div class="table-responsive">
-		<table class="table" id="classroom_table">
+		<table class="table class_common_table" id="classroom_table">
             <thead>
                 <tr>
-                	<th><%= check_box_tag 'classroom_id[]', '', false, :class => "select-all-classroom" %></th>
-                    <th>Classroom Code</th>
+                	<th>Remove all &nbsp; <%= check_box_tag 'classroom_id[]', '', false, :class => "select-all" %></th>
+					<th>Classroom Code</th>
                     <th>Classroom Name</th>
 					<th>School Year</th>
 					<th>Number Of School Admins</th>
@@ -26,7 +26,7 @@
               <tbody>
 				 <% @classrooms.each do |classroom| %>
 				    <tr class="odd gradeX">
-                 	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "classroom-check-box" %></td>	
+                 	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "check-box" %></td>	
                       <td class=""><%= classroom.code %></td>
                       <td class=""><%= classroom.name %></td>
 					  <td class="">
@@ -54,7 +54,7 @@
 		<%= paginate @classrooms %>
 	</div>	
 </div>		  
-<%#= end %>
+<% end %>
 
 <script type="text/javascript">
 showHideMenu('li_school');

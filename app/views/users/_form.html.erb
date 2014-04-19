@@ -33,7 +33,7 @@
 				<%end%>
 	        </div>
 			<% end %>
-			<%= hidden_field_tag :send_mail, @send_mail%>
+			<%#= hidden_field_tag :send_mail, @send_mail%>
 	    </div>
     </div>       
 </div>
@@ -44,7 +44,7 @@
 	{
 	    showHideMenu('li_webadmin');	
 	}
-	else if(<%= @role_id.name.eql?('SChool Admin')%>)
+	else if(<%= @role_id.name.eql?('School Admin')%>)
 	{
 	    showHideMenu('li_school');	
 	}

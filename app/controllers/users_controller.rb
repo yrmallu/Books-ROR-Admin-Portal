@@ -2,7 +2,6 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-  #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :destroy, :delete_parent] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
@@ -23,7 +22,6 @@ class UsersController < ApplicationController
 	else
 	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
 	end
-	
   end
   
   def show
@@ -44,7 +42,7 @@ class UsersController < ApplicationController
  
   def edit
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
-	set_bread_crumb(@role_id.id, @school.id)
+	set_bread_crumb(@role_id.id, @user.school_id)
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
   end
  
@@ -90,7 +88,7 @@ class UsersController < ApplicationController
 	  add_user_level_setting if @user.role.name.eql?('Student')
 	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
-	    #@user.user_details_change_email(current_user.first_name, path)
+	    @user.user_details_change_email(current_user.first_name, path)
 	  end
 	else
 	  render :action=> 'new'
@@ -202,7 +200,7 @@ class UsersController < ApplicationController
   end
   
   def get_role_id
-  	@role_id = Role.where("id = '#{params[:role_id]}' ").last
+    @role_id = Role.where("id = '#{params[:role_id]}' ").last
   end
   
   def email_validation

@@ -237,7 +237,7 @@ DEPENDENCIES
   pg (= 0.17.1)
   pry (= 0.9.12.6)
   rails (= 4.0.3)
-  rails_12factor
+  rails_12factor (= 0.0.2)
   roo (= 1.13.2)
   rspec-rails (= 2.14.1)
   rubyzip!
