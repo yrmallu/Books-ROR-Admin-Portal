@@ -44,129 +44,50 @@
 							<label class="form-label">Small Book Cover</label>	
 							<% if f.object.book_cover_file_name && !f.object.book_cover_file_name.blank? %>
 								<%= image_tag f.object.book_cover.url(:small) %>
-							
-								<%= f.file_field :book_cover %>
-							<% else %>
-								<%= f.file_field :book_cover %>
 							<% end %>
-
-							<!-- <%#=render 'books/image'%>
-								<%#=f.fields_for :images, @images do |fb|%>
-								
-									<%#= unless fb.object.new_record? %>
-										<%#= unless fb.object.book_cover.blank? %>
-										 	<div class="single_document_div">
-					                          <%#= image_tag fb.object.book_cover.url(:book_cover) %>
-					                          <br/>
-					                          <%#= @s = fb.object.book_cover %>
-					                          <br/>
-					                          <%#= fb.check_box :_destroy %> <%#= fb.label :remove %>
-					                        </div>
-					                     <%#= end %>
-				                     <%#= end %>
-						        	<%#=render 'book_cover_fields', f: fb%>
-						    	<%#=end%>
-						    	 <%#=f.fields_for :images, @images do |fb|%>
-						    	 	<%#= if fb.object.new_record? %>
-						    	 		
-						        		<%#=render 'book_cover_fields', f: fb%>
-						        	<%#= end %>
-						    	<%#= end %>
-							<%#= link_to_add_fields "Add File", f, :images, options: 'epub_book' %> -->
+							<%= f.file_field :book_cover %>
 				    	</div> 
-					
-					 
-	            
-				    	<div class="col-md-6" style="border:1px solid #CCCCCC;">
+				    	<div class="col-md-6" >
 							<label class="form-label">EPub Book</label>	<br />
-							<%#=render 'books/image'%>
 							<%if f.object.epub_file_name && !f.object.epub_file_name.blank? %>
 								<%= f.object.epub_file_name %>
-							<% else %>
-								<%= f.file_field :epub %>
 							<% end %>
-							<!-- <%#=f.fields_for :images, @images do |fb|%>
-								
-									<%#= unless fb.object.new_record? %>
-										<%#= unless fb.object.epub_book.blank? %>
-										
-										 	<div class="single_document_div">
-					                          <%#= image_tag fb.object.epub_book.url(:epub_book) %>
-					                          <br/>
-					                          <%#= @s = fb.object.epub_book %>
-					                          <br/>
-					                          <%#= fb.check_box :_destroy %> <%#= fb.label :remove %>
-					                        </div>
-					                     <%#= end %>
-				                     <%#= end %>
-						        	<%#=render 'book_cover_fields', f: fb%>
-						    	<%#=end%>
-						    	<%#=f.fields_for :images,@images do |fb|%>
-						    	<%#= if fb.object.new_record? %>
-						        	<%#=render 'epub_book_fields', f: fb%>
-						        <%#= end %>
-						    	<%#=end%>
-							<%#= link_to_add_fields "Add File", f, :images, options: 'epub_book' %> -->
+							<br />
+							<%= f.file_field :epub %>
 				    	</div>  
 					</div>
 				</div>
-				<!-- <div class="form-row form-group">
-					<div class="row">
-				    	<div class="col-md-6">
-							<label class="form-label">Large Book Cover</label>	
-							<%#=render 'books/image'%>
-							
-								<%#=f.fields_for :images, @images do |fb|%>
-								
-									<%#= unless fb.object.new_record? %>
-										<%#= unless fb.object.book_cover_large.blank? %>
-										
-										 	<div class="single_document_div">
-					                          <%#= image_tag fb.object.book_cover_large.url(:book_cover_large) %>
-					                          <br/>
-					                          <%#= @s = fb.object.book_cover_large %>
-					                          <br/>
-					                          <%#= fb.check_box :_destroy %> <%#= fb.label :remove %>
-					                        </div>
-					                     <%#= end %>
-				                     <%#= end %>
-						        	<%#=render 'book_cover_fields', f: fb%>
-						    	<%#=end%>
 
-						    	<%#=f.fields_for :images,@images do |fb|%>
-						    		<%#= if fb.object.new_record? %>
-						        	<%#=render 'book_cover_large_fields', f: fb%>
-						        	<%#= end %>
-						    	<%#=end%>
-							<%#= link_to_add_fields "Add File", f, :images, options: 'book_cover_large' %>
+	            <div class="form-row form-group" style="margin-top:50px;">
+					<div class="row">
+				    	<div class="col-md-10">
+							<label class="form-label">Preview Book Image</label>	
+							<div>
+								<%=f.fields_for :preview_images do |fb|%>
+									<% unless fb.object.new_record? %>
+									 	<div class="single_document_div">
+				                          <div style="height:130px;"><%= image_tag fb.object.preview_image.url(:thumb) %></div>
+				                          <%= fb.check_box :_destroy %> <%= fb.label :remove %>
+				                        </div>
+				                     <% end %>
+							    <% end%>
+							</div>
+							
 				    	</div>  
 					</div>
-				</div> -->
-	            <div class="form-row form-group" style="border:1px solid #CCCCCC;">
+				</div>
+
+				 <div class="form-row form-group" >
 					<div class="row">
 				    	<div class="col-md-6">
-							<label class="form-label">Preview Book Image</label>	
-							<%#=render 'books/image'%>
-
-							<%=f.fields_for :preview_images do |fb|%>
-									
-									<% unless fb.object.new_record? %>
-										
-										 	<div class="single_document_div">
-					                          <%= image_tag fb.object.preview_image.url(:thumb) %>
-					                          <br/>
-					                          
-					                          <br/>
-					                          <%= fb.check_box :_destroy %> <%= fb.label :remove %>
-					                        </div>
-				                     <% end %>
-						        	<%#=render 'preview_book_image', f: fb%>
-						    	<% end%>
+							<label class="form-label">Add Preview Book Image</label>	
+							<div>
 						    	<%= f.fields_for :preview_images do |fb|%>
-						    	<% if fb.object.new_record? %>
-						        	<%=render 'preview_book_image_fields', f: fb%>
-						        <% end %>
+							    	<% if fb.object.new_record? %>
+							        	<%=render 'preview_book_image_fields', f: fb%>
+							        <% end %>
 						    	<% end%>
+					    	</div>
 							<%= link_to_add_fields "Add File", f, :preview_images, options: 'preview_book_image' %>
 				    	</div>  
 					</div>

@@ -31,7 +31,6 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.book_unique_id = Time.now.to_i.to_s
-    binding.pry
     respond_to do |format|
       if @book.save
         parse_epub @book, @book.epub.path
@@ -147,6 +146,6 @@ def parse_epub(book, path)
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:id, :title, :description, :author, :book_cover, :epub, :preview_images_attributes=> [:preview_image,:book_id])
+      params.require(:book).permit(:id, :title, :description, :author, :book_cover, :epub, :preview_images_attributes=> [:preview_image, :book_id, :_destroy, :id ])
     end
 end
