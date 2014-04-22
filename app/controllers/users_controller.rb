@@ -68,17 +68,21 @@ class UsersController < ApplicationController
   def update
     path = request.env['HTTP_HOST']
 	if @user.update_attributes(user_params)
-	  #p "accessid===",params[:accessright]
 	  unless params[:accessright].blank?
-	    # if params[:accessright].eql?('0')
-# 	      @accessright_exist = @user.user_accessrights.last
-# 	      @accessright_exist.update_attributes(:accessright_id=>params[:accessright], :access_flag=>true, :role_id=>@user.role_id)
-# 	    else
-# 	      @accessright_exist = @user.user_accessrights.where("accessright_id = #{params[:accessright]}").last
-# 		  if @accessright_exist.blank?
-# 	        @user.user_accessrights.create(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id) 
-# 	      end
-#         end
+	    if params[:accessright].eql?('0')
+		  can_manage_access_right_id = get_manage_student_accessright
+	      @accessright_exist = @user.user_accessrights.where("accessright_id = #{can_manage_access_right_id.id}").last
+		  unless @accessright_exist.blank?
+		    @accessright_exist.update_attributes(:accessright_id=>can_manage_access_right_id.id, :access_flag=>true, :role_id=>@user.role_id)
+		  end
+	    else
+	      @accessright_exist = @user.user_accessrights.where("accessright_id = #{params[:accessright]}").last
+		  unless @accessright_exist.blank?
+ 	        @accessright_exist.update_attributes(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id) 
+ 	      else
+		    @user.user_accessrights.create(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id)
+		  end
+        end
 	  end 
     array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
     unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
@@ -88,7 +92,7 @@ class UsersController < ApplicationController
 	  add_user_level_setting if @user.role.name.eql?('Student')
 	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
 	  if  params[:send_mail].blank?
-	    @user.user_details_change_email(current_user.first_name, path)
+	    #@user.user_details_change_email(current_user.first_name, path)
 	  end
 	else
 	  render :action=> 'new'

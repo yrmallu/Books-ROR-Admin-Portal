@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
 	 else
 	   if @user && @user.authenticate(params[:session][:password]) && (@user.license_expiry_date.to_s > "#{Time.now.to_date.to_s}")
          session[:user_id] = @user.id
-         redirect_to dashboard_users_path
+         redirect_to schools_path
        else
 	     flash[:error] = "Invalid email/password combination OR license must have expired."
          redirect_to signin_path

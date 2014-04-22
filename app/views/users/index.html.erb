@@ -7,19 +7,19 @@
 			    <%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id.id), :class=>"btn btn-success btn-xs"%>
 			<%end%>
 		<%elsif @role_id.name.eql?('School Admin')%>
-		    <% if can? :create, :users %>
+		    <% if (can? :create, :users) && (can? :create_sa, :users) %>
 		        <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 			<%end%>
 			<%=link_to 'Import School Admin List', import_list_users_path(:list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "school_admin", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 		<%elsif @role_id.name.eql?('Teacher')%>
-		    <% if can? :create, :users %>
+		    <% if (can? :create, :users) && (can? :create_teacher, :users) %>
 			    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		    <%end%>	
 			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "teacher", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
 			<%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.name.eql?('Student')%>
-			<% if can? :create, :users %>
+			<% if (can? :create, :users) && (can? :create_student, :users) %>
 			    <%=link_to 'Add Student', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 			<%end%>
 			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
@@ -48,55 +48,59 @@
               </thead>
               <tbody>
 				 <% @users.each do |user| %>
-                  <tr class="odd gradeX">
-                 	  <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "check-box" %></td>
-                      <td class=""><%= user.first_name %></td>
-                      <td class=""><%= user.last_name %></td>
-                      <td class="center "><%= user.email %></td>
-					  <td class=""><%= user.phone_number %></td>
-					  <%unless @role_id.name.eql?('Web Admin')%>
-					      <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
-					  <%end%>
-  					  <%if @role_id.name.eql?('Student')%>
-					      <td class=""><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></td>
-					      <td class=""><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></td>
-  					  <%end%>
-					  <td data-no-turbolink>
-   				      <% if user.email == current_user.email %>
-						    <%unless @school.blank?%>
-   				      		    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %>  
-							<%else%>
-							    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> 
-							<%end%>	
-   				      	<% else %>	
-						    <%unless @school.blank?%>		
-						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %> 
-						    <%else%>
-						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>
-						    <% end %> 
-						<% end %> 
-   				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %>  
-						<% unless  @role_id.name.eql?('Web Admin')%>  
-						    <%= hidden_field_tag :user_id, user.id%>
-							<!-- <button class="btn btn-primary btn-xs assign_license" data-toggle="modal" data-target="#myModal" data-input='<%#=user.id%>' >
-						        Assign License
-						    </button> --> 
-							<%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
-						<%end%>
-						<%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %>   
+				     <% unless user.id == current_user.id%>
+                         <tr class="odd gradeX">
+                 	         <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "check-box" %></td>
+                             <td class=""><%= user.first_name %></td>
+                             <td class=""><%= user.last_name %></td>
+                             <td class="center "><%= user.email %></td>
+					         <td class=""><%= user.phone_number %></td>
+					         <%unless @role_id.name.eql?('Web Admin')%>
+					             <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
+					         <%end%>
+  					         <%if @role_id.name.eql?('Student')%>
+					             <td class=""><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></td>
+					             <td class=""><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></td>
+  					         <%end%>
+					         <td data-no-turbolink>
+					         <% if ((can? :update, :users) && (can? :update_sa, :users)) && params[:role_id].eql?('2') %>
+						         <%= render 'edit_link', user: user%>
+                             <% end %>
+						     <% if ((can? :update, :users) && (can? :update_teacher, :users)) && params[:role_id].eql?('3') %>
+						         <%= render 'edit_link', user: user%>
+                             <% end %>
+						     <% if (((can? :update, :users) && (can? :update_student, :users)) || ((can? :update, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>	
+						         <%= render 'edit_link', user: user%>
+						     <% end %>
+						     <% if ((can? :destroy, :users) && (can? :destroy_sa, :users)) && params[:role_id].eql?('2') %>
+						         <%= render 'delete_link', user: user%>
+						     <% end %>  
+						     <% if ((can? :destroy, :users) && (can? :destroy_teacher, :users)) && params[:role_id].eql?('3') %>
+						         <%= render 'delete_link', user: user%>
+						     <% end %>	  
+						     <% if (((can? :destroy, :users) && (can? :destroy_student, :users)) || ((can? :destroy, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>
+   				   	             <%= render 'delete_link', user: user%>      
+						     <% end %>
+					         <% unless  @role_id.name.eql?('Web Admin')%>  
+						         <%= hidden_field_tag :user_id, user.id%>
+							     <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
+						
+						         <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %>   
 						<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
 					       Change Password
 					    </button> -->
-						<%= link_to '<i title="Change Password" class="fa fa-lock increase_size"></i>'.html_safe, '', :class=>"change_password", data: { toggle: "modal", target: "#changePassword", input: user.id} %>
-					</td>
-                 </tr>
+						    <%end%>	
+						    <%= link_to '<i title="Change Password" class="fa fa-lock increase_size"></i>'.html_safe, '', :class=>"change_password", data: { toggle: "modal", target: "#changePassword", input: user.id} %>
+					    </td>
+                     </tr>
+				     <% end %>
 				 <% end %>
             </tbody>
         </table>
 	</div>
 
 	<div data-no-turbolink>
-		    <%= paginate @users %>
+		<%= paginate @users %>
 	</div>
  </div>		  
 <%#= end %>
@@ -112,10 +116,6 @@
       <div class="modal-body">
 		  <div id="school_licenses_list"></div>
 	  </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Assign</button>
-      </div> -->
     </div>
   </div>
 </div>		

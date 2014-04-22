@@ -43,13 +43,13 @@
 							<% if can? :create, :licenses %> 
 							   <%= link_to '<i title="Add License" class="btg btg-lisence"></i>'.html_safe, new_license_path(:school_id=>school)%> 
 							<%end%>
-							<% if can? :read, :users %>
+							<% if (can? :read, :users) && (can? :read_sa, :users) %>
 							    <%=link_to '<i title="School Admin List" class="btg btg-admin"></i>'.html_safe, users_path(:school_id=>school, :role_id=>@school_admin.id)%> 
 							<%end%>
-							<% if can? :read, :users %>
+							<% if (can? :read, :users) && (can? :read_teacher, :users) %>
 							    <%=link_to '<i title="Teacher List" class="btg btg-teacher"></i>'.html_safe, users_path(:school_id=>school, :role_id=>@teacher.id)%>
 							<%end%>
-							<% if can? :read, :users %>
+							<% if ((can? :read, :users) && (can? :read_student, :users)) || ((can? :read, :users) && (can? :manage_student, :users)) %>
 							    <%=link_to '<i title="Student List" class="btg btg-student"></i>'.html_safe, users_path(:school_id=>school, :role_id=>@student.id)%> 
 							<%end%>
 							<% if can? :read, :classrooms %>

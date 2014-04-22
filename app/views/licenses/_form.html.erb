@@ -33,7 +33,11 @@
 		                <div class="col-sm-3">
 		                    <div class="form-group">
  				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
- 				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
+							   <% if action_name.eql?('edit')%>
+ 				     		       <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control", :readonly=>true %>
+							   <%else%>
+							       <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control"%>
+							   <%end%>	   
 		                	</div>
 						</div>
 					    <div class="col-sm-3">

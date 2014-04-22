@@ -34,6 +34,11 @@ class ApplicationController < ActionController::Base
   end
   
   def get_schools
+    # if current_user.role.name.eql?("Web Admin")
+#       @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
+# 	else
+# 	  @schools = @current_user.school
+# 	end
     @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
   end
   
@@ -111,9 +116,10 @@ class ApplicationController < ActionController::Base
 #     redirect_to root_url, :alert => exception.message
 #   end	
   
-  rescue_from CanCan::Unauthorized do |exception|
-    redirect_to root_url, :alert => exception.message
-  end
+  #enable_authorization
+    rescue_from CanCan::Unauthorized do |exception|
+      redirect_to root_url, :alert => exception.message
+    end
 
   def set_bread_crumb(*extras)
     parameters = []
