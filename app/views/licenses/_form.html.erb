@@ -53,7 +53,11 @@
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
-				<%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+		        <%if current_user.role.name.eql?('Web Admin')%>
+				    <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+				<%else%>
+				    <%= link_to 'Cancel', school_path(current_user.school_id), class: "btn btn-white btn-xs"%>
+				<%end%>
 	        </div>
 			<% end %>
 	    </div>

@@ -2,7 +2,7 @@
 	<div class="col-md-12">
     	<div class="panel panel-default">
         	<div class="panel-heading">
-            	<h4 class="panel-title">School Information</h4>
+            	<h4 class="panel-title">School Details</h4>
         	</div>
 			<p id="notice"><%= notice %></p>
         	<div class="panel-body">
@@ -40,21 +40,36 @@
             	</address>
             	<address>
 	  	       	    <% unless @school.licenses.blank? %>
-	  		   		    <%@school.licenses.each do |lic|%>
-	     		        <address>
-	  						<strong>Expiry Date:</strong>
-	  					    <%= lic.expiry_date.to_date unless lic.blank?%>
-	  					</address>
-	  					<address>
-	  					    <strong>No. of Licenses:</strong>
-	  					    <%= lic.no_of_licenses unless lic.blank?%>
-	  					</address>
-	  				    <%end%>	
+	  		   		    <table class="table" id="lic_info_table">
+							<thead>
+								<tr>
+									<td><strong>License Batch Name</strong></td>
+									<td><strong>Expiry Date</strong></td>
+									<td><strong>Total No. of Licenses</strong></td>
+									<td><strong>Licenses in Use</strong></td>
+									<td><strong>Unused Licenses</strong></td>
+								</tr>
+							</thead>
+							<tbody>	
+						        <%@school.licenses.each do |lic|%>
+						            <tr>
+										<td><%= lic.license_batch_name unless lic.blank?%></td>
+										<td><%= lic.expiry_date.to_date unless lic.blank?%></td>
+	  					                <td><%= lic.no_of_licenses unless lic.blank?%></td>
+										<td><%= lic.used_liscenses unless lic.blank?%></td>
+										<td><%= (lic.no_of_licenses - lic.used_liscenses) unless lic.blank?%></td>
+									</tr>
+								<%end%>		
+							</tbody>			
+	  					</table>
+	  				    
 	  	            <%end%>
                 </address>
 			    <div data-no-turbolink>
 			        <%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary btn-xs" %>
-			        <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+			        <%if current_user.role.name.eql?('Web Admin')%>
+					    <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+					<%end%>
         	    </div>
 		    </div>
         </div>

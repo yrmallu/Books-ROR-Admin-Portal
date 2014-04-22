@@ -25,15 +25,15 @@
 	            </thead>
 	            <tbody>
 					<% @schools.each do |school| %>
-		                <tr class="odd gradeX">
+		                <tr class="odd gradeX" data-no-turbolink>
 		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "check-box" %></td>	
 		                  <td class=""><%= school.code %></td>
-		                  <td class=""><%= school.name %></td>
+		                  <td class=""><%= link_to school.name, school_path(school), :title=>"View School Details" %></td>
 		                  <td class=""><%= school.district %></td>
 		                  <td class="center "><%= school.city %></td>
 		                  <td class="center "><%= school.state %></td>
 						  <td class="center "><%= school.country %></td>
-						  <td data-no-turbolink>
+						  <td>
 						  	<% if can? :update, :schools %>
 						    	<%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %>  
 						    <%end%>

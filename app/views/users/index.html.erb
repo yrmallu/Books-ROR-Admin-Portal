@@ -49,9 +49,13 @@
               <tbody>
 				 <% @users.each do |user| %>
 				     <% unless user.id == current_user.id%>
-                         <tr class="odd gradeX">
+                         <tr class="odd gradeX" data-no-turbolink>
                  	         <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "check-box" %></td>
-                             <td class=""><%= user.first_name %></td>
+							 <%unless @role_id.name.eql?('Web Admin')%>
+                                 <td class=""><%= link_to user.first_name, user_path(user, :role_id => @role_id, :school_id=>@school.id), :title=>"View User Details" %></td>
+							 <%else%>
+							     <td class=""><%= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
+							 <%end%>
                              <td class=""><%= user.last_name %></td>
                              <td class="center "><%= user.email %></td>
 					         <td class=""><%= user.phone_number %></td>
@@ -62,7 +66,7 @@
 					             <td class=""><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></td>
 					             <td class=""><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></td>
   					         <%end%>
-					         <td data-no-turbolink>
+  					         <td>
 					         <% if ((can? :update, :users) && (can? :update_sa, :users)) && params[:role_id].eql?('2') %>
 						         <%= render 'edit_link', user: user%>
                              <% end %>
@@ -81,14 +85,17 @@
 						     <% if (((can? :destroy, :users) && (can? :destroy_student, :users)) || ((can? :destroy, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>
    				   	             <%= render 'delete_link', user: user%>      
 						     <% end %>
-					         <% unless  @role_id.name.eql?('Web Admin')%>  
-						         <%= hidden_field_tag :user_id, user.id%>
+					         <% unless  @role_id.name.eql?('Web Admin')%> 
+							     <%= hidden_field_tag :user_id, user.id%>
 							     <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
 						
 						         <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %>   
 						<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
 					       Change Password
 					    </button> -->
+							<%else%>
+						        <%= render 'edit_link', user: user%> 
+						        <%= render 'delete_link', user: user%>
 						    <%end%>	
 						    <%= link_to '<i title="Change Password" class="fa fa-lock increase_size"></i>'.html_safe, '', :class=>"change_password", data: { toggle: "modal", target: "#changePassword", input: user.id} %>
 					    </td>

@@ -29,7 +29,7 @@
 				<% elsif @role_id.name.eql?('Teacher')%>
 				    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id => @school.id), class: "btn btn-white btn-xs"%>
 				<% elsif @role_id.name.eql?('Student')%>
-				    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id => @school.id), class: "btn btn-white btn-xs"%>	
+				    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id => @school.id), class: "btn btn-white btn-xs"%>
 				<%end%>
 	        </div>
 			<% end %>

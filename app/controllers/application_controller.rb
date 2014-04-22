@@ -168,6 +168,16 @@ class ApplicationController < ActionController::Base
             "School List"=> "",
           }
         }
+		
+      when "schools#show"
+       @breadcrumb = {
+       :title=>"School Details",
+	   :icon=>"fa fa-building-o",
+       :breadcrumb=>{
+         "School List"=> "",
+         }
+       }
+		
       when "schools#new"
         @breadcrumb = {
           :title=>"Add new school",
@@ -218,13 +228,11 @@ class ApplicationController < ActionController::Base
         }
       }
 
-	  
       when "users#new-1"
 		@breadcrumb = {
           :title=>"Add Web Admin",
 		  :icon=>"fa fa-user",
           :breadcrumb=>{
-            "School List"=> schools_path,
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
             "Add Web Admin"=> "",
           }
@@ -234,8 +242,6 @@ class ApplicationController < ActionController::Base
           :title=>"Web Admin List",
 		  :icon=>"fa fa-user",
           :breadcrumb=>{
-            "School List"=> schools_path,
-			"School Listing" => schools_path,	
             "Web Admin List"=> "",
           }
         }
