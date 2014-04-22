@@ -348,7 +348,17 @@ class ApplicationController < ActionController::Base
             }
           } 
 		  
-		  
+          when "classrooms#show"
+            @breadcrumb = {
+              :title=>"Classroom Details",
+  			  :icon=>"fa fa-users",
+              :breadcrumb=>{
+                "School List"=> schools_path,
+                "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+                "Edit classroom info"=> "",
+              }
+            }
+			
          when "licenses#new"
   		  @breadcrumb = {
             :title=>"Add License",
