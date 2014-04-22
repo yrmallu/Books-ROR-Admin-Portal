@@ -1,28 +1,61 @@
 $(document).ready(function () {
-    $('.school-check-box').change(function () {
-        var check = ($('.school-check-box').filter(":checked").length == $('.school-check-box').length);
-        $('.select-all-school').prop("checked", check);
-    });
-	// enable/disable delete button whether select-all check-box is checked or not
-    $('.select-all-school').click(function () {
-        if($("#school_table .school-check-box:checked").length > 0)
-			document.getElementById("delete_school").disabled=true;
-		else
-			document.getElementById("delete_school").disabled=false;  
-    });
-	// enable/disable delete button whether any check-box is checked or not
-    $('.school-check-box').click(function () {
-       if($("#school_table .school-check-box:checked").length > 0)
-			document.getElementById("delete_school").disabled=false;
-		else
-			document.getElementById("delete_school").disabled=true;  
-    }); 
+ //    $('.school-check-box').change(function () {
+ //        var check = ($('.school-check-box').filter(":checked").length == $('.school-check-box').length);
+ //        $('.select-all-school').prop("checked", check);
+ //    });
+	// // enable/disable delete button whether select-all check-box is checked or not
+ //    $('.select-all-school').click(function () {
+ //        if($("#school_table .school-check-box:checked").length > 0)
+	// 		document.getElementById("delete_school").disabled=true;
+	// 	else
+	// 		document.getElementById("delete_school").disabled=false;  
+ //    });
+	// // enable/disable delete button whether any check-box is checked or not
+ //    $('.school-check-box').click(function () {
+ //       if($("#school_table .school-check-box:checked").length > 0)
+	// 		document.getElementById("delete_school").disabled=false;
+	// 	else
+	// 		document.getElementById("delete_school").disabled=true;  
+ //    }); 
+    $("input[type='checkbox']").on('click',function(){
+    checkIfAnySchools();
+  });
 });
 	
+function checkAllSchools(){
+  // alert("above checkall code");
+    $(".school-check-box").each(function(){$(this).prop("checked", true);});
+    // alert("below checkall code");
+    $(".lnk-typ1").css("color","#908a8a");
+    $(".lnk-typ2").css("color","#0d71b4");
+    checkIfAnySchools();
+}
+
+function uncheckAllSchools(){
+    $(".school-check-box").each(function(){$(this).removeAttr("checked");});
+    $(".lnk-typ1").css("color","#0d71b4");
+    $(".lnk-typ2").css("color","#908a8a");
+    checkIfAnySchools();
+}
+
+function checkIfAnySchools(){
+  // alert("hiiii");
+  // alert($("input[id='school_ids_']:checked").length);
+  if ($("input[id='school_ids_']:checked").length > 0){
+    
+      $("#delete_school").removeAttr('disabled');
+      // alert("hiiii");
+      // $("#send_request").removeAttr('disabled');
+  }else{
+    // alert("hiiii");
+    $("#delete_school").attr('disabled', 'true'); 
+    // $("#send_request").attr('disabled', 'true');
+  }
+}
 // select-all check-box functionality
-$(document).on("click",".select-all-school",function(){
-	$('.school-check-box').prop('checked', $(this).is(':checked'));
-});
+// $(document).on("click",".select-all-school",function(){
+// 	$('.school-check-box').prop('checked', $(this).is(':checked'));
+// });
 
 $(document).on("click","#school_country",function(){
 	select_wrapper = $('#school_state_wrapper')		

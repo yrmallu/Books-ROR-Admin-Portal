@@ -10,7 +10,7 @@
 			<table class="table" id="book_table">
 	            <thead>
 	                <tr>
-	            		<th><%= check_box_tag 'book_id[]', '', false, :class => "select-all-book" %></th>
+	            		<th><%= link_to :All, 'javascript:checkAllBooks()', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAllBooks()', :class => "lnk-typ2" %></th>
                     	<th>Title</th>
                     	<th>Author</th>
                     	<th>Description</th>

@@ -14,7 +14,7 @@
 			<table class="table" id="school_table">
 	            <thead>
 	                <tr>
-	                	<th>Remove all &nbsp; <%= check_box_tag 'school_id[]', '', false, :class => "select-all-school" %></th>
+	                	<th><%= link_to :All, 'javascript:checkAllSchools()', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAllSchools()', :class => "lnk-typ2" %>  </th>
 	                    <th>School Code</th>
 	                    <th>School Name</th>
 	                    <th>District</th>

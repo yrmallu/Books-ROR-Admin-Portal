@@ -34,9 +34,9 @@
 						      <%= classroom.school_year_start_date.year %> - <%= classroom.school_year_end_date.year %>
 						  <%end%>
 				      </td>
-					  <td class=""><%=  %></td>
-					  <td class=""><%=  %></td>
-					  <td class=""><%=  %></td>
+					  <td class="" align="center"><%= classroom.users.school_admins.count %></td>
+					  <td class="" align="center"><%= classroom.users.teachers.count %></td>
+					  <td class="" align="center"><%= classroom.users.students.count %></td>
                       <td data-no-turbolink>
 						  <% if can? :update, :classrooms %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  

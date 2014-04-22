@@ -39,19 +39,19 @@
 						<div class="col-sm-3">
 	                        <div class="form-group">
 	                    	    <%= label_tag "teachers_count", "Number Of School Admins", :class=>"control-label" %> : 
-								<%= @role_wise_count[0].blank? ? 0 : @role_wise_count[0] %>
+								<%= @classroom.school_admins_count %>
 	                        </div>
 	                    </div>
 						<div class="col-sm-3">
 	                        <div class="form-group">
 	                    	    <%= label_tag "teachers_count", "Number Of Teachers", :class=>"control-label" %> : 
-								<%= @role_wise_count[1].blank? ? 0 : @role_wise_count[1] %>
+								<%= @classroom.teachers_count %>
 	                        </div>
 	                    </div>
 						<div class="col-sm-6">
 	                        <div class="form-group">
-			     		        <%= label_tag "students_count", "Number Of Teachers", :class=>"control-label" %> :
-								<%= @role_wise_count[2].blank? ? 0 : @role_wise_count[2] %>
+			     		        <%= label_tag "students_count", "Number Of Students", :class=>"control-label" %> :
+								<%= @classroom.students_count %>
 	                        </div>
 	                    </div>
 	               </div>

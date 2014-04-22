@@ -21,6 +21,11 @@ class User < ActiveRecord::Base
   #before_update :send_user_mail
   accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
   
+  scope :web_admins, -> { where(role_id: 1) }
+  scope :school_admins, -> { where(role_id: 2) }
+  scope :teachers, -> { where(role_id: 3) }
+  scope :students, -> { where(role_id: 4) }
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}
   

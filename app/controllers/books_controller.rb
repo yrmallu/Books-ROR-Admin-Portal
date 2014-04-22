@@ -31,6 +31,8 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.book_unique_id = Time.now.to_i.to_s
+    # @book.book_unique_id = "67KG7asd78aAdaCal"
+    # binding.pry 
     respond_to do |format|
       if @book.save
         parse_epub @book, @book.epub.path
@@ -82,9 +84,10 @@ def parse_epub(book, path)
     css_tags = []
     js_tags = []
     ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/js/#{js} \"></script>" }
+    # ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://107.21.250.244/books-that-grow-web-app/uploads_dir/js/#{js} \"></script>" }
     path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
     list_files.each do |k, v|
-      ip_path = v.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
+      ip_path = v.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
       if v.split("/").last.split(".").last == "css" 
        css_tags <<  "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ip_path + " \"> </link>"
       end
@@ -102,7 +105,8 @@ def parse_epub(book, path)
       p "writing to an html",list_files[x], re
       File.open(list_files[x], "r") {|file|  @body_doc = Nokogiri::HTML(file.read)} 
       @body_doc.css("img").each do |link|
-        link.attributes["src"].value = path_with_ip + "/OEBPS/" + link.attributes["src"].value 
+        link.attributes["src"].value = path_with_ip + "/OEBPS/" + link.attributes["src"].value
+        # link.attributes["src"].value = "http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/#{dir_name.first}/OEBPS/" + link.attributes["src"].value  
       end
       File.open(list_files[x], "r") {|file| re << @body_doc.xpath("//body").to_html}
       re.slice! "<body>"
