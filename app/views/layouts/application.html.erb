@@ -24,7 +24,7 @@
             <div class="media userlogged">
 				<%= image_tag("loggeduser.png", :class=>"media-object")%>
                 <div class="media-body">
-                    <h4><%=current_user.first_name unless current_user.blank?%></h4>
+                    <h4><%= current_user.first_name unless current_user.blank? %></h4>
                 </div>
             </div>
             <h5 class="sidebartitle actitle">Account</h5>
@@ -43,34 +43,34 @@
 		<% if current_user.is_web_admin?%>
 		<li class="nav-parent" id="li_school"><a href=""><i class="glyphicon glyphicon-book"></i> <span>School</span></a>
 			<span class="arrow arrw-pos" container_li="li_school"></span>
-          <ul class="children">
-		      <% if can? :create, :schools %>
-			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
-			  <%end%>
-			  <% if can? :read, :schools %>
-			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
-			 <%end%>
-         </ul>
-        </li>
+        <ul class="children">
+  	      <% if can? :create, :schools %>
+  		      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
+  		    <%end%>
+  			  <% if can? :read, :schools %>
+  			      <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
+  			  <%end%>
+        </ul>
+    </li>
 		
 		<li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Web Admin", root_path %>
 			<span class="arrow arrw-pos" container_li="li_webadmin"></span>
-          <ul class="children">
-			 <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id =>Role.where("name='Web Admin'").last) %></li>
-			 <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path(:role_id => Role.where("name='Web Admin'").last) %></li>
-			 <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
-          </ul>
-        </li>
+      <ul class="children">
+  			<li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id =>Role.where("name='Web Admin'").last) %></li>
+  			<li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin Listing", users_path(:role_id => Role.where("name='Web Admin'").last) %></li>
+  			<li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
+      </ul>
+    </li>
   		
-      <li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Books", books_path %>
-         <ul class="children">
-          <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Book List", books_path %></li>
-         <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
-       </ul>
-      </li>
+    <li class="nav-parent" id="li_webadmin"><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "Books", books_path %>
+       <ul class="children">
+        <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Book List", books_path %></li>
+       <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Book", new_book_path %></li>
+     </ul>
+    </li>
 
 
-		<% if current_user.is_web_admin?%>
+		
 		<li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
 			<span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
