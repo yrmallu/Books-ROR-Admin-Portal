@@ -119,7 +119,13 @@ class SchoolsController < ApplicationController
    end
 
   def update_license_expiration_date
-    params[:license_expiry_date].each{|k,v| License.find(k).update_attributes(:expiry_date => v, :used_liscenses => 0) if v && !v.blank? } if params[:license_expiry_date] && !params[:license_expiry_date].blank?
+    params[:license_expiry_date].each do |k,v|
+      lic = License.find(k) 
+      if v && !v.blank? && !(lic.expiry_date == v.to_date)
+        lic.update_attributes(:expiry_date => v) 
+        lic.users.each{|u| u.update_attributes(:license_expiry_date => v)} if lic.users && !lic.users.blank?
+      end
+   end if params[:license_expiry_date] && !params[:license_expiry_date].blank?
     #params[:license_ids].each{|lic| License.find(lic).update_attributes(:expiry_date => nil) } if params[:license_ids] && !params[:license_ids].blank?
     redirect_to schools_url 
   end

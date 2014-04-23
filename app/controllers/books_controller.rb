@@ -31,8 +31,6 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.book_unique_id = Time.now.to_i.to_s
-    # @book.book_unique_id = "67KG7asd78aAdaCal"
-    # binding.pry 
     respond_to do |format|
       if @book.save
         parse_epub @book, @book.epub.path
@@ -68,55 +66,20 @@ def parse_epub(book, path)
       }
     }
 
-    f =  list_files["META-INF/container.xml"] if list_files.keys.include?("META-INF/container.xml")
-    File.open(f, "r") {|file|  @doc = Nokogiri::HTML(file.read)} 
-    @doc.xpath("//rootfile").each{|x|  xml_file=x.attributes["full-path"].value}
-    File.open(list_files[xml_file], "r") {|file|  @doc_opf = Nokogiri::HTML(file.read)} 
-    
-    @doc_opf.xpath("//spine").each do |x|
-      x.xpath("//itemref").each{|y| spine_files << y.attributes['idref'].value }
-    end
-    
-    @doc_opf.xpath("//manifest").each do |x|
-      x.xpath("//item").each{|y| next if !spine_files.include?(y.attributes['id'].value); xhtml_files << y.attributes['href'].value if File.extname(y.attributes['href'].value).eql?(".xhtml")}
-    end
+    xhtml_files = get_xhtml_files list_files   
     # we can to in normal after saving 
-    css_tags = []
-    js_tags = []
-    ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/js/#{js} \"></script>" }
+    css_tags, js_tags = get_css_js_tags list_files
+    # ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/js/#{js} \"></script>" }
     # ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://107.21.250.244/books-that-grow-web-app/uploads_dir/js/#{js} \"></script>" }
-    path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
-    list_files.each do |k, v|
-      ip_path = v.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
-      if v.split("/").last.split(".").last == "css" 
-       css_tags <<  "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ip_path + " \"> </link>"
-      end
-    end 
-    css_tags.delete_at(0)
-    re = css_tags.join(" ")
-    style_tag = "<style type=\"text/css\"> .disallowselection {  -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: -moz-none;-ms-user-select: none; user-select: none; background: red; } </style>"
-    re << style_tag
-    re << "<div id=\"content\"> <div class=\"story_content\" id=\"story_content\">" 
-    xhtml_files.each do |f|    
-      x = "OEBPS/" + f
-      div_id = f.split(".").first
-      bookchapterholder_div = " <div id=\"" + div_id + "\" class=\"bookchapterholder\"> </div>"
-      re << bookchapterholder_div
-      p "writing to an html",list_files[x], re
-      File.open(list_files[x], "r") {|file|  @body_doc = Nokogiri::HTML(file.read)} 
-      @body_doc.css("img").each do |link|
-        link.attributes["src"].value = path_with_ip + "/OEBPS/" + link.attributes["src"].value
-        # link.attributes["src"].value = "http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/#{dir_name.first}/OEBPS/" + link.attributes["src"].value  
-      end
-      File.open(list_files[x], "r") {|file| re << @body_doc.xpath("//body").to_html}
-      re.slice! "<body>"
-      re.slice! "</body>"
-      re << "</div>"
-    end
-    re << "</div> </div>"
-    re << js_tags.join(" ")
-    file_path = dest_path + "/OEBPS/index.html"
-    File.open(file_path , "w") {|fi| fi.puts re}
+    # path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
+    path_with_ip = dest_path.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
+    index_file_string = generate_index_file_string xhtml_files, list_files, index_file_string, css_tags.join(" "), js_tags.join(" "), path_with_ip
+    cp_file_list = [dest_path+"/OEBPS/covers/", dest_path+"/OEBPS/css/", dest_path+"/OEBPS/fonts/", dest_path+"/OEBPS/images/", dest_path+"/OEBPS/js/", dest_path+"/OEBPS/package.opf",dest_path+"/OEBPS/toc.ncx" ]
+    FileUtils.cp_r cp_file_list, dest_path
+    FileUtils.rm_rf [dest_path+"/OEBPS", dest_path+"/META-INF"]
+    FileUtils.remove_file dest_path+"/mimetype"
+    # file_path = dest_path + "/OEBPS/index.html"
+    File.open(dest_path+"/index.html" , "w") {|fi| fi.puts index_file_string}
   end
 
   def update
@@ -152,4 +115,69 @@ def parse_epub(book, path)
     def book_params
       params.require(:book).permit(:id, :title, :description, :author, :book_cover, :epub, :preview_images_attributes=> [:preview_image, :book_id, :_destroy, :id ])
     end
+
+    def get_xhtml_files(list_files)
+      xml_file = ""
+      xhtml_files = []    
+      spine_files = []
+
+      f =  list_files["META-INF/container.xml"] if list_files.keys.include?("META-INF/container.xml")
+      File.open(f, "r") {|file|  @doc = Nokogiri::HTML(file.read)} 
+      @doc.xpath("//rootfile").each{|x|  xml_file=x.attributes["full-path"].value}
+      File.open(list_files[xml_file], "r") {|file|  @doc_opf = Nokogiri::HTML(file.read)} 
+      
+      @doc_opf.xpath("//spine").each do |x|
+        x.xpath("//itemref").each{|y| spine_files << y.attributes['idref'].value }
+      end
+      
+      @doc_opf.xpath("//manifest").each do |x|
+        x.xpath("//item").each{|y| next if !spine_files.include?(y.attributes['id'].value); xhtml_files << y.attributes['href'].value if File.extname(y.attributes['href'].value).eql?(".xhtml")}
+      end
+      xhtml_files
+    end
+
+    def get_css_js_tags(list_files)
+      css_tags = []
+      js_tags = []
+      js_list = ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"]
+      list_files.each do |k, v|
+        ip_path = v.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
+        ip_path = ip_path.gsub("OEBPS/","" )
+        if v.split("/").last.split(".").last == "css" 
+         css_tags <<  "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ip_path + " \"> </link>"
+        elsif (v.split("/").last.split(".").last == "js") && (js_list.include? v.split("/").last)
+          js_tags <<  "<script type=\"text/javascript\" src=\"" + ip_path + " \"></script>"
+        end
+      end 
+      css_tags.delete_at(0)
+      js_tags.delete_at(0)
+
+      return css_tags, js_tags
+    end
+
+    def generate_index_file_string(xhtml_files, list_files, index_file_string, css_tags, js_tags, path_with_ip)
+      index_file_string = css_tags
+      style_tag = "<style type=\"text/css\"> .disallowselection {  -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: -moz-none;-ms-user-select: none; user-select: none; background: red; } </style>"
+      index_file_string << style_tag
+      index_file_string << "<div id=\"content\"> <div class=\"story_content\" id=\"story_content\">" 
+      xhtml_files.each do |f|    
+        x = "OEBPS/" + f
+        div_id = f.split(".").first
+        bookchapterholder_div = " <div id=\"" + div_id + "\" class=\"bookchapterholder\"> </div>"
+        index_file_string << bookchapterholder_div
+        p "writing to an html",list_files[x], index_file_string
+        File.open(list_files[x], "r") {|file|  @body_doc = Nokogiri::HTML(file.read)} 
+        @body_doc.css("img").each do |link|
+          link.attributes["src"].value = path_with_ip + "/" + link.attributes["src"].value
+          # link.attributes["src"].value = "http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/#{dir_name.first}/OEBPS/" + link.attributes["src"].value  
+        end
+        File.open(list_files[x], "r") {|file| index_file_string << @body_doc.xpath("//body").to_html}
+        index_file_string.slice! "<body>"
+        index_file_string.slice! "</body>"
+        # re << "</div>"
+      end
+      index_file_string << "</div> </div>"
+      index_file_string << js_tags
+      # index_file_string
+    end 
 end

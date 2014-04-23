@@ -82,6 +82,7 @@ class UsersController < ApplicationController
 # 	      end
 #         end
 	  end 
+    binding.pry
     array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
     unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
       @user.user_classrooms.destroy_all
