@@ -3,6 +3,7 @@ module ApplicationHelper
     return "checked" if accessrights.include?(accessright) unless accessrights.blank?
     return false
   end
+
   
   def link_to_add_fields(name, f, association, options='')
     new_object = f.object.send(association).klass.new

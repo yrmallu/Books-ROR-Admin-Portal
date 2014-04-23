@@ -4119,3 +4119,9 @@ div.error label.error:before {
 .redrow{
       background-color: #FFCCCC;
    }
+
+.single_document_div{
+   width: 150px;
+   height: 150px;
+   float: left;
+}

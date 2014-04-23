@@ -6,7 +6,8 @@ class BooksController < ApplicationController
   # GET /books.json
   def index
     #@books = Book.all
-    @books = Book.order("created_at DESC").page params[:page]
+    # @books = Book.order("created_at DESC").page params[:page]
+    @books = Book.page params[:page]
   end
 
   # GET /books/1
@@ -17,11 +18,12 @@ class BooksController < ApplicationController
   # GET /books/new
   def new
     @book = Book.new
-    @images = @book.images.build
+    # @book.preview_images.build
   end
 
   # GET /books/1/edit
   def edit
+    @book.preview_images.build
   end
 
   # POST /books
@@ -29,10 +31,11 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     @book.book_unique_id = Time.now.to_i.to_s
-    binding.pry
+    # @book.book_unique_id = "67KG7asd78aAdaCal"
+    # binding.pry 
     respond_to do |format|
       if @book.save
-        parse_epub @book, @book.images.find_by_epub_book_content_type("application/epub+zip").epub_book.path
+        parse_epub @book, @book.epub.path
         format.html { redirect_to @book, notice: 'Book was successfully created.' }
         format.json { render action: 'show', status: :created, location: @book }
       else
@@ -81,9 +84,10 @@ def parse_epub(book, path)
     css_tags = []
     js_tags = []
     ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/js/#{js} \"></script>" }
+    # ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://107.21.250.244/books-that-grow-web-app/uploads_dir/js/#{js} \"></script>" }
     path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
     list_files.each do |k, v|
-      ip_path = v.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
+      ip_path = v.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
       if v.split("/").last.split(".").last == "css" 
        css_tags <<  "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ip_path + " \"> </link>"
       end
@@ -101,7 +105,8 @@ def parse_epub(book, path)
       p "writing to an html",list_files[x], re
       File.open(list_files[x], "r") {|file|  @body_doc = Nokogiri::HTML(file.read)} 
       @body_doc.css("img").each do |link|
-        link.attributes["src"].value = path_with_ip + "/OEBPS/" + link.attributes["src"].value 
+        link.attributes["src"].value = path_with_ip + "/OEBPS/" + link.attributes["src"].value
+        # link.attributes["src"].value = "http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/#{dir_name.first}/OEBPS/" + link.attributes["src"].value  
       end
       File.open(list_files[x], "r") {|file| re << @body_doc.xpath("//body").to_html}
       re.slice! "<body>"
@@ -140,11 +145,11 @@ def parse_epub(book, path)
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book
-      @book = Book.includes(:images).find(params[:id])
+      @book = Book.includes(:preview_images).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:id, :title, :description, :author, :images_attributes=> [:name,:book_cover,:book_cover_large,:preview_book_image,:epub_book,:book_id])
+      params.require(:book).permit(:id, :title, :description, :author, :book_cover, :epub, :preview_images_attributes=> [:preview_image, :book_id, :_destroy, :id ])
     end
 end

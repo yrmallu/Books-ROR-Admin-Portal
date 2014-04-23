@@ -119,10 +119,12 @@ class UsersController < ApplicationController
   
   def delete_user
     deleted_user = ''
+    binding.pry
 	User.where(id: params[:user_ids]).each do |user|
 	  deleted_user = user
       user.update_attributes(delete_flag: true)
     end
+    binding.pry
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
   end
   

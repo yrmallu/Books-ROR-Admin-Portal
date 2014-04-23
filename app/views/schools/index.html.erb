@@ -10,10 +10,10 @@
 		</div>
 		 
 		<div class="table-responsive">
-			<table class="table class_common_table" id="school_table">
+			<table class="table" id="school_table">
 	            <thead>
 	                <tr>
-	                	<th>Remove all &nbsp; <%= check_box_tag 'school_id[]', '', false, :class => "all-school" %></th>
+	                	<th><%= link_to :All, 'javascript:checkAllSchools()', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAllSchools()', :class => "lnk-typ2" %>  </th>
 	                    <th>School Code</th>
 	                    <th>School Name</th>
 	                    <th>District</th>
@@ -24,9 +24,9 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-					<% @schools.each do |school| %>
-		                <tr class="odd gradeX" data-no-turbolink>
-		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "check-box" %></td>	
+					<% @schools.try(:each) do |school| %>
+		                <tr class="odd gradeX">
+		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "school-check-box" %></td>	
 		                  <td class=""><%= school.code %></td>
 		                  <td class=""><%= link_to school.name, school_path(school), :title=>"View School Details" %></td>
 		                  <td class=""><%= school.district %></td>

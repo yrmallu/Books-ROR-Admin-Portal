@@ -1,4 +1,4 @@
-<%#= form_tag 'users/delete_user' do %>
+<%= form_tag 'users/delete_user' do %>
   <div class="panel panel-default">
 	<div class="panel-body"> 
 	  <div class="index_page_btns" data-no-turbolink>
@@ -25,13 +25,13 @@
 			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "student", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
 		<%end%>
-		<%#=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_element',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	</div>
 	<div class="table-responsive">
 		<table class="table class_common_table" id="users_table">
             <thead>
                 <tr>
-                	<th>Remove all &nbsp; <%= check_box_tag 'user_id[]', '', false, :class => "select-all" %></th>
+                	<th><%= link_to :All, 'javascript:checkAllUsers()', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAllUsers()', :class => "lnk-typ2" %></th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -110,7 +110,7 @@
 		<%= paginate @users %>
 	</div>
  </div>		  
-<%#= end %>
+<% end %>
 
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -123,6 +123,10 @@
       <div class="modal-body">
 		  <div id="school_licenses_list"></div>
 	  </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Assign</button>
+      </div> -->
     </div>
   </div>
 </div>		

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140418134603) do
+ActiveRecord::Schema.define(version: 20140419121059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,23 +29,19 @@ ActiveRecord::Schema.define(version: 20140418134603) do
   end
 
   create_table "books", force: true do |t|
-    t.string  "title"
-    t.text    "description"
-    t.string  "author"
-    t.hstore  "preview_name"
-    t.string  "book_file_name"
-    t.integer "chapters"
-    t.string  "book_unique_id"
-    t.hstore  "thumb_name"
-    t.string  "cover"
-    t.string  "interest_level", limit: 60
-    t.string  "delete_flag",    limit: 2
-  end
-
-  create_table "classroom_books", force: true do |t|
-    t.integer "classroom_id"
-    t.integer "book_id"
-    t.integer "user_id"
+    t.string   "title"
+    t.string   "description"
+    t.string   "author"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "book_cover_file_name"
+    t.string   "book_cover_content_type"
+    t.integer  "book_cover_file_size"
+    t.datetime "book_cover_updated_at"
+    t.string   "epub_file_name"
+    t.string   "epub_content_type"
+    t.integer  "epub_file_size"
+    t.datetime "epub_updated_at"
   end
 
   create_table "classrooms", force: true do |t|
@@ -96,16 +92,21 @@ ActiveRecord::Schema.define(version: 20140418134603) do
     t.string   "license_batch_name"
   end
 
-  create_table "notes", force: true do |t|
-    t.integer "user_id"
-    t.integer "book_id"
-    t.text    "note_data"
-  end
-
   create_table "parents", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "preview_images", force: true do |t|
+    t.integer  "book_id"
+    t.string   "preview_image"
+    t.string   "preview_image_file_name"
+    t.string   "preview_image_content_type"
+    t.integer  "preview_image_file_size"
+    t.datetime "preview_image_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -145,16 +146,6 @@ ActiveRecord::Schema.define(version: 20140418134603) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "role_id"
-  end
-
-  create_table "user_books", id: false, force: true do |t|
-    t.integer "id",                 limit: 8
-    t.hstore  "reading_percentage"
-    t.hstore  "last_reading_info"
-    t.integer "user_id",            limit: 8
-    t.string  "device_id"
-    t.integer "book_id"
-    t.string  "reading_info"
   end
 
   create_table "user_classrooms", force: true do |t|
@@ -201,23 +192,5 @@ ActiveRecord::Schema.define(version: 20140418134603) do
 
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
   add_index "users", ["school_id"], name: "index_users_on_school_id", using: :btree
-
-  create_table "users_bk", id: false, force: true do |t|
-    t.integer  "id",                  limit: 8, default: "nextval('users_id_seq'::regclass)", null: false
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "username"
-    t.date     "license_expiry_date"
-    t.boolean  "delete_flag",                   default: false
-    t.string   "email",                         default: "",                                  null: false
-    t.integer  "device_id"
-    t.integer  "role_id"
-    t.integer  "school_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.hstore   "userinfo"
-    t.string   "password_digest"
-    t.integer  "license_id"
-  end
 
 end
