@@ -31,7 +31,9 @@
 		                  <td class=""><%= link_to school.name, school_path(school), :title=>"View School Details" %></td>
 		                  <td class=""><%= school.district %></td>
 		                  <td class="center "><%= school.city %></td>
-		                  <td class="center "><%= school.state %></td>
+		                  <%#= @country = Carmen::Country.coded('US') %>
+						  <%#= Carmen::Country.coded('US').subregions.coded(school.state) %>
+						  <td class="center "><%= Carmen::Country.coded('US').subregions.coded(school.state).name unless school.state.blank? %></td>
 						  <td class="center "><%= school.country %></td>
 						  <td>
 						  	<% if can? :update, :schools %>

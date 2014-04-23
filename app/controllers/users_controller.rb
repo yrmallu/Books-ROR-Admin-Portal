@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
-  before_action :get_role_id, :only => [:new, :index, :edit, :show, :destroy, :delete_parent] 
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
   before_action :get_classrooms, :only => [:new]
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent]
@@ -14,13 +14,13 @@ class UsersController < ApplicationController
   
   def index
     if !@role_id.blank? && params[:school_id].blank?
-      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+      @users = User.where("role_id = '#{@role_id.id}'").by_newest.page params[:page]
 	  set_bread_crumb(@role_id.id)
     elsif !@role_id.blank? && !params[:school_id].blank?
-      @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+      @users = @school.users.where("role_id = '#{@role_id.id}'").by_newest.page params[:page]
 	  set_bread_crumb(@role_id.id, @school.id)
 	else
-	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+	  @users = User.by_newest.page params[:page]
 	end
   end
   
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 	path = request.env['HTTP_HOST']
-    if @user.save
+	if @user.save
 	  unless params[:accessright].eql?('0')
 	    @user.assign_accessright(params[:accessright]) 
   	  end
@@ -127,7 +127,7 @@ class UsersController < ApplicationController
   end
   
   def get_school_specific_classrooms
-    @school_specific_classrooms = @school.classrooms("delete_flag is not true")	unless params[:school_id].blank? 
+    @school_specific_classrooms = @school.classrooms unless params[:school_id].blank? 
   end
   
   def get_manage_student_accessright
@@ -145,7 +145,7 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
-    @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
+    @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) ")
     render :partial=>"assign_license"
   end
   

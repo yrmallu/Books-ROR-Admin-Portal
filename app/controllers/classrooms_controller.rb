@@ -36,8 +36,8 @@ class ClassroomsController < ApplicationController
 
   def edit
     @role_wise_count = []
-    @assigned_teachers = @classroom.users.includes(:role).where("delete_flag is not true AND (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
-	@assigned_students = @classroom.users.includes(:role).where("delete_flag is not true AND name='Student'").references(:role) if @classroom && @classroom.users
+    @assigned_teachers = @classroom.users.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
+	@assigned_students = @classroom.users.includes(:role).where("name='Student'").references(:role) if @classroom && @classroom.users
     @role_wise_users = @classroom.users.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
 	@role_wise_users.each{|x| @role_wise_count << x.total_users_count} 
 	set_bread_crumb(@school.id)
@@ -99,8 +99,8 @@ class ClassroomsController < ApplicationController
   end
   
   def get_school_specific_users
-    @school_specific_teachers = @school.users.includes(:role).where("delete_flag is not true AND (name='School Admin' OR name='Teacher') ").references(:role) unless params[:school_id].blank? 
-    @school_specific_students = @school.users.includes(:role).where("delete_flag is not true AND name='Student'").references(:role) unless params[:school_id].blank?
+    @school_specific_teachers = @school.users.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:school_id].blank? 
+    @school_specific_students = @school.users.includes(:role).where("name='Student'").references(:role) unless params[:school_id].blank?
   end
 
   private

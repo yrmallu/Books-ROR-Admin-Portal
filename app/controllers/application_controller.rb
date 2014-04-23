@@ -39,11 +39,11 @@ class ApplicationController < ActionController::Base
 # 	else
 # 	  @schools = @current_user.school
 # 	end
-    @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
+    @schools = School.by_newest.page params[:page]
   end
   
   def get_all_schools
-    @schools = School.where("delete_flag is not true").order("created_at DESC")
+    @schools = School.by_newest
   end
   
   def get_school_by_id

@@ -5,6 +5,7 @@ class Classroom < ActiveRecord::Base
   
   before_create :generate_random_code
   
+  scope :by_newest, -> {order("created_at DESC")}
   #store_accessor :classroom_count, :student_count, :teacher_count, :school_admin_count
   
   paginates_per 10

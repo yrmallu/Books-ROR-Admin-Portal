@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  
+  include CommonQueries
   paginates_per 10
   max_paginates_per 10
   
@@ -20,12 +20,14 @@ class User < ActiveRecord::Base
   #before_update :send_user_mail
   accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
   
+  scope :by_newest, -> {order("created_at DESC")}
+  
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}
   
-  has_attached_file :photos, :styles => { :medium => "300x300>",  :thumb => "100x100>" },
-                               :url  => "/users/images/:id/:style/:basename.:extension",
-                               :path => ":rails_root/public/users/images/:id/:style/:basename.:extension"
+  has_attached_file :photos, :style => { :medium => "300x300>",  :thumb => "100x100>" },
+                             :url  => "/users/images/:id/:style/:basename.:extension",
+                             :path => ":rails_root/public/users/images/:id/:style/:basename.:extension"
 							   
   validates_attachment_size :photos, :less_than => 5.megabytes
   validates_attachment_content_type :photos, :content_type => /\Aimage\/.*\Z/
