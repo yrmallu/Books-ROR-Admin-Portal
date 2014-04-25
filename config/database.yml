@@ -27,9 +27,9 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: df5hfjsf4t9d78
+  database: rails_app
   pool: 5
-  host: ec2-54-225-101-124.compute-1.amazonaws.com
-  username: nphajysesavnzm
-  password: uQLzyAN26wz9er3DwhHpmnXuUq
+  host: 54.83.84.222
+  username: postgres
+  password: cuelogic
   port: 5432 

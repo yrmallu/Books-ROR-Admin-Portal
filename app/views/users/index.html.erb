@@ -19,7 +19,7 @@
 			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "teacher", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
 			<%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
 		<%elsif @role_id.name.eql?('Student')%>
-			<% if (can? :create, :users) && (can? :create_student, :users) %>
+			<% if ((can? :read, :users) && (can? :read_student, :users)) || ((can? :read, :users) && (can? :manage_student, :users)) %>
 			    <%=link_to 'Add Student', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 			<%end%>
 			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
@@ -69,7 +69,7 @@
   					         <td>
 					         <% if ((can? :update, :users) && (can? :update_sa, :users)) && params[:role_id].eql?('2') %>
 						         <%= render 'edit_link', user: user%>
-                             <% end %>
+							 <% end %>
 						     <% if ((can? :update, :users) && (can? :update_teacher, :users)) && params[:role_id].eql?('3') %>
 						         <%= render 'edit_link', user: user%>
                              <% end %>
@@ -87,10 +87,18 @@
 						     <% end %>
 					         <% unless  @role_id.name.eql?('Web Admin')%> 
 							     <%= hidden_field_tag :user_id, user.id%>
-							     <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
-						
-						         <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %>   
-						<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
+								 <% if params[:role_id].eql?('4') %>
+								     <% if (can? :get_user_school_licenses, :users) %>
+							             <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
+						             <% end %>
+								     <% if (can? :remove_license, :users) && params[:role_id].eql?('4') %>
+						                 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } unless user.license_expiry_date.blank? %>   
+								     <% end %>
+								 <%else%>
+								     <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
+									 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } unless user.license_expiry_date.blank? %>  
+						         <%end%>
+							<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
 					       Change Password
 					    </button> -->
 							<%else%>
@@ -215,6 +223,7 @@ $(".download_sample").click(function(){
 
 });
 
+$(document).ready(function(){
 $('#changePassword').click(function() {
 	$(".form_validation").validate({
 		rules: {
@@ -233,6 +242,7 @@ $('#changePassword').click(function() {
 			}
 		}
 		});
+});
 });
 </script>
 

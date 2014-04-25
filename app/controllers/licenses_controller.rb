@@ -1,4 +1,6 @@
 class LicensesController < ApplicationController
+
+  before_action :logged_in?
   before_action :set_license, only: [:show, :edit, :destroy, :update]
 
   def index
