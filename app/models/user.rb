@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   scope :by_newest, -> {order("created_at DESC")}
   
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false}
+  validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
   
   has_attached_file :photos, :style => { :medium => "300x300>",  :thumb => "100x100>" },
                              :url  => "/users/images/:id/:style/:basename.:extension",
@@ -39,10 +39,6 @@ class User < ActiveRecord::Base
   
   def is_school_admin?
   	 self.role.name.eql?("School Admin") unless self.role.blank?
-  end
-  
-  def assign_accessright(accessright_id)
-    self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?
   end
   
   def update_license_count
@@ -77,6 +73,10 @@ class User < ActiveRecord::Base
   def user_details_change_email(current_user, path)
     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
 	UserMailer.user_details_changed(user_info).deliver
+  end
+  
+  def assign_accessright(accessright_id)
+    self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?
   end
   
   def access_to_remove_or_add(options={})

@@ -1,5 +1,6 @@
 class ClassroomsController < ApplicationController
   
+  before_action :logged_in?
   before_action :set_classroom, only: [:show, :edit, :update, :destroy]
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
   before_action :get_school_by_id, only: [:new, :index, :edit]

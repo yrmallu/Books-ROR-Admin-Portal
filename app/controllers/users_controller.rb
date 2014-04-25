@@ -13,101 +13,294 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-    if !@role_id.blank? && params[:school_id].blank?
-      @users = User.where("role_id = '#{@role_id.id}'").by_newest.page params[:page]
-	  set_bread_crumb(@role_id.id)
-    elsif !@role_id.blank? && !params[:school_id].blank?
-      @users = @school.users.where("role_id = '#{@role_id.id}'").by_newest.page params[:page]
-	  set_bread_crumb(@role_id.id, @school.id)
+    unless current_user.is_web_admin?
+	  current_user_read_accessrights
+      unless @access_right_name.kind_of?(Array)
+	    if @current_user_accessrights.include?(@access_right_name)
+          user_index
+	    else
+	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :read, User)
+	    end
+	  else
+	    user_index
+	  end
 	else
-	  @users = User.by_newest.page params[:page]
+	  user_index
 	end
   end
   
   def show
-    @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
-	@reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
-  end
- 
-  def new
-    @user = User.new
-	unless params[:school_id].blank?
-	  set_bread_crumb(@role_id.id, @school.id)
-	else
-	  set_bread_crumb(@role_id.id)
-	end
-    @assigned_classrooms = []
-	@parent = @user.parents.build
-  end
- 
-  def edit
-    @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
-	set_bread_crumb(@role_id.id, @user.school_id)
-    @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-  end
- 
-  def create
-    @user = User.new(user_params)
-	path = request.env['HTTP_HOST']
-	if @user.save
-	  unless params[:accessright].eql?('0')
-	    @user.assign_accessright(params[:accessright]) 
-  	  end
-	  unless params[:selected_ids].blank?
-        array_classroom_ids = params[:selected_ids].split(' ') 
-	    array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-	  end  
-	  add_user_level_setting if @user.role.name.eql?('Student')
-	  redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-	  #@user.welcome_email(path)
-    else 
-      render :action=> 'new'
-	end
-  end
-   
-  def update
-    path = request.env['HTTP_HOST']
-	if @user.update_attributes(user_params)
-	  unless params[:accessright].blank?
-	    if params[:accessright].eql?('0')
-		  can_manage_access_right_id = get_manage_student_accessright
-	      @accessright_exist = @user.user_accessrights.where("accessright_id = #{can_manage_access_right_id.id}").last
-		  unless @accessright_exist.blank?
-		    @accessright_exist.update_attributes(:accessright_id=>can_manage_access_right_id.id, :access_flag=>true, :role_id=>@user.role_id)
-		  end
+    unless current_user.is_web_admin?
+	  current_user_read_accessrights
+	  unless @access_right_name.kind_of?(Array)
+        if @current_user_accessrights.include?(@access_right_name)
+          user_show
 	    else
-	      @accessright_exist = @user.user_accessrights.where("accessright_id = #{params[:accessright]}").last
-		  unless @accessright_exist.blank?
- 	        @accessright_exist.update_attributes(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id) 
- 	      else
-		    @user.user_accessrights.create(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id)
-		  end
-        end
-	  end 
-    array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
-    unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-      @user.user_classrooms.destroy_all
-      array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-    end 
-	  add_user_level_setting if @user.role.name.eql?('Student')
-	  redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
-	  if  params[:send_mail].blank?
-	    #@user.user_details_change_email(current_user.first_name, path)
+	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :read, User)
+	    end
+	  else
+	    user_show
 	  end
 	else
-	  render :action=> 'new'
+	  user_show
+	end
+  end
+  
+  def user_index
+    if !@role_id.blank? && params[:school_id].blank?
+      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+      set_bread_crumb(@role_id.id)
+    elsif !@role_id.blank? && !params[:school_id].blank?
+      @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+      set_bread_crumb(@role_id.id, @school.id)
+    else
+      @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+    end
+  end
+  
+  def user_show
+    @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
+    @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
+  end
+
+  def current_user_read_accessrights
+	@current_user_accessrights = []
+    @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
+	if @role_id.name.eql?('School Admin')
+	  @access_right_name = 'View School Admin'
+	elsif @role_id.name.eql?('Teacher')
+	  @access_right_name = 'View Teacher'
+	elsif @role_id.name.eql?('Student')
+	  @access_right_name = 'View Student'
+	  unless current_user.user_accessrights.blank?
+	    @access_right_name = []
+		@access_right_name << 'View Student'
+		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
+      end
+	end
+  end
+  
+  def new 
+    unless current_user.is_web_admin?
+	  current_user_create_accessrights
+	  unless @access_right_name.kind_of?(Array)
+        if @current_user_accessrights.include?(@access_right_name)
+	      user_new
+	    else
+	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :create, User)
+	    end
+	  else
+	    user_new
+	  end 
+	else
+	  user_new
+	end
+  end
+  
+  def create
+    unless current_user.is_web_admin?
+      @role_id = Role.find(params[:user][:role_id])
+	  current_user_create_accessrights
+	  unless @access_right_name.kind_of?(Array)
+	    if @current_user_accessrights.include?(@access_right_name)
+          user_create
+	    else
+	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :create, User)
+	    end
+	  else
+	    user_create
+	  end
+	else
+      user_create
+	end
+  end
+  
+  def user_new
+    @user = User.new
+    unless params[:school_id].blank?
+      set_bread_crumb(@role_id.id, @school.id)
+    else
+      set_bread_crumb(@role_id.id)
+    end
+    @assigned_classrooms = []
+    @parent = @user.parents.build
+  end
+   
+  def user_create
+    @user = User.new(user_params)
+    path = request.env['HTTP_HOST']
+    if @user.save
+      unless params[:accessright].eql?('0')
+        @user.assign_accessright(params[:accessright]) 
+      end
+      unless params[:selected_ids].blank?
+        array_classroom_ids = params[:selected_ids].split(' ') 
+        array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+      end  
+      add_user_level_setting if @user.role.name.eql?('Student')
+      redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
+      #@user.welcome_email(path)
+    else 
+      render :action=> 'new'
+    end
+  end
+   
+  def current_user_create_accessrights
+    @current_user_accessrights = []
+    @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
+    if @role_id.name.eql?('School Admin')
+      @access_right_name = 'Create School Admin'
+    elsif @role_id.name.eql?('Teacher')
+	  @access_right_name = 'Create Teacher'
+    elsif @role_id.name.eql?('Student')
+      @access_right_name = 'Create Student'
+	  unless current_user.user_accessrights.blank?
+	    @access_right_name = []
+		@access_right_name << 'Create Student'
+		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
+      end
+    end
+  end 
+   
+  def edit
+    unless current_user.is_web_admin?
+   	  current_user_update_accessrights
+	  unless @access_right_name.kind_of?(Array)
+        if @current_user_accessrights.include?(@access_right_name)
+	      user_edit
+	    else
+	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+	    end
+	  else
+	    user_edit
+	  end
+	else
+	  user_edit
+	end
+  end 
+   
+  def update
+    unless current_user.is_web_admin?
+      current_user_update_accessrights
+	  unless @access_right_name.kind_of?(Array)
+        if @current_user_accessrights.include?(@access_right_name)
+          user_update  
+	    else
+	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+	    end
+	  else
+	    user_update
+      end
+    else
+      user_update
+	end	  
+  end
+  
+  def user_edit
+    @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
+    set_bread_crumb(@role_id.id, @user.school_id)
+    @assigned_classrooms = @user.classrooms if @user && @user.classrooms
+  end
+  
+  def user_update
+    path = request.env['HTTP_HOST']
+    if @user.update_attributes(user_params)
+      unless params[:accessright].blank?
+        if params[:accessright].eql?('0')
+	      can_manage_access_right_id = get_manage_student_accessright
+          @accessright_exist = @user.user_accessrights.where("accessright_id = #{can_manage_access_right_id.id}").last
+	      unless @accessright_exist.blank?
+	        @accessright_exist.update_attributes(:accessright_id=>can_manage_access_right_id.id, :access_flag=>true, :role_id=>@user.role_id)
+	      end
+        else
+          @accessright_exist = @user.user_accessrights.where("accessright_id = #{params[:accessright]}").last
+	      unless @accessright_exist.blank?
+            @accessright_exist.update_attributes(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id) 
+          else
+	        @user.user_accessrights.create(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id)
+	      end
+        end
+      end 
+      array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
+      unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
+        @user.user_classrooms.destroy_all
+        array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+      end 
+      add_user_level_setting if @user.role.name.eql?('Student')
+      redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
+      if  params[:send_mail].blank?
+        #@user.user_details_change_email(current_user.first_name, path)
+      end
+    else
+      render :action=> 'new'
+    end
+  end
+  
+  def current_user_update_accessrights
+   	@current_user_accessrights = []
+    @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
+	if @user.role.name.eql?('School Admin')
+	  @access_right_name = 'Update School Admin'
+	elsif @user.role.name.eql?('Teacher')
+	  @access_right_name = 'Update Teacher'
+	elsif @user.role.name.eql?('Student')
+	  @access_right_name = 'Update Student'
+	  unless current_user.user_accessrights.blank?
+	    @access_right_name = []
+		@access_right_name << 'Create Student'
+		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
+      end
 	end
   end
   
   def destroy
-    unless @user.license.blank?
-  	  @user.remove_license(@user.license_id)
-	  remove_license_from_user
-	end
-	  @user.update_attributes(:delete_flag=>true)
-	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.' 
+    unless current_user.is_web_admin?
+	  current_user_destroy_accessrights
+	  unless @access_right_name.kind_of?(Array)
+        if @current_user_accessrights.include?(@access_right_name)
+		 p "AAAAAA"
+          user_destroy 
+	    else
+		p "BBBBB"
+	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :destroy, User)
+	    end
+	  else
+	    p "CCCCCC"
+	    user_destroy
+	  end
+	else
+	 p "DDDDD"
+	  user_destroy
+	end  
   end
 
+  def user_destroy
+    unless @user.license.blank?
+      @user.remove_license(@user.license_id)
+      remove_license_from_user
+    end
+      @user.update_attributes(:delete_flag=>true)
+    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.'
+  end
+  
+  def current_user_destroy_accessrights
+	@current_user_accessrights = []
+    @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
+	if @user.role.name.eql?('School Admin')
+	  @access_right_name = 'Delete School Admin'
+	elsif @user.role.name.eql?('Teacher')
+	  @access_right_name = 'Delete Teacher'
+	elsif @user.role.name.eql?('Student')
+	  @access_right_name = 'Delete Student'
+	  unless current_user.user_accessrights.blank?
+	    @access_right_name = []
+		@access_right_name << 'Delete Student'
+		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
+      end
+	end
+	p "dfsfsdf=========sfsdfsdf",@access_right_name
+  end
+  
   def add_user_level_setting 
     if @user.assign_reading_based_on.eql?('grade')
 	  user_level = @user.grade
@@ -127,7 +320,7 @@ class UsersController < ApplicationController
   end
   
   def get_school_specific_classrooms
-    @school_specific_classrooms = @school.classrooms unless params[:school_id].blank? 
+    @school_specific_classrooms = @school.classrooms("delete_flag is not true")	unless params[:school_id].blank? 
   end
   
   def get_manage_student_accessright
@@ -145,7 +338,7 @@ class UsersController < ApplicationController
   
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
-    @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) ")
+    @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
   

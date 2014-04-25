@@ -41,7 +41,6 @@ BooksThatGrow::Application.routes.draw do
       get 'remove_license'
       get 'get_user_accessright'
       post 'update_user_accessright'
-
       post 'assign_license'
       get 'download_sample_list'
       get 'import_list'

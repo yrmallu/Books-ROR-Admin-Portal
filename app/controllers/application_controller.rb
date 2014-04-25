@@ -111,14 +111,10 @@ class ApplicationController < ActionController::Base
     end
     data_list
   end
-
-  # rescue_from CanCan::AccessDenied do |exception|
-#     redirect_to root_url, :alert => exception.message
-#   end	
   
   #enable_authorization
     rescue_from CanCan::Unauthorized do |exception|
-      redirect_to root_url, :alert => exception.message
+      redirect_to dashboard_users_path, :alert => exception.message
     end
 
   def set_bread_crumb(*extras)

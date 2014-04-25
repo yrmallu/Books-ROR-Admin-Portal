@@ -1,4 +1,6 @@
 class SchoolsController < ApplicationController
+
+  before_action :logged_in?
   before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list], except: [:save_school_list]
   before_action :get_schools, only: [:index]
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
