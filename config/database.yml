@@ -29,7 +29,7 @@ production:
   encoding: unicode
   database: rails_app
   pool: 5
-  host: 54.83.84.222
+  host: localhost
   username: postgres
   password: cuelogic
   port: 5432 

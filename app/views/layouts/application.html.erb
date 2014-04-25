@@ -39,7 +39,7 @@
       <ul class="nav nav-pills nav-stacked nav-bracket page-sidebar" id="main-menu" data-no-turbolink>
 		<!-- <li id="li_dashboard"><%= link_to '<i class="fa fa-home"></i>'.html_safe + "Dashboard", root_path %></li> -->
 		 <!-- <span class="arrow arrw-pos" container_li="li_dashboard"></span> -->
-		
+		<%unless current_user.blank?%>
 		<% if current_user.is_web_admin?%>
 		<li class="nav-parent" id="li_school"><a href=""><i class="glyphicon glyphicon-book"></i> <span>School</span></a>
 			<span class="arrow arrw-pos" container_li="li_school"></span>
@@ -113,6 +113,7 @@
           </ul>
         </li>
 		<%end%>
+		<%end%>
       </ul>
     </div>
   </div>
@@ -129,10 +130,12 @@
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+				<%unless current_user.blank?%>  
 				<% if current_user.role.name.eql?('Web Admin')%>  
 				    <li><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "My Profile", user_path(current_user, :role_id=>current_user.role_id) %></li>  
 				<%else%>
 				    <li><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "My Profile", user_path(current_user, :role_id=>current_user.role_id, :school_id=>current_user.school_id) %></li>  
+				<%end%>
 				<%end%>
 				<li><%= link_to '<i class="glyphicon glyphicon-log-out"></i>'.html_safe + "Log Out", signout_path, method: :delete %></li>
               </ul>
