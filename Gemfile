@@ -14,7 +14,8 @@ gem 'pg', '0.17.1'
 # Use SCSS for stylesheets
 gem 'sass-rails', '4.0.2'
 
-gem 'cancan', github: 'ryanb/cancan', branch: '2.0'
+#gem 'cancan', github: 'ryanb/cancan', branch: '2.0'
+gem 'cancan', :github => 'ryanb/cancan', :branch => '2.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '2.5.0'
@@ -39,6 +40,7 @@ gem 'bcrypt-ruby', '3.1.5'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
+gem 'therubyracer', :platforms => :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails', '3.1.0'
@@ -56,7 +58,8 @@ gem 'rubyzip', :git => 'git://github.com/davidhooey/rubyzip.git'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', '0.4.0',  require: false
+  #gem 'sdoc', '0.4.0',  require: false
+  gem 'sdoc', '0.4.0',  :require => false
 end
 
 # Use unicorn as the app server

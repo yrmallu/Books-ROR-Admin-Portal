@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140419121059) do
+ActiveRecord::Schema.define(version: 20140418134603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,12 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.datetime "epub_updated_at"
   end
 
+  create_table "classroom_books", force: true do |t|
+    t.integer "classroom_id"
+    t.integer "book_id"
+    t.integer "user_id"
+  end
+
   create_table "classrooms", force: true do |t|
     t.integer  "code"
     t.string   "name"
@@ -53,7 +59,7 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.datetime "updated_at"
     t.hstore   "classroom_count"
     t.integer  "school_id"
-    t.boolean  "delete_flag"
+    t.boolean  "delete_flag",            default: false
     t.date     "school_year_start_date"
     t.date     "school_year_end_date"
   end
@@ -88,8 +94,14 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.integer  "school_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "delete_flag"
+    t.boolean  "delete_flag",        default: false
     t.string   "license_batch_name"
+  end
+
+  create_table "notes", force: true do |t|
+    t.integer "user_id"
+    t.integer "book_id"
+    t.text    "note_data"
   end
 
   create_table "parents", force: true do |t|
@@ -148,7 +160,18 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.integer  "role_id"
   end
 
-  create_table "user_classrooms", force: true do |t|
+  create_table "user_books", id: false, force: true do |t|
+    t.integer "id",                 limit: 8
+    t.hstore  "reading_percentage"
+    t.hstore  "last_reading_info"
+    t.integer "user_id",            limit: 8
+    t.string  "device_id"
+    t.integer "book_id"
+    t.string  "reading_info"
+  end
+
+  create_table "user_classrooms", id: false, force: true do |t|
+    t.integer "id",           default: "nextval('user_classrooms_id_seq'::regclass)", null: false
     t.integer "user_id"
     t.integer "classroom_id"
     t.integer "role_id"
@@ -165,7 +188,7 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.integer  "userlevel"
     t.string   "reference"
     t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "updated_at",      default: "now()"
   end
 
   create_table "users", force: true do |t|
@@ -192,5 +215,7 @@ ActiveRecord::Schema.define(version: 20140419121059) do
 
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
   add_index "users", ["school_id"], name: "index_users_on_school_id", using: :btree
+
+  
 
 end

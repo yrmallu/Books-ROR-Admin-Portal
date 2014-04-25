@@ -113,6 +113,7 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.2.0)
       launchy (~> 2.2)
+    libv8 (3.16.14.3)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -159,6 +160,7 @@ GEM
     rake (10.3.0)
     rdoc (4.1.1)
       json (~> 1.4)
+    ref (1.0.5)
     roo (1.13.2)
       nokogiri
       rubyzip
@@ -197,6 +199,9 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
+    therubyracer (0.12.0)
+      libv8 (~> 3.16.14.0)
+      ref
     thor (0.19.1)
     thread_safe (0.3.3)
     tilt (1.4.1)
@@ -243,5 +248,6 @@ DEPENDENCIES
   rubyzip!
   sass-rails (= 4.0.2)
   sdoc (= 0.4.0)
+  therubyracer
   turbolinks (= 2.2.1)
   uglifier (= 2.5.0)

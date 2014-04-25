@@ -2,33 +2,40 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-      user ||= User.new
+    unless user.blank?
       if user.is_web_admin?
         can :access, :all
       else 
         user_rights = user.user_permission_names.collect{|i| i.name}
 		p "final accessrights=====",user_rights
 
-		can :create, :users, :role_id => user.role_id if user_rights.include?("Create School Admin")
- 		can :create, :users, :role_id => user.role_id if user_rights.include?("Create Teacher")
- 		can :create, :users, :role_id => user.role_id if user_rights.include?("Create Student")
+		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Create School Admin")
+ 		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Create Teacher")
+ 		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Create Student")
+		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Can Manage Student")
 		can :create_sa, :users if user_rights.include?("Create School Admin")
 		can :create_teacher, :users if user_rights.include?("Create Teacher")
 		can :create_student, :users if user_rights.include?("Create Student")
 		can :manage_student, :users if user_rights.include?("Can Manage Student")
+		can :get_user_school_licenses, :users if user_rights.include?("Can Assign/Update License")
+		can :remove_license, :users if user_rights.include?("Can Remove License")
+		can :get_user_school_licenses, :users if user_rights.include?("Can Manage Student")
+		can :remove_license, :users if user_rights.include?("Can Manage Student")
 		
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View Web Admin")
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View School Admin")
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View Teacher")
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View Student")
+		can :read, :users, :role_id => user.role_id if user_rights.include?("Can Manage Student")
 		can :read_sa, :users if user_rights.include?("View School Admin")
 		can :read_teacher, :users if user_rights.include?("View Teacher")
 		can :read_student, :users if user_rights.include?("View Student")
 		can :manage_student, :users if user_rights.include?("Can Manage Student")
 		
-		can [:update, :read], :users, :role_id => user.role_id if user_rights.include?("Update School Admin")
-		can [:update, :read], :users, :role_id => user.role_id if user_rights.include?("Update Teacher")
-		can [:update, :read], :users, :role_id => user.role_id if user_rights.include?("Update Student")
+		can can [:update, :edit, :read], :users, :users if user_rights.include?("Update School Admin")
+		can can [:update, :edit, :read], :users if user_rights.include?("Update Teacher")
+		can can [:update, :edit, :read], :users if user_rights.include?("Update Student")
+		can can [:update, :edit, :read], :users if user_rights.include?("Can Manage Student")
 		can [:update_sa, :read_sa], :users if user_rights.include?("Update School Admin")
 		can [:update_teacher, :read_teacher], :users if user_rights.include?("Update Teacher")
 		can [:update_student, :read_student], :users if user_rights.include?("Update Student")
@@ -37,9 +44,10 @@ class Ability
 		can [:destroy, :read], :users, :role_id => user.role_id if user_rights.include?("Delete School Admin")
 		can [:destroy, :read], :users, :role_id => user.role_id if user_rights.include?("Delete Teacher")
 		can [:destroy, :read], :users, :role_id => user.role_id if user_rights.include?("Delete Student")
-		can [:destroy_sa, :read], :users if user_rights.include?("Delete School Admin")
-		can [:destroy_teacher, :read], :users if user_rights.include?("Delete Teacher")
-		can [:destroy_student, :read], :users if user_rights.include?("Delete Student")
+		can [:destroy, :read], :users if user_rights.include?("Can Manage Student")
+		can [:destroy_sa, :read_sa], :users if user_rights.include?("Delete School Admin")
+		can [:destroy_teacher, :read_teacher], :users if user_rights.include?("Delete Teacher")
+		can [:destroy_student, :read_student], :users if user_rights.include?("Delete Student")
 		can :manage_student, :users if user_rights.include?("Can Manage Student")
 		
 		can :create, :schools if user_rights.include?("Create School")
@@ -86,5 +94,6 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
   end
 end

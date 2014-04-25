@@ -10,6 +10,8 @@ class School < ActiveRecord::Base
 	
 	accepts_nested_attributes_for :licenses, :allow_destroy=> true, :reject_if => :all_blank
 	
+	scope :by_newest, -> {order("created_at DESC")}
+	
 	before_create :generate_random_code
 	
 	paginates_per 10

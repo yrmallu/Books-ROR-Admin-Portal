@@ -39,11 +39,11 @@ class ApplicationController < ActionController::Base
 # 	else
 # 	  @schools = @current_user.school
 # 	end
-    @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
+    @schools = School.by_newest.page params[:page]
   end
   
   def get_all_schools
-    @schools = School.where("delete_flag is not true").order("created_at DESC")
+    @schools = School.by_newest
   end
   
   def get_school_by_id
@@ -111,14 +111,10 @@ class ApplicationController < ActionController::Base
     end
     data_list
   end
-
-  # rescue_from CanCan::AccessDenied do |exception|
-#     redirect_to root_url, :alert => exception.message
-#   end	
   
   #enable_authorization
     rescue_from CanCan::Unauthorized do |exception|
-      redirect_to root_url, :alert => exception.message
+      redirect_to dashboard_users_path, :alert => exception.message
     end
 
   def set_bread_crumb(*extras)
