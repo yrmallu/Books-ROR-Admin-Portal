@@ -183,12 +183,6 @@ ActiveRecord::Schema.define(version: 20140423072350) do
     t.integer "role_id"
   end
 
-  create_table "user_classrooms_backup", force: true do |t|
-    t.integer "user_id"
-    t.integer "classroom_id"
-    t.integer "role_id"
-  end
-
   create_table "userlevel_settings", force: true do |t|
     t.integer  "book_id"
     t.integer  "user_id"
@@ -227,23 +221,5 @@ ActiveRecord::Schema.define(version: 20140423072350) do
 
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
   add_index "users", ["school_id"], name: "index_users_on_school_id", using: :btree
-
-  create_table "users_bk", id: false, force: true do |t|
-    t.integer  "id",                  limit: 8, default: "nextval('users_id_seq'::regclass)", null: false
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "username"
-    t.date     "license_expiry_date"
-    t.boolean  "delete_flag",                   default: false
-    t.string   "email",                         default: "",                                  null: false
-    t.integer  "device_id"
-    t.integer  "role_id"
-    t.integer  "school_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.hstore   "userinfo"
-    t.string   "password_digest"
-    t.integer  "license_id"
-  end
 
 end
