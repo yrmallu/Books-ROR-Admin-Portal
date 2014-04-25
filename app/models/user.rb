@@ -22,6 +22,11 @@ class User < ActiveRecord::Base
   
   scope :by_newest, -> {order("created_at DESC")}
   
+  scope :web_admins, -> { where(role_id: 1) }
+  scope :school_admins, -> { where(role_id: 2) }
+  scope :teachers, -> { where(role_id: 3) }
+  scope :students, -> { where(role_id: 4) }
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, :presence=> true, :format=>{:with=>VALID_EMAIL_REGEX},:uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
   
@@ -41,13 +46,17 @@ class User < ActiveRecord::Base
   	 self.role.name.eql?("School Admin") unless self.role.blank?
   end
   
+  def assign_accessright(accessright_id)
+    self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?
+  end
+  
   def update_license_count
     if self.license_id_was.blank?
-	  assign_new_license unless self.license_id.blank?
-	elsif self.license_id != (self.license_id_was)
-	  remove_license(self.license_id_was)
-	  assign_new_license unless self.license_id.blank?
-	end	
+  	  assign_new_license unless self.license_id.blank?
+  	elsif self.license_id != (self.license_id_was)
+  	  remove_license(self.license_id_was)
+  	  assign_new_license unless self.license_id.blank?
+  	end	
   end
   
   def assign_new_license
@@ -73,10 +82,6 @@ class User < ActiveRecord::Base
   def user_details_change_email(current_user, path)
     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
 	UserMailer.user_details_changed(user_info).deliver
-  end
-  
-  def assign_accessright(accessright_id)
-    self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?
   end
   
   def access_to_remove_or_add(options={})
@@ -113,4 +118,23 @@ class User < ActiveRecord::Base
     Rails.cache.delete('user_accessrights_'+self.id.to_s) if self.role_id_changed?
   end
   
+  def self.search(query_string, role_id, school_id)
+    roleid = role_id.to_i
+    schoolid = school_id.to_i 
+    user = User.arel_table
+    users = User.where(
+      user[:role_id].eq(roleid).and(
+        user[:school_id].eq(schoolid).and(
+          user[:last_name].matches(query_string).or(
+            user[:username].matches(query_string).or(
+              user[:email].matches(query_string).or(
+                user[:email].matches(query_string)
+                )
+              )
+            )
+          )
+        )
+      )
+  end
+
 end

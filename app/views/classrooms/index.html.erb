@@ -7,13 +7,13 @@
 			<% if can? :create, :classrooms %> 
 			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
 			<%end%>
-			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_element',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	 	</div>
 	 <div class="table-responsive">
 		<table class="table class_common_table" id="classroom_table">
             <thead>
                 <tr>
-                	<th>Remove all &nbsp; <%= check_box_tag 'classroom_id[]', '', false, :class => "select-all" %></th>
+                	<th><%= link_to :All, 'javascript:checkAll("classroom")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("classroom")', :class => "lnk-typ2" %></th>
 					<th>Classroom Code</th>
                     <th>Classroom Name</th>
 					<th>School Year</th>
@@ -26,7 +26,7 @@
               <tbody>
 				 <% @classrooms.each do |classroom| %>
 				    <tr class="odd gradeX" data-no-turbolink>
-                 	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "check-box" %></td>	
+                 	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "classroom-check-box" %></td>	
                       <td class=""><%= classroom.code %></td>
                       <td class=""><%= link_to classroom.name, classroom_path(classroom, :school_id=>@school.id), :title=>"View Classroom Details" %></td>
 					  <td class="">
@@ -34,10 +34,10 @@
 						      <%= classroom.school_year_start_date.year %> - <%= classroom.school_year_end_date.year %>
 						  <%end%>
 				      </td>
-					  <td class=""><%=  %></td>
-					  <td class=""><%=  %></td>
-					  <td class=""><%=  %></td>
-                      <td>
+					  <td class="" align="center"><%= classroom.users.school_admins.count %></td>
+					  <td class="" align="center"><%= classroom.users.teachers.count %></td>
+					  <td class="" align="center"><%= classroom.users.students.count %></td>
+                      <td data-no-turbolink>
 						  <% if can? :update, :classrooms %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
 						  <%end%>

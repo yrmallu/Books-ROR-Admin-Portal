@@ -1,19 +1,30 @@
-<%= form_tag 'schools/delete_school' do %>
+
 <div class="panel panel-default">
 	<div class="panel-body"> 
+		
+		<%= text_field_tag :text_field_search %>
+		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
+
+		<button class="btn btn-primary btn-xs" id="search" >
+						    Search
+						    </button>
+
+		<%= form_tag 'schools/delete_school' do %>
 		<div class="index_page_btns" data-no-turbolink>
+
+			<%=link_to 'List All Records', schools_path, :class=>"btn btn-success btn-xs" if @search_flag %>
 			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 			
 			<% if can? :create, :schools %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
-			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_element',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
 		</div>
 		 
 		<div class="table-responsive">
-			<table class="table class_common_table" id="school_table">
+			<table class="table" id="school_table">
 	            <thead>
 	                <tr>
-	                	<th>Remove all &nbsp; <%= check_box_tag 'school_id[]', '', false, :class => "all-school" %></th>
+	                	<th><%= link_to :All, 'javascript:checkAll("school")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("school")', :class => "lnk-typ2" %>  </th>
 	                    <th>School Code</th>
 	                    <th>School Name</th>
 	                    <th>District</th>
@@ -24,9 +35,9 @@
 	                </tr>
 	            </thead>
 	            <tbody>
-					<% @schools.each do |school| %>
-		                <tr class="odd gradeX" data-no-turbolink>
-		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "check-box" %></td>	
+					<% @schools.try(:each) do |school| %>
+		                <tr class="odd gradeX">
+		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "school-check-box" %></td>	
 		                  <td class=""><%= school.code %></td>
 		                  <td class=""><%= link_to school.name, school_path(school), :title=>"View School Details" %></td>
 		                  <td class=""><%= school.district %></td>
@@ -72,9 +83,10 @@
 		<div data-no-turbolink>
 			<%= paginate @schools %>
 		</div>	
+	<% end %>
 	</div>	
 </div>	  
-<% end %>		  
+		  
 
 
 <div class="modal fade" id="school_license_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

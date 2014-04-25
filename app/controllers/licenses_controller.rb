@@ -20,6 +20,7 @@ class LicensesController < ApplicationController
   def edit
      @license = License.find(params[:id])
      @school_id = @license.school_id
+     @licenses = License.where("school_id = #{params[:school_id]} AND delete_flag is not true").order("created_at DESC").page params[:page]
   end
 
   def create

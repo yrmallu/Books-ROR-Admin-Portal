@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
+  #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
@@ -27,6 +28,7 @@ class UsersController < ApplicationController
 	else
 	  user_index
 	end
+	
   end
   
   def show
@@ -47,54 +49,19 @@ class UsersController < ApplicationController
   end
   
   def user_index
-    if !@role_id.blank? && params[:school_id].blank?
-      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
-      set_bread_crumb(@role_id.id)
-    elsif !@role_id.blank? && !params[:school_id].blank?
-      @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
-      set_bread_crumb(@role_id.id, @school.id)
+    if params[:query_string] && !(params[:query_string].blank?) 
+      @users = User.search("%#{params[:query_string]}%", params[:role_id], params[:school_id]).page(params[:page]).per(10) 
     else
-      @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+      if !@role_id.blank? && params[:school_id].blank?
+        @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+  	  set_bread_crumb(@role_id.id)
+      elsif !@role_id.blank? && !params[:school_id].blank?
+        @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+  	    set_bread_crumb(@role_id.id, @school.id)
+  	  else
+        @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+  	  end
     end
-  end
-  
-  def user_show
-    @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
-    @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
-  end
-
-  def current_user_read_accessrights
-	@current_user_accessrights = []
-    @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
-	if @role_id.name.eql?('School Admin')
-	  @access_right_name = 'View School Admin'
-	elsif @role_id.name.eql?('Teacher')
-	  @access_right_name = 'View Teacher'
-	elsif @role_id.name.eql?('Student')
-	  @access_right_name = 'View Student'
-	  unless current_user.user_accessrights.blank?
-	    @access_right_name = []
-		@access_right_name << 'View Student'
-		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
-      end
-	end
-  end
-  
-  def new 
-    unless current_user.is_web_admin?
-	  current_user_create_accessrights
-	  unless @access_right_name.kind_of?(Array)
-        if @current_user_accessrights.include?(@access_right_name)
-	      user_new
-	    else
-	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :create, User)
-	    end
-	  else
-	    user_new
-	  end 
-	else
-	  user_new
-	end
   end
   
   def create
@@ -139,7 +106,7 @@ class UsersController < ApplicationController
       end  
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-      #@user.welcome_email(path)
+      @user.welcome_email(path)
     else 
       render :action=> 'new'
     end
@@ -229,7 +196,7 @@ class UsersController < ApplicationController
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
       if  params[:send_mail].blank?
-        #@user.user_details_change_email(current_user.first_name, path)
+        @user.user_details_change_email(current_user.first_name, path)
       end
     else
       render :action=> 'new'
@@ -258,18 +225,14 @@ class UsersController < ApplicationController
 	  current_user_destroy_accessrights
 	  unless @access_right_name.kind_of?(Array)
         if @current_user_accessrights.include?(@access_right_name)
-		 p "AAAAAA"
           user_destroy 
 	    else
-		p "BBBBB"
 	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :destroy, User)
 	    end
 	  else
-	    p "CCCCCC"
 	    user_destroy
 	  end
 	else
-	 p "DDDDD"
 	  user_destroy
 	end  
   end
@@ -298,7 +261,7 @@ class UsersController < ApplicationController
 		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
       end
 	end
-	p "dfsfsdf=========sfsdfsdf",@access_right_name
+
   end
   
   def add_user_level_setting 
@@ -312,10 +275,12 @@ class UsersController < ApplicationController
   
   def delete_user
     deleted_user = ''
+    
 	User.where(id: params[:user_ids]).each do |user|
 	  deleted_user = user
       user.update_attributes(delete_flag: true)
     end
+  
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
   end
   

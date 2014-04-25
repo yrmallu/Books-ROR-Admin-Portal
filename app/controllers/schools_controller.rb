@@ -8,6 +8,12 @@ class SchoolsController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
+    if params[:query_string] && !(params[:query_string].blank?)
+      @schools = School.search("%#{params[:query_string]}%").page(params[:page]).per(10) 
+      @search_flag = true
+    else
+      @search_flag = false
+    end
     @school_admin = Role.where("name = 'School Admin'").last
 	@teacher = Role.where("name = 'Teacher'").last
 	@student = Role.where("name = 'Student'").last
@@ -121,16 +127,14 @@ class SchoolsController < ApplicationController
    end
 
   def update_license_expiration_date
-    if params[:license_expiry_date] && !params[:license_expiry_date].blank?
-	  params[:license_expiry_date].each do |k,v| 
-	    if v && !v.blank? 
-	      #binding.pry
-		  License.find(k).update_attributes(:expiry_date => v, :used_liscenses => '0') 
-		  #User.where("license_id = #{k}").each{ |user| user.update_attributes(:license_expiry_date => '', :license_id => '')}
-	    end 
-	  end  
-	end
- 	#params[:license_ids].each{|lic| License.find(lic).update_attributes(:expiry_date => nil) } if params[:license_ids] && !params[:license_ids].blank?
+    params[:license_expiry_date].each do |k,v|
+      lic = License.find(k) 
+      if v && !v.blank? && !(lic.expiry_date == v.to_date)
+        lic.update_attributes(:expiry_date => v) 
+        lic.users.each{|u| u.update_attributes(:license_expiry_date => v)} if lic.users && !lic.users.blank?
+      end
+   end if params[:license_expiry_date] && !params[:license_expiry_date].blank?
+    #params[:license_ids].each{|lic| License.find(lic).update_attributes(:expiry_date => nil) } if params[:license_ids] && !params[:license_ids].blank?
     redirect_to schools_url 
   end
   
