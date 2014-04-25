@@ -2,6 +2,7 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
+  #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent] 
   before_action :get_manage_student_accessright, :only => [:new, :edit]
@@ -27,6 +28,7 @@ class UsersController < ApplicationController
 	else
 	  user_index
 	end
+	
   end
   
   def show
@@ -273,10 +275,12 @@ class UsersController < ApplicationController
   
   def delete_user
     deleted_user = ''
+    
 	User.where(id: params[:user_ids]).each do |user|
 	  deleted_user = user
       user.update_attributes(delete_flag: true)
     end
+  
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
   end
   

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140418134603) do
+ActiveRecord::Schema.define(version: 20140423072350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,10 +30,16 @@ ActiveRecord::Schema.define(version: 20140418134603) do
 
   create_table "books", force: true do |t|
     t.string   "title"
-    t.string   "description"
+    t.text     "description"
     t.string   "author"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.hstore   "preview_name"
+    t.string   "book_file_name"
+    t.integer  "chapters"
+    t.string   "book_unique_id"
+    t.hstore   "thumb_name"
+    t.string   "cover"
+    t.string   "interest_level",          limit: 60
+    t.string   "delete_flag",             limit: 2
     t.string   "book_cover_file_name"
     t.string   "book_cover_content_type"
     t.integer  "book_cover_file_size"
@@ -177,6 +183,12 @@ ActiveRecord::Schema.define(version: 20140418134603) do
     t.integer "role_id"
   end
 
+  create_table "user_classrooms_backup", force: true do |t|
+    t.integer "user_id"
+    t.integer "classroom_id"
+    t.integer "role_id"
+  end
+
   create_table "userlevel_settings", force: true do |t|
     t.integer  "book_id"
     t.integer  "user_id"
@@ -216,6 +228,22 @@ ActiveRecord::Schema.define(version: 20140418134603) do
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
   add_index "users", ["school_id"], name: "index_users_on_school_id", using: :btree
 
-  
+  create_table "users_bk", id: false, force: true do |t|
+    t.integer  "id",                  limit: 8, default: "nextval('users_id_seq'::regclass)", null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "username"
+    t.date     "license_expiry_date"
+    t.boolean  "delete_flag",                   default: false
+    t.string   "email",                         default: "",                                  null: false
+    t.integer  "device_id"
+    t.integer  "role_id"
+    t.integer  "school_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.hstore   "userinfo"
+    t.string   "password_digest"
+    t.integer  "license_id"
+  end
 
 end

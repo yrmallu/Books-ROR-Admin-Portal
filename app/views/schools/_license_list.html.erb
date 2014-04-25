@@ -28,7 +28,7 @@
 					        <td class=""><%= lic.users.school_admins.count %></td>
 					        <td class=""><%= lic.users.teachers.count %></td>
 					        <td class=""><%= lic.users.students.count %></td>
-                            <td><%= text_field_tag "license_expiry_date[#{lic.id}]","" ,:class=>"form-control datepicker", :placeholder=>"yyyy-mm-dd" %></td>
+                            <td><%= text_field_tag "license_expiry_date[#{lic.id}]",lic.expiry_date ,:class=>"form-control datepicker", :placeholder=>"yyyy-mm-dd" %></td>
                         </tr>
 				   <% end %>
                 </tbody>

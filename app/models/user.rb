@@ -52,11 +52,11 @@ class User < ActiveRecord::Base
   
   def update_license_count
     if self.license_id_was.blank?
-	  assign_new_license unless self.license_id.blank?
-	elsif self.license_id != (self.license_id_was)
-	  remove_license(self.license_id_was)
-	  assign_new_license unless self.license_id.blank?
-	end	
+  	  assign_new_license unless self.license_id.blank?
+  	elsif self.license_id != (self.license_id_was)
+  	  remove_license(self.license_id_was)
+  	  assign_new_license unless self.license_id.blank?
+  	end	
   end
   
   def assign_new_license
