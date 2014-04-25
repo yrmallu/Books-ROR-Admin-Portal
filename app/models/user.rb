@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   
-  paginates_per 10
+  paginates_per 5
   max_paginates_per 10
   
   has_secure_password
@@ -116,4 +116,23 @@ class User < ActiveRecord::Base
     Rails.cache.delete('user_accessrights_'+self.id.to_s) if self.role_id_changed?
   end
   
+  def self.search(query_string, role_id, school_id)
+    roleid = role_id.to_i
+    schoolid = school_id.to_i 
+    user = User.arel_table
+    users = User.where(
+      user[:role_id].eq(roleid).and(
+        user[:school_id].eq(schoolid).and(
+          user[:last_name].matches(query_string).or(
+            user[:username].matches(query_string).or(
+              user[:email].matches(query_string).or(
+                user[:email].matches(query_string)
+                )
+              )
+            )
+          )
+        )
+      )
+  end
+
 end

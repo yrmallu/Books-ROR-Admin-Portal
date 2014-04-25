@@ -1,70 +1,43 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 $(document).ready(function () {
-    // $('.book-check-box').change(function () {
-    //     var check = ($('.book-check-box').filter(":checked").length == $('.book-check-box').length);
-    //     $('.select-all-book').prop("checked", check);
-    // });
+	 $("#search").on('click',function(){
+	 	var search_query = jQuery.trim($('#text_field_search').val());
 
-    $("input[type='checkbox']").on('click',function(){
-		checkIfAnyBooks();
-	});
+		if (search_query.length > 0) {
+			url = document.URL.split("?");
+		   var new_url = url[0] + "?query_string=" + search_query;
+		   $(location).attr('href', new_url);
+		}
+	 	 
+	 });
 
-	// enable/disable delete button whether select-all check-box is checked or not
-  //   $('.select-all-book').click(function () {
-  //       if($("#books_table .book-check-box:checked").length > 0){
-		// 	// document.getElementById("delete_book").disabled=true;
-		// 	// $('#delete_book').attr('disabled', true)
-		// 	alert($("#books_table .book-check-box:checked").length);
+	  $("#user_search").on('click',function(){
+	 	var search_query = jQuery.trim($('#text_field_search').val());
+		if (search_query.length > 0) {
+			var new_url
+			var split_url = document.URL.split("?");
+			var split_params = split_url[1].split("&");
+			alert(split_params[split_params.length -1]);
+			if (split_params[split_params.length -1].split("=")[0] == "query_string"){
+				split_params.pop();
+			}
 
-		// }else{
-		// 	// document.getElementById("delete_book").disabled=false;  
-		// 	// $('#delete_book').removeAttr('disabled')
-		// 	alert($("#books_table .book-check-box:checked").length);
-		// }
-		// 	// $('#delete_book').removeAttr('disabled')
-  //   });
-	// enable/disable delete button whether any check-box is checked or not
-  //   $('.book-check-box').click(function () {
-  //      if($("#books_table .book-check-box:checked").length > 0)
-		// 	document.getElementById("delete_book").disabled=false;
-		// else
-		// 	document.getElementById("delete_book").disabled=true;  
-  //   }); 
+			if (split_url[1].split("&")[0].split("=")[0] == "page"){
+				// split_params = split_url[1].split("&");
+				split_params.shift();
+			    new_url = split_url[0] + "?" + split_params.join("&") + "&query_string=" + search_query;
+				
+			}else{
+				new_url = document.URL + "&query_string=" + search_query;
+			}
+			alert(split_params[split_params.length]);
+		   // var new_url = split_url[0] + split_params.join("&") + "&query_string=" + search_query;
+		   // alert("hiii");
+					   // var new_url = url[0] + "?query_string=" + search_query;
+		   $(location).attr('href', new_url);
+		}
+	 	 
+	 });
 });
-	
-// select-all check-box functionality
-// $(document).on("click",".select-all-book",function(){
-// 	$('.book-check-box').prop('checked', $(this).is(':checked'));
-// });
 
-function checkAllBooks(){
-	// alert("above checkall code");
-    $(".book-check-box").each(function(){$(this).prop("checked", true);});
-    // alert("below checkall code");
-    $(".lnk-typ1").css("color","#908a8a");
-    $(".lnk-typ2").css("color","#0d71b4");
-    checkIfAnyBooks();
-}
-
-function uncheckAllBooks(){
-    $(".book-check-box").each(function(){$(this).removeAttr("checked");});
-    $(".lnk-typ1").css("color","#0d71b4");
-    $(".lnk-typ2").css("color","#908a8a");
-   	checkIfAnyBooks();
-}
-
-function checkIfAnyBooks(){
-	// alert("hiiii");
-	// alert($("input[id='book_ids_']:checked").length);
-	if ($("input[id='book_ids_']:checked").length > 0){
-		
-    	$("#delete_book").removeAttr('disabled');
-    	// alert("hiiii");
-    	// $("#send_request").removeAttr('disabled');
-	}else{
-		// alert("hiiii");
-		$("#delete_book").attr('disabled', 'true');	
-		// $("#send_request").attr('disabled', 'true');
-	}
-}

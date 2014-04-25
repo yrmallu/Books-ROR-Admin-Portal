@@ -13,15 +13,20 @@ class UsersController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
-    if !@role_id.blank? && params[:school_id].blank?
-      @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
-	  set_bread_crumb(@role_id.id)
-    elsif !@role_id.blank? && !params[:school_id].blank?
-      @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
-	  set_bread_crumb(@role_id.id, @school.id)
-	else
-	  @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
-	end
+    if params[:query_string] && !(params[:query_string].blank?) 
+      @users = User.search("%#{params[:query_string]}%", params[:role_id], params[:school_id]).page(params[:page]).per(10) 
+      binding.pry
+    else
+      if !@role_id.blank? && params[:school_id].blank?
+        @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+  	    set_bread_crumb(@role_id.id)
+      elsif !@role_id.blank? && !params[:school_id].blank?
+        @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+  	    set_bread_crumb(@role_id.id, @school.id)
+  	  else
+  	    @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+  	  end
+    end
   end
   
   def show

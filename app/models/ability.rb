@@ -2,6 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+      user ||= User.new
       if user.is_web_admin?
         can :access, :all
       else 

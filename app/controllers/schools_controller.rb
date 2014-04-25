@@ -6,9 +6,15 @@ class SchoolsController < ApplicationController
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
+    if params[:query_string] && !(params[:query_string].blank?)
+      @schools = School.search("%#{params[:query_string]}%").page(params[:page]).per(10) 
+      @search_flag = true
+    else
+      @search_flag = false
+    end
     @school_admin = Role.where("name = 'School Admin'").last
-	@teacher = Role.where("name = 'Teacher'").last
-	@student = Role.where("name = 'Student'").last
+  	@teacher = Role.where("name = 'Teacher'").last
+  	@student = Role.where("name = 'Student'").last
   end
 
   def show
