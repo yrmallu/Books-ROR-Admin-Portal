@@ -32,4 +32,4 @@ production:
   host: localhost
   username: postgres
   password: cuelogic
-  port: 5432 
+  
