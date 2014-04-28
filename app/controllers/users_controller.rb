@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     else
       if !@role_id.blank? && params[:school_id].blank?
         @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
-  	    set_bread_crumb(@role_id.id)
+  	  set_bread_crumb(@role_id.id)
       elsif !@role_id.blank? && !params[:school_id].blank?
         @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
   	    set_bread_crumb(@role_id.id, @school.id)
@@ -156,7 +156,7 @@ class UsersController < ApplicationController
       end  
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-      #@user.welcome_email(path)
+      @user.welcome_email(path)
     else 
 	  @reading_grades = []
       @assigned_classrooms = []
