@@ -81,7 +81,7 @@ def parse_epub(book, path)
     # ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://107.21.250.244/books-that-grow-web-app/uploads_dir/js/#{js} \"></script>" }
     
 
-    binding.pry
+    
     path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{server_ip}" )
     # path_with_ip = dest_path.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
     index_file_string = generate_index_file_string xhtml_files, list_files, index_file_string, css_tags.join(" "), js_tags.join(" "), path_with_ip
