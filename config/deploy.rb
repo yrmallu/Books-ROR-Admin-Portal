@@ -15,7 +15,7 @@ default_run_options[:pty] = true
 set :rails_env, "production"
 set :deploy_via, :copy
 set :ssh_options, { :forward_agent => true}
-ssh_options[:keys] = %w(/Users/apple/Downloads/danielepub.pem)
+ssh_options[:keys] = %w(/Users/cuelogic/Downloads/danielepub.pem)
 set :keep_releases, 5
 server "54.83.84.222", :app, :web, :db, :primary => true
 # role :web, "54.225.184.100"                          # Your HTTP server, Apache/etc

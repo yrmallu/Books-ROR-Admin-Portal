@@ -4,6 +4,7 @@
 	       <%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
 		   <div class="panel-body">
 			   <%= hidden_field_tag :send_mail, @no_mail%>
+			   <%= hidden_field_tag :role_id, params[:role_id]%>
 			       <div class="row">
 		               <div class="col-sm-6">
 		                   <div class="form-group">

@@ -124,13 +124,14 @@ class UsersController < ApplicationController
   end
   
   def get_school_after_render
-    unless params[:school_id].blank?
+    if !params[:school_id].blank?
       @school = School.find(params[:school_id]) 
-    else
+    elsif !params[:user][:school_id].blank?
       @school = School.find(params[:user][:school_id]) 
+	else
+	  @school = School.find(@user.school_id) 
     end
   end
-  
   
   def user_new
     @user = User.new
@@ -156,7 +157,7 @@ class UsersController < ApplicationController
       end  
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-      @user.welcome_email(path)
+      #@user.welcome_email(path)
     else 
 	  @reading_grades = []
       @assigned_classrooms = []
