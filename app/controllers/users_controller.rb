@@ -63,12 +63,46 @@ class UsersController < ApplicationController
   	  end
     end
   end
-
-   def user_show
+  
+  def user_show
     @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
-  @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
+	@reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
   end
   
+  def new
+	unless current_user.is_web_admin?
+	  current_user_create_accessrights
+	   unless @access_right_name.kind_of?(Array)
+	     if @current_user_accessrights.include?(@access_right_name)
+	       user_new
+	     else
+	       raise CanCan::Unauthorized.new("You are not authorized to access this page.", :create, User)
+	     end
+	   else
+	     user_new
+	   end 
+    else
+	  user_new
+	end
+  end
+  
+  def current_user_read_accessrights
+ 	@current_user_accessrights = []
+    @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
+ 	if @role_id.name.eql?('School Admin')
+ 	  @access_right_name = 'View School Admin'
+ 	elsif @role_id.name.eql?('Teacher')
+ 	  @access_right_name = 'View Teacher'
+ 	elsif @role_id.name.eql?('Student')
+ 	  @access_right_name = 'View Student'
+ 	  unless current_user.user_accessrights.blank?
+ 	    @access_right_name = []
+ 		@access_right_name << 'View Student'
+ 		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
+       end
+    end
+  end	
+	 
   def create
     unless current_user.is_web_admin?
       @role_id = Role.find(params[:user][:role_id])
@@ -193,19 +227,17 @@ class UsersController < ApplicationController
 	      end
         end
       end 
-      if params[:selected_ids] && !params[:selected_ids].blank?
-        array_classroom_ids = params[:selected_ids].split(' ') unless !params[:selected_ids] && params[:selected_ids].blank?
-        unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-          binding.pry
+      array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
+	  unless array_classroom_ids.blank?
+	    unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
           @user.user_classrooms.destroy_all
           array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-        end 
-
+        end
+	  end 
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
       if  params[:send_mail].blank?
-        @user.user_details_change_email(current_user.first_name, path)
-      end
+        #@user.user_details_change_email(current_user.first_name, path)
       end
     else
       render :action=> 'new'

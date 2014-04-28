@@ -134,7 +134,7 @@ class ApplicationController < ActionController::Base
         @breadcrumb = {
           :title=>"Dashboard",
           :breadcrumb=>{
-            "School List"=> ""
+            "Dashboard"=> ""
           }
         }
 		
