@@ -26,16 +26,27 @@
 	                    </div>
 	                </div>
 				</div>	
+				<% unless @role_id.name.eql?('Student')  %>
 				<div class="row">	
 	                <div class="col-sm-6">
 	                    <div class="form-group">
 		   			    	<%= f.label :email, :class=>"control-label"%><span class="asterisk">*</span>
-		   			    	<%= f.text_field :email, :required=>true, :class=>"form-control email_validation" %>
+		   			    	<%= f.text_field :email, :class=>"form-control email_validation" %>
 							<span class="help-inline error_box"></span>
 	                    </div>
 	                </div>
 	            </div>
-				<% unless ('new').eql?action_name%>
+				<%else%>
+				<div class="row">	
+	                <div class="col-sm-6">
+	                    <div class="form-group">
+		   			    	<%= f.label :email, :class=>"control-label"%>
+		   			    	<%= f.text_field :email, :class=>"form-control" %>
+	                    </div>
+	                </div>
+	            </div> 
+				<%end%>
+				<% unless ('new').eql?action_name %>
 				    <% unless (@role_id.name.eql?('Web Admin') || @user.license_expiry_date.blank?)%>
 					    <div class="row">
 					        <div class="col-sm-3">

@@ -4,11 +4,11 @@ class UsersController < ApplicationController
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :change_user_password, :remove_license ]
-  before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent] 
-  before_action :get_manage_student_accessright, :only => [:new, :edit]
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent, :create, :update] 
+  before_action :get_manage_student_accessright, :only => [:new, :edit, :create, :update]
   before_action :get_classrooms, :only => [:new]
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent]
-  before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent]
+  before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent, :create, :update]
   before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
@@ -106,7 +106,7 @@ class UsersController < ApplicationController
   def create
     unless current_user.is_web_admin?
       @role_id = Role.find(params[:user][:role_id])
-	  current_user_create_accessrights
+      current_user_create_accessrights
 	  unless @access_right_name.kind_of?(Array)
 	    if @current_user_accessrights.include?(@access_right_name)
           user_create
@@ -114,12 +114,23 @@ class UsersController < ApplicationController
 	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :create, User)
 	    end
 	  else
+	    get_school_after_render
 	    user_create
 	  end
 	else
+      get_school_after_render
       user_create
 	end
   end
+  
+  def get_school_after_render
+    unless params[:school_id].blank?
+      @school = School.find(params[:school_id]) 
+    else
+      @school = School.find(params[:user][:school_id]) 
+    end
+  end
+  
   
   def user_new
     @user = User.new
@@ -147,6 +158,9 @@ class UsersController < ApplicationController
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
       #@user.welcome_email(path)
     else 
+	  @reading_grades = []
+      @assigned_classrooms = []
+	  @school_specific_classrooms = [] 
       render :action=> 'new'
     end
   end
@@ -195,9 +209,11 @@ class UsersController < ApplicationController
 	      raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
 	    end
 	  else
+	    get_school_after_render
 	    user_update
       end
     else
+	  get_school_after_render
       user_update
 	end	  
   end
@@ -240,7 +256,10 @@ class UsersController < ApplicationController
         #@user.user_details_change_email(current_user.first_name, path)
       end
     else
-      render :action=> 'new'
+	  @reading_grades = []
+      @assigned_classrooms = []
+	  @school_specific_classrooms = [] 
+	  render :action=> 'edit'
     end
   end
   
@@ -403,7 +422,11 @@ class UsersController < ApplicationController
   end
   
   def get_role_id
-    @role_id = Role.where("id = '#{params[:role_id]}' ").last
+    unless params[:role_id].blank?
+      @role_id = Role.where("id = '#{params[:role_id]}' ").last 
+	else
+      @role_id = Role.where("id = '#{params[:user][:role_id]}' ").last 
+	end
   end
   
   def email_validation

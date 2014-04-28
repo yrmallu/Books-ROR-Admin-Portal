@@ -16,7 +16,7 @@ required_field = function(){
 			"license[no_of_licenses]":{ required: true, number: true, min: 1 },
 			"user[school_id]":{required: true} ,
 			"user[first_name]":{required: true} ,
-			"user[email]":{ email:true, required: true} ,
+			//"user[email]":{ email:true, required: true} ,
 			"user[password]":{ minlength: 5, required: true} ,
 			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} ,
 			"license[license_batch_name]":{required: true} ,
@@ -65,7 +65,7 @@ required_field = function(){
 			"license[no_of_licenses]":"Please enter number greater than zero.",
 			"user[school_id]":"Select School.",
 			"user[first_name]":"First Name can't be blank.",
-			"user[email]":"Enter a valid email address.",
+			//"user[email]":"Enter a valid email address.",
 			"user[password]":{
 				required: "Please provide a password",
 				minlength: "Your password must be at least 5 characters long."

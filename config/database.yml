@@ -16,7 +16,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: books_that_grow_v1_0_1
+  database: rails-btg
   pool: 5
   host: 192.168.10.37
   username: postgres
