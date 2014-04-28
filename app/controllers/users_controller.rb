@@ -416,7 +416,7 @@ class UsersController < ApplicationController
  	  redirect_to forgot_password_path
  	else
  	  user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
- 	  UserMailer.forgot_password_email(user_info).deliver
+ 	  # UserMailer.forgot_password_email(user_info).deliver
 	  flash[:success] = "Email sent with password reset instructions."
  	  redirect_to signin_path
     end
