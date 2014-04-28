@@ -28,7 +28,7 @@
             	</address>
             	<address>
 			    	<strong>State:</strong>
-			    	<%= @school.state %>
+			    	<%= Carmen::Country.coded('US').subregions.coded(@school.state).name unless @school.state.blank? %>
             	</address>
             	<address>
 			    	<strong>Country:</strong>

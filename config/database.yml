@@ -37,7 +37,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: rails_app
+  database: books_that_grow_v1_0_1
   pool: 5
   host: localhost
   username: postgres

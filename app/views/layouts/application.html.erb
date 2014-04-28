@@ -71,7 +71,7 @@
     <li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
       <span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Access Right", new_accessright_path %></li>
+            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Assign Access Right", new_accessright_path %></li>
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
           </ul>
         </li>
@@ -80,12 +80,6 @@
     <li class="nav-parent" id="li_accessright"><a href=""><i class="fa fa-chevron-circle-down"></i> <span>Options</span></a>
       <span class="arrow arrw-pos" container_li="li_options"></span>
           <ul class="children">
-          <% if can? :create, :schools %>
-        <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School", new_school_path %></li>
-        <%end%>
-        <% if can? :read, :schools %>
-        <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "School List", schools_path %></li>
-        <%end%>     
       <% if (can? :create, :users) && (can? :create_sa, :users) %>  
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add School Admin", new_user_path(:role_id =>Role.where("name='School Admin'").last, :school_id=>current_user.school_id) %></li>
       <%end%>
