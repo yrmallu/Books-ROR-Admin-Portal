@@ -29,14 +29,10 @@ class Book < ActiveRecord::Base
   max_paginates_per 10
 
   def update_preview_name
-    # binding.pry
     if !@trigger_after_save
       @trigger_after_save = true
-      prev_img_names = self.preview_images.pluck('preview_image_file_name')
-      self.preview_name = Hash[(0..prev_img_names.count - 1).zip prev_img_names]
-      # binding.pry
+      self.preview_name = Hash[self.preview_images.pluck("id", "preview_image_file_name")]
       save
     end
-    # binding.pry
   end
 end

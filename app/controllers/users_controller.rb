@@ -63,6 +63,11 @@ class UsersController < ApplicationController
   	  end
     end
   end
+
+   def user_show
+    @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
+  @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
+  end
   
   def create
     unless current_user.is_web_admin?
@@ -188,15 +193,19 @@ class UsersController < ApplicationController
 	      end
         end
       end 
-      array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
-      unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-        @user.user_classrooms.destroy_all
-        array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-      end 
+      if params[:selected_ids] && !params[:selected_ids].blank?
+        array_classroom_ids = params[:selected_ids].split(' ') unless !params[:selected_ids] && params[:selected_ids].blank?
+        unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
+          binding.pry
+          @user.user_classrooms.destroy_all
+          array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+        end 
+
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
       if  params[:send_mail].blank?
         @user.user_details_change_email(current_user.first_name, path)
+      end
       end
     else
       render :action=> 'new'

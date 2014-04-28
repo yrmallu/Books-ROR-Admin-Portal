@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140423072350) do
+ActiveRecord::Schema.define(version: 20140428062642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,7 +39,6 @@ ActiveRecord::Schema.define(version: 20140423072350) do
     t.hstore   "thumb_name"
     t.string   "cover"
     t.string   "interest_level",          limit: 60
-    t.string   "delete_flag",             limit: 2
     t.string   "book_cover_file_name"
     t.string   "book_cover_content_type"
     t.integer  "book_cover_file_size"
@@ -48,6 +47,7 @@ ActiveRecord::Schema.define(version: 20140423072350) do
     t.string   "epub_content_type"
     t.integer  "epub_file_size"
     t.datetime "epub_updated_at"
+    t.boolean  "delete_flag",                        default: false
   end
 
   create_table "classroom_books", force: true do |t|

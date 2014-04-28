@@ -73,13 +73,14 @@ def parse_epub(book, path)
     css_tags, js_tags = get_css_js_tags list_files
     # ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://#{local_ip}:3000/public/js/#{js} \"></script>" }
     # ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"].each{|js| js_tags << "<script type=\"text/javascript\" src=\" http://107.21.250.244/books-that-grow-web-app/uploads_dir/js/#{js} \"></script>" }
-    # path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
-    path_with_ip = dest_path.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
+    path_with_ip = dest_path.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
+    # path_with_ip = dest_path.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
     index_file_string = generate_index_file_string xhtml_files, list_files, index_file_string, css_tags.join(" "), js_tags.join(" "), path_with_ip
     cp_file_list = [dest_path+"/OEBPS/covers/", dest_path+"/OEBPS/css/", dest_path+"/OEBPS/fonts/", dest_path+"/OEBPS/images/", dest_path+"/OEBPS/js/", dest_path+"/OEBPS/package.opf",dest_path+"/OEBPS/toc.ncx" ]
     FileUtils.cp_r cp_file_list, dest_path
     FileUtils.rm_rf [dest_path+"/OEBPS", dest_path+"/META-INF"]
     FileUtils.remove_file dest_path+"/mimetype"
+    FileUtils.rm_rf  "#{Rails.root}/#{dir_name.first}"
     # file_path = dest_path + "/OEBPS/index.html"
     File.open(dest_path+"/index.html" , "w") {|fi| fi.puts index_file_string}
   end
@@ -143,31 +144,42 @@ def parse_epub(book, path)
       js_tags = []
       js_list = ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"]
       list_files.each do |k, v|
-        ip_path = v.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
+        ip_path = v.gsub("#{Rails.root}/public","http://#{local_ip}:3000" )
         ip_path = ip_path.gsub("OEBPS/","" )
         if v.split("/").last.split(".").last == "css" 
-         css_tags <<  "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + ip_path + " \"> </link>"
+         css_tags <<  "
+         <link rel=\"stylesheet\" type=\"text/css\" href=\"" + ip_path + " \"> </link>"
         elsif (v.split("/").last.split(".").last == "js") && (js_list.include? v.split("/").last)
-          js_tags <<  "<script type=\"text/javascript\" src=\"" + ip_path + " \"></script>"
+          js_tags <<  "
+          <script type=\"text/javascript\" src=\"" + ip_path + " \"></script>"
         end
       end 
       css_tags.delete_at(0)
-      js_tags.delete_at(0)
 
       return css_tags, js_tags
     end
 
     def generate_index_file_string(xhtml_files, list_files, index_file_string, css_tags, js_tags, path_with_ip)
       index_file_string = css_tags
-      style_tag = "<style type=\"text/css\"> .disallowselection {  -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: -moz-none;-ms-user-select: none; user-select: none; background: red; } </style>"
+      style_tag = "
+      <style type=\"text/css\"> 
+      .disallowselection {  
+        -webkit-touch-callout: none;
+        -webkit-user-select: none; -khtml-user-select: none; 
+        -moz-user-select: -moz-none;-ms-user-select: none; 
+         user-select: none; background: red; 
+       } 
+       </style>"
       index_file_string << style_tag
-      index_file_string << "<div id=\"content\"> <div class=\"story_content\" id=\"story_content\">" 
+      index_file_string << "
+      <div id=\"content\">
+       <div class=\"story_content\" id=\"story_content\">" 
       xhtml_files.each do |f|    
         x = "OEBPS/" + f
         div_id = f.split(".").first
-        bookchapterholder_div = " <div id=\"" + div_id + "\" class=\"bookchapterholder\"> </div>"
+        bookchapterholder_div = " 
+        <div id=\"" + div_id + "\" class=\"bookchapterholder\"> </div>"
         index_file_string << bookchapterholder_div
-        p "writing to an html",list_files[x], index_file_string
         File.open(list_files[x], "r") {|file|  @body_doc = Nokogiri::HTML(file.read)} 
         @body_doc.css("img").each do |link|
           link.attributes["src"].value = path_with_ip + "/" + link.attributes["src"].value
@@ -178,8 +190,34 @@ def parse_epub(book, path)
         index_file_string.slice! "</body>"
         # re << "</div>"
       end
-      index_file_string << "</div> </div>"
+      index_file_string << "</div>
+       </div>"
+      
       index_file_string << js_tags
+      index_file_string = add_js_script(index_file_string, path_with_ip)
       # index_file_string
     end 
+
+    def add_js_script(index_file_string, path_with_ip)
+
+        js_script = "
+        <script type=\"text/javascript\">
+        if (window.navigator.userAgent.indexOf(\"MSIE \") > 0)
+        {
+         var contentObject = document.getElementById(\"content\");         
+
+         var touchJavaScript = document.createElement('script');
+         touchJavaScript.type = 'text/javascript';
+         touchJavaScript.src = '#{path_with_ip}/js/jquery_touch.js';
+         contentObject.appendChild(touchJavaScript);
+
+         var swipeJavaScript = document.createElement('script');
+         swipeJavaScript.type = 'text/javascript';
+         swipeJavaScript.src = '#{path_with_ip}/js/jquery_swipe.js';
+         contentObject.appendChild(swipeJavaScript);
+        }
+        </script>"
+        index_file_string << js_script
+
+    end
 end
