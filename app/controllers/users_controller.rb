@@ -124,13 +124,15 @@ class UsersController < ApplicationController
   end
   
   def get_school_after_render
-    if !params[:school_id].blank?
-      @school = School.find(params[:school_id]) 
-    elsif !params[:user][:school_id].blank?
-      @school = School.find(params[:user][:school_id]) 
-	else
-	  @school = School.find(@user.school_id) 
-    end
+    unless @role_id.name.eql?('Web Admin')
+      if !params[:school_id].blank?
+        @school = School.find(params[:school_id]) 
+      elsif !params[:user][:school_id].blank?
+        @school = School.find(params[:user][:school_id]) 
+	  else
+	    @school = School.find(@user.school_id) 
+      end
+	end
   end
   
   def user_new
