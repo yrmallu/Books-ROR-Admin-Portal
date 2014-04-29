@@ -205,7 +205,7 @@
 	}
 
 $( ".assign_license" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true", role_id:<%=params[:role_id]%>},
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true", role_id:<%=@role_id.id%>},
 function(data) {
 	         
              if(data)
@@ -217,7 +217,7 @@ function(data) {
 
 
 $( ".change_password" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%=params[:role_id]%>},
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%=@role_id.id%>},
 function(data) {
 	         
              if(data)
