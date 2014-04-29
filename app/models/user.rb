@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+ 
   include CommonQueries
   paginates_per 10
   max_paginates_per 10
@@ -28,12 +29,14 @@ class User < ActiveRecord::Base
   scope :students, -> { where(role_id: 4) }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  NO_SPACE_REGEX = /\A\S+\Z/
   
+  #validates :username, :presence=> true, :format => {:with=>NO_SPACE_REGEX}, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
   validates :email, :presence=> true, :if => :not_student?
   validates :email, :format=>{:with=>VALID_EMAIL_REGEX}, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
+  validates :first_name, :format => { :with => /\A(([a-zA-Z])+(-?[a-zA-Z]+)*\s?)+\Z/ }
   
   def not_student?
-  
     if (self.role_id.eql?(1) || self.role_id.eql?(2) || self.role_id.eql?(3))
 	  return true
 	else

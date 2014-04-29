@@ -1,4 +1,6 @@
 class Classroom < ActiveRecord::Base
+
+  include CommonQueries
   has_many :user_classrooms
   has_many :users, :through => :user_classrooms
   belongs_to :school

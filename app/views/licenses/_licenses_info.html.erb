@@ -11,7 +11,7 @@
 					    <th>Action</th>
                     </tr>
                 </thead>
-                <tbody >
+                <tbody id="license_body">
 			        <% @licenses.each do |lic| %>
 	                    <tr class="odd gradeX">
 							<td class=""><%= lic.license_batch_name %></td>
@@ -31,6 +31,9 @@
                </tbody>
            </table>
 	    </div>
+	   <div data-no-turbolink>
+	   <%= paginate @licenses %>
+	   </div>
     </div>	
 </div>
 

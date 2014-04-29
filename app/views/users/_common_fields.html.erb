@@ -16,7 +16,9 @@
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 	                    	<%= f.label :username, "Username", :class=>"control-label" %><span class="asterisk">*</span>
-		    			    <%= f.text_field :username, :class=>"form-control" %>
+							<%= f.text_field :username, :class=>"form-control" %>
+		    			    <%#= f.text_field :username, :class=>"form-control username_validation" %>
+							<span class="help-inline error_box"></span>
 	                    </div>
 	                </div>
 	                <div class="col-sm-3">
