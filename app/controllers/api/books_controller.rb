@@ -25,7 +25,7 @@ class Api::BooksController < ApplicationController
 			name = navpoint.at_css('text').text
 			# src = navpoint.at_css('content').attributes['src'].value
 			# toc_json.merge!(count.to_s => { "id" => id, "text" => text, "src" => src})
-			toc_json << { :id => id, :name => text}
+			toc_json << { :id => id, :name => name}
 		end
 		toc_json
 	end
