@@ -4,19 +4,19 @@
 	        <div class="panel-heading">
                 <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
-			<!-- <div id="id_create_license" class="alert_license_success hide">License Added.</div>	
+			<div id="id_create_license" class="alert_license_success hide">License Added.</div>	
 			<div id="id_update_license" class="alert_license_success hide">License Updated.</div>	
-			<div id="id_archive_license" class="alert_license_success hide">License Archived.</div> -->
+			<div id="id_archive_license" class="alert_license_success hide">License Archived.</div>
 	       
 	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
 				 <div class="panel-body">
 					<%= f.hidden_field :school_id, :value=>@school_id %>
 				    <% if @license.errors.any? %>
 				    <div id="error_explanation">
-				        <h2><%= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2>
+				        <!-- <h2><%#= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2> -->
 				        <ul>
 				            <% @license.errors.full_messages.each do |msg| %>
-				                <li><%= msg %></li>
+				               <%= msg %>
 				            <% end %>
 				        </ul>
 				    </div>
@@ -66,9 +66,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	showHideMenu('li_school');
-	// $('#id_create_license').removeClass('show').addClass('hide');
-// 	$('#id_update_license').removeClass('show').addClass('hide');
-// 	$('#id_archive_license').removeClass('show').addClass('hide');	
+	$('#id_create_license').removeClass('show').addClass('hide');
+	$('#id_update_license').removeClass('show').addClass('hide');
+	$('#id_archive_license').removeClass('show').addClass('hide');	
 });
 </script>
 	

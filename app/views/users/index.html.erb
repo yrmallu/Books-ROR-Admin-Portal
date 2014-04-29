@@ -41,6 +41,7 @@
                 	<th><%= link_to :All, 'javascript:checkAll("user")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("user")', :class => "lnk-typ2" %></th>
                     <th>First Name</th>
                     <th>Last Name</th>
+					<th>Username</th>
                     <th>Email</th>
 					<th>Phone Number</th>
 					<%unless @role_id.name.eql?('Web Admin')%>
@@ -64,6 +65,7 @@
 							     <td class=""><%= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
 							 <%end%>
                              <td class=""><%= user.last_name %></td>
+							 <td class=""><%= user.username %></td>
                              <td class="center "><%= user.email %></td>
 					         <td class=""><%= user.phone_number %></td>
 					         <%unless @role_id.name.eql?('Web Admin')%>

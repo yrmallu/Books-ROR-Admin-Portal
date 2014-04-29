@@ -10,14 +10,14 @@
 					<%=f.hidden_field :school_id, :value=>@school.id unless @school.blank? %>
 					<% if @user.errors.any? %>
 				    <div id="error_explanation">
-				        <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+				        <!-- <h2><%#= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2> -->
 				        <ul>
 				            <% @user.errors.full_messages.each do |msg| %>
-				                <li><%= msg %></li>
+				                <%= msg %>
 				            <% end %>
 				        </ul>
 				    </div>
-				  	<% end %>
+					<% end %>
 		        <%= render 'common_fields', f: f %>
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
@@ -50,6 +50,8 @@
 	}
 	
 email_valid = "<%= url_for :controller=> 'users', :action => 'email_validation', :id=> action_name.eql?("edit") ? @user.id : 0%>"	
+
+username_valid = "<%= url_for :controller=> 'users', :action => 'username_validation', :id=> action_name.eql?("edit") ? @user.id : 0%>"
 
 </script>
 

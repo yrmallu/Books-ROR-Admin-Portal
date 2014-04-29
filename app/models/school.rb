@@ -1,5 +1,6 @@
 class School < ActiveRecord::Base
   
+  include CommonQueries 
   before_validation :strip_whitespace
   default_scope {where.not(delete_flag: true)}	
   validates :name, :presence=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}

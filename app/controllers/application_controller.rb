@@ -357,7 +357,7 @@ class ApplicationController < ActionController::Base
 			
          when "licenses#new"
   		  @breadcrumb = {
-            :title=>"Add License",
+            :title=>"Add / Edit / Delete License",
   			:icon=>"btg btg-lisence",
               :breadcrumb=>{
               "School List"=> schools_path,

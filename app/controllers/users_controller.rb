@@ -161,9 +161,9 @@ class UsersController < ApplicationController
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
       #@user.welcome_email(path)
     else 
-	  @reading_grades = []
+	  get_all_reading_grades
       @assigned_classrooms = []
-	  @school_specific_classrooms = [] 
+	  @school_specific_classrooms = @school.classrooms("delete_flag is not true")	unless @school.blank? 
       render :action=> 'new'
     end
   end
@@ -259,9 +259,9 @@ class UsersController < ApplicationController
         #@user.user_details_change_email(current_user.first_name, path)
       end
     else
-	  @reading_grades = []
-      @assigned_classrooms = []
-	  @school_specific_classrooms = [] 
+	  get_all_reading_grades
+      @assigned_classrooms = @user.classrooms if @user && @user.classrooms
+	  @school_specific_classrooms = @school.classrooms("delete_flag is not true")	unless @school.blank?
 	  render :action=> 'edit'
     end
   end
@@ -440,6 +440,15 @@ class UsersController < ApplicationController
         render :text => "avaiable"
      end
    end
+   
+  def username_validation
+    @check_unique_username = User.where("username = '#{params[:username]}' and id != #{params[:id]}")
+    unless (@check_unique_username.blank?)
+       render :text => "This username is already in use."
+     else
+       render :text => "avaiable"
+    end
+  end 
   
   def download_sample_list
     if params[:list_type] == "school_admin"

@@ -10,10 +10,10 @@
 				    <%=f.hidden_field :school_id, :value=>@school.id%>
 				    <% if @classroom.errors.any? %>
 				    <div id="error_explanation">
-				        <h4><%= pluralize(@classroom.errors.count, "error") %> prohibited this classroom from being saved:</h4>
+				        <!-- <h4><%#= pluralize(@classroom.errors.count, "error") %> prohibited this classroom from being saved:</h4> -->
 				        <ul>
 				            <% @classroom.errors.full_messages.each do |msg| %>
-				                <li><%= msg %></li>
+				                <%= msg %>
 				            <% end %>
 				        </ul>
 				    </div>

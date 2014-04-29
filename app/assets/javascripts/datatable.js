@@ -8,8 +8,8 @@ jQuery(document).ready(function() {
 	    "bLengthChange": false,
 	    "bInfo": false,
 	    "bAutoWidth": false,
-	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
-	   "aoColumnDefs": [
+        "sDom": 't',
+	    "aoColumnDefs": [
 	               { "bSortable": false, "aTargets": [-1] },
 				  ]
 	 });
@@ -22,9 +22,9 @@ jQuery(document).ready(function() {
  	    "bLengthChange": false,
  	    "bInfo": false,
  	    "bAutoWidth": false,
-      "bFilter": false,
- 	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
- 	   "aoColumnDefs": [
+        "bFilter": false,
+ 	    "sDom": 't',
+ 	    "aoColumnDefs": [
  	               { "bSortable": false, "aTargets": [7] },
 				   { "bSortable": false, "aTargets": [0] }]
  	 });
@@ -37,8 +37,8 @@ jQuery(document).ready(function() {
   	    "bLengthChange": false,
   	    "bInfo": false,
   	    "bAutoWidth": false,
-  	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
-  	   "aoColumnDefs": [
+  	    "sDom": 't',
+  	    "aoColumnDefs": [
   	               { "bSortable": false, "aTargets": [7] },
  				   { "bSortable": false, "aTargets": [0] }]
   	 });
@@ -51,8 +51,8 @@ jQuery(document).ready(function() {
   	    "bLengthChange": false,
   	    "bInfo": false,
   	    "bAutoWidth": false,
-  	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
-  	   "aoColumnDefs": [
+  	    "sDom": 't',
+  	    "aoColumnDefs": [
   	               { "bSortable": false, "aTargets": [2] }]
   	 });
 	 
@@ -64,8 +64,8 @@ jQuery(document).ready(function() {
    	    "bLengthChange": false,
    	    "bInfo": false,
    	    "bAutoWidth": false,
-   	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
-   	   "aoColumnDefs": [
+   	    "sDom": 't',
+   	    "aoColumnDefs": [
    	               { "bSortable": false, "aTargets": [4] }]
    	 });
 	 
@@ -77,8 +77,8 @@ jQuery(document).ready(function() {
         "bLengthChange": false,
         "bInfo": false,
         "bAutoWidth": false,
-        "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
-       "aoColumnDefs": []
+        "sDom": 't',
+        "aoColumnDefs": []
      });
 	 
   	
@@ -90,8 +90,8 @@ jQuery(document).ready(function() {
  	    "bLengthChange": false,
  	    "bInfo": false,
  	    "bAutoWidth": false,
- 	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
- 	   "aoColumnDefs": [
+ 	    "sDom": 't',
+ 	    "aoColumnDefs": [
  	               { "bSortable": false, "aTargets": [7] },
 				   { "bSortable": false, "aTargets": [0] }]
  	 });
@@ -104,7 +104,7 @@ jQuery(document).ready(function() {
  	    "bLengthChange": false,
  	    "bInfo": false,
  	    "bAutoWidth": false,
- 	    "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'p i>>",
+ 	    "sDom": 't',
  	   // "aoColumnDefs": [
  	               // { "bSortable": false, "aTargets": [3] },
 				   // { "bSortable": false, "aTargets": [0] }]
