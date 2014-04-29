@@ -22,9 +22,10 @@ class Book < ActiveRecord::Base
   # validates_attachment_content_type :book_cover_large, :content_type => /\Aimage\/.*\Z/
   # validates_attachment_content_type :preview_book_image, :content_type => /\Aimage\/.*\Z/
   validates_attachment_content_type :epub, :content_type => ['application/epub+zip', 'application/octet-stream']
-
-  validates_presence_of :title
- 
+  
+  validates_attachment_presence :epub
+  # validates_presence_of :title
+  validates :title, :presence=> true
   paginates_per 10
   max_paginates_per 10
 
@@ -34,5 +35,17 @@ class Book < ActiveRecord::Base
       self.preview_name = Hash[self.preview_images.pluck("id", "preview_image_file_name")]
       save
     end
+  end
+
+  def self.search(query_string)
+  # qs = query_string.tr("%","").to_i 
+  book = Book.arel_table
+  books = Book.where(
+    book[:title].matches(query_string).or(
+      book[:description].matches(query_string).or(
+        book[:author].matches(query_string)
+        )
+      )
+    )
   end
 end

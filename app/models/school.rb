@@ -25,7 +25,7 @@ class School < ActiveRecord::Base
     self.name = self.name.strip
   end
 
-  def self.search(query_string)
+   def self.search(query_string)
   	qs = query_string.tr("%","").to_i 
 	school = School.arel_table
 	schools = School.where(
@@ -35,9 +35,9 @@ class School < ActiveRecord::Base
 					school[:city].matches(query_string).or(
 						school[:state].matches(query_string).or(
 							school[:country].matches(query_string)
-							
+
 							)
-					
+
 						)
 					)
 				)

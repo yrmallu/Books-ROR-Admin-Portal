@@ -9,7 +9,14 @@ class BooksController < ApplicationController
   def index
     #@books = Book.all
     # @books = Book.order("created_at DESC").page params[:page]
-    @books = Book.page params[:page]
+    if params[:query_string] && !(params[:query_string].blank?)
+      @books = Book.search("%#{params[:query_string]}%").page(params[:page]).per(10) 
+      @search_flag = true
+    else
+      @books = Book.page params[:page]
+      @search_flag = false
+    end
+    
   end
 
   # GET /books/1

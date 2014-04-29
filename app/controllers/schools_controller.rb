@@ -15,8 +15,8 @@ class SchoolsController < ApplicationController
       @search_flag = false
     end
     @school_admin = Role.where("name = 'School Admin'").last
-	@teacher = Role.where("name = 'Teacher'").last
-	@student = Role.where("name = 'Student'").last
+  	@teacher = Role.where("name = 'Teacher'").last
+  	@student = Role.where("name = 'Student'").last
   end
 
   def show
@@ -61,6 +61,7 @@ class SchoolsController < ApplicationController
   end
   
   def get_schoolwise_license_list
+    binding.pry
     @license_assign_count = []
     @licenses = @school.licenses.order("created_at DESC").page params[:page]
 	@licenses_allocated = User.select("school_id, license_id, role_id, count(license_id) as total_license_count").group("role_id,license_id, school_id").having("school_id =?", params[:id])

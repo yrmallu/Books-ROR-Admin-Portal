@@ -1,7 +1,15 @@
-<%= form_tag 'classrooms/delete_classroom' do %>
+
 <div class="panel panel-default">
 	<div class="panel-body"> 
+		<%= text_field_tag :text_field_search %>
+		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
+
+		<button class="btn btn-primary btn-xs" id="classroom_search" >
+						    Search
+						    </button>
+		<%= form_tag 'classrooms/delete_classroom' do %>
 		<div class="index_page_btns" data-no-turbolink>
+			<%=link_to 'List All Records', classrooms_path, :class=>"btn btn-success btn-xs" if @search_flag %>
        		<%= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<%= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<% if can? :create, :classrooms %> 
@@ -52,10 +60,11 @@
 	</div>
 	    <div data-no-turbolink>
 		    <%= paginate @classrooms %>
-	    </div>	
+	    </div>
+	<% end %>	
     </div>
 </div>		  
-<% end %>
+
 
 <script type="text/javascript">
 showHideMenu('li_school');

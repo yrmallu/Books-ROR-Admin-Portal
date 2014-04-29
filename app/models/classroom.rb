@@ -14,4 +14,14 @@ class Classroom < ActiveRecord::Base
   def generate_random_code
     self.code = Classroom.count == 0 ? 10001:Classroom.maximum("code") + 1
   end
+
+  def self.search(query_string)
+  qs = query_string.tr("%","").to_i 
+  classroom = Classroom.arel_table
+  classrooms = Classroom.where(
+    classroom[:code].eq(qs).or(
+        classroom[:name].matches(query_string)
+      )
+    )
+  end
 end

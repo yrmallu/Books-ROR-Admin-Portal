@@ -1,9 +1,17 @@
-<%#= form_tag 'schools/delete_school', remote: true do %>
+
 <div class="panel panel-default">
 	<div class="panel-body"> 
+		<%= text_field_tag :text_field_search %>
+		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
+
+		<button class="btn btn-primary btn-xs" id="book_search" >
+						    Search
+						    </button>
+		<%= form_tag 'schools/delete_school' do %>
 		<div class="index_page_btns" data-no-turbolink>
+			<%= link_to 'List All Records', books_path, :class=>"btn btn-success btn-xs" if @search_flag %>
 			<% if can? :create, Book %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>
-			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<%= submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>
 		</div>
 		 
 		 <div class="table-responsive">
@@ -40,9 +48,10 @@
 		<div data-no-turbolink>
 		    <%= paginate @books %>
 		</div>
+		<% end %>		
 	</div>
 </div>		  
-<%#= end %>		  
+  
 
 
 <script type="text/javascript">

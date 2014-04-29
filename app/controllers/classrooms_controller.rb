@@ -9,9 +9,16 @@ class ClassroomsController < ApplicationController
   before_action :get_school_specific_users, :only => [:new, :edit]
    
   def index
+    if params[:query_string] && !(params[:query_string].blank?)
+      @classrooms = Classroom.includes(:users).search("%#{params[:query_string]}%").page(params[:page]).per(10) 
+      @search_flag = true
+    else
+      @classrooms = Classroom.includes(:users).where("classrooms.delete_flag is not true AND classrooms.school_id = '#{params[:school_id]}'").references(:users).page params[:page]
+      @search_flag = false
+    end
     set_bread_crumb(@school.id)
     #@classrooms = Classroom.joins(:users).select("users.role_id as role_id, classrooms.id as id, classrooms.name as name, classrooms.school_year_start_date as school_year_start_date, classrooms.school_year_end_date as school_year_end_date, classrooms.code as code, classrooms.school_id as school_id, count(user_classrooms.user_id) as total_users_count").group("classrooms.id,users.role_id, classrooms.school_id").having("classrooms.delete_flag is not true and classrooms.school_id = '#{params[:school_id]}' ").preload(:users).page params[:page]
-	@classrooms = Classroom.includes(:users).where("classrooms.delete_flag is not true AND classrooms.school_id = '#{params[:school_id]}'").references(:users).page params[:page]
+
   end
 
   def show

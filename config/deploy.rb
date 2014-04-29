@@ -80,7 +80,7 @@ set :rails_env, "production"
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/books #{release_path}/public/books"
     run "ln -nfs #{shared_path}/images #{release_path}/public/images"
-    run "ln -nfs #{shared_path}/images #{release_path}/public/users"
+    run "ln -nfs #{shared_path}/users #{release_path}/public/users"
   end
 
   desc "Fix file permissions"

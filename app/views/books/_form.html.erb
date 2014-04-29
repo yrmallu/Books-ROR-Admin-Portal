@@ -48,7 +48,7 @@
 							<%= f.file_field :book_cover %>
 				    	</div> 
 				    	<div class="col-md-6" >
-							<label class="form-label">EPub Book</label>	<br />
+							<label class="form-label">EPub Book</label><span class="asterisk">*</span> 	<br />
 							<%if f.object.epub_file_name && !f.object.epub_file_name.blank? %>
 								<%= f.object.epub_file_name %>
 							<% end %>

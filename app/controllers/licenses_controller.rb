@@ -14,7 +14,7 @@ class LicensesController < ApplicationController
     @licenses = License.where("school_id = #{params[:school_id]}").by_newest.page params[:page]
     @license = License.new
     @school_id = params["school_id"]
-	set_bread_crumb(@school_id)
+	  set_bread_crumb(@school_id)
   end
 
   def edit
