@@ -206,6 +206,10 @@
 	    showHideMenu('li_school');	
 	}
 
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
+	
 $( ".assign_license" ).click(function() {
           jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true", role_id:<%=@role_id.id%>},
 function(data) {

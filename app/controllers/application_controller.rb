@@ -34,12 +34,13 @@ class ApplicationController < ActionController::Base
   end
   
   def get_schools
-    # if current_user.role.name.eql?("Web Admin")
-#       @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
-# 	else
-# 	  @schools = @current_user.school
-# 	end
-    @schools = School.by_newest.page params[:page]
+    @schools = []
+    if current_user.role.name.eql?("Web Admin")
+      @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
+	else
+	  @schools << @current_user.school
+	end
+    #@schools = School.by_newest.page params[:page]
   end
   
   def get_all_schools

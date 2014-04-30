@@ -95,6 +95,10 @@
 <script type="text/javascript">
 	showHideMenu('li_school');
 	
+	<% unless current_user.role_id.eql?(1)%>
+	  showHideMenu('li_options');	
+	<%end%>
+	
 	school_unique = "<%= url_for :controller=> 'schools', :action => 'check_school_name_uniqueness', :id=> action_name.eql?("edit") ? @school.id : 0%>"	
 </script>
 

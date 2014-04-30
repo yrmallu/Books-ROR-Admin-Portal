@@ -57,3 +57,20 @@ span.page{padding: 10px !important;}
 label.label-rights { display: inline-block; overflow: hidden; width: 190px;margin-bottom: 10px; }
 label.label-rights input[type=checkbox] {display:inline-block; float:left; margin:4px 5px 0 0;}
 label.error {display:block;}
+
+
+/* form validation design issues */
+	.form-group .field_with_errors:first-child {float:left;}
+	.form-lable-multiselect{display:block;}
+	.table-responsive{margin-top:-27px;}
+	
+	
+/* School table data-grid design chagnes */
+	.school-table tr th:nth-child(1){width:8%;}
+	.school-table tr th:nth-child(2){width:11%;}
+	.school-table tr th:nth-child(3){width:23%;}
+	.school-table tr th:nth-child(4){width:10%;}
+	.school-table tr th:nth-child(5){width:9%;}
+	.school-table tr th:nth-child(6){width:9%;}
+	.school-table tr th:nth-child(7){width:10%;}
+	.school-table tr th:nth-child(8){width:20%;}

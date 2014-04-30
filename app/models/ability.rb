@@ -22,7 +22,6 @@ class Ability
 		can :get_user_school_licenses, :users if user_rights.include?("Can Manage Student")
 		can :remove_license, :users if user_rights.include?("Can Manage Student")
 		
-		can :read, :users, :role_id => user.role_id if user_rights.include?("View Web Admin")
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View School Admin")
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View Teacher")
 		can :read, :users, :role_id => user.role_id if user_rights.include?("View Student")

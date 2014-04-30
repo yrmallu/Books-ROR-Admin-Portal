@@ -21,7 +21,7 @@
 		</div>
 		 
 		<div class="table-responsive">
-			<table class="table" id="school_table">
+			<table class="table school-table" id="school_table">
 	            <thead>
 	                <tr>
 	                	<th><%= link_to :All, 'javascript:checkAll("school")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("school")', :class => "lnk-typ2" %>  </th>
@@ -69,9 +69,10 @@
 							    <%= link_to '<i title="Classroom List" class="btg btg-classroom"></i>'.html_safe, classrooms_path(:school_id=>school)%> 
 						   <%end%>
 						<% if can? :read, :licenses %> 
-						    <button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%=school.id%>' >
+						    <!-- <button class="btn btn-primary btn-xs license_details" data-toggle="modal" data-target="#school_license_details" data-input='<%#=school.id%>' >
 						    License Details
-						    </button>	
+						    </button> -->	
+							<%= link_to '<i title="License Details" class="glyphicon glyphicon-list-alt"></i>'.html_safe, '', :class=>"license_details", data: { toggle: "modal", target: "#school_license_details", input: school.id} %>
 						<%end%>	
 						   </td>
 		                </tr>
@@ -79,10 +80,11 @@
 	        	</tbody>
 	    	</table>
 		</div>
-
+        <% if @schools.count && @schools.count > 1 %>
 		<div data-no-turbolink>
 			<%= paginate @schools %>
-		</div>	
+		</div>
+		<% end %>	
 	<% end %>
 	</div>	
 </div>	  
