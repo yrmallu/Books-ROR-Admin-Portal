@@ -77,7 +77,7 @@
         </li>
     
     <%else%>
-    <li class="nav-parent" id="li_accessright"><a href=""><i class="fa fa-chevron-circle-down"></i> <span>Options</span></a>
+    <li class="nav-parent" id="li_options"><a href=""><i class="fa fa-chevron-circle-down"></i> <span>Options</span></a>
       <span class="arrow arrw-pos" container_li="li_options"></span>
           <ul class="children">
       <% if (can? :create, :users) && (can? :create_sa, :users) %>  
@@ -144,16 +144,15 @@
         </ul>
       </div>
     </div>
-    <div class="contentpanel">
+    <div class="contentpanel"> 
+
+  <%= render 'breadcrumb/breadcrumb' %>
+  
   <% flash.each do |key, value| %>
     <div class="alert alert-<%= key %>"> <%= value %>
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         </div>
   <% end %>
-  
-
-  <%= render 'breadcrumb/breadcrumb' %>
-
 
   <%=yield %>
     </div>

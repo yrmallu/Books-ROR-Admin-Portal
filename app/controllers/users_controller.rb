@@ -54,7 +54,7 @@ class UsersController < ApplicationController
     else
       if !@role_id.blank? && params[:school_id].blank?
         @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
-  	  set_bread_crumb(@role_id.id)
+  	    set_bread_crumb(@role_id.id)
       elsif !@role_id.blank? && !params[:school_id].blank?
         @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
   	    set_bread_crumb(@role_id.id, @school.id)
@@ -229,9 +229,7 @@ class UsersController < ApplicationController
   
   def user_update
     path = request.env['HTTP_HOST']
-    binding.pry
     if @user.update_attributes(user_params)
-      binding.pry
       unless params[:accessright].blank?
         if params[:accessright].eql?('0')
 	      can_manage_access_right_id = get_manage_student_accessright
@@ -326,7 +324,6 @@ class UsersController < ApplicationController
 		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
       end
 	end
-
   end
   
   def add_user_level_setting 
@@ -340,12 +337,10 @@ class UsersController < ApplicationController
   
   def delete_user
     deleted_user = ''
-    
-	User.where(id: params[:user_ids]).each do |user|
+ 	User.where(id: params[:user_ids]).each do |user|
 	  deleted_user = user
       user.update_attributes(delete_flag: true)
     end
-  
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
   end
   

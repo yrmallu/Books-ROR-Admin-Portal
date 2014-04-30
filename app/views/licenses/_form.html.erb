@@ -66,6 +66,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	showHideMenu('li_school');
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
 	$('#id_create_license').removeClass('show').addClass('hide');
 	$('#id_update_license').removeClass('show').addClass('hide');
 	$('#id_archive_license').removeClass('show').addClass('hide');	
