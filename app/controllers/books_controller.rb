@@ -93,7 +93,7 @@ def parse_epub(book, path)
     # path_with_ip = dest_path.gsub("#{Rails.root}/public/books/","http://107.21.250.244/books-that-grow-web-app/uploads_dir/read-book/" )
     index_file_string = generate_index_file_string xhtml_files, list_files, index_file_string, css_tags.join(" "), js_tags.join(" "), path_with_ip
     cp_file_list = [dest_path+"/OEBPS/covers/", dest_path+"/OEBPS/css/", dest_path+"/OEBPS/fonts/", dest_path+"/OEBPS/images/", dest_path+"/OEBPS/js/", dest_path+"/OEBPS/package.opf",dest_path+"/OEBPS/toc.ncx" ]
-    FileUtils.cp_r cp_file_list, dest_path
+    FileUtils.cp_r cp_file_list, dest_path rescue
     FileUtils.rm_rf [dest_path+"/OEBPS", dest_path+"/META-INF"]
     FileUtils.remove_file dest_path+"/mimetype"
     FileUtils.rm_rf  "#{Rails.root}/#{dir_name.first}"
@@ -127,6 +127,16 @@ def parse_epub(book, path)
     end
   end
   
+  def delete_book
+    deleted_book = ''
+    Book.where(id: params[:book_ids]).each do |book|
+    deleted_book = book
+    dir_name = book.book_unique_id
+    book.destroy
+    FileUtils.rm_rf  "#{Rails.root}/public/books/#{dir_name}"
+    end
+  redirect_to books_path
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

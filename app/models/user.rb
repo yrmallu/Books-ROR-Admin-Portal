@@ -38,10 +38,10 @@ class User < ActiveRecord::Base
   
   def not_student?
     if (self.role_id.eql?(1) || self.role_id.eql?(2) || self.role_id.eql?(3))
-	  return true
-	else
-	  return false
-	end
+  	  return true
+  	else
+  	  return false
+  	end
   end
  
   has_attached_file :photos, :style => { :medium => "300x300>",  :thumb => "100x100>" },
