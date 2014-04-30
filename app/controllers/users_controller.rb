@@ -89,15 +89,15 @@ class UsersController < ApplicationController
   def current_user_read_accessrights
  	@current_user_accessrights = []
     @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
- 	if @role_id.name.eql?('School Admin')
- 	  @access_right_name = 'View School Admin'
+	if @role_id.name.eql?('School Admin')
+	  @access_right_name = 'View School Admin'
  	elsif @role_id.name.eql?('Teacher')
  	  @access_right_name = 'View Teacher'
  	elsif @role_id.name.eql?('Student')
  	  @access_right_name = 'View Student'
  	  unless current_user.user_accessrights.blank?
- 	    @access_right_name = []
- 		@access_right_name << 'View Student'
+	    @access_right_name = []
+	    @access_right_name << 'View Student'
  		@access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
        end
     end

@@ -7,7 +7,7 @@ class SchoolsController < ApplicationController
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
-  def index
+  def index 
     if params[:query_string] && !(params[:query_string].blank?)
       @schools = School.search("%#{params[:query_string]}%").page(params[:page]).per(10) 
       @search_flag = true
@@ -61,7 +61,6 @@ class SchoolsController < ApplicationController
   end
   
   def get_schoolwise_license_list
-    binding.pry
     @license_assign_count = []
     @licenses = @school.licenses.order("created_at DESC").page params[:page]
 	@licenses_allocated = User.select("school_id, license_id, role_id, count(license_id) as total_license_count").group("role_id,license_id, school_id").having("school_id =?", params[:id])
