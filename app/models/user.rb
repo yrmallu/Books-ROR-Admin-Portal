@@ -95,9 +95,14 @@ class User < ActiveRecord::Base
   
   def user_details_change_email(current_user, path)
     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-	UserMailer.user_details_changed(user_info).deliver
+	  UserMailer.user_details_changed(user_info).deliver
   end
   
+  def user_email_change_email(current_user, path, emails)
+    user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+    UserMailer.user_email_changed(user_info, emails).deliver
+  end
+
   def access_to_remove_or_add(options={})
     options[:accessright].each do |access|
       unless (options[:removed] + options[:added]).include?(access)

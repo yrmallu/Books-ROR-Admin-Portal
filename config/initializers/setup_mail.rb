@@ -1,10 +1,12 @@
-# ActionMailer::Base.delivery_method = :smtp
-# ActionMailer::Base.smtp_settings = {  
-#       :address              => "smtp.gmail.com",  
-#       :port                 => 587,  
-#       :domain               => "gmail.com",  
-#       :user_name            => "",
-#       :password             => "",
-#       :authentication       => "plain",  
-#       :enable_starttls_auto => true  
-#     }
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.smtp_settings = {  
+      :address              => "smtp.gmail.com",  
+      :port                 => 587,  
+      :domain               => "gmail.com",  
+      :user_name            => "cuelogic.test.acc@gmail.com",
+      :password             => "cuelogic",
+      :authentication       => "plain",  
+      :enable_starttls_auto => true  
+    }
+

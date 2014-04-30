@@ -79,7 +79,7 @@ def parse_epub(book, path)
       when '192'
         server_ip = "#{local_ip}:3000"
       when '10'
-        server_ip = "54.83.84.222/"
+        server_ip = "54.83.84.222"
     end
     xhtml_files = get_xhtml_files list_files   
     # we can to in normal after saving 
@@ -172,7 +172,7 @@ def parse_epub(book, path)
     def get_css_js_tags(list_files, server_ip)
       css_tags = []
       js_tags = []
-      js_list = ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js", "touchswipe.js"]
+      js_list = ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js"]
       list_files.each do |k, v|
         ip_path = v.gsub("#{Rails.root}/public","http://#{server_ip}" )
         ip_path = ip_path.gsub("OEBPS/","" )
@@ -225,7 +225,6 @@ def parse_epub(book, path)
       
       index_file_string << js_tags
       index_file_string = add_js_script(index_file_string, path_with_ip)
-      # index_file_string
     end 
 
     def add_js_script(index_file_string, path_with_ip)
@@ -245,6 +244,13 @@ def parse_epub(book, path)
          swipeJavaScript.type = 'text/javascript';
          swipeJavaScript.src = '#{path_with_ip}/js/jquery_swipe.js';
          contentObject.appendChild(swipeJavaScript);
+        }
+        else
+        {
+        var swipeJavaScript = document.createElement('script');
+             swipeJavaScript.type = 'text/javascript';
+             swipeJavaScript.src = '#{path_with_ip}/js/touchswipe.js';
+             contentObject.appendChild(swipeJavaScript);
         }
         </script>"
         index_file_string << js_script

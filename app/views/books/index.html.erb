@@ -7,7 +7,7 @@
 		<button class="btn btn-primary btn-xs" id="book_search" >
 						    Search
 						    </button>
-		<%= form_tag 'schools/delete_book' do %>
+		<%= form_tag 'books/delete_book' do %>
 		<div class="index_page_btns" data-no-turbolink>
 			<%= link_to 'List All Records', books_path, :class=>"btn btn-success btn-xs" if @search_flag %>
 			<% if can? :create, Book %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>

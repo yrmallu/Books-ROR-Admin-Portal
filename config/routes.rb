@@ -1,5 +1,9 @@
 BooksThatGrow::Application.routes.draw do
-  resources :books
+  resources :books do
+    collection do
+      post 'delete_book'
+    end
+  end
 
   resources :classrooms do
     collection do

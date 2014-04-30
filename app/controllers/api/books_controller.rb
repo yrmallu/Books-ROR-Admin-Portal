@@ -2,6 +2,7 @@ class Api::BooksController < ApplicationController
 	skip_before_filter :authentication_check
 	before_filter :set_headers
 	def read
+		Rails.cache.clear
 		book_unique_id = params[:book_unique_id]
 		render :file => "#{Rails.root}/public/books/#{book_unique_id}/index.html", :layout => false, :status => 200
 	end
