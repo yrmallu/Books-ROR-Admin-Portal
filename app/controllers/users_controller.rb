@@ -229,7 +229,9 @@ class UsersController < ApplicationController
   
   def user_update
     path = request.env['HTTP_HOST']
+    binding.pry
     if @user.update_attributes(user_params)
+      binding.pry
       unless params[:accessright].blank?
         if params[:accessright].eql?('0')
 	      can_manage_access_right_id = get_manage_student_accessright

@@ -24,7 +24,7 @@ set :scm_verbose, true
 set :branch, "master"
 
 # set :scm_passphrase, "password"
-#set :use_sudo, false
+set :use_sudo, false
 
 #############################################################
 # Settings
