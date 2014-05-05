@@ -4,6 +4,9 @@ jQuery(document).ready(function(){
 		dateFormat: 'yy-mm-dd',
 	    minDate: 0
 	}).val();
+	$('.input-group-addon').click(function() {
+		$("#datepicker").datepicker( "show" );
+	});
   });
 
 

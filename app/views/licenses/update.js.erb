@@ -8,6 +8,9 @@ $('#datepicker').datepicker({
 	dateFormat: 'yy-mm-dd',
     minDate: 0		 
 }).val();
+$('.input-group-addon').click(function() {
+	$("#datepicker").datepicker( "show" );
+});
 
 $('#id_update_license').removeClass('hide').addClass('show');
 $('#id_create_license').removeClass('show').addClass('hide');
