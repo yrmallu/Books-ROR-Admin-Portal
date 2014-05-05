@@ -147,16 +147,15 @@ class ApplicationController < ActionController::Base
             "Add Accessright"=> ""
           }
         }
-	   
-      when "accessrights"
+      when "accessrights#index"
         @breadcrumb = {
-          :title=>"Add Accessrights",
+          :title=>"Accessrights List",
 		  :icon=>"glyphicon glyphicon-ban-circle",
           :breadcrumb=>{
-            "Add Accessright"=> ""
+            "Accessrights List"=> ""
           }
-        } 		
-		
+        } 
+     	
        when "schools#index"
         @breadcrumb = {
           :title=>"School List",
