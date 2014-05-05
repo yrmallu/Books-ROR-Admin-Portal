@@ -1,7 +1,10 @@
 
 jQuery(document).ready(function(){
-  $('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
-});
+	$('#datepicker').datepicker({ 
+		dateFormat: 'yy-mm-dd',
+	    minDate: 0
+	}).val();
+  });
 
 
 // select/de-select classrooms while add/edit school-admin,teacher,student

@@ -11,6 +11,7 @@ jQuery(document).ready(function() {
         "sDom": 't',
 	    "aoColumnDefs": [
 	               { "bSortable": false, "aTargets": [-1] },
+				   { "bSortable": false, "aTargets": [0] }
 				  ]
 	 });
   

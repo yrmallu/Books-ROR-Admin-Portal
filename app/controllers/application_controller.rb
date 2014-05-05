@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   def get_schools
     @schools = []
     if current_user.role.name.eql?("Web Admin")
-      @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
+      @schools = School.by_newest.page params[:page]
 	else
 	  @schools << @current_user.school
 	end
@@ -177,16 +177,15 @@ class ApplicationController < ActionController::Base
 		
       when "schools#new"
         @breadcrumb = {
-          :title=>"Add new school",
+          :title=>"Add New School",
 		  :icon=>"fa fa-building-o",
           :breadcrumb=>{
-            "School List"=> schools_path,
             "Add new school"=> "",
           }
         }
       when "schools#edit"
         @breadcrumb = {
-          :title=>"Edit school info",
+          :title=>"Edit School Details",
 		  :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School List"=> schools_path,
@@ -216,7 +215,7 @@ class ApplicationController < ActionController::Base
       }
       when "users#edit-2"
       @breadcrumb = {
-        :title=>"Edit school admin info",
+        :title=>"Edit School Admin Details",
 		:icon=>"fa fa-user",
         :breadcrumb=>{
           "School List"=> schools_path,
@@ -244,10 +243,9 @@ class ApplicationController < ActionController::Base
         }
         when "users#edit-1"
         @breadcrumb = {
-          :title=>"Edit web admin info",
+          :title=>"Edit Web Admin Details",
 		  :icon=>"fa fa-user",
           :breadcrumb=>{
-           "School List"=> schools_path,
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
             "Edit web admin info"=> "",
           }
@@ -275,7 +273,7 @@ class ApplicationController < ActionController::Base
         }
         when "users#edit-3"
         @breadcrumb = {
-          :title=>"Edit teacher info",
+          :title=>"Edit Teacher Details",
 		  :icon=>"fa fa-user",
           :breadcrumb=>{
            "School List"=> schools_path,
@@ -297,7 +295,7 @@ class ApplicationController < ActionController::Base
         }
         when "users#edit-4"
         @breadcrumb = {
-          :title=>"Edit student info",
+          :title=>"Edit Student Details",
 		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "School List"=> schools_path,
@@ -326,7 +324,7 @@ class ApplicationController < ActionController::Base
           }
         when "classrooms#new"
 		  @breadcrumb = {
-            :title=>"Add new classroom",
+            :title=>"Add New Classroom",
 			:icon=>"fa fa-users",
             :breadcrumb=>{
               "School List"=> schools_path,
@@ -336,7 +334,7 @@ class ApplicationController < ActionController::Base
           }
         when "classrooms#edit"
           @breadcrumb = {
-            :title=>"Edit classroom info",
+            :title=>"Edit Classroom Details",
 			:icon=>"fa fa-users",
             :breadcrumb=>{
               "School List"=> schools_path,

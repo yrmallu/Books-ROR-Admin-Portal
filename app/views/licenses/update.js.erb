@@ -4,12 +4,29 @@ $('#datepicker').val('');
 
 $('#id_license').html('<%= j(render "form") %>');
 $('#id_license_info').html('<%= j(render "licenses_info") %>')
-$('#datepicker').datepicker({ dateFormat: 'yy-mm-dd' }).val();
+$('#datepicker').datepicker({ 
+	dateFormat: 'yy-mm-dd',
+    minDate: 0		 
+}).val();
 
 $('#id_update_license').removeClass('hide').addClass('show');
 $('#id_create_license').removeClass('show').addClass('hide');
 $('#id_archive_license').removeClass('show').addClass('hide');
 
+$(document).ready(function(){
+	$(".form_validation").validate({
+		rules: {
+			"license[license_batch_name]":{required: true} ,
+			"license[no_of_licenses]":{ required: true, number: true, min: 1 },
+			"license[expiry_date]":{required: true} 
+		},
+		messages: {
+			"license[license_batch_name]":"Please enter license batch name.",
+			"license[expiry_date]":"Please enter license expiration date.",
+			"license[no_of_licenses]":"Please enter number greater than zero."
+		}
+		});
+});
 
 
 
