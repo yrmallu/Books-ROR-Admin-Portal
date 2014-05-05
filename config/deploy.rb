@@ -57,12 +57,13 @@ set :rails_env, "production"
 # Callbacks
 ##############################################################
 
-# after "deploy", "deploy:symlink_config_files"
- after "deploy", "deploy:restart"
- after "deploy", "deploy:cleanup"
+  after  'deploy:update_code', 'deploy:migrate' #symlink_shared' # uncomment
+  after 'deploy:migrate', 'deploy:symlink_shared'
+  after "deploy:symlink_shared", "deploy:restart"
+  after "deploy:restart", "deploy:cleanup"
 
 # If you are using Passenger mod_rails uncomment this:
- namespace :deploy do
+namespace :deploy do
   task :start do ; end
   task :stop do ; end
   
@@ -90,11 +91,9 @@ set :rails_env, "production"
   desc "Precompile assets after deploy"
   task :precompile_assets do
     run <<-CMD
-      cd #{ current_path } &&
-      #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
+    cd #{ current_path } &&
+    #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
     CMD
   end  
+end
 
- end
- 
- 
