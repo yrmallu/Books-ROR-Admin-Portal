@@ -11,6 +11,7 @@ class AccessrightsController < ApplicationController
   end
     
   def index
+    set_bread_crumb
   end
     
   def edit
