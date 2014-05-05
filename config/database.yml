@@ -31,7 +31,7 @@ test:
   database: BookThatGrow_test
   pool: 5
   host: localhost
-  username: postgres
+  username: apple
   password: cuelogic 
 
 production:

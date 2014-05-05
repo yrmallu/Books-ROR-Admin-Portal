@@ -10,7 +10,7 @@ jQuery(document).ready(function() {
 	    "bAutoWidth": false,
         "sDom": 't',
 	    "aoColumnDefs": [
-	               { "bSortable": false, "aTargets": [-1] },
+	               { "bSortable": false, "aTargets": [0, -1] },
 				  ]
 	 });
   
@@ -25,8 +25,8 @@ jQuery(document).ready(function() {
         "bFilter": false,
  	    "sDom": 't',
  	    "aoColumnDefs": [
- 	               { "bSortable": false, "aTargets": [7] },
-				   { "bSortable": false, "aTargets": [0] }]
+                 { "bSortable": false, "aTargets": [0, -1] },
+          ]
  	 });
 	 
   	jQuery('#classroom_table').dataTable({
@@ -38,9 +38,9 @@ jQuery(document).ready(function() {
   	    "bInfo": false,
   	    "bAutoWidth": false,
   	    "sDom": 't',
-  	    "aoColumnDefs": [
-  	               { "bSortable": false, "aTargets": [7] },
- 				   { "bSortable": false, "aTargets": [0] }]
+  	   "aoColumnDefs": [
+                 { "bSortable": false, "aTargets": [0, -1] },
+          ]
   	 });
 	 
   	jQuery('#accessright_table').dataTable({
@@ -91,9 +91,9 @@ jQuery(document).ready(function() {
  	    "bInfo": false,
  	    "bAutoWidth": false,
  	    "sDom": 't',
- 	    "aoColumnDefs": [
- 	               { "bSortable": false, "aTargets": [7] },
-				   { "bSortable": false, "aTargets": [0] }]
+ 	   "aoColumnDefs": [
+                 { "bSortable": false, "aTargets": [0, -1] },
+          ]
  	 });
   	
   	jQuery('#book_table').dataTable({
@@ -105,9 +105,9 @@ jQuery(document).ready(function() {
  	    "bInfo": false,
  	    "bAutoWidth": false,
  	    "sDom": 't',
- 	   // "aoColumnDefs": [
- 	               // { "bSortable": false, "aTargets": [3] },
-				   // { "bSortable": false, "aTargets": [0] }]
+ 	   "aoColumnDefs": [
+                 { "bSortable": false, "aTargets": [0, -1] },
+          ]
  	 });
   
   });

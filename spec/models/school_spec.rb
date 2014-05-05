@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe School do
-  context 'associations' do
+  # context 'associations' do
     it { should have_many(:licenses)}
-  end
-  context 'validations' do
+  # end
+  # context 'validations' do
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
-  end
-  context 'To ensure that a column of the database are actually exists' do
+  # end
+  # context 'To ensure that a column of the database are actually exists' do
     it { should have_db_column(:id).of_type(:integer) }
     it { should have_db_column(:code).of_type(:integer)}
     it { should have_db_column(:name).of_type(:string).with_options(:limit => 255)}  
@@ -22,7 +22,7 @@ describe School do
     it { should have_db_column(:created_at).of_type(:datetime) }
     it { should have_db_column(:updated_at).of_type(:datetime) }
     it { should have_db_column(:delete_flag).of_type(:boolean)}
-  end
+  # end
 end
 
 # == Schema Information
