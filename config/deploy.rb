@@ -57,19 +57,19 @@ set :rails_env, "production"
 # Callbacks
 ##############################################################
 
-  after  'deploy:update_code', 'deploy:migrate' #symlink_shared' # uncomment
-  after 'deploy:migrate', 'deploy:symlink_shared'
-  after "deploy:symlink_shared", "deploy:restart"
-  after "deploy:restart", "deploy:cleanup"
+  # after  'deploy:update_code', 'deploy:migrate' #symlink_shared' # uncomment
+  # after 'deploy', 'deploy:symlink_shared'
+  after "deploy", "deploy:restart"
+  after "deploy", "deploy:cleanup"
 
 # If you are using Passenger mod_rails uncomment this:
 namespace :deploy do
-  task :start do ; end
-  task :stop do ; end
+  # task :start do ; end
+  # task :stop do ; end
   
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-  end
+  # task :restart, :roles => :app, :except => { :no_release => true } do
+  #   run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+  # end
 
   # desc "Symlink shared config files"
   # task :symlink_config_files do
