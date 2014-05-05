@@ -36,7 +36,7 @@ set :deploy_via, :copy
 
 set :ssh_options, { :forward_agent => true}
 
-ssh_options[:keys] = %w(/Users/cuelogic/Downloads/danielepub.pem)
+ssh_options[:keys] = %w(/Users/apple/Downloads/danielepub.pem)
 
 set :keep_releases, 5
 

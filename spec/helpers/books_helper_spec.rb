@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+# require "test/functional/controller_helper"
 # Specs in this file have access to a helper object that includes
 # the BooksHelper. For example:
 #

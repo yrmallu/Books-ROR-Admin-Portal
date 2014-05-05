@@ -1,12 +1,22 @@
 class Book < ActiveRecord::Base
+  
   self.primary_key = "id"
   
+  paginates_per 10
+  max_paginates_per 10  
   @trigger_after_save = nil
   after_save :update_preview_name
-  # after_update :update_preview_name
+
+  ###########################################################################################
+  ## Relationships
+  ###########################################################################################
 
   has_many :preview_images, :dependent => :destroy  
   accepts_nested_attributes_for :preview_images, :allow_destroy=> true, :reject_if => :all_blank
+
+  ###########################################################################################
+  ## Attachments
+  ###########################################################################################
 
   has_attached_file :epub,
                     :url  => "/images/assets/template/books/:id/:style/:basename.:extension",
@@ -18,16 +28,23 @@ class Book < ActiveRecord::Base
                     :path => ":rails_root/public/images/assets/template/books/:id/:style/:basename.:extension",
                     :use_timestamp => false
 
+  ###########################################################################################
+  ## Validations
+  ###########################################################################################
+
   validates_attachment_content_type :book_cover, :content_type => /\Aimage\/.*\Z/
   # validates_attachment_content_type :book_cover_large, :content_type => /\Aimage\/.*\Z/
   # validates_attachment_content_type :preview_book_image, :content_type => /\Aimage\/.*\Z/
   validates_attachment_content_type :epub, :content_type => ['application/epub+zip', 'application/octet-stream']
   
   validates_attachment_presence :epub
-  # validates_presence_of :title
+  validates_attachment_presence :book_cover
   validates :title, :presence=> true
-  paginates_per 10
-  max_paginates_per 10
+
+
+  ###########################################################################################
+  ## Methods
+  ###########################################################################################
 
   def update_preview_name
     if !@trigger_after_save
@@ -48,4 +65,5 @@ class Book < ActiveRecord::Base
       )
     )
   end
+
 end

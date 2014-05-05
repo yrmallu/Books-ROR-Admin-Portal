@@ -172,7 +172,7 @@ def parse_epub(book, path)
     def get_css_js_tags(list_files, server_ip)
       css_tags = []
       js_tags = []
-      js_list = ["jquery_1.7.2.min.js", "page_flip.js", "reader_reusables.js"]
+      js_list = ["jquery_1.7.2.min.js", "reader_reusables.js"]
       list_files.each do |k, v|
         ip_path = v.gsub("#{Rails.root}/public","http://#{server_ip}" )
         ip_path = ip_path.gsub("OEBPS/","" )
@@ -180,6 +180,7 @@ def parse_epub(book, path)
          css_tags <<  "
          <link rel=\"stylesheet\" type=\"text/css\" href=\"" + ip_path + " \"> </link>"
         elsif (v.split("/").last.split(".").last == "js") && (js_list.include? v.split("/").last)
+          binding.pry
           js_tags <<  "
           <script type=\"text/javascript\" src=\"" + ip_path + " \"></script>"
         end
@@ -224,7 +225,7 @@ def parse_epub(book, path)
        </div>"
       
       index_file_string << js_tags
-      index_file_string = add_js_script(index_file_string, path_with_ip)
+      # index_file_string = add_js_script(index_file_string, path_with_ip)
     end 
 
     def add_js_script(index_file_string, path_with_ip)
