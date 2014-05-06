@@ -85,27 +85,25 @@ namespace :deploy do
   #   run "#{ sudo } ln -s #{ deploy_to }/shared/config/database.yml #{ current_path }/config/database.yml"
   # end
 
-  
+  desc "Symlink shared resources on each release"
+  task :symlink_shared, :roles => :app do
+    run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/books #{release_path}/public/books"
+    run "ln -nfs #{shared_path}/images #{release_path}/public/images"
+    run "ln -nfs #{shared_path}/users #{release_path}/public/users"
+  end
 
   desc "Fix file permissions"
   task :fix_file_permissions, :roles => [ :app, :db, :web ] do
     sudo "chown -R g+rw #{current_path}/releases" 
-  end
-
-  desc "Symlink shared resources on each release"
-  task :symlink_shared, :roles => :app do
-    run "ln -nfs #{shared_path}/config/database.yml #{current_path}/config/database.yml"
-    run "ln -nfs #{shared_path}/books #{current_path}/public/books"
-    run "ln -nfs #{shared_path}/images #{current_path}/public/images"
-    run "ln -nfs #{shared_path}/users #{current_path}/public/users"
   end 
   # desc "Precompile assets after deploy"
-  task :precompile_assets do
-    run <<-CMD
-    cd #{ current_path } &&
-    #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
-    CMD
-  end  
+  # task :precompile_assets do
+  #   run <<-CMD
+  #   cd #{ current_path } &&
+  #   #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
+  #   CMD
+  # end  
 end
 
 after "deploy", "deploy:restart"

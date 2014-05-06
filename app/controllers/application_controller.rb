@@ -5,10 +5,13 @@ class ApplicationController < ActionController::Base
   
   include SessionsHelper
   hide_action :current_user
-  
   before_filter :authentication_check
   USER, PASSWORD = 'books-that-grow', 'qwerty123'
-    
+  
+  rescue_from Exception, :with => :render_error
+  rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found   
+  rescue_from ActionController::RoutingError, :with => :render_not_found   
+	
   helper_method :current_user
   helper_method :local_ip
   
@@ -22,6 +25,27 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  #called by last route matching unmatched routes.  Raises RoutingError which will be rescued from in the same way as other exceptions.
+  def raise_not_found!
+    raise ActionController::RoutingError.new("No route matches #{params[:unmatched_route]}")
+  end
+ 
+  #render 500 error 
+  def render_error(e)
+    respond_to do |f| 
+      f.html{ render :file => "#{Rails.root}/public/500.html", :status => 500 }
+        # f.js{ render :partial => "public/ajax_500", :status => 500 }
+    end
+  end
+  
+     #render 404 error 
+  def render_not_found(e)
+    respond_to do |f| 
+      f.html{ render :file => "#{Rails.root}/public/404.html", :status => 404 }
+      # f.js{ render :partial => "#{Rails.root}/public/ajax_404", :status => 404 }
+    end
+  end
+	 
   def local_ip
     orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
     

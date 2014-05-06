@@ -24,7 +24,7 @@ module BooksThatGrow
     console do
         ActiveRecord::Base.connection
     end
-    config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
+    # config.middleware.insert_before ActionDispatch::Static, Rack::Deflater
   end
 
 end

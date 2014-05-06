@@ -2,6 +2,8 @@ class Role < ActiveRecord::Base
   has_many :users
   has_many :user_accessrights
   has_and_belongs_to_many :accessrights
+
+  validates :name, :length => {:maximum => 255}, :allow_blank=>true
   
   def add_accessrights(accessright)
     unless accessright.blank?
