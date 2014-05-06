@@ -30,6 +30,7 @@ server "54.83.84.222", :app, :web, :db, :primary => true
 # these http://github.com/rails/irs_process_scripts
 
 # If you are using Passenger mod_rails uncomment this:
+
 namespace :deploy do
   task :start do ; end
   task :stop do ; end
@@ -55,13 +56,13 @@ namespace :deploy do
   task :fix_file_permissions, :roles => [ :app, :db, :web ] do
     sudo "chown -R g+rw #{current_path}/releases" 
   end 
-  desc "Precompile assets after deploy"
-  task :precompile_assets do
-    run <<-CMD
-    cd #{ current_path } &&
-    #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
-    CMD
-  end  
+  # desc "Precompile assets after deploy"
+  # task :precompile_assets do
+  #   run <<-CMD
+  #   cd #{ current_path } &&
+  #   #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
+  #   CMD
+  # end  
 end
 
 after  'deploy:update_code', 'deploy:migrate' #symlink_shared' # uncomment

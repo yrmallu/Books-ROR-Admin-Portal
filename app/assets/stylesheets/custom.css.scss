@@ -1,3 +1,6 @@
+/*common classes */
+.margin-t-10{margin-top:10px;}
+
 #error_explanation {
   color: #B94A48;
   ul {
@@ -77,3 +80,11 @@ label.error {display:block;}
 	.school-table tr th:nth-child(6){width:9%;}
 	.school-table tr th:nth-child(7){width:10%;}
 	.school-table tr th:nth-child(8){width:20%;}
+
+/* Fieldset */
+	.fieldset-parents{height:110px;}
+	.add-parent{ margin-bottom:20px; display:block;}
+	.add-student-label{padding-right:10px;}
+
+/* Student profile pic */
+	.student-profil-pic{width:100px; border-radius:100px; margin-bottom:10px;}
