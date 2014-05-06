@@ -151,7 +151,9 @@ class ApplicationController < ActionController::Base
         :icon=>"fa fa-building-o",
         :breadcrumb=>{
           "School List"=> "",
-
+         }
+      }
+		 
       when "accessrights#index"
         @breadcrumb = {
           :title=>"Accessrights List",
