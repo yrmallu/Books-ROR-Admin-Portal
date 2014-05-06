@@ -22,5 +22,6 @@ pickle-email-*.html
 .project
 /config/initializers/secret_token.rb
 /config/database.yml
+.DS_Store
 Capfile
 
