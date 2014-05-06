@@ -58,8 +58,8 @@ class User < ActiveRecord::Base
   validates :email, :presence=> true, :if => :not_student?
   validates :email, :format=>{:with=>VALID_EMAIL_REGEX}, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
   validates :first_name, :format => { :with => /\A(([a-zA-Z])+(-?[a-zA-Z]+)*\s?)+\Z/ }
-  validates :school_id, :presence=> {:message => "Select School."}
-  validates :password, :presence => true, :confirmation => true, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
+  #validates :school_id, :presence=> {:message => "Select School."}
+  #validates :password, :presence => true, :confirmation => true, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
   validates_attachment_size :photos, :less_than => 5.megabytes
   validates_attachment_content_type :photos, :content_type => /\Aimage\/.*\Z/
   
