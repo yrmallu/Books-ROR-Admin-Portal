@@ -88,12 +88,12 @@ namespace :deploy do
   task :fix_file_permissions, :roles => [ :app, :db, :web ] do
     sudo "chown -R g+rw #{current_path}/releases" 
   end 
-  desc "Precompile assets after deploy"
-  task :precompile_assets do
-    run <<-CMD
-    cd #{ current_path } &&
-    #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
-    CMD
-  end  
+  # desc "Precompile assets after deploy"
+  # task :precompile_assets do
+  #   run <<-CMD
+  #   cd #{ current_path } &&
+  #   #{ sudo } bundle exec rake assets:precompile RAILS_ENV=#{ rails_env }
+  #   CMD
+  # end  
 end
 
