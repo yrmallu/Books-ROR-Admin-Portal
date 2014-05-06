@@ -66,7 +66,12 @@ class UsersController < ApplicationController
   
   def user_show
     @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
-  @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
+    @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
+	unless @school.blank?
+	  set_bread_crumb(@role_id.id, @school.id)
+	else
+	  set_bread_crumb(@role_id.id)
+	end
   end
   
   def new
