@@ -144,7 +144,6 @@ class ApplicationController < ActionController::Base
         :breadcrumb=>{
           "Add Accessright"=> ""
         }
-<<<<<<< HEAD
       } 		
     when "schools#index"
       @breadcrumb = {
@@ -152,7 +151,7 @@ class ApplicationController < ActionController::Base
         :icon=>"fa fa-building-o",
         :breadcrumb=>{
           "School List"=> "",
-=======
+
       when "accessrights#index"
         @breadcrumb = {
           :title=>"Accessrights List",
@@ -169,9 +168,8 @@ class ApplicationController < ActionController::Base
           :breadcrumb=>{
             "School List"=> "",
           }
->>>>>>> 3d1e865fefe562a7d8e81b101a03227ab39cf555
         }
-      }
+      
     when "schools#show"
       @breadcrumb = {
         :title=>"School Details",
