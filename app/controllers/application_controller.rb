@@ -7,6 +7,11 @@ class ApplicationController < ActionController::Base
   hide_action :current_user
   
   before_filter :authentication_check
+  
+  rescue_from Exception, :with => :render_error
+  rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found   
+  rescue_from ActionController::RoutingError, :with => :render_not_found
+  
   USER, PASSWORD = 'books-that-grow', 'qwerty123'
     
   helper_method :current_user
@@ -21,15 +26,36 @@ class ApplicationController < ActionController::Base
       user == USER && password == PASSWORD
     end
   end
+ 
+   #called by last route matching unmatched routes.  Raises RoutingError which will be rescued from in the same way as other exceptions.
+   def raise_not_found!
+     raise ActionController::RoutingError.new("No route matches #{params[:unmatched_route]}")
+   end
+ 
+   #render 500 error 
+   def render_error(e)
+     respond_to do |f| 
+       f.html{ render :file => "#{Rails.root}/public/500.html", :status => 500 }
+       # f.js{ render :partial => "public/ajax_500", :status => 500 }
+     end
+   end
+  
+   #render 404 error 
+   def render_not_found(e)
+     respond_to do |f| 
+       f.html{ render :file => "#{Rails.root}/public/404.html", :status => 404 }
+       # f.js{ render :partial => "#{Rails.root}/public/ajax_404", :status => 404 }
+     end
+   end
+  
   
   def local_ip
     orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
-    
     UDPSocket.open do |s|
       s.connect '64.233.187.99', 1
       s.addr.last
     end
-  ensure
+    ensure
     Socket.do_not_reverse_lookup = orig
   end
   
@@ -37,10 +63,9 @@ class ApplicationController < ActionController::Base
     @schools = []
     if current_user.role.name.eql?("Web Admin")
       @schools = School.by_newest.page params[:page]
-	else
-	  @schools << @current_user.school
-	end
-    #@schools = School.by_newest.page params[:page]
+	  else
+	    @schools << @current_user.school
+	  end
   end
   
   def get_all_schools
@@ -52,9 +77,6 @@ class ApplicationController < ActionController::Base
   end
   
   def get_accessright
-    # if current_user.role_id.eql?(1)
-#       @accessrights = Accessright.where("id > 4")	
-# 	end
     @accessrights = Accessright.all
   end
   
