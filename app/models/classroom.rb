@@ -26,7 +26,7 @@ class Classroom < ActiveRecord::Base
   ###########################################################################################
   ## Validations
   ###########################################################################################
-  validates :name, :presence => { :message => "Classroom Name can't be blank." }
+  validates :name, :presence => { :message => "Classroom Name can't be blank." }, :length => {:maximum => 255}
 
 
   ###########################################################################################
