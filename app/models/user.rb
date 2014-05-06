@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   ###########################################################################################
 
   def not_student?
-    if (self.role_id.eql?(1) || self.role_id.eql?(2) || self.role_id.eql?(3))
+    if (self.role.name.eql?('Web Admin') || self.role.name.eql?('School Admin') || self.role.name.eql?('Teacher'))
       return true
     else
       return false
