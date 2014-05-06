@@ -2,7 +2,7 @@
 	<div class="col-md-12">
     	<div class="panel panel-default">
         	<div class="panel-heading">
-            	<h4 class="panel-title">User Information</h4>
+            	<h4 class="panel-title">User Details</h4>
         	</div>
         	<div class="panel-body">
             	<address>
@@ -17,29 +17,40 @@
 			    	<strong>Phone Number:</strong>
 			    	<%= @user.phone_number %>
             	</address>
-				<% unless @role_id.eql?('1')%>
+				<% unless @role_id.name.eql?('Web Admin')%>
 				<address>
 			    	<strong>License Expiration Date:</strong>
 			    	<%= @user.license_expiry_date %>
             	</address>
 				<%end%>
+				<address>
 			    	<strong>Email:</strong>
 			    	<%= @user.email %>
             	</address>
+				<% if @role_id.name.eql?('Student')%>
+					<address>
+				    	<strong>Student Grade:</strong>
+				    	<%= @grade %>
+	            	</address>
+					<address>
+				    	<strong>Student Reading Ability:</strong>
+				    	<%= @reading %>
+	            	</address>
+				<%end%>
 			    <div data-no-turbolink>
-					<% unless @role_id.eql?('1')%>
+					<% unless @role_id.name.eql?('Web Admin')%>
 			            <%= link_to 'Edit', edit_user_path(@user, :role_id => @user.role_id, :school_id=>@school.id), :class=>"btn btn-success btn-xs" %>
 					<%else%>
 					    <%= link_to 'Edit', edit_user_path(@user, :role_id => @user.role_id), :class=>"btn btn-success btn-xs" %>
 					<%end%>
-					<% if @role_id.eql?('1')%>
-						<%= link_to 'Cancel', users_path(:role_id => 1), class: "btn btn-white btn-xs"%>
-					<% elsif @role_id.eql?('2')%>
-					    <%= link_to 'Cancel', users_path(:role_id => 2, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
-					<% elsif @role_id.eql?('3')%>
-					    <%= link_to 'Cancel', users_path(:role_id => 3, :school_id=>@school.id), class: "btn btn-white btn-xs"%>	
-					<% elsif @role_id.eql?('4')%>
-					    <%= link_to 'Cancel', users_path(:role_id => 4, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
+					<% if @role_id.name.eql?('Web Admin')%>
+						<%= link_to 'Cancel', users_path(:role_id => @role_id.id), class: "btn btn-white btn-xs"%>
+					<% elsif @role_id.name.eql?('School Admin')%>
+					    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
+					<% elsif @role_id.name.eql?('Teacher')%>
+					    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>	
+					<% elsif @role_id.name.eql?('Student')%>
+					    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
 					<%end%>
         	    </div>
 		    </div>
@@ -47,15 +58,11 @@
     </div>
 </div>
 <script type="text/javascript">
-if( <%= @role_id.eql?('1')%>)
+if( <%= @role_id.name.eql?('Web Admin')%>)
 {
     showHideMenu('li_webadmin');	
 }
-else if(<%= @role_id.eql?('2')%>)
-{
-    showHideMenu('li_school');	
-}
-else if(<%= @role_id.eql?('3')%>)
+else if(<%= @role_id.name.eql?('School Admin')%>)
 {
     showHideMenu('li_school');	
 }

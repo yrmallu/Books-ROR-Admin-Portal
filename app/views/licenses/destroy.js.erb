@@ -1,6 +1,12 @@
 $('#id_license_info').html('<%= j(render "licenses_info") %>')
 
+$('#license_license_batch_name').val('');
 $('#license_no_of_licenses').val('');
 $('#datepicker').val('');
 
 <% @license = License.new  %>
+
+$('#id_archive_license').removeClass('hide').addClass('show');
+$('#id_update_license').removeClass('show').addClass('hide');
+$('#id_create_license').removeClass('show').addClass('hide');
+

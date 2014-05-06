@@ -1,77 +1,134 @@
-<%#= form_tag 'users/delete_user', remote: true do %>
+
   <div class="panel panel-default">
 	<div class="panel-body"> 
+		<%= text_field_tag :text_field_search %>
+		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
+
+		<button class="btn btn-primary btn-xs" id="user_search" >
+						    Search
+		</button>
+		<%= form_tag 'users/delete_user' do %>
 	  <div class="index_page_btns" data-no-turbolink>
-		<% if @role_id.eql?('1')%>
-			<%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id), :class=>"btn btn-success btn-xs"%>
-		<%elsif @role_id.eql?('2')%>
-		    <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
-		<%elsif @role_id.eql?('3')%>
-		    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
-		<%elsif @role_id.eql?('4')%>
-		    <%=link_to 'Add Student', new_user_path(:role_id => @role_id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>    	
+		<% if @role_id.name.eql?('Web Admin')%>
+		    <% if can? :create, :users %>
+			    <%=link_to 'Add Web Admin', new_user_path(:role_id => @role_id.id), :class=>"btn btn-success btn-xs"%>
+			<%end%>
+		<%elsif @role_id.name.eql?('School Admin')%>
+		    <% if (can? :create, :users) && (can? :create_sa, :users) %>
+		        <%=link_to 'Add School Admin', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+			<%end%>
+			<%=link_to 'Import School Admin List', import_list_users_path(:list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "school_admin", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
+		<%elsif @role_id.name.eql?('Teacher')%>
+		    <% if (can? :create, :users) && (can? :create_teacher, :users) %>
+			    <%=link_to 'Add Teacher', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+		    <%end%>	
+			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "teacher", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
+			<%=link_to 'Import Teacher List', import_list_users_path(:list_type => "teacher"), :class=>"btn btn-success btn-xs"%>
+		<%elsif @role_id.name.eql?('Student')%>
+			<% if ((can? :read, :users) && (can? :read_student, :users)) || ((can? :read, :users) && (can? :manage_student, :users)) %>
+			    <%=link_to 'Add Student', new_user_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
+			<%end%>
+			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student"), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "student", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
 		<%end%>
 		<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
-	  </div>
-	 
-	 <div class="table-responsive">
-		<table class="table" id="users_table">
+	</div>
+	<div class="table-responsive">
+		<table class="table class_common_table" id="users_table">
             <thead>
                 <tr>
-                	<th></th>
+                	<th><%= link_to :All, 'javascript:checkAll("user")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("user")', :class => "lnk-typ2" %></th>
                     <th>First Name</th>
                     <th>Last Name</th>
+					<th>Username</th>
                     <th>Email</th>
 					<th>Phone Number</th>
+					<%unless @role_id.name.eql?('Web Admin')%>
+					    <th>License Expiration Date</th>
+					<%end%>
+					<%if @role_id.name.eql?('Student')%>
+					    <th>Grade</th>
+					    <th>Reading Level</th>
+					<%end%>
 					<th>Actions</th>
                  </tr>
               </thead>
               <tbody>
 				 <% @users.each do |user| %>
-                  <tr class="odd gradeX">
-                 	  <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
-                      <td class=""><%= user.first_name %></td>
-                      <td class=""><%= user.last_name %></td>
-                      <td class="center "><%= user.email %></td>
-					  <td class=""><%= user.phone_number %></td>
-					  <td data-no-turbolink>
-   				      <% if user.email == current_user.email %>
-						    <%unless @school.blank?%>
-   				      		    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %>  | 
-							<%else%>
-							    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>  |
-							<%end%>	
-   				      	<% else %>	
-						    <%unless @school.blank?%>		
-						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %> |
-						    <%else%>
-						        <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %> |
-						    <% end %> 
-						<% end %> 
-   				   	      <%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: 'Are you sure?' } %> | 
-						  <%= link_to '<i title="Remove License" class="fa fa-minus-square"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } %> | 
-						<% unless @role_id.eql?('1')%>  
-						    <%= hidden_field_tag :user_id, user.id%>
-							<button class="btn btn-primary btn-xs assign_license" data-toggle="modal" data-target="#myModal" data-input='<%=user.id%>' >
-						        Assign License
-						    </button> | 
-						<%end%>  
-						<button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%=user.id%>' >
+				     <% unless user.id == current_user.id%>
+                         <tr class="odd gradeX" data-no-turbolink>
+                 	         <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
+							 <%unless @role_id.name.eql?('Web Admin')%>
+                                 <td class=""><%= link_to user.first_name, user_path(user, :role_id => @role_id, :school_id=>@school.id), :title=>"View User Details" %></td>
+							 <%else%>
+							     <td class=""><%= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
+							 <%end%>
+                             <td class=""><%= user.last_name %></td>
+							 <td class=""><%= user.username %></td>
+                             <td class="center "><%= user.email %></td>
+					         <td class=""><%= user.phone_number %></td>
+					         <%unless @role_id.name.eql?('Web Admin')%>
+					             <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
+					         <%end%>
+  					         <%if @role_id.name.eql?('Student')%>
+					             <td class=""><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></td>
+					             <td class=""><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></td>
+  					         <%end%>
+  					         <td>
+					         <% if ((can? :update, :users) && (can? :update_sa, :users)) && params[:role_id].eql?('2') %>
+						         <%= render 'edit_link', user: user%>
+							 <% end %>
+						     <% if ((can? :update, :users) && (can? :update_teacher, :users)) && params[:role_id].eql?('3') %>
+						         <%= render 'edit_link', user: user%>
+                             <% end %>
+						     <% if (((can? :update, :users) && (can? :update_student, :users)) || ((can? :update, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>	
+						         <%= render 'edit_link', user: user%>
+						     <% end %>
+						     <% if ((can? :destroy, :users) && (can? :destroy_sa, :users)) && params[:role_id].eql?('2') %>
+						         <%= render 'delete_link', user: user%>
+						     <% end %>  
+						     <% if ((can? :destroy, :users) && (can? :destroy_teacher, :users)) && params[:role_id].eql?('3') %>
+						         <%= render 'delete_link', user: user%>
+						     <% end %>	  
+						     <% if (((can? :destroy, :users) && (can? :destroy_student, :users)) || ((can? :destroy, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>
+   				   	             <%= render 'delete_link', user: user%>      
+						     <% end %>
+					         <% unless  @role_id.name.eql?('Web Admin')%> 
+							     <%= hidden_field_tag :user_id, user.id%>
+								 <% if params[:role_id].eql?('4') %>
+								     <% if (can? :get_user_school_licenses, :users) %>
+							             <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
+						             <% end %>
+								     <% if (can? :remove_license, :users) && params[:role_id].eql?('4') %>
+						                 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } unless user.license_expiry_date.blank? %>   
+								     <% end %>
+								 <%else%>
+								     <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
+									 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } unless user.license_expiry_date.blank? %>  
+						         <%end%>
+							<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
 					       Change Password
-					    </button>
-						<%#= link_to '<i title="Change Password" class="fa fa-lock"></i>'.html_safe, '', :class=>"", data: { toggle: "modal", target: "#myModal"} %>
-					</td>
-                 </tr>
+					    </button> -->
+							<%else%>
+						        <%= render 'edit_link', user: user%> 
+						        <%= render 'delete_link', user: user%>
+						    <%end%>	
+						    <%= link_to '<i title="Change Password" class="fa fa-lock increase_size"></i>'.html_safe, '', :class=>"change_password", data: { toggle: "modal", target: "#changePassword", input: user.id} %>
+					    </td>
+                     </tr>
+				     <% end %>
 				 <% end %>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 	</div>
 
 	<div data-no-turbolink>
 		<%= paginate @users %>
 	</div>
+	<% end %>
  </div>		  
-<%#= end %>
+</div>
 
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -92,6 +149,36 @@
   </div>
 </div>		
 
+<div class="modal fade" id="download_list_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Download Sample List</h4>
+      </div>
+      <div class="modal-body sample_list_links_div">
+		  <div id="school_admin" style='display:none;'>
+		  		<%=link_to 'Download Sample Spreadsheet', download_sample_list_users_path(:format => :xls, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> | 
+		  		<%=link_to 'Download Sample CSV', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
+		  </div>
+
+		  <div id="teacher" style='display:none;'>
+		  		<%=link_to 'Download Sample Spreadsheet', download_sample_list_users_path(:format => :xls, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> | 
+		  		<%=link_to 'Download Sample CSV', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
+		  </div>
+
+		  <div id="student" style='display:none;'>
+		  		<%=link_to 'Download Sample Spreadsheet', download_sample_list_users_path(:format => :xls, :list_type => "student"), :class=>"btn btn-success btn-xs"%> | 
+		  		<%=link_to 'Download Sample CSV', download_sample_list_users_path(:format => :xls, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
+		  </div>
+	  </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Assign</button>
+      </div> -->
+    </div>
+  </div>
+</div>		
 
 <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -110,17 +197,21 @@
 
 
 <script type="text/javascript">
-	if( <%= @role_id.eql?('1')%>)
+	if( <%= @role_id.name.eql?('Web Admin')%>)
 	{
 	    showHideMenu('li_webadmin');	
 	}
-	else if(<%= @role_id.eql?('2')%>)
+	else if(<%= @role_id.name.eql?('School Admin')%> || <%= @role_id.name.eql?('Teacher')%> || <%= @role_id.name.eql?('Student')%>)
 	{
 	    showHideMenu('li_school');	
 	}
 
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
+	
 $( ".assign_license" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true"},
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true", role_id:<%=@role_id.id%>},
 function(data) {
 	         
              if(data)
@@ -130,8 +221,9 @@ function(data) {
       });
 });
 
+
 $( ".change_password" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input')},
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%=@role_id.id%>},
 function(data) {
 	         
              if(data)
@@ -141,6 +233,35 @@ function(data) {
       });
 });
 
+
+$(".download_sample").click(function(){
+	list_type = $(this).attr('data-list_type');
+	$(".sample_list_links_div").children('div').filter("#"+list_type).show();
+	$(".sample_list_links_div").children('div').not("#"+list_type).hide();
+
+});
+
+$(document).ready(function(){
+$('#changePassword').click(function() {
+	$(".form_validation").validate({
+		rules: {
+			"user[password]":{ minlength: 5, required: true} ,
+			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} 
+		},
+		messages: {
+			"user[password]":{
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long."
+			},
+			"user[password_confirmation]": {
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long.",
+				equalTo: "Please enter the same password as above."
+			}
+		}
+		});
+});
+});
 </script>
 
 

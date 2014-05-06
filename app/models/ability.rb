@@ -2,36 +2,69 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    unless user.blank?
       if user.is_web_admin?
-        can :manage, :all
+        can :access, :all
       else 
         user_rights = user.user_permission_names.collect{|i| i.name}
+		p "final accessrights=====",user_rights
+
+		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Create School Admin")
+ 		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Create Teacher")
+ 		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Create Student")
+		can [:create, :new], :users, :role_id => user.role_id if user_rights.include?("Can Manage Student")
+		can :create_sa, :users if user_rights.include?("Create School Admin")
+		can :create_teacher, :users if user_rights.include?("Create Teacher")
+		can :create_student, :users if user_rights.include?("Create Student")
+		can :manage_student, :users if user_rights.include?("Can Manage Student")
+		can :get_user_school_licenses, :users if user_rights.include?("Can Assign/Update License")
+		can :remove_license, :users if user_rights.include?("Can Remove License")
+		can :get_user_school_licenses, :users if user_rights.include?("Can Manage Student")
+		can :remove_license, :users if user_rights.include?("Can Manage Student")
 		
-        can :create, School if user_rights.include?("Create School")
-        can :read, School if user_rights.include?("View School")
-        can [:destroy, :read], School if user_rights.include?("Delete School")
-        can [:update, :read], School if user_rights.include?("Update School")
+		can :read, :users, :role_id => user.role_id if user_rights.include?("View School Admin")
+		can :read, :users, :role_id => user.role_id if user_rights.include?("View Teacher")
+		can :read, :users, :role_id => user.role_id if user_rights.include?("View Student")
+		can :read, :users, :role_id => user.role_id if user_rights.include?("Can Manage Student")
+		can :read_sa, :users if user_rights.include?("View School Admin")
+		can :read_teacher, :users if user_rights.include?("View Teacher")
+		can :read_student, :users if user_rights.include?("View Student")
+		can :manage_student, :users if user_rights.include?("Can Manage Student")
+		
+		can can [:update, :edit, :read], :users, :users if user_rights.include?("Update School Admin")
+		can can [:update, :edit, :read], :users if user_rights.include?("Update Teacher")
+		can can [:update, :edit, :read], :users if user_rights.include?("Update Student")
+		can can [:update, :edit, :read], :users if user_rights.include?("Can Manage Student")
+		can [:update_sa, :read_sa], :users if user_rights.include?("Update School Admin")
+		can [:update_teacher, :read_teacher], :users if user_rights.include?("Update Teacher")
+		can [:update_student, :read_student], :users if user_rights.include?("Update Student")
+		can :manage_student, :users if user_rights.include?("Can Manage Student")
+		
+		can [:destroy, :read], :users, :role_id => user.role_id if user_rights.include?("Delete School Admin")
+		can [:destroy, :read], :users, :role_id => user.role_id if user_rights.include?("Delete Teacher")
+		can [:destroy, :read], :users, :role_id => user.role_id if user_rights.include?("Delete Student")
+		can [:destroy, :read], :users if user_rights.include?("Can Manage Student")
+		can [:destroy_sa, :read_sa], :users if user_rights.include?("Delete School Admin")
+		can [:destroy_teacher, :read_teacher], :users if user_rights.include?("Delete Teacher")
+		can [:destroy_student, :read_student], :users if user_rights.include?("Delete Student")
+		can :manage_student, :users if user_rights.include?("Can Manage Student")
+		
+		can :create, :schools if user_rights.include?("Create School")
+        can :read, :schools if user_rights.include?("View School")
+        can [:destroy, :read], :schools if user_rights.include?("Delete School")
+        can [:update, :read], :schools if user_rights.include?("Update School")
+		
+        can :create, :classrooms if user_rights.include?("Create Classroom")
+        can :read, :classrooms if user_rights.include?("View Classroom")
+        can [:destroy, :read], :classrooms if user_rights.include?("Delete Classroom")
+        can [:update, :read], :classrooms if user_rights.include?("Update Classroom")
+		
+        can :create, :licenses if user_rights.include?("Create License")
+        can :read, :licenses if user_rights.include?("View License")
+        can [:destroy, :read], :licenses if user_rights.include?("Delete License")
+        can [:update, :read], :licenses if user_rights.include?("Update License")
+		
 		 
-        can :create, School if user_rights.include?("Create School Admin")
-        can :read, School if user_rights.include?("View School Admin")
-        can [:destroy, :read], School if user_rights.include?("Delete School Admin")
-        can [:update, :read], School if user_rights.include?("Update School Admin")
-		
-        can :create, School if user_rights.include?("Create Teacher")
-        can :read, School if user_rights.include?("View Teacher")
-        can [:destroy, :read], School if user_rights.include?("Delete Teacher")
-        can [:update, :read], School if user_rights.include?("Update Teacher")
-		
-        can :create, School if user_rights.include?("Create Teacher")
-        can :read, School if user_rights.include?("View Teacher")
-        can [:destroy, :read], School if user_rights.include?("Delete Teacher")
-        can [:update, :read], School if user_rights.include?("Update Teacher")
-		
-        can :create, School if user_rights.include?("Create Student")
-        can :read, School if user_rights.include?("View Student")
-        can [:destroy, :read], School if user_rights.include?("Delete Student")
-        can [:update, :read], School if user_rights.include?("Update Student")
-		
 	  end
   
     # Define abilities for the passed in user here. For example:
@@ -60,5 +93,6 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
+  end
   end
 end

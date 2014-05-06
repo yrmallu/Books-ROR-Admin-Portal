@@ -2,18 +2,21 @@
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	        <div class="panel-heading">
-	            <!-- <h4 class="panel-title">License Form</h4> -->
-	             <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+                <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
-	        <div class="panel-body">
+			<div id="id_create_license" class="alert_license_success hide">License Added.</div>	
+			<div id="id_update_license" class="alert_license_success hide">License Updated.</div>	
+			<div id="id_archive_license" class="alert_license_success hide">License Archived.</div>
+	       
 	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
+				 <div class="panel-body">
 					<%= f.hidden_field :school_id, :value=>@school_id %>
 				    <% if @license.errors.any? %>
 				    <div id="error_explanation">
-				        <h2><%= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2>
+				        <!-- <h2><%#= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2> -->
 				        <ul>
 				            <% @license.errors.full_messages.each do |msg| %>
-				                <li><%= msg %></li>
+				               <%= msg %>
 				            <% end %>
 				        </ul>
 				    </div>
@@ -30,29 +33,45 @@
 		                <div class="col-sm-3">
 		                    <div class="form-group">
  				     		   <%= f.label :no_of_licenses, "Number Of Licenses", :class=>"control-label" %><span class="asterisk">*</span>
- 				     		   <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control" %>
+							   <% if action_name.eql?('edit')%>
+ 				     		       <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control", :readonly=>true %>
+							   <%else%>
+							       <%= f.text_field :no_of_licenses, :required=>true, :class=>"form-control"%>
+							   <%end%>	   
 		                	</div>
 						</div>
 					    <div class="col-sm-3">
 		                    <div class="form-group">
 				     		    <%= f.label :expiry_date, "License Expiration date", :class=>"control-label" %><span class="asterisk">*</span>
 							    <div class="input-group">
-				     		        <%= f.text_field :expiry_date, :class=>"form-control", :placeholder=>"yyyy-mm-dd",:id=>"datepicker" %>
+				     		        <%= f.text_field :expiry_date, :required=>true, :class=>"form-control", :placeholder=>"yyyy-mm-dd",:id=>"datepicker", :readonly=>true %>
    			                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
    			                    </div>
 		                    </div>
 		                </div>
 		            </div>
-					
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
-				<%= link_to 'Cancel', licenses_path, class: "btn btn-white btn-xs"%>
+		        <%if current_user.role.name.eql?('Web Admin')%>
+				    <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+				<%else%>
+				    <%= link_to 'Cancel', school_path(current_user.school_id), class: "btn btn-white btn-xs"%>
+				<%end%>
 	        </div>
-			
 			<% end %>
 	    </div>
     </div>       
 </div>
-
+<script type="text/javascript">
+$(document).ready(function() {
+	showHideMenu('li_school');
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
+	$('#id_create_license').removeClass('show').addClass('hide');
+	$('#id_update_license').removeClass('show').addClass('hide');
+	$('#id_archive_license').removeClass('show').addClass('hide');	
+});
+</script>
 	

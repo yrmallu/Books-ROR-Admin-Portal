@@ -38,23 +38,64 @@
 	                    </div>
 	                </div>
 	            </div>
-	            <div class="row">
-	            	<div class="col-sm-6">
-	                	<div class="form-group">
-				    		<%= f.label :book_cover, "Small Book Cover", :class=>"control-label"%><span class="asterisk">*</span> </br>
-				    		<%= f.file_field :book_cover, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	                <div class="col-sm-6">
-	                	<div class="form-group">
-				    		<%= f.label :epub_book, "EPub Book", :class=>"control-label"%><span class="asterisk">*</span> </br>
-				    		<%= f.file_field :epub_book, :class=>"form-control" %>
-	                    </div>
-	                </div>
-	            </div>
+	            <div class="form-row form-group">
+					<div class="row">
+				    	<div class="col-md-6">
+							<label class="form-label">Small Book Cover</label>	
+							<% if f.object.book_cover_file_name && !f.object.book_cover_file_name.blank? %>
+								<%= image_tag f.object.book_cover.url(:small) %>
+							<% end %>
+							<%= f.file_field :book_cover %>
+				    	</div> 
+				    	<div class="col-md-6" >
+							<label class="form-label">EPub Book</label><span class="asterisk">*</span> 	<br />
+							<%if f.object.epub_file_name && !f.object.epub_file_name.blank? %>
+								<%= f.object.epub_file_name %>
+							<% end %>
+							<br />
+							<%= f.file_field :epub %>
+				    	</div>  
+					</div>
+				</div>
+
+	            <div class="form-row form-group" style="margin-top:50px;">
+					<div class="row">
+				    	<div class="col-md-10">
+							<label class="form-label">Preview Book Image</label>	
+							<div>
+								<%=f.fields_for :preview_images do |fb|%>
+									<% unless fb.object.new_record? %>
+									 	<div class="single_document_div">
+				                          <div style="height:130px;"><%= image_tag fb.object.preview_image.url(:thumb) %></div>
+				                          <%= fb.check_box :_destroy %> <%= fb.label :remove %>
+				                        </div>
+				                     <% end %>
+							    <% end%>
+							</div>
+							
+				    	</div>  
+					</div>
+				</div>
+
+				 <div class="form-row form-group" >
+					<div class="row">
+				    	<div class="col-md-6">
+							<label class="form-label">Add Preview Book Image</label>	
+							<div>
+						    	<%= f.fields_for :preview_images do |fb|%>
+							    	<% if fb.object.new_record? %>
+							        	<%=render 'preview_book_image_fields', f: fb%>
+							        <% end %>
+						    	<% end%>
+					    	</div>
+							<%= link_to_add_fields "Add File", f, :preview_images, options: 'preview_book_image' %>
+				    	</div>  
+					</div>
+				</div>
+
 	        </div><!-- panel-body -->
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Submit", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' } %>
+	            <%= f.submit "Submit", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' }, :onclick => "return validateForm();"  %>
 	        </div>
 			<% end %>
 	    </div>
@@ -62,7 +103,50 @@
 </div>
 
 <script type="text/javascript">
-	showHideMenu('li_webadmin');
+	showHideMenu('li_book');
+	
+	function validateForm()
+	{
+		var flag = true;
+		var book_title = $("#book_title").val();
+		var book_cover = $("#book_images_attributes_0_book_cover").val();
+		var epub_book = $("#book_images_attributes_1_epub_book").val();
+		var book_cover_large = $("#book_images_attributes_2_book_cover_large").val();
+		var preview_book_image = $("#book_images_attributes_3_preview_book_image").val();
+		var epub_book_ext = $('#book_images_attributes_1_epub_book').val().split('.').pop().toLowerCase();
+		  
+		if ($.inArray(epub_book_ext,['epub']) == -1)
+		{
+			alert("Please upload epub extension book");
+			flag = false;
+		}  
+		if(book_title.length == 0)  
+		{
+			alert('Please Enter Book Title');
+			flag = false;
+		}
+		if(book_cover.length == 0)  
+		{
+			alert('Please upload image for Book Cover');
+			flag = false;
+		}
+		if(epub_book.length == 0)  
+		{
+			alert('Please upload .epub extension book for Epub Book');
+			flag = false;
+		}
+		if(book_cover_large.length == 0)  
+		{
+			alert('Please upload image for Book Cover Large');
+			flag = false;
+		}
+		if(preview_book_image.length == 0)  
+		{
+			alert('Please upload image for Preview Book Image');
+			flag = false;
+		}
+		return flag;
+	}
 </script>
 
 

@@ -1,0 +1,5 @@
+<%unless @school.blank?%>		
+    <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id, :school_id=>@school.id) %> 
+<%else%>
+   <%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => @role_id) %>
+<% end %>

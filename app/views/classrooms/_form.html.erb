@@ -10,10 +10,10 @@
 				    <%=f.hidden_field :school_id, :value=>@school.id%>
 				    <% if @classroom.errors.any? %>
 				    <div id="error_explanation">
-				        <h4><%= pluralize(@classroom.errors.count, "error") %> prohibited this classroom from being saved:</h4>
+				        <!-- <h4><%#= pluralize(@classroom.errors.count, "error") %> prohibited this classroom from being saved:</h4> -->
 				        <ul>
 				            <% @classroom.errors.full_messages.each do |msg| %>
-				                <li><%= msg %></li>
+				                <%= msg %>
 				            <% end %>
 				        </ul>
 				    </div>
@@ -34,6 +34,28 @@
 	                        </div>
 	                    </div>
 	               </div>
+	               <% if action_name.eql?("edit")%> 
+				   <div class="row">
+						<div class="col-sm-3">
+	                        <div class="form-group">
+	                    	    <%= label_tag "teachers_count", "Number Of School Admins", :class=>"control-label" %> : 
+								<%= @classroom.users.school_admins.count %>
+	                        </div>
+	                    </div>
+						<div class="col-sm-3">
+	                        <div class="form-group">
+	                    	    <%= label_tag "teachers_count", "Number Of Teachers", :class=>"control-label" %> : 
+								<%= @classroom.users.teachers.count %>
+	                        </div>
+	                    </div>
+						<div class="col-sm-6">
+	                        <div class="form-group">
+			     		        <%= label_tag "students_count", "Number Of Students", :class=>"control-label" %> :
+								<%= @classroom.users.students.count %>
+	                        </div>
+	                    </div>
+	               </div>
+				   <%end%>
 	               <div class="row">
 				       <div class="col-sm-3">
 	                       <div class="form-group">
@@ -56,7 +78,43 @@
 							   <div id="id_end_msg" style="display:none" class="error">End date should be greater than start date</div>   	                       </div>
 	                   </div>
 	              </div>
-		    </div>  
+				  <%= hidden_field_tag 'selected_ids', @assigned_teachers.map{|c| c.id }  %>
+	  		        <div class="row">
+	                      <div class="col-sm-9">
+	                          <div class="form-group">
+	                              <%= label_tag "teachers", "Teachers", :class=>"control-label form-lable-multiselect" %>
+								  <div style="float:left;" id="assigned_div">
+									  <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+	                              </div>
+	                              <div class="assign_arrows">
+	                                  <a href="#Remove" class="remove"> Remove >> </a><br />
+	                                  <a href="#Add" class="add"> << Add </a>
+	                              </div>
+	                              <div style="float:left;" id="all_div">
+									  <%= select_tag "all_present_id", options_from_collection_for_select(@school_specific_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+	                              </div>
+	                          </div>
+	                      </div>
+	  		        </div>
+  				  <%= hidden_field_tag 'student_selected_ids', @assigned_students.map{|c| c.id }  %>
+  	  		        <div class="row">
+  	                      <div class="col-sm-9">
+  	                          <div class="form-group">
+								  <%= label_tag "studnts", "Students", :class=>"control-label form-lable-multiselect" %>
+  	                              <div style="float:left;" id="student_assigned_div">
+  	                                  <%= select_tag "student_assigned_id", options_from_collection_for_select(@assigned_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+  	                              </div>
+  	                              <div class="assign_arrows">
+  	                                  <a href="#Remove" class="remove"> Remove >> </a><br />
+  	                                  <a href="#Add" class="add"> << Add </a>
+  	                              </div>
+  	                              <div style="float:left;" id="all_student_div">
+  	                                  <%= select_tag "all_student_id", options_from_collection_for_select(@school_specific_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+  	                              </div>
+  	                          </div>
+  	                      </div>
+  	  		        </div>
+			</div>  
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
 				<%= link_to 'Cancel', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
@@ -67,6 +125,53 @@
 
 <script type="text/javascript">
 	showHideMenu('li_school');
+	
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
+	
+	// Assign student to a classroom, multi select
+	    $(function () {
+	      $('select#student_assigned_id').listbox({'searchbar': true});
+	      $('select#all_student_id').listbox({'searchbar': true});
+	    });
+	  $(document).ready(function() {
+
+	    $('.remove').click(function(e) {
+	      student_selected_ids = $("#student_selected_ids").val().split(" ");
+	      $('#student_assigned_id option:selected').each(function(){
+	        student_selected_ids.removeByValue(this.value)
+	      });
+	      $('#student_assigned_id option:selected').remove();
+	      $("#student_selected_ids").val(student_selected_ids.join(" "));
+	      $('#student_assigned_div').children('div .lbjs').remove();
+	      $('select#student_assigned_id').listbox({'searchbar': true});
+	    });
+
+	    $('.add').on('click', function(){
+	      student_selected_ids = []
+	      var selectedOpts = $('#all_student_id option:selected').clone();
+	      selectedOpts.each(function(i){
+	        if($("#student_assigned_id option[value='"+this.value+"']").length <= 0){
+	          $('#student_assigned_id').append(this);
+	          student_selected_ids.push(this.value);
+	        }
+	      });
+	      $("#student_selected_ids").val($.merge($("#student_selected_ids").val().split(" "), student_selected_ids).join(" "));
+	      $('#student_assigned_div').children('div .lbjs').remove();
+	      $('select#student_assigned_id').listbox({'searchbar': true});
+	    });
+	  });
+  
+	  Array.prototype.removeByValue = function(val) {
+	    for(var i=0; i<this.length; i++) {
+	        if(this[i] == val) {
+	            this.splice(i, 1);
+	            break;
+	        }
+	    }
+	}
+    
 </script>
 
 

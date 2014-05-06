@@ -24,21 +24,21 @@ BooksThatGrow::Application.configure do
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
-
+  config.assets.css_compressor = :sass
+  config.assets.precompile += %w( *.css *.js )
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
+  config.assets.compile = true
 
   # Generate digests for assets URLs.
   config.assets.digest = true
 
   # Version of your assets, change this if you want to expire all your assets.
   config.assets.version = '1.0'
-
+  config.serve_static_assets = true
   # Specifies the header that your server uses for sending files.
-  # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
-  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
-
+  config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
+  #config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+  
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
@@ -78,20 +78,20 @@ BooksThatGrow::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
   
-  cconfig.action_mailer.default_url_options = {:host => 'localhost:3000'} 
-    config.action_mailer.delivery_method = :smtp
-    config.action_mailer.perform_deliveries = true 
-    config.action_mailer.raise_delivery_errors = true 
-    config.action_mailer.default :charset => "utf-8"
+  config.action_mailer.default_url_options = {:host => 'books-that-grow.herokuapp.com'} 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true 
+  config.action_mailer.raise_delivery_errors = true 
+  config.action_mailer.default :charset => "utf-8"
 
-    config.action_mailer.smtp_settings = {
-      address: "smtp.gmail.com",
-      port: 587,
-      domain: "gmail.com",
-      authentication: "plain",
-      enable_starttls_auto: true,
-	  user_name: ENV["GMAIL_USERNAME"],
-      password: ENV["GMAIL_PASSWORD"]
-    }
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "books-that-grow.herokuapp.com",
+    authentication: "plain",
+    enable_starttls_auto: true,
+    user_name: ENV["GMAIL_USERNAME"],
+    password: ENV["GMAIL_PASSWORD"]
+  }
 	
 end

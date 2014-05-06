@@ -6,28 +6,34 @@
                     <tr>
 						<th>Batch Name</th>
 	                    <th>Number Of Liscenses</th>
-					    <!-- <th>License Used</th> -->
+					    <th>Licenses Used</th>
 	                    <th>License Expiration Date</th>
 					    <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="license_body">
 			        <% @licenses.each do |lic| %>
 	                    <tr class="odd gradeX">
 							<td class=""><%= lic.license_batch_name %></td>
 	                        <td class=""><%= lic.no_of_licenses %></td>
-						    <!-- <td class=""><%#= lic.used_licenses %></td> -->
+						    <td class=""><%= lic.used_liscenses %></td>
 	                        <td class=""><%= lic.expiry_date %></td>
-						    <td>
-						        <%= link_to '<i title="Edit License" class="fa fa-pencil"></i>'.html_safe, edit_license_path(:id=>lic, :school_id=>lic.school_id), :remote=>true%> 
-						        <%= link_to '<i title="Archive License" class="glyphicon glyphicon-trash"></i>'.html_safe, lic, method: :delete, data: { confirm: 'Are you sure?' }, :remote=>true %>						
+						    <td data-no-turbolink>
+								<% if can? :update, :licenses %> 
+						            <%= link_to '<i title="Edit License" class="fa fa-pencil"></i>'.html_safe, edit_license_path(:id=>lic, :school_id=>lic.school_id), :remote=>true %> 
+								<%end%>
+								<% if can? :destroy, :licenses %> 
+						            <%= link_to '<i title="Archive License" class="glyphicon glyphicon-trash"></i>'.html_safe, lic, method: :delete, data: { confirm: 'Are you sure?' }, :remote=>true %>	
+								<%end%>					
 			               </td> 
 				       </tr>
 			       <% end %> 
                </tbody>
            </table>
 	    </div>
-       
+	   <div data-no-turbolink>
+	   <%= paginate @licenses %>
+	   </div>
     </div>	
 </div>
 

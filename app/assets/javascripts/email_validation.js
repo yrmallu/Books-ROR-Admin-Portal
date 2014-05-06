@@ -29,3 +29,29 @@ email_validation = function(){
 jQuery(document).ready(email_validation);
 $(document).on('page:load', email_validation);
 
+
+
+var username_validation;
+username_validation = function(){
+  jQuery(".username_validation").blur(function(){
+  username = jQuery("#"+this.id).val();
+  username_id = this.id;
+    jQuery("#"+this.id).parent().find(".help-inline").html("\t");
+    jQuery.get(username_valid,{ username : jQuery("#"+this.id).val() },
+    function(data) {
+      if(data=='avaiable')
+      {
+	    jQuery("#"+username_id).parent().find(".help-inline").html("\t");
+      }
+      else
+      {
+	    jQuery("#"+username_id).parent().find(".help-inline").html(data);
+		return false;
+      }
+    });
+  return true;
+});
+}
+jQuery(document).ready(username_validation);
+$(document).on('page:load', username_validation);
+

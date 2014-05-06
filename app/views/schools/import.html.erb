@@ -1,0 +1,49 @@
+<div class="panel panel-default">
+	<div class="panel-body"> 
+		<div class="table-responsive">
+			<table class="table" id="school_table">
+	            <thead>
+	                <tr>
+	                    <th>School Name</th>
+	                    <th>District</th>
+	                    <th>City</th>
+						<th>State</th>
+	                    <th>Country</th>
+						<th>Valid</th>
+						<th>Errors</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+					<% @schools.each do |school_arr| %>
+					<% school = school_arr.first %>
+					<% error_hash = school_arr.last %>
+		                <tr class="odd gradeX <%= 'redrow' unless error_hash[:is_valid] -%>">
+		                  <td class=""><%= school.name %></td>
+		                  <td class=""><%= school.district %></td>
+		                  <td class="center "><%= school.city %></td>
+		                  <td class="center "><%= school.state %></td>
+						  <td class="center "><%= school.country %></td>
+						  <td><%= error_hash[:is_valid] %></td>
+						  <td><%= error_hash[:error_messages].each{|message| puts "#{message.first} <br />" unless message.blank? } %></td>
+		                </tr>
+					<% end %>
+	        	</tbody>
+	    	</table>
+		</div>
+		 <div class="panel-footer">
+	         <div width="50%" style="border : 1px solid #CCCCCC; border-radius : 10px; float :left; padding: 30px;">
+	         	<p>Let me save all the valid schools only</p>
+	         	<div style="text-align: center;">
+	         		<%= link_to "Save", {:action => :save_school_list, :schools => @schools}, :method => 'post' %>
+	         	</div>	
+	         </div>
+	         <div width="50%" align="right" style="border : 1px solid #CCCCCC; border-radius : 10px; float: right; padding: 30px;">
+	         	<p>Let me Correct all the data and upload the List again </p>
+	         	<div style="text-align: center;">
+	         		<%= link_to "Upload Again", :action => :import_list, :schools => @schools, :method => 'post' %>
+	         	</div>	
+	         </div>
+	     </div>
+		
+	</div>	
+</div>

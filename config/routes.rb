@@ -1,10 +1,24 @@
 BooksThatGrow::Application.routes.draw do
-  resources :books
+  resources :books do
+    collection do
+      post 'delete_book'
+    end
+  end
 
   resources :classrooms do
     collection do
       post 'delete_classroom'
     end
+  end
+
+  namespace :api do
+    resources :books do 
+      collection do
+        get 'read'
+        get 'table_of_content'
+      end
+    end
+
   end
 
   resources :licenses
@@ -20,30 +34,39 @@ BooksThatGrow::Application.routes.draw do
   resources :users do 
     collection do
       post 'delete_user'
-	  get 'change_user_password'
-	  get 'dashboard'
-	  get 'forgot_password'
-	  get 'reset_password'
-	  post 'set_new_password'
-	  post 'email_for_password'
-	  get 'get_user_school_licenses'
-	  get 'email_validation'
-	  get 'remove_license'
-   	  get 'get_user_accessright'
+      get 'change_user_password'
+      get 'dashboard'
+      get 'forgot_password'
+      get 'reset_password'
+      post 'set_new_password'
+      post 'email_for_password'
+      get 'get_user_school_licenses'
+      get 'email_validation'
+	  get 'username_validation'
+      get 'remove_license'
+      get 'get_user_accessright'
       post 'update_user_accessright'
+      post 'assign_license'
+      get 'download_sample_list'
+      get 'import_list'
+      post 'import'
+      post 'save_user_list'
+	  get 'delete_parent'
      end
   end
 
   resources :schools do 
     collection do
       post 'delete_school'
-	  get 'get_schoolwise_license_list'
-	  get 'download_school_list'
+      get 'get_schoolwise_license_list'
+      get 'download_school_list'
       post 'import'
       get 'import_list'
-	  get 'get_schoolwise_license_list'
-	  get 'check_school_name_uniqueness'
-     end
+      post 'save_school_list'
+      get 'get_schoolwise_license_list'
+      get 'check_school_name_uniqueness'
+      post 'update_license_expiration_date'
+    end
   end
   get '/schools/subregion_options' => 'schools#subregion_options'
   
@@ -58,7 +81,7 @@ BooksThatGrow::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'users#dashboard'
+  root 'schools#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

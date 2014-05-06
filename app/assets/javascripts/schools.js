@@ -1,28 +1,4 @@
-$(document).ready(function () {
-    $('.school-check-box').change(function () {
-        var check = ($('.school-check-box').filter(":checked").length == $('.school-check-box').length);
-        $('.select-all-school').prop("checked", check);
-    });
-	// enable/disable delete button whether select-all check-box is checked or not
-    $('.select-all-school').click(function () {
-        if($("#school_table .school-check-box:checked").length > 0)
-			document.getElementById("delete_school").disabled=true;
-		else
-			document.getElementById("delete_school").disabled=false;  
-    });
-	// enable/disable delete button whether any check-box is checked or not
-    $('.school-check-box').click(function () {
-       if($("#school_table .school-check-box:checked").length > 0)
-			document.getElementById("delete_school").disabled=false;
-		else
-			document.getElementById("delete_school").disabled=true;  
-    }); 
-});
-	
-// select-all check-box functionality
-$(document).on("click",".select-all-school",function(){
-	$('.school-check-box').prop('checked', $(this).is(':checked'));
-});
+
 
 $(document).on("click","#school_country",function(){
 	select_wrapper = $('#school_state_wrapper')		
@@ -34,14 +10,14 @@ $(document).on("click","#school_country",function(){
 
 function validateform()
 {
-	var flag = true;
-	var ext = $('#file').val().split('.').pop().toLowerCase();
-	if ($.inArray(ext,['xls']) == -1)
-	{
-		alert("Please upload xls file");
-		flag = false;
-	}
-	return flag;
+    var flag = true;
+    var ext = $('#file').val().split('.').pop().toLowerCase();
+    if ($.inArray(ext,['xls', 'csv', 'xlsx']) == -1) {
+      alert("Please upload xls or csv files only");
+      flag = false;
+    }
+
+  return flag;
 }
 
 

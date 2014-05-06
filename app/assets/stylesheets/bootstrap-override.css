@@ -195,8 +195,8 @@ h4, .h4 {
 }
 
 .btn-success {
-   background-color: #1CAF9A;
-   border-color: #17a08c;
+   background-color: #1CAF9A !important;
+   border-color: #17a08c !important;
 }
 
 .btn-success:hover,
@@ -881,6 +881,7 @@ h4, .h4 {
 
 .modal-dialog {
    border: 0;
+   width: 800px;
 }
 
 .modal-content {
@@ -1278,6 +1279,8 @@ small.media-desc {
 .table tbody > tr > td,
 .table tfoot > tr > td {
 	border-color: #eee;
+    max-width: 220px;
+   word-wrap:break-word;
 }
 
 .table-striped > tbody > tr:nth-child(2n+1) > td,

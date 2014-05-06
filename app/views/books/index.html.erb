@@ -1,0 +1,59 @@
+
+<div class="panel panel-default">
+	<div class="panel-body"> 
+		<%= text_field_tag :text_field_search %>
+		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
+
+		<button class="btn btn-primary btn-xs" id="book_search" >
+						    Search
+						    </button>
+		<%= form_tag 'books/delete_book' do %>
+		<div class="index_page_btns" data-no-turbolink>
+			<%= link_to 'List All Records', books_path, :class=>"btn btn-success btn-xs" if @search_flag %>
+			<% if can? :create, Book %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>
+			<%= submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>
+		</div>
+		 
+		 <div class="table-responsive">
+			<table class="table" id="book_table">
+	            <thead>
+	                <tr>
+	            		<th><%= link_to :All, 'javascript:checkAll("book")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("book")', :class => "lnk-typ2" %></th>
+                    	<th>Title</th>
+                    	<th>Author</th>
+                    	<th>Description</th>
+						<th>Actions</th>	
+	                </tr>
+	            </thead>
+	            <tbody>
+					<% @books.each do |book| %>
+                 		<tr class="odd gradeX">
+                   			<td class=""><%= check_box_tag 'book_ids[]', book.id, false, :class => "book-check-box" %></td>
+                      		<td class="center"><%= book.title %></td>
+                      		<td class="center"><%= book.author %></td>
+                      		<td class="center"><%= book.description %></td>
+      						<td data-no-turbolink>
+  								<% if can? :update, Book %>
+						      		<%= link_to '<i title="Edit Book" class="fa fa-pencil"></i>'.html_safe, edit_book_path(book) %> 						  
+						  		<%end%>
+   				   	      		<% if can? :destroy, Classroom %> 
+						      		<%= link_to '<i title="Delete Book" class="glyphicon glyphicon-trash"></i>'.html_safe, book, method: :delete, data: { confirm: 'Are you sure?' } %> 
+					      		<%end%>
+    						</td>
+                 		</tr>
+					<% end %>	
+	        	</tbody>
+	    	</table>
+		</div>
+		<div data-no-turbolink>
+		    <%= paginate @books %>
+		</div>
+		<% end %>		
+	</div>
+</div>		  
+  
+
+
+<script type="text/javascript">
+	showHideMenu('li_book');
+</script>

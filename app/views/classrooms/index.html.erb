@@ -1,18 +1,28 @@
-<%#= form_tag 'classrooms/delete_classroom', remote: true do %>
+
 <div class="panel panel-default">
 	<div class="panel-body"> 
+		<%= text_field_tag :text_field_search %>
+		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
+
+		<button class="btn btn-primary btn-xs" id="classroom_search" >
+						    Search
+						    </button>
+		<%= form_tag 'classrooms/delete_classroom' do %>
 		<div class="index_page_btns" data-no-turbolink>
+			<%=link_to 'List All Records', classrooms_path, :class=>"btn btn-success btn-xs" if @search_flag %>
        		<%= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<%= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
-			<% if can? :create, Classroom %> <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> <%end%>
+			<% if can? :create, :classrooms %> 
+			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
+			<%end%>
 			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	 	</div>
 	 <div class="table-responsive">
-		<table class="table" id="classroom_table">
+		<table class="table class_common_table" id="classroom_table">
             <thead>
                 <tr>
-                	<th><%= check_box_tag 'classroom_id[]', '', false, :class => "select-all-classroom" %></th>
-                    <th>Classroom Code</th>
+                	<th><%= link_to :All, 'javascript:checkAll("classroom")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("classroom")', :class => "lnk-typ2" %></th>
+					<th>Classroom Code</th>
                     <th>Classroom Name</th>
 					<th>School Year</th>
 					<th>Number Of School Admins</th>
@@ -23,23 +33,23 @@
               </thead>
               <tbody>
 				 <% @classrooms.each do |classroom| %>
-				    <tr class="odd gradeX">
+				    <tr class="odd gradeX" data-no-turbolink>
                  	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "classroom-check-box" %></td>	
                       <td class=""><%= classroom.code %></td>
-                      <td class=""><%= classroom.name %></td>
+                      <td class=""><%= link_to classroom.name, classroom_path(classroom, :school_id=>@school.id), :title=>"View Classroom Details" %></td>
 					  <td class="">
 						  <% unless classroom.school_year_start_date.blank? || classroom.school_year_end_date.blank? %>
 						      <%= classroom.school_year_start_date.year %> - <%= classroom.school_year_end_date.year %>
 						  <%end%>
 				      </td>
-					  <td class=""><%=  %></td>
-					  <td class=""><%=  %></td>
-					  <td class=""><%=  %></td>
+					  <td class="" align="center"><%= classroom.users.school_admins.count %></td>
+					  <td class="" align="center"><%= classroom.users.teachers.count %></td>
+					  <td class="" align="center"><%= classroom.users.students.count %></td>
                       <td data-no-turbolink>
-						  <% if can? :update, Classroom %>
+						  <% if can? :update, :classrooms %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
 						  <%end%>
-   				   	      <% if can? :destroy, Classroom %> 
+   				   	      <% if can? :destroy, :classrooms %> 
 						      <%= link_to '<i title="Archive Classroom" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: 'Are you sure?' } %> 
 					      <%end%>
 					</td>
@@ -48,12 +58,17 @@
              </tbody>
     	</table>
 	</div>
-	<div data-no-turbolink>
-		<%= paginate @classrooms %>
-	</div>	
+	    <div data-no-turbolink>
+		    <%= paginate @classrooms %>
+	    </div>
+	<% end %>	
+    </div>
 </div>		  
-<%#= end %>
+
 
 <script type="text/javascript">
 showHideMenu('li_school');
+<% unless current_user.is_web_admin?%>
+  showHideMenu('li_options');	
+<%end%>
 </script>

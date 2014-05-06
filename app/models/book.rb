@@ -1,12 +1,69 @@
 class Book < ActiveRecord::Base
-  has_attached_file :book_cover, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
-  has_attached_file :epub_book,
-                    :url  => "/images/assets/template/:id/:style/:basename.:extension",
-                    :path => ":rails_root/public/images/assets/template/:id/:style/:basename.:extension"
-                                                
-  validates_attachment_content_type :book_cover, :content_type => /\Aimage\/.*\Z/
-  validates_attachment_content_type :epub_book, :content_type => ['application/epub+zip']
+  
+  self.primary_key = "id"
+  
+  paginates_per 10
+  max_paginates_per 10  
+  @trigger_after_save = nil
+  after_save :update_preview_name
 
-  validates :book_cover, :attachment_presence => true
-  validates :epub_book, :attachment_presence => true
+  ###########################################################################################
+  ## Relationships
+  ###########################################################################################
+
+  has_many :preview_images, :dependent => :destroy  
+  accepts_nested_attributes_for :preview_images, :allow_destroy=> true, :reject_if => :all_blank
+
+  ###########################################################################################
+  ## Attachments
+  ###########################################################################################
+
+  has_attached_file :epub,
+                    :url  => "/images/assets/template/books/:id/:style/:basename.:extension",
+                    :path => ":rails_root/public/images/assets/template/books/:id/:style/:basename.:extension",
+                    :use_timestamp => false
+  
+  has_attached_file :book_cover, :styles => { :large => "300x300>", :small => "100x100>" }, :default_url => "/images/:style/missing.png",
+                    :url  => "/images/assets/template/books/:id/:style/:basename.:extension",
+                    :path => ":rails_root/public/images/assets/template/books/:id/:style/:basename.:extension",
+                    :use_timestamp => false
+
+  ###########################################################################################
+  ## Validations
+  ###########################################################################################
+
+  validates_attachment_content_type :book_cover, :content_type => /\Aimage\/.*\Z/
+  # validates_attachment_content_type :book_cover_large, :content_type => /\Aimage\/.*\Z/
+  # validates_attachment_content_type :preview_book_image, :content_type => /\Aimage\/.*\Z/
+  validates_attachment_content_type :epub, :content_type => ['application/epub+zip', 'application/octet-stream']
+  
+  validates_attachment_presence :epub
+  validates_attachment_presence :book_cover
+  validates :title, :presence=> true
+
+
+  ###########################################################################################
+  ## Methods
+  ###########################################################################################
+
+  def update_preview_name
+    if !@trigger_after_save
+      @trigger_after_save = true
+      self.preview_name = Hash[self.preview_images.pluck("id", "preview_image_file_name")]
+      save
+    end
+  end
+
+  def self.search(query_string)
+  # qs = query_string.tr("%","").to_i 
+  book = Book.arel_table
+  books = Book.where(
+    book[:title].matches(query_string).or(
+      book[:description].matches(query_string).or(
+        book[:author].matches(query_string)
+        )
+      )
+    )
+  end
+
 end
