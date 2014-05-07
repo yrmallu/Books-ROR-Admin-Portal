@@ -1,3 +1,4 @@
+require 'zip/zip'
 class Book < ActiveRecord::Base
 
   self.primary_key = "id"
@@ -50,9 +51,9 @@ class Book < ActiveRecord::Base
       book[:title].matches(query_string).or(
         book[:description].matches(query_string).or(
           book[:author].matches(query_string)
-          )
         )
       )
+    )
   end
 
   # public instance methods ...................................................
@@ -63,7 +64,7 @@ class Book < ActiveRecord::Base
     xhtml_files = []    
     dir_name = FileUtils.mkdir_p(book_unique_id)
     dest_path = "#{Rails.root}/public/books/#{dir_name.first}"
-    RubyZip::File.open(epub.path) { |zip_file|
+    Zip::ZipFile.open(epub.path) { |zip_file|
       zip_file.each { |f|
         next if f.name =~ /__MACOSX/ or f.name =~ /\.DS_Store/ #or !f.file?
         list_file_names.push(f.name)
@@ -186,8 +187,6 @@ class Book < ActiveRecord::Base
     index_file_string << js_tags
     # index_file_string = add_js_script(index_file_string, path_with_ip)
   end 
-
-
 
   def add_js_script(index_file_string, path_with_ip)
     js_script = "

@@ -15,15 +15,15 @@
             	</address>
             	<address>
 			    	<strong>Number Of School Admins:</strong>
-			    	<%#= @role_wise_count[0].blank? ? 0 : @role_wise_count[0] %>
+			    	<%= @classroom.school.users.school_admins.count %>
             	</address>
             	<address>
 			    	<strong>Number Of Teachers:</strong>
-			    	<%#= @role_wise_count[1].blank? ? 0 : @role_wise_count[1] %>
+			    	<%= @classroom.school.users.teachers.count %>
             	</address>
             	<address>
 			    	<strong>Number Of Students:</strong>
-			    	<%#= @role_wise_count[2].blank? ? 0 : @role_wise_count[2] %>
+			    	<%= @classroom.school.users.students.count %>
             	</address>
             	<address>
 			    	<strong>School Start Year:</strong>

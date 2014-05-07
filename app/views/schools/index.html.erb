@@ -44,7 +44,7 @@
 		                  <td class="center "><%= school.city %></td>
 		                  <%#= @country = Carmen::Country.coded('US') %>
 						  <%#= Carmen::Country.coded('US').subregions.coded(school.state) %>
-						  <td class="center "><%= Carmen::Country.coded('US').subregions.coded(school.state).name unless school.state.blank? %></td>
+						  <td class="center "><%= Carmen::Country.coded('US').subregions.coded(school.state).try(:name) unless school.state.blank? %></td>
 						  <td class="center "><%= school.country %></td>
 						  <td>
 						  	<% if can? :update, :schools %>

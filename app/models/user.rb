@@ -53,11 +53,11 @@ class User < ActiveRecord::Base
   ## Validations
   ###########################################################################################  
 
-  validates :username, :presence=> true, :length => {:maximum => 255}, :format => {:with=> NO_SPACE_REGEX}, :uniqueness=> {scope: :school}
+  validates :username, :presence=> true, :length => {:maximum => 255}, :format => {:with=> NO_SPACE_REGEX}, :uniqueness=> {scope: :school, conditions: -> { where.not(delete_flag: 'true') }}
   validates :email, :presence=> true, :length => {:maximum => 255}, :if => :not_student?
   validates :email, :format=>{:with=> VALID_EMAIL_REGEX }, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
-  validates :first_name, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
-  validates :last_name, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
+  validates :first_name, :presence=> true, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
+  validates :last_name, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX },:allow_blank=>true
   #validates :school_id, :presence=> {:message => "Select School."}
   #validates :password, :presence => true, :confirmation => true, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
   validates_attachment_size :photos, :less_than => 5.megabytes

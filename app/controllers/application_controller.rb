@@ -8,9 +8,9 @@ class ApplicationController < ActionController::Base
   before_filter :authentication_check
   USER, PASSWORD = 'books-that-grow', 'qwerty123'
   
-  rescue_from Exception, :with => :render_error
-  rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found   
-  rescue_from ActionController::RoutingError, :with => :render_not_found   
+  # rescue_from Exception, :with => :render_error
+  # rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found   
+  # rescue_from ActionController::RoutingError, :with => :render_not_found   
 	
   helper_method :current_user
   helper_method :local_ip

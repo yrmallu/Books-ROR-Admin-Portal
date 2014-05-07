@@ -53,7 +53,8 @@ gem 'jbuilder', '2.0.4'
 
 gem 'epub-parser', '0.1.5'
 
-gem 'rubyzip', :git => 'git://github.com/davidhooey/rubyzip.git'
+gem 'rubyzip', '< 1.0.0'
+# gem 'rubyzip', :git => 'git://github.com/davidhooey/rubyzip.git'
 # gem 'rubyzip', '~> 1.1.3', :require => 'zip'
 
 group :doc do
