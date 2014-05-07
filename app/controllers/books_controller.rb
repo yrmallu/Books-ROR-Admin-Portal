@@ -71,7 +71,7 @@ class BooksController < ApplicationController
     Book.where(id: params[:book_ids]).each do |book|
     deleted_book = book
     dir_name = book.book_unique_id
-    book.destroy
+    book.delete_book
     FileUtils.rm_rf  "#{Rails.root}/public/books/#{dir_name}"
     end
   redirect_to books_path
@@ -89,3 +89,11 @@ class BooksController < ApplicationController
     end
     
 end
+
+
+
+
+
+
+
+

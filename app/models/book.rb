@@ -92,6 +92,10 @@ class Book < ActiveRecord::Base
     File.open(dest_path+"/index.html" , "w") {|fi| fi.puts index_file_string}
   end
 
+  def delete_book
+    delete_flag = true
+    save
+  end
   # protected instance methods ................................................
 
   # private instance methods ..................................................
@@ -182,6 +186,8 @@ class Book < ActiveRecord::Base
     index_file_string << js_tags
     # index_file_string = add_js_script(index_file_string, path_with_ip)
   end 
+
+
 
   def add_js_script(index_file_string, path_with_ip)
     js_script = "
