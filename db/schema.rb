@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140428071911) do
+ActiveRecord::Schema.define(version: 20140419121059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,70 +48,37 @@ ActiveRecord::Schema.define(version: 20140428071911) do
     t.integer  "epub_file_size"
     t.datetime "epub_updated_at"
     t.boolean  "delete_flag",                        default: false
-  end
-
-  create_table "classroom_books", force: true do |t|
-    t.integer "classroom_id"
-    t.integer "book_id"
-    t.integer "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "classrooms", force: true do |t|
-    t.integer  "code"
+    t.string   "code"
     t.string   "name"
     t.string   "cover_image"
     t.string   "secret_key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.hstore   "classroom_count"
     t.integer  "school_id"
     t.boolean  "delete_flag",            default: false
     t.date     "school_year_start_date"
     t.date     "school_year_end_date"
-  end
-
-  create_table "images", force: true do |t|
-    t.string   "name"
-    t.string   "book_cover_file_name"
-    t.string   "book_cover_content_type"
-    t.integer  "book_cover_file_size"
-    t.datetime "book_cover_updated_at"
-    t.string   "book_cover_large_file_name"
-    t.string   "book_cover_large_content_type"
-    t.integer  "book_cover_large_file_size"
-    t.datetime "book_cover_large_updated_at"
-    t.string   "preview_book_image_file_name"
-    t.string   "preview_book_image_content_type"
-    t.integer  "preview_book_image_file_size"
-    t.datetime "preview_book_image_updated_at"
-    t.string   "epub_book_file_name"
-    t.string   "epub_book_content_type"
-    t.integer  "epub_book_file_size"
-    t.datetime "epub_book_updated_at"
-    t.integer  "book_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "licenses", force: true do |t|
     t.date     "expiry_date"
-    t.integer  "no_of_licenses"
+    t.integer  "no_of_licenses",     default: 0
     t.integer  "used_liscenses",     default: 0
     t.integer  "school_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.boolean  "delete_flag",        default: false
     t.string   "license_batch_name"
-  end
-
-  create_table "notes", force: true do |t|
-    t.integer "user_id"
-    t.integer "book_id"
-    t.text    "note_data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "parents", force: true do |t|
-    t.string   "name"
+    t.text     "name"
     t.string   "email"
     t.integer  "user_id"
     t.datetime "created_at"
@@ -144,46 +111,29 @@ ActiveRecord::Schema.define(version: 20140428071911) do
   end
 
   create_table "schools", force: true do |t|
-    t.integer  "code"
-    t.string   "name"
-    t.string   "address"
+    t.string   "code"
+    t.text     "name"
+    t.text     "address"
     t.string   "city"
     t.string   "district"
     t.string   "state"
     t.string   "country"
     t.string   "phone"
+    t.boolean  "delete_flag", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "delete_flag", default: false
   end
 
   create_table "user_accessrights", force: true do |t|
     t.integer  "user_id"
     t.integer  "accessright_id"
     t.boolean  "access_flag"
+    t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "role_id"
   end
 
-  create_table "user_books", id: false, force: true do |t|
-    t.integer "id",                 limit: 8
-    t.hstore  "reading_percentage"
-    t.hstore  "last_reading_info"
-    t.integer "user_id",            limit: 8
-    t.string  "device_id"
-    t.integer "book_id"
-    t.string  "reading_info"
-  end
-
-  create_table "user_classrooms", id: false, force: true do |t|
-    t.integer "id",           default: "nextval('user_classrooms_id_seq'::regclass)", null: false
-    t.integer "user_id"
-    t.integer "classroom_id"
-    t.integer "role_id"
-  end
-
-  create_table "user_classrooms_backup", force: true do |t|
+  create_table "user_classrooms", force: true do |t|
     t.integer "user_id"
     t.integer "classroom_id"
     t.integer "role_id"
@@ -200,21 +150,19 @@ ActiveRecord::Schema.define(version: 20140428071911) do
     t.integer  "userlevel"
     t.string   "reference"
     t.datetime "created_at"
-    t.datetime "updated_at",      default: "now()"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "username"
+    t.text     "first_name"
+    t.text     "last_name"
+    t.text     "username"
     t.date     "license_expiry_date"
     t.boolean  "delete_flag",             default: false
     t.string   "email",                   default: "",    null: false
     t.integer  "device_id"
     t.integer  "role_id"
     t.integer  "school_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.hstore   "userinfo"
     t.string   "password_digest"
     t.integer  "license_id"
@@ -223,27 +171,11 @@ ActiveRecord::Schema.define(version: 20140428071911) do
     t.string   "photos_content_type"
     t.integer  "photos_file_size"
     t.datetime "photos_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
   add_index "users", ["school_id"], name: "index_users_on_school_id", using: :btree
-
-  create_table "users_bk", id: false, force: true do |t|
-    t.integer  "id",                  limit: 8, default: "nextval('users_id_seq'::regclass)", null: false
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "username"
-    t.date     "license_expiry_date"
-    t.boolean  "delete_flag",                   default: false
-    t.string   "email",                         default: "",                                  null: false
-    t.integer  "device_id"
-    t.integer  "role_id"
-    t.integer  "school_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.hstore   "userinfo"
-    t.string   "password_digest"
-    t.integer  "license_id"
-  end
 
 end

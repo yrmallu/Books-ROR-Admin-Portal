@@ -7,21 +7,22 @@
 # development:
 #   adapter: postgresql
 #   encoding: unicode
-#   database: BookThatGrow_development
+#   database: books-that-grow-migrations
 #   pool: 5
-#   host: localhost
-#   username: apple
-#   password: cuelogic  
-  
+#   host: 192.168.10.37
+#   username: postgres
+#   password: pg2014  
+#   port: 5433
+
 development:
   adapter: postgresql
   encoding: unicode
-  database: books_that_grow_v1_0_1
+  database: books-that-grow-migration
   pool: 5
-  host: 192.168.10.37
-  username: postgres
-  password: pg2014  
-  port: 5433
+  host: localhost
+  username: apple
+  password: cuelogic
+  
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
@@ -32,24 +33,14 @@ test:
   pool: 5
   host: localhost
   username: apple
-  password: cuelogic 
-
+  password: cuelogic
+  
 production:
   adapter: postgresql
   encoding: unicode
-  database: df5hfjsf4t9d78
+  database: books_that_grow_v1_0_1
   pool: 5
-  host: ec2-54-225-101-124.compute-1.amazonaws.com
-  username: nphajysesavnzm
-  password: uQLzyAN26wz9er3DwhHpmnXuUq
-  port: 5432
-  
-# production:
-#   adapter: postgresql
-#   encoding: unicode
-#   database: rails_app
-#   pool: 5
-#   host: localhost
-#   username: postgres
-#   password: cuelogic
+  host: localhost
+  username: postgres
+  password: cuelogic
   

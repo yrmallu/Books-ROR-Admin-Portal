@@ -2,6 +2,8 @@ class LicensesController < ApplicationController
 
   before_action :logged_in?
   before_action :set_license, only: [:show, :edit, :destroy, :update]
+  
+  load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
 
   def index
     get_license_list

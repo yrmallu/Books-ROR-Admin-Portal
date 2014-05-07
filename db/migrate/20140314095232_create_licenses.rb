@@ -1,14 +1,14 @@
 class CreateLicenses < ActiveRecord::Migration
   def change
     create_table :licenses do |t|
-      t.integer :license_group_id
       t.date :expiry_date
-      t.integer :no_of_licenses
-      t.integer :used_liscenses
+      t.integer :no_of_licenses, default: 0
+      t.integer :used_liscenses, default: 0
       t.integer :school_id
-
+      t.boolean :delete_flag, default:false
+      t.string  :license_batch_name
+	  
       t.timestamps
     end
-    change_column :licenses, :id, :integer, :limit => 8
   end
 end

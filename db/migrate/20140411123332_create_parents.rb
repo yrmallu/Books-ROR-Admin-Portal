@@ -1,7 +1,7 @@
 class CreateParents < ActiveRecord::Migration
   def change
     create_table :parents do |t|
-      t.string :name
+      t.text :name
       t.string :email
       t.integer :user_id
 

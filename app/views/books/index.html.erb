@@ -10,8 +10,8 @@
 		<%= form_tag 'books/delete_book' do %>
 		<div class="index_page_btns" data-no-turbolink>
 			<%= link_to 'List All Records', books_path, :class=>"btn btn-success btn-xs" if @search_flag %>
-			<% if can? :create, Book %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>
-			<%= submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<% if can? :create, :books %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>
+			<%= submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>
 		</div>
 		 
 		 <div class="table-responsive">
@@ -33,11 +33,11 @@
                       		<td class="center"><%= book.author %></td>
                       		<td class="center"><%= book.description %></td>
       						<td data-no-turbolink>
-  								<% if can? :update, Book %>
+  								<% if can? :update, :books %>
 						      		<%= link_to '<i title="Edit Book" class="fa fa-pencil"></i>'.html_safe, edit_book_path(book) %> 						  
 						  		<%end%>
-   				   	      		<% if can? :destroy, Classroom %> 
-						      		<%= link_to '<i title="Delete Book" class="glyphicon glyphicon-trash"></i>'.html_safe, book, method: :delete, data: { confirm: 'Are you sure?' } %> 
+   				   	      		<% if can? :destroy, :books %> 
+						      		<%= link_to '<i title="Archive Book" class="glyphicon glyphicon-trash"></i>'.html_safe, book, method: :delete, data: { confirm: 'Are you sure?' } %> 
 					      		<%end%>
     						</td>
                  		</tr>
