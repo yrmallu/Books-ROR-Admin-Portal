@@ -11,12 +11,10 @@
 
 		<%= form_tag 'schools/delete_school' do %>
 		<div class="index_page_btns" data-no-turbolink>
-
+            <% if can? :create, :schools %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
 			<%=link_to 'List All Records', schools_path, :class=>"btn btn-success btn-xs" if @search_flag %>
-			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
-			
-			<% if can? :create, :schools %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
+			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
 			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
 		</div>
 		 

@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
       return true
     else
       return false
-    end
+    end unless self.role.blank?
   end
 
   def is_web_admin?

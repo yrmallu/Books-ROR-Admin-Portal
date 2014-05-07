@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   before_filter :authentication_check
   USER, PASSWORD = 'books-that-grow', 'qwerty123'
   
-  rescue_from Exception, :with => :render_error
+  #rescue_from Exception, :with => :render_error
   rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found   
   rescue_from ActionController::RoutingError, :with => :render_not_found   
 	
@@ -31,12 +31,12 @@ class ApplicationController < ActionController::Base
   end
  
   #render 500 error 
-  def render_error(e)
-    respond_to do |f| 
-      f.html{ render :file => "#{Rails.root}/public/500.html", :status => 500 }
-        # f.js{ render :partial => "public/ajax_500", :status => 500 }
-    end
-  end
+  # def render_error(e)
+#     respond_to do |f| 
+#       f.html{ render :file => "#{Rails.root}/public/500.html", :status => 500 }
+#         # f.js{ render :partial => "public/ajax_500", :status => 500 }
+#     end
+#   end
   
      #render 404 error 
   def render_not_found(e)
@@ -152,7 +152,7 @@ class ApplicationController < ActionController::Base
 
     p "extras=====",parameters = extra.split(",")
 	selector =  parameters.empty? ? "#{params[:controller]}##{params[:action]}" : (("classrooms").eql?("#{params[:controller]}") || ("licenses").eql?("#{params[:controller]}")) ? "#{params[:controller]}##{params[:action]}" : "#{params[:controller]}##{params[:action]}".concat("-"+parameters[0])  
-    
+    p "selector=====",selector
     case selector
 
       when "users#dashboard"
@@ -290,7 +290,7 @@ class ApplicationController < ActionController::Base
 		  :icon=>"fa fa-user",
           :breadcrumb=>{
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
-            "Edit web admin info"=> "",
+            "Edit Web Admin Details"=> "",
           }
         }   
 
@@ -331,7 +331,7 @@ class ApplicationController < ActionController::Base
           :breadcrumb=>{
            "School List"=> schools_path,
             "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-            "Edit teacher info"=> "",
+            "Edit Teacher Details"=> "",
           }
         }
 
@@ -353,7 +353,7 @@ class ApplicationController < ActionController::Base
           :breadcrumb=>{
             "School List"=> schools_path,
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-            "Edit Student info"=> "",
+            "Edit Student Details"=> "",
           }
         }
         when "users#show-4"
@@ -392,7 +392,7 @@ class ApplicationController < ActionController::Base
             :breadcrumb=>{
               "School List"=> schools_path,
 			  "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Add new classroom"=> "",
+              "Add New Classroom"=> "",
             }
           }
         when "classrooms#edit"
@@ -402,7 +402,7 @@ class ApplicationController < ActionController::Base
             :breadcrumb=>{
               "School List"=> schools_path,
               "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Edit classroom info"=> "",
+              "Edit Classroom Details"=> "",
             }
           } 
 		  
@@ -413,7 +413,7 @@ class ApplicationController < ActionController::Base
               :breadcrumb=>{
                 "School List"=> schools_path,
                 "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-                "Edit classroom info"=> "",
+                "Edit Classroom Details"=> "",
               }
             }
 			
@@ -424,7 +424,7 @@ class ApplicationController < ActionController::Base
               :breadcrumb=>{
               "School List"=> schools_path,
   			  "School List"=> (url_for :controller => 'schools', :action => 'index', :school_id => parameters[0]),
-              "Add new license"=> "",
+              "Add New License"=> "",
               }
             }
          when "books#index"

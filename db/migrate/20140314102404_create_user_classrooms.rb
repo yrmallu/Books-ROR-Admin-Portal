@@ -3,8 +3,7 @@ class CreateUserClassrooms < ActiveRecord::Migration
     create_table :user_classrooms do |t|
       t.integer :user_id
       t.integer :classroom_id
-      t.integer :user_type
+      t.integer :role_id
     end
-    change_column :user_classrooms, :id, :integer, :limit => 8
   end
 end

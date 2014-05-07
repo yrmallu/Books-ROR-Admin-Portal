@@ -166,9 +166,9 @@ class UsersController < ApplicationController
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
       @user.welcome_email(path)
     else 
-    get_all_reading_grades
+      get_all_reading_grades
       @assigned_classrooms = []
-    @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank? 
+      @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank? 
       render :action=> 'new'
     end
   end

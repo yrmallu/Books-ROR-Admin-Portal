@@ -24,4 +24,4 @@ pickle-email-*.html
 /config/database.yml
 .DS_Store
 Capfile
-
+/config/deploy.rb
