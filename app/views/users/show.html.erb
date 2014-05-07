@@ -2,7 +2,12 @@
 	<div class="col-md-12">
     	<div class="panel panel-default">
         	<div class="panel-heading">
-            	<h4 class="panel-title">User Details</h4>
+				<% if @user.id == current_user.id%>
+				    <h4 class="panel-title">My Information</h4>
+				<%else%>
+				    <h4 class="panel-title">User Details</h4>
+				<%end%>
+            	
         	</div>
         	<div class="panel-body">
             	<address>
@@ -44,13 +49,13 @@
 					    <%= link_to 'Edit', edit_user_path(@user, :role_id => @user.role_id), :class=>"btn btn-success btn-xs" %>
 					<%end%>
 					<% if @role_id.name.eql?('Web Admin')%>
-						<%= link_to 'Cancel', users_path(:role_id => @role_id.id), class: "btn btn-white btn-xs"%>
+						<%= link_to 'Return to User List', users_path(:role_id => @role_id.id), class: "btn btn-white btn-xs"%>
 					<% elsif @role_id.name.eql?('School Admin')%>
-					    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
+					    <%= link_to 'Return to User List', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
 					<% elsif @role_id.name.eql?('Teacher')%>
-					    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>	
+					    <%= link_to 'Return to User List', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>	
 					<% elsif @role_id.name.eql?('Student')%>
-					    <%= link_to 'Cancel', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
+					    <%= link_to 'Return to User List', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
 					<%end%>
         	    </div>
 		    </div>

@@ -39,7 +39,7 @@ class School < ActiveRecord::Base
   ###########################################################################################
 
   def generate_random_code
-  	self.code = School.count == 0 ? 10001:School.maximum("code") + 1
+  	self.code = School.count == 0 ? (1000001.to_i) : (School.maximum("code").to_i + 1.to_i)
   end
 
   def strip_whitespace

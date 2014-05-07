@@ -6,6 +6,8 @@ class AccessrightsController < ApplicationController
   before_action :set_role, :only => [:edit, :create, :update, :check_role_accessright]
   before_action :role_accessright, :only=>[:edit, :check_role_accessright]
   
+  load_and_authorize_resource :only=>[:show, :new, :edit, :index]
+  
   def new
     set_bread_crumb
   end

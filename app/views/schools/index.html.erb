@@ -15,7 +15,7 @@
 			<%=link_to 'List All Records', schools_path, :class=>"btn btn-success btn-xs" if @search_flag %>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
-			<%=submit_tag 'Delete', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
 		</div>
 		 
 		<div class="table-responsive">

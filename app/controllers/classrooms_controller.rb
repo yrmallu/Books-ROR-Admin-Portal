@@ -7,6 +7,8 @@ class ClassroomsController < ApplicationController
   before_action :get_school_year_range, only: [:new, :edit]
   before_action :get_complete_date, only: [:create, :update]
   before_action :get_school_specific_users, :only => [:new, :edit]
+  
+  load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
    
   def index
     if params[:query_string] && !(params[:query_string].blank?)
@@ -74,7 +76,7 @@ class ClassroomsController < ApplicationController
 
   def destroy
     @classroom.update_attributes(:delete_flag=>true)
-    redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom deleted.' 
+    redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom archived.' 
   end
 
   def delete_classroom
