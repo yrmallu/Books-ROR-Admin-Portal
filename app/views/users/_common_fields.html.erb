@@ -82,27 +82,28 @@
 	        	    <%=f.fields_for :parents,@parent do |fb|%>     
 	        		    <%=render 'parent_fields', f: fb%>
 	        	    <%end%>
+					<div class="add-parent">
 				    <%= link_to_add_fields "Add More Parent Details", f, :parents %>
-			   	
+				</div>
 				<div class="row">
 	            	<div class="col-sm-3">
 	                	<div class="form-group">
-	                    	<%= f.label :grade, "Grade Level", :class=>"control-label" %>
+	                    	<%= f.label :grade, "Grade Level", :class=>"control-label add-student-label" %>
 		    			    <%= f.select :grade, options_for_select(@reading_grades.collect {|g| [ g.grade_name, g.id ] }, :selected=>f.object.grade), {:prompt=>"Select Grade Level", :class=>"form-control"} %>
 	                    </div>
 	                </div>
 	                <div class="col-sm-6">
 	                    <div class="form-group">
-	                    	<%= f.label :reading_ability, "Reading Ability", :class=>"control-label" %>
+	                    	<%= f.label :reading_ability, "Reading Ability", :class=>"control-label add-student-label" %>
 		    			    <%= f.select :reading_ability, options_for_select(@reading_grades.collect {|g| [ g.grade_name, g.id ] }, :selected=>f.object.reading_ability), {:prompt=>"Select Reading Ability", :class=>"form-control"}%>
 	                    </div>
 	                </div>
 	            </div>
 				<div class="row">
-	            	<div class="col-sm-3">
+	            	<div class="col-sm-6">
 	                	<div class="form-group">
-				            <%= f.label :assign_reading_based_on, "Reading Based On", :class=>"control-label" %>
-							<%= f.select :assign_reading_based_on, [["Grade level","grade"],["Reading Ability","reading"]], {:prompt => "Select Reading Based On"}, {:class=>"form-control"}%>
+				            <%= f.label :assign_reading_based_on, "Reading Based On", :class=>"control-label add-student-label" %>
+							<%= f.select :assign_reading_based_on, [["Grade level","grade"],["Reading Ability","reading"]], {:prompt => "Select Reading Based On"}, {:class=>""}%>
 				        </div>
 				    </div>
 				</div>
@@ -112,7 +113,7 @@
 			   			    <tr>
 			   				    <td>
 			   					    <div class=""><%image = ( ["edit", "update"].include?(action_name)) ? (@user.photos.blank? ? "missin.png" : @user.photos.url) : 'missin.png'  %>
-			   					    <%= image_tag(image, :alt=>"your image", :class=>"", :border=>"1") %>
+			   					    <%= image_tag(image, :alt=>"your image", :class=>"student-profil-pic", :border=>"1") %>
 								</div>
 			   				    </td>
 			   			    </tr>
@@ -140,7 +141,7 @@
 		    <%= hidden_field_tag 'selected_ids', @assigned_classrooms.map{|c| c.id }  %>
 		        <div class="row">
                     <div class="col-sm-9">
-                        <div class="form-group">
+                        <div class="form-group margin-t-10">
 							<%= label_tag 'classrooms', "Classrooms", :class=>"control-label form-lable-multiselect"%>
                             <div style="float:left;" id="assigned_div">
                                 <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>

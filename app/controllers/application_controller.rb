@@ -5,10 +5,13 @@ class ApplicationController < ActionController::Base
   
   include SessionsHelper
   hide_action :current_user
-  
   before_filter :authentication_check
   USER, PASSWORD = 'books-that-grow', 'qwerty123'
-    
+  
+  rescue_from Exception, :with => :render_error
+  rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found   
+  rescue_from ActionController::RoutingError, :with => :render_not_found   
+	
   helper_method :current_user
   helper_method :local_ip
   
@@ -22,6 +25,27 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  #called by last route matching unmatched routes.  Raises RoutingError which will be rescued from in the same way as other exceptions.
+  def raise_not_found!
+    raise ActionController::RoutingError.new("No route matches #{params[:unmatched_route]}")
+  end
+ 
+  #render 500 error 
+  def render_error(e)
+    respond_to do |f| 
+      f.html{ render :file => "#{Rails.root}/public/500.html", :status => 500 }
+        # f.js{ render :partial => "public/ajax_500", :status => 500 }
+    end
+  end
+  
+     #render 404 error 
+  def render_not_found(e)
+    respond_to do |f| 
+      f.html{ render :file => "#{Rails.root}/public/404.html", :status => 404 }
+      # f.js{ render :partial => "#{Rails.root}/public/ajax_404", :status => 404 }
+    end
+  end
+	 
   def local_ip
     orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true  # turn off reverse DNS resolution temporarily
     
@@ -36,7 +60,7 @@ class ApplicationController < ActionController::Base
   def get_schools
     @schools = []
     if current_user.role.name.eql?("Web Admin")
-      @schools = School.where("delete_flag is not true").order("created_at DESC").page params[:page]
+      @schools = School.by_newest.page params[:page]
 	else
 	  @schools << @current_user.school
 	end
@@ -147,20 +171,19 @@ class ApplicationController < ActionController::Base
             "Add Accessright"=> ""
           }
         }
-	   
-      when "accessrights"
+      when "accessrights#index"
         @breadcrumb = {
-          :title=>"Add Accessrights",
+          :title=>"Accessrights List",
 		  :icon=>"glyphicon glyphicon-ban-circle",
           :breadcrumb=>{
-            "Add Accessright"=> ""
+            "Accessrights List"=> ""
           }
-        } 		
-		
+        } 
+     	
        when "schools#index"
         @breadcrumb = {
           :title=>"School List",
-		  :icon=>"fa fa-table",
+		  :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School List"=> "",
           }
@@ -171,26 +194,26 @@ class ApplicationController < ActionController::Base
        :title=>"School Details",
 	   :icon=>"fa fa-building-o",
        :breadcrumb=>{
-         "School List"=> "",
+	     "School List"=> schools_path,
+         "School Details"=> "",
          }
        }
 		
       when "schools#new"
         @breadcrumb = {
-          :title=>"Add new school",
+          :title=>"Add New School",
 		  :icon=>"fa fa-building-o",
           :breadcrumb=>{
-            "School List"=> schools_path,
-            "Add new school"=> "",
+            "Add New School"=> "",
           }
         }
       when "schools#edit"
         @breadcrumb = {
-          :title=>"Edit school info",
+          :title=>"Edit School Details",
 		  :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School List"=> schools_path,
-            "Edit school info"=> "",
+            "Edit School Details"=> "",
           }
         }
 
@@ -198,7 +221,7 @@ class ApplicationController < ActionController::Base
       when "users#new-2"
 	  @breadcrumb = {
         :title=>"Add School Admin",
-		:icon=>"fa fa-user",
+		:icon=>"btg btg-admin",
         :breadcrumb=>{
           "School List"=> schools_path,
           "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
@@ -208,20 +231,30 @@ class ApplicationController < ActionController::Base
       when "users#index-2"
       @breadcrumb = {
         :title=>"School Admin List",
-		:icon=>"fa fa-user",
+		:icon=>"btg btg-admin",
         :breadcrumb=>{
           "School List"=> schools_path,
 		  "School Admin List"=> "",
         }
       }
+      when "users#show-2"
+       @breadcrumb = {
+       :title=>"School Admin Details",
+	   :icon=>"btg btg-admin",
+       :breadcrumb=>{
+	     "School List"=> schools_path,
+         "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+         "School Admin Details"=> "",
+         }
+       }
       when "users#edit-2"
       @breadcrumb = {
-        :title=>"Edit school admin info",
-		:icon=>"fa fa-user",
+        :title=>"Edit School Admin Details",
+		:icon=>"btg btg-admin",
         :breadcrumb=>{
           "School List"=> schools_path,
           "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-          "Edit school admin info"=> "",
+          "Edit School Admin Details"=> "",
         }
       }
 
@@ -242,12 +275,20 @@ class ApplicationController < ActionController::Base
             "Web Admin List"=> "",
           }
         }
+        when "users#show-1"
+         @breadcrumb = {
+         :title=>"Web Admin Details",
+  	     :icon=>"fa fa-user",
+         :breadcrumb=>{
+           "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+           "School Admin Details"=> "",
+           }
+         }
         when "users#edit-1"
         @breadcrumb = {
-          :title=>"Edit web admin info",
+          :title=>"Edit Web Admin Details",
 		  :icon=>"fa fa-user",
           :breadcrumb=>{
-           "School List"=> schools_path,
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
             "Edit web admin info"=> "",
           }
@@ -257,7 +298,7 @@ class ApplicationController < ActionController::Base
         when "users#new-3"
         @breadcrumb = {
           :title=>"Add Teacher",
-		  :icon=>"fa fa-user",
+		  :icon=>"btg btg-teacher",
           :breadcrumb=>{
             "School List"=> schools_path,
             "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
@@ -267,16 +308,26 @@ class ApplicationController < ActionController::Base
         when "users#index-3"
         @breadcrumb = {
           :title=>"Teacher List",
-		  :icon=>"fa fa-user",
+		  :icon=>"btg btg-teacher",
           :breadcrumb=>{
            "School List"=> schools_path,
             "Teacher List"=> "",
           }
         }
+        when "users#show-3"
+         @breadcrumb = {
+         :title=>"Teacher Details",
+  	     :icon=>"btg btg-teacher",
+         :breadcrumb=>{
+  	       "School List"=> schools_path,
+           "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+           "Teacher Details"=> "",
+           }
+         }
         when "users#edit-3"
         @breadcrumb = {
-          :title=>"Edit teacher info",
-		  :icon=>"fa fa-user",
+          :title=>"Edit Teacher Details",
+		  :icon=>"btg btg-teacher",
           :breadcrumb=>{
            "School List"=> schools_path,
             "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
@@ -288,7 +339,7 @@ class ApplicationController < ActionController::Base
         when "users#new-4"
         @breadcrumb = {
           :title=>"Add Student",
-		  :icon=>"fa fa-user",
+		  :icon=>"btg btg-student",
           :breadcrumb=>{
             "School List"=> schools_path,
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
@@ -297,18 +348,28 @@ class ApplicationController < ActionController::Base
         }
         when "users#edit-4"
         @breadcrumb = {
-          :title=>"Edit student info",
-		  :icon=>"fa fa-user",
+          :title=>"Edit Student Details",
+		  :icon=>"btg btg-student",
           :breadcrumb=>{
             "School List"=> schools_path,
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
             "Edit Student info"=> "",
           }
         }
+        when "users#show-4"
+         @breadcrumb = {
+         :title=>"Student Details",
+  	     :icon=>"btg btg-student",
+         :breadcrumb=>{
+  	       "School List"=> schools_path,
+           "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+           "Student Details"=> "",
+           }
+         }
         when "users#index-4"
         @breadcrumb = {
           :title=>"Student List",
-		  :icon=>"fa fa-user",
+		  :icon=>"btg btg-student",
           :breadcrumb=>{
            "School List"=> schools_path,
             "Student List"=> "",
@@ -326,7 +387,7 @@ class ApplicationController < ActionController::Base
           }
         when "classrooms#new"
 		  @breadcrumb = {
-            :title=>"Add new classroom",
+            :title=>"Add New Classroom",
 			:icon=>"fa fa-users",
             :breadcrumb=>{
               "School List"=> schools_path,
@@ -336,7 +397,7 @@ class ApplicationController < ActionController::Base
           }
         when "classrooms#edit"
           @breadcrumb = {
-            :title=>"Edit classroom info",
+            :title=>"Edit Classroom Details",
 			:icon=>"fa fa-users",
             :breadcrumb=>{
               "School List"=> schools_path,
@@ -366,6 +427,42 @@ class ApplicationController < ActionController::Base
               "Add new license"=> "",
               }
             }
+         when "books#index"
+          @breadcrumb = {
+            :title=>"Book List",
+  		    :icon=>"glyphicon glyphicon-book",
+            :breadcrumb=>{
+              "Book List"=> "",
+            }
+          }
+		
+        when "books#show"
+         @breadcrumb = {
+         :title=>"Book Details",
+  	     :icon=>"glyphicon glyphicon-book",
+         :breadcrumb=>{
+		   "Books List"=> books_path,
+           "Book Details"=> "",
+           }
+         }
+		
+        when "books#new"
+          @breadcrumb = {
+            :title=>"Add New Book",
+  		    :icon=>"glyphicon glyphicon-book",
+            :breadcrumb=>{
+              "Add New Book"=> "",
+            }
+          }
+        when "books#edit"
+          @breadcrumb = {
+            :title=>"Edit Book Details",
+  		    :icon=>"glyphicon glyphicon-book",
+            :breadcrumb=>{
+              "Books List"=> books_path,
+              "Edit Book Details"=> "",
+            }
+          }	
          
       else
         @breadcrumb = {

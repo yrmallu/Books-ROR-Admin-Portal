@@ -34,7 +34,7 @@ class SchoolsController < ApplicationController
     @school.country = 'US'
     if @school.save
       flash[:success] = "School created."
-    redirect_to @school  
+    redirect_to schools_path  
     else
       render :action=> 'new'
     end

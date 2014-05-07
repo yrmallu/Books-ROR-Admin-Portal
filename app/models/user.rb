@@ -47,19 +47,19 @@ class User < ActiveRecord::Base
   scope :teachers, -> { where(role_id: 3) }
   scope :students, -> { where(role_id: 4) }
 
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  NO_SPACE_REGEX = /\A\S+\Z/
+
 
   ###########################################################################################
   ## Validations
   ###########################################################################################  
 
-  validates :username, :presence=> true, :format => {:with=>NO_SPACE_REGEX}, :uniqueness=> {scope: :school}
-  validates :email, :presence=> true, :if => :not_student?
-  validates :email, :format=>{:with=>VALID_EMAIL_REGEX}, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
-  validates :first_name, :format => { :with => /\A(([a-zA-Z])+(-?[a-zA-Z]+)*\s?)+\Z/ }
-  validates :school_id, :presence=> {:message => "Select School."}
-  validates :password, :presence => true, :confirmation => true, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
+  validates :username, :presence=> true, :length => {:maximum => 255}, :format => {:with=> NO_SPACE_REGEX}, :uniqueness=> {scope: :school}
+  validates :email, :presence=> true, :length => {:maximum => 255}, :if => :not_student?
+  validates :email, :format=>{:with=> VALID_EMAIL_REGEX }, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
+  validates :first_name, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
+  validates :last_name, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
+  #validates :school_id, :presence=> {:message => "Select School."}
+  #validates :password, :presence => true, :confirmation => true, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
   validates_attachment_size :photos, :less_than => 5.megabytes
   validates_attachment_content_type :photos, :content_type => /\Aimage\/.*\Z/
   
@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   ###########################################################################################
 
   def not_student?
-    if (self.role_id.eql?(1) || self.role_id.eql?(2) || self.role_id.eql?(3))
+    if (self.role.name.eql?('Web Admin') || self.role.name.eql?('School Admin') || self.role.name.eql?('Teacher'))
       return true
     else
       return false
@@ -164,14 +164,11 @@ class User < ActiveRecord::Base
         user[:school_id].eq(schoolid).and(
           user[:last_name].matches(query_string).or(
             user[:username].matches(query_string).or(
-              user[:email].matches(query_string).or(
-                user[:email].matches(query_string)
-                )
-              )
+              user[:email].matches(query_string)
             )
           )
         )
       )
+    )
   end
-
 end
