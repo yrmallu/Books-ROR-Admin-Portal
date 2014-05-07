@@ -1,3 +1,4 @@
+require 'zip/zip'
 class Book < ActiveRecord::Base
 
   self.primary_key = "id"
@@ -26,7 +27,10 @@ class Book < ActiveRecord::Base
   validates_attachment_content_type :epub, :content_type => ['application/epub+zip', 'application/octet-stream']
   validates_attachment_presence :epub
   validates_attachment_presence :book_cover
-  validates :title, :presence=> true
+  validates :title, :presence=> true, :length => {:maximum => 255}
+  validates :description, :length => {:maximum => 255}, :allow_blank => true
+  validates :author, :length => {:maximum => 255}, :allow_blank => true
+  
 
   # callbacks .................................................................
   after_save :update_preview_name
@@ -47,9 +51,9 @@ class Book < ActiveRecord::Base
       book[:title].matches(query_string).or(
         book[:description].matches(query_string).or(
           book[:author].matches(query_string)
-          )
         )
       )
+    )
   end
 
   # public instance methods ...................................................
@@ -60,7 +64,7 @@ class Book < ActiveRecord::Base
     xhtml_files = []    
     dir_name = FileUtils.mkdir_p(book_unique_id)
     dest_path = "#{Rails.root}/public/books/#{dir_name.first}"
-    RubyZip::File.open(epub.path) { |zip_file|
+    Zip::ZipFile.open(epub.path) { |zip_file|
       zip_file.each { |f|
         next if f.name =~ /__MACOSX/ or f.name =~ /\.DS_Store/ #or !f.file?
         list_file_names.push(f.name)
@@ -89,6 +93,10 @@ class Book < ActiveRecord::Base
     File.open(dest_path+"/index.html" , "w") {|fi| fi.puts index_file_string}
   end
 
+  def delete_book
+    delete_flag = true
+    save
+  end
   # protected instance methods ................................................
 
   # private instance methods ..................................................

@@ -15,15 +15,15 @@
             	</address>
             	<address>
 			    	<strong>Number Of School Admins:</strong>
-			    	<%#= @role_wise_count[0].blank? ? 0 : @role_wise_count[0] %>
+			    	<%= @classroom.school.users.school_admins.count %>
             	</address>
             	<address>
 			    	<strong>Number Of Teachers:</strong>
-			    	<%#= @role_wise_count[1].blank? ? 0 : @role_wise_count[1] %>
+			    	<%= @classroom.school.users.teachers.count %>
             	</address>
             	<address>
 			    	<strong>Number Of Students:</strong>
-			    	<%#= @role_wise_count[2].blank? ? 0 : @role_wise_count[2] %>
+			    	<%= @classroom.school.users.students.count %>
             	</address>
             	<address>
 			    	<strong>School Start Year:</strong>
@@ -35,7 +35,7 @@
             	</address>
             	<div data-no-turbolink>
 			    	<%= link_to 'Edit', edit_classroom_path(@classroom, :school_id=>@classroom.school_id), :class=>"btn btn-success btn-xs", data: { disable_with: 'Saving...' } %>
-					<%= link_to 'Cancel', classrooms_path(:school_id=>@classroom.school_id), class: "btn btn-white btn-xs"%>
+					<%= link_to 'Return to Classroom List', classrooms_path(:school_id=>@classroom.school_id), class: "btn btn-white btn-xs"%>
         	    </div>
 		    </div>
         </div>

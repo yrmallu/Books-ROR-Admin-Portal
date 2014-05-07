@@ -1,9 +1,11 @@
-require 'rubyzip'
+# require 'rubyzip'
 class BooksController < ApplicationController
 
   before_action :logged_in?
   before_action :set_book, only: [:show, :edit, :update, :destroy]
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
+  
+  load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
 
   def index
     if params[:query_string] && !(params[:query_string].blank?)
@@ -33,7 +35,7 @@ class BooksController < ApplicationController
     respond_to do |format|
       if @book.save
         @book.parse_epub 
-        format.html { redirect_to @book, notice: 'Book was successfully created.' }
+        format.html { redirect_to @book, notice: 'Book created.' }
         format.json { render action: 'show', status: :created, location: @book }
       else
         format.html { render action: 'new' }
@@ -47,7 +49,7 @@ class BooksController < ApplicationController
       if @book.update(book_params)
         FileUtils.rm_rf  "#{Rails.root}/public/books/#{@book.book_unique_id}"
         @book.parse_epub 
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
+        format.html { redirect_to @book, notice: 'Book updated.' }
         format.json { render action: 'show', status: :ok, location: @book }
       else
         format.html { render action: 'edit' }
@@ -57,9 +59,8 @@ class BooksController < ApplicationController
   end
 
   def destroy
-    dir_name = @book.book_unique_id
-    @book.destroy
-    FileUtils.rm_rf  "#{Rails.root}/public/books/#{dir_name}"
+    @book.update_attributes(:delete_flag => true)
+    FileUtils.rm_rf  "#{Rails.root}/public/books/#{@book.book_unique_id}"
     respond_to do |format|
       format.html { redirect_to books_url }
       format.json { head :no_content }
@@ -67,14 +68,11 @@ class BooksController < ApplicationController
   end
   
   def delete_book
-    deleted_book = ''
     Book.where(id: params[:book_ids]).each do |book|
-    deleted_book = book
-    dir_name = book.book_unique_id
-    book.destroy
-    FileUtils.rm_rf  "#{Rails.root}/public/books/#{dir_name}"
+      book.update_attributes(:delete_flag => true)
+      FileUtils.rm_rf  "#{Rails.root}/public/books/#{book.book_unique_id}"
     end
-  redirect_to books_path
+    redirect_to books_path
   end
 
   private
@@ -89,3 +87,11 @@ class BooksController < ApplicationController
     end
     
 end
+
+
+
+
+
+
+
+

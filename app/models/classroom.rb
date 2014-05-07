@@ -33,7 +33,7 @@ class Classroom < ActiveRecord::Base
   ## Methods
   ###########################################################################################
   def generate_random_code
-    self.code = Classroom.count == 0 ? 10001:Classroom.maximum("code") + 1
+    self.code = Classroom.count == 0 ? (10001.to_i) : (Classroom.maximum("code").to_i + 1.to_i)
   end
 
   def self.search(query_string)

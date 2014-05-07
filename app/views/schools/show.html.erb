@@ -67,9 +67,9 @@
                 </address>
 			    <div data-no-turbolink>
 			        <%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary btn-xs" %>
-			        <%if current_user.role.name.eql?('Web Admin')%>
-					    <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
-					<%end%>
+			        <%#=if current_user.role.name.eql?('Web Admin')%>
+					    <%= link_to 'Return to School List', schools_path, class: "btn btn-white btn-xs"%>
+					<%#=end%>
         	    </div>
 		    </div>
         </div>

@@ -64,6 +64,14 @@ class Ability
         can [:destroy, :read], :licenses if user_rights.include?("Delete License")
         can [:update, :read], :licenses if user_rights.include?("Update License")
 		
+        can :create, :books if user_rights.include?("Create Book")
+        can :read, :books if user_rights.include?("View Book")
+        can [:destroy, :read], :books if user_rights.include?("Delete Book")
+        can [:update, :read], :books if user_rights.include?("Update Book")
+		
+        can :create, :accessrights if user_rights.include?("Update Accessright")
+		can :read, :accessrights if user_rights.include?("View Acessright")
+        can [:update, :read], :accessrights if user_rights.include?("Update Accessright")
 		 
 	  end
   

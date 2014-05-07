@@ -314,7 +314,7 @@ class UsersController < ApplicationController
       remove_license_from_user
     end
       @user.update_attributes(:delete_flag=>true)
-    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User deleted.'
+    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User archived.'
   end
   
   def current_user_destroy_accessrights

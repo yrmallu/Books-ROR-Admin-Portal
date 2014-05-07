@@ -33,13 +33,19 @@ class School < ActiveRecord::Base
   ###########################################################################################
 
   validates :name, :presence => {:message => "School name can't be blank."}, :length => {:maximum => 255}, :uniqueness => { :case_sensitive => false, conditions: -> { where.not(delete_flag: 'true') }}
+  validates :address, :length => {:maximum => 255}, :allow_blank=>true
+  validates :city, :length => {:maximum => 255}, :allow_blank=>true
+  validates :district, :length => {:maximum => 255}, :allow_blank=>true
+  validates :state, :length => {:maximum => 255}, :allow_blank=>true
+  validates :country, :length => {:maximum => 255}, :allow_blank=>true
+  validates :phone, :length => {:maximum => 255}, :allow_blank=>true
 
 	###########################################################################################
   ## Methods
   ###########################################################################################
 
   def generate_random_code
-  	self.code = School.count == 0 ? 10001:School.maximum("code") + 1
+  	self.code = School.count == 0 ? (1000001.to_i) : (School.maximum("code").to_i + 1.to_i)
   end
 
   def strip_whitespace

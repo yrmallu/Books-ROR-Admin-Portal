@@ -1,7 +1,9 @@
 <div class="panel panel-default">
     <div class="panel-body"> 
 	    <div class="index_page_btns" data-no-turbolink>
-		    <%= link_to 'Add Access Rights', new_accessright_path, class: "btn btn-success btn-xs"%>
+			<% if can? :update, :accessrights %>	 
+		        <%= link_to 'Add Access Rights', new_accessright_path, class: "btn btn-success btn-xs"%>
+			<%end%>	
 	    </div>
    	 <div class="table-responsive">
    		<table class="table" id="accessright_table">
@@ -25,7 +27,9 @@
 							   <%end%>
 							</td>
 							<td data-no-turbolink>
+								<% if can? :update, :accessrights %>	 
 								   <%= link_to '<i title="Edit Accessright" class="fa fa-pencil"></i>'.html_safe, edit_accessright_path(role) %>
+								<%end%>	
 							</td>
 				       </tr>
 	   	      	  	<% end %>

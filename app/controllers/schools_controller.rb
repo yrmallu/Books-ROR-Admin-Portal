@@ -56,7 +56,7 @@ class SchoolsController < ApplicationController
     @licenses.each do |license|
       license.update_attributes(:delete_flag=>true)
     end
-    flash[:success] = "School deleted." 
+    flash[:success] = "School archived." 
     redirect_to schools_url 
   end
   
