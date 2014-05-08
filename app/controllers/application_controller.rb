@@ -247,15 +247,28 @@ class ApplicationController < ActionController::Base
         }
       }
       when "users#show-2"
-       @breadcrumb = {
-       :title=>"School Admin Information",
-	   :icon=>"btg btg-admin",
-       :breadcrumb=>{
-	     "School List"=> schools_path,
-         "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-         "School Admin Information"=> "",
-         }
-       }
+	  if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+        @breadcrumb = {
+        :title=>"My Information",
+ 	   :icon=>"btg btg-admin",
+        :breadcrumb=>{
+ 	     "School List"=> schools_path,
+          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+          "My Information"=> "",
+          }
+        }
+	  else
+        @breadcrumb = {
+        :title=>"School Admin Information",
+ 	   :icon=>"btg btg-admin",
+        :breadcrumb=>{
+ 	     "School List"=> schools_path,
+          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+          "School Admin Information"=> "",
+          }
+        }
+	  end
+     
       when "users#edit-2"
 	  if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
         @breadcrumb = {
@@ -306,14 +319,26 @@ class ApplicationController < ActionController::Base
           }
         }
         when "users#show-1"
-         @breadcrumb = {
-         :title=>"Web Admin Information",
-  	     :icon=>"fa fa-user",
-         :breadcrumb=>{
-           "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
-           "School Admin Information"=> "",
-           }
-         }
+		if !parameters[1].blank? && parameters[1].eql?(current_user.id.to_s)
+          @breadcrumb = {
+          :title=>"My Information",
+   	     :icon=>"fa fa-user",
+          :breadcrumb=>{
+            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+            "My Information"=> "",
+            }
+          }
+		else
+          @breadcrumb = {
+          :title=>"Web Admin Information",
+   	     :icon=>"fa fa-user",
+          :breadcrumb=>{
+            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+            "School Admin Information"=> "",
+            }
+          }
+		end
+         
         when "users#edit-1"
 		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
           @breadcrumb = {
@@ -355,15 +380,28 @@ class ApplicationController < ActionController::Base
           }
         }
         when "users#show-3"
-         @breadcrumb = {
-         :title=>"Teacher Information",
-  	     :icon=>"btg btg-teacher",
-         :breadcrumb=>{
-  	       "School List"=> schools_path,
-           "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-           "Teacher Information"=> "",
-           }
-         }
+		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+          @breadcrumb = {
+          :title=>"My Information",
+   	     :icon=>"btg btg-teacher",
+          :breadcrumb=>{
+   	       "School List"=> schools_path,
+            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "My Information"=> "",
+            }
+          }
+		else
+          @breadcrumb = {
+          :title=>"Teacher Information",
+   	     :icon=>"btg btg-teacher",
+          :breadcrumb=>{
+   	       "School List"=> schools_path,
+            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Teacher Information"=> "",
+            }
+          }
+		end
+         
         when "users#edit-3"
 		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
           @breadcrumb = {
