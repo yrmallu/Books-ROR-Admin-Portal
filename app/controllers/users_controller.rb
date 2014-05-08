@@ -488,6 +488,7 @@ class UsersController < ApplicationController
 
   def import_list
     @list_type = params[:list_type]
+	set_bread_crumb(@list_type, params[:role_id], params[:school_id])
   end
 
   def import
