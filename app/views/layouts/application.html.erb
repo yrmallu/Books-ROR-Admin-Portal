@@ -199,16 +199,16 @@
 
 
 <script type="text/javascript">
-$( ".change_password" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%=current_user.role_id%>},
-function(data) {
-	         
-             if(data)
-              {
-			   jQuery("#change_user_password_info").html(data);
-             }
-      });
-});
+// $( ".change_password" ).click(function() {
+//           jQuery.get("<%#=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%#=current_user.role_id%>},
+// function(data) {
+// 	         
+//              if(data)
+//               {
+// 			   jQuery("#change_user_password_info").html(data);
+//              }
+//       });
+// });
 
 $(document).ready(function(){
 $('#changePassword').click(function() {
