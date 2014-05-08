@@ -3,7 +3,7 @@ class SchoolsController < ApplicationController
   before_action :logged_in?
   before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list], except: [:save_school_list]
   before_action :get_schools, only: [:index]
-  before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
+  before_action :set_bread_crumb, only: [:index, :show, :edit, :new, :import_list]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -93,7 +93,7 @@ class SchoolsController < ApplicationController
   end
 
   def import
-    flash[:notice] = ""
+    #flash[:notice] = ""
     begin
       File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
         file.write(params[:file].read)

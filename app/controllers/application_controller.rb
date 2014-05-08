@@ -216,7 +216,16 @@ class ApplicationController < ActionController::Base
             "Edit School Information"=> "",
           }
         }
-
+      when "schools#import_list"
+        @breadcrumb = {
+          :title=>"Import School List",
+		  :icon=>"fa fa-building-o",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            "Import School List"=> "",
+          }
+        }	
+	
 
       when "users#new-2"
 	  @breadcrumb = {
@@ -269,7 +278,16 @@ class ApplicationController < ActionController::Base
           }
         }
 	  end
-      
+      when "users#import_list-school_admin"
+        @breadcrumb = {
+          :title=>"Import School Admin List",
+		  :icon=>"fa fa-building-o",
+          :breadcrumb=>{
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+            "Import School Admin List"=> "",
+          }
+        }
+	  
       when "users#new-1"
 		@breadcrumb = {
           :title=>"Add Web Admin",
@@ -368,6 +386,15 @@ class ApplicationController < ActionController::Base
             }
           }	
 		end
+        when "users#import_list-teacher"
+          @breadcrumb = {
+            :title=>"Import Teacher List",
+  		  :icon=>"fa fa-building-o",
+            :breadcrumb=>{
+              "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+              "Import Teacher List"=> "",
+            }
+          }
        
         when "users#new-4"
         @breadcrumb = {
@@ -408,6 +435,15 @@ class ApplicationController < ActionController::Base
             "Student List"=> "",
           }
         }
+        when "users#import_list-student"
+          @breadcrumb = {
+            :title=>"Import Student List",
+  		  :icon=>"fa fa-building-o",
+            :breadcrumb=>{
+              "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+              "Import Student List"=> "",
+            }
+          }
 		
         when "classrooms#index"
           @breadcrumb = {

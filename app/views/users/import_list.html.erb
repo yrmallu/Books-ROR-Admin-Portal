@@ -1,10 +1,10 @@
 <div class="panel panel-default">
 	<div class="panel-body"> 
-		<h2>Import <%= @list_type.downcase.tr('_', ' ').titleize %></h2>  
+		<!-- <h2>Import <%#= @list_type.downcase.tr('_', ' ').titleize %></h2>   -->
 		<%= form_tag import_users_path, multipart: true do %>  
 			<%= hidden_field_tag :list_type, @list_type %>
 	  		<%= file_field_tag :file %>  
-	  		<%= submit_tag "Import", :onclick => "return validateform();" %>  
+	  		<%= submit_tag "Import", :onclick => "return validateform();", :class=>"margin-t-10" %>  
 		<% end %>
 	</div>
 </div>	
