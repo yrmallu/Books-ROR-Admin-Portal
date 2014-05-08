@@ -210,25 +210,25 @@
 //       });
 // });
 
-$(document).ready(function(){
-$('#changePassword').click(function() {
-	$(".form_validation").validate({
-		rules: {
-			"user[password]":{ minlength: 5, required: true} ,
-			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} 
-		},
-		messages: {
-			"user[password]":{
-				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long."
-			},
-			"user[password_confirmation]": {
-				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long.",
-				equalTo: "Please enter the same password as above."
-			}
-		}
-		});
-});
-});
+// $(document).ready(function(){
+// $('#changePassword').click(function() {
+// 	$(".form_validation").validate({
+// 		rules: {
+// 			"user[password]":{ minlength: 5, required: true} ,
+// 			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} 
+// 		},
+// 		messages: {
+// 			"user[password]":{
+// 				required: "Please provide a password",
+// 				minlength: "Your password must be at least 5 characters long."
+// 			},
+// 			"user[password_confirmation]": {
+// 				required: "Please provide a password",
+// 				minlength: "Your password must be at least 5 characters long.",
+// 				equalTo: "Please enter the same password as above."
+// 			}
+// 		}
+// 		});
+// });
+// });
 </script>
