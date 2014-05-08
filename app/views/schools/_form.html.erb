@@ -23,7 +23,7 @@
 	            	<% if params["action"] == "edit"%>
 	                <div class="col-sm-3">
 	                    <div class="form-group">
-	                    	<%= f.label :code, "School Code", :class=>"control-label" %><span class="asterisk">*</span> </br>
+	                    	<%= f.label :code, "School Code", :class=>"control-label" %></br>
 	                    	<%= @school.code %>
 	                    </div>
 	                </div>
@@ -31,7 +31,8 @@
 	                <div class="col-sm-9">
 	                    <div class="form-group">
 			     		   <%= f.label :name, "School Name", :class=>"control-label" %><span class="asterisk">*</span>
-			     		   <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control school_name_unique" %>
+			     		   <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control" %>
+						   <%#= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control school_name_unique" %>
 						   <span class="help-inline error_box"></span>
 	                    </div>
 	                </div>
@@ -46,8 +47,8 @@
 	                <div class="col-sm-6">
 	                    <div class="form-group">
 		   			    	<%= f.label :phone, :class=>"control-label"%>
-		   			    	<%= f.text_field :phone, :class=>"form-control" %>
-	                    </div>
+		   			    	<%= f.text_field :phone, :class=>"form-control"%>
+						</div>
 	                </div>
 	            </div>
 	            <div class="row">
@@ -93,6 +94,8 @@
 </div>
 
 <script type="text/javascript">
+
+   $("#school_phone").mask("(999) 999-9999");
 	showHideMenu('li_school');
 	
 	<% unless current_user.role_id.eql?(1)%>

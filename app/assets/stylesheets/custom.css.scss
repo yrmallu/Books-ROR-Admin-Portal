@@ -91,4 +91,7 @@ label.error {display:block;}
 	
 .no-access{width:100%; min-height:850px; background:#fff;}
 .no-access img {padding-top:100px;}	
+
+.date-picker-margin {margin: 0;}
+.input-group .hasDatepicker + label.error{position:absolute;top:42px;}
 	

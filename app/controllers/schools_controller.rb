@@ -113,7 +113,7 @@ class SchoolsController < ApplicationController
     @schools =  get_file_data(session[:file], School, save = true)
     FileUtils.rm session[:file]
     session[:file] = ""
-    flash[:success] = "School's list saved successfully." 
+    flash[:success] = "School's list imported." 
     redirect_to schools_url 
   end
 

@@ -152,7 +152,7 @@ class ApplicationController < ActionController::Base
 
     p "extras=====",parameters = extra.split(",")
 	selector =  parameters.empty? ? "#{params[:controller]}##{params[:action]}" : (("classrooms").eql?("#{params[:controller]}") || ("licenses").eql?("#{params[:controller]}")) ? "#{params[:controller]}##{params[:action]}" : "#{params[:controller]}##{params[:action]}".concat("-"+parameters[0])  
-    
+    p "selector=====",selector
     case selector
 
       when "users#dashboard"
@@ -248,16 +248,28 @@ class ApplicationController < ActionController::Base
          }
        }
       when "users#edit-2"
-      @breadcrumb = {
-        :title=>"Edit School Admin Information",
-		:icon=>"btg btg-admin",
-        :breadcrumb=>{
-          "School List"=> schools_path,
-          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-          "Edit School Admin Information"=> "",
+	  if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+        @breadcrumb = {
+          :title=>"Edit My Information",
+  		:icon=>"btg btg-admin",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Edit My Information"=> "",
+          }
         }
-      }
-
+	  else
+        @breadcrumb = {
+          :title=>"Edit School Admin Information",
+  		:icon=>"btg btg-admin",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Edit School Admin Information"=> "",
+          }
+        }
+	  end
+      
       when "users#new-1"
 		@breadcrumb = {
           :title=>"Add Web Admin",
@@ -285,16 +297,26 @@ class ApplicationController < ActionController::Base
            }
          }
         when "users#edit-1"
-        @breadcrumb = {
-          :title=>"Edit Web Admin Information",
-		  :icon=>"fa fa-user",
-          :breadcrumb=>{
-            "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
-            "Edit Web Admin Information"=> "",
+		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+          @breadcrumb = {
+            :title=>"Edit My Information",
+  		  :icon=>"fa fa-user",
+            :breadcrumb=>{
+              "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+              "Edit My Information"=> "",
+            }
           }
-        }   
-
-
+		else
+          @breadcrumb = {
+            :title=>"Edit Web Admin Information",
+  		  :icon=>"fa fa-user",
+            :breadcrumb=>{
+              "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+              "Edit Web Admin Information"=> "",
+            }
+          }
+		end
+         
         when "users#new-3"
         @breadcrumb = {
           :title=>"Add Teacher",
@@ -325,17 +347,28 @@ class ApplicationController < ActionController::Base
            }
          }
         when "users#edit-3"
-        @breadcrumb = {
-          :title=>"Edit Teacher Information",
-		  :icon=>"btg btg-teacher",
-          :breadcrumb=>{
-           "School List"=> schools_path,
-            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-            "Edit Teacher Information"=> "",
+		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+          @breadcrumb = {
+            :title=>"Edit My Information",
+  		  :icon=>"btg btg-teacher",
+            :breadcrumb=>{
+             "School List"=> schools_path,
+              "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+              "Edit My Information"=> "",
+            }
           }
-        }
-
-
+		else
+          @breadcrumb = {
+            :title=>"Edit Teacher Information",
+  		  :icon=>"btg btg-teacher",
+            :breadcrumb=>{
+             "School List"=> schools_path,
+              "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+              "Edit Teacher Information"=> "",
+            }
+          }	
+		end
+       
         when "users#new-4"
         @breadcrumb = {
           :title=>"Add Student",
@@ -348,22 +381,22 @@ class ApplicationController < ActionController::Base
         }
         when "users#edit-4"
         @breadcrumb = {
-          :title=>"Edit Student Details",
+          :title=>"Edit Student Information",
 		  :icon=>"btg btg-student",
           :breadcrumb=>{
             "School List"=> schools_path,
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-            "Edit Student info"=> "",
+            "Edit Student Information"=> "",
           }
         }
         when "users#show-4"
          @breadcrumb = {
-         :title=>"Student Details",
+         :title=>"Student Information",
   	     :icon=>"btg btg-student",
          :breadcrumb=>{
   	       "School List"=> schools_path,
            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-           "Student Details"=> "",
+           "Student Information"=> "",
            }
          }
         when "users#index-4"
@@ -413,7 +446,7 @@ class ApplicationController < ActionController::Base
               :breadcrumb=>{
                 "School List"=> schools_path,
                 "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-                "Edit classroom info"=> "",
+                "Edit Classroom Information"=> "",
               }
             }
 			

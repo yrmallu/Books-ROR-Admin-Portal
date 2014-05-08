@@ -13,8 +13,8 @@
 			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
 			<%end%>
 			<%=link_to 'List All Records', classrooms_path, :class=>"btn btn-success btn-xs" if @search_flag %>
-			<%= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
-       		<%= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
+			<%#= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
+       		<%#= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<%= submit_tag 'Delete', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
 	 	</div>
 	 <div class="table-responsive">

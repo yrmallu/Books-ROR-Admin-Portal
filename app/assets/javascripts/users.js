@@ -7,6 +7,7 @@ jQuery(document).ready(function(){
 	$('.input-group-addon').click(function() {
 		$("#datepicker").datepicker( "show" );
 	});
+	$("#user_phone_number").mask("(999) 999-9999");
   });
 
 

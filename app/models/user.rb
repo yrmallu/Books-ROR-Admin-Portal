@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_many :parents
   belongs_to :license
   before_update :update_license_count
+  #after_update :check_user_changed_own_password
   accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
 
   ###########################################################################################
@@ -82,6 +83,14 @@ class User < ActiveRecord::Base
   def is_school_admin?
   	 self.role.name.eql?("School Admin") unless self.role.blank?
   end
+  
+  # def check_user_changed_own_password
+#   binding .pry
+#     if !self.password_digest_was.eql?(self.password_digest)
+# 	  sign_out
+# 	  redirect_to root_path
+# 	end
+#   end
   
   def assign_accessright(accessright_id)
     self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?

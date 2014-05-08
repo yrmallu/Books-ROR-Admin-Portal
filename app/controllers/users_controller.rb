@@ -228,12 +228,13 @@ class UsersController < ApplicationController
   
   def user_edit
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
-    set_bread_crumb(@role_id.id, @user.school_id)
+    set_bread_crumb(@role_id.id, @user.school_id, @user.id)
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
   end
   
   def user_update
     path = request.env['HTTP_HOST']
+	root_path = root_url
     email_before_save = @user.email
     if @user.update_attributes(user_params)
       email_after_save = @user.email
