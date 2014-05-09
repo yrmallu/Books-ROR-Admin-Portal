@@ -117,7 +117,7 @@ class User < ActiveRecord::Base
   
   def welcome_email(path)
     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-	  UserMailer.welcome_email(user_info).deliver
+	UserMailer.welcome_email(user_info).deliver
   end
   
   def user_details_change_email(current_user, path)
