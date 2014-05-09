@@ -68,9 +68,9 @@ class UsersController < ApplicationController
     @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
     @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
 	unless @school.blank?
-	  set_bread_crumb(@role_id.id, @school.id)
+	  set_bread_crumb(@role_id.id, @school.id, @user.id)
 	else
-	  set_bread_crumb(@role_id.id)
+	  set_bread_crumb(@role_id.id, @user.id)
 	end
   end
   
@@ -164,7 +164,7 @@ class UsersController < ApplicationController
       end  
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
-      @user.welcome_email(path)
+      @user.welcome_email(path) unless params[:user][:email].blank?
     else 
     get_all_reading_grades
       @assigned_classrooms = []
@@ -362,8 +362,8 @@ class UsersController < ApplicationController
   end
   
   def remove_license
-     remove_license_from_user
-   redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
+    remove_license_from_user
+    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
   end
   
   def remove_license_from_user 
