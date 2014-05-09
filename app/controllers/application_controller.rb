@@ -103,7 +103,7 @@ class ApplicationController < ActionController::Base
 
     spreadsheet = Roo::Excel.new(file, nil, :ignore)
    
-    header = spreadsheet.row(1).map{|h| h.to_sym.try(:downcase)}
+    header = spreadsheet.row(1).map{|h| h.to_sym.try(:downcase) unless h.blank?}
     data_list = []
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
