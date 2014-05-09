@@ -31,7 +31,7 @@ class School < ActiveRecord::Base
   ###########################################################################################
   ## Validations
   ###########################################################################################
-  validates :code, :uniqueness => {:case_sensitive => false}
+  #validates :code, :uniqueness => {:case_sensitive => false}
   validates :name, :presence => {:message => "School name can't be blank."}, :length => {:maximum => 255}#, :uniqueness => { :case_sensitive => false, conditions: -> { where.not(delete_flag: 'true') }}
   validates :address, :length => {:maximum => 255}, :allow_blank=>true
   validates :city, :length => {:maximum => 255}, :allow_blank=>true

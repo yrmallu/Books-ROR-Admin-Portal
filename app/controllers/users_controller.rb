@@ -236,42 +236,49 @@ class UsersController < ApplicationController
     path = request.env['HTTP_HOST']
 	root_path = root_url
     email_before_save = @user.email
+	password_before_update = @user.password_digest
     if @user.update_attributes(user_params)
       email_after_save = @user.email
       unless params[:accessright].blank?
         if params[:accessright].eql?('0')
-        can_manage_access_right_id = get_manage_student_accessright
+          can_manage_access_right_id = get_manage_student_accessright
           @accessright_exist = @user.user_accessrights.where("accessright_id = #{can_manage_access_right_id.id}").last
-        unless @accessright_exist.blank?
-          @accessright_exist.update_attributes(:accessright_id=>can_manage_access_right_id.id, :access_flag=>true, :role_id=>@user.role_id)
-        end
+          unless @accessright_exist.blank?
+            @accessright_exist.update_attributes(:accessright_id=>can_manage_access_right_id.id, :access_flag=>true, :role_id=>@user.role_id)
+          end
         else
           @accessright_exist = @user.user_accessrights.where("accessright_id = #{params[:accessright]}").last
-        unless @accessright_exist.blank?
+          unless @accessright_exist.blank?
             @accessright_exist.update_attributes(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id) 
           else
-          @user.user_accessrights.create(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id)
-        end
+            @user.user_accessrights.create(:accessright_id=>params[:accessright], :access_flag=>false, :role_id=>@user.role_id)
+          end
         end
       end 
       array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
-    unless array_classroom_ids.blank?
-      unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
+      unless array_classroom_ids.blank?
+        unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
           @user.user_classrooms.destroy_all
           array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
         end
-    end 
+      end 
       add_user_level_setting if @user.role.name.eql?('Student')
-      redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
-      if  params[:send_mail].blank?
+	  #Check if user updated his own password, if yes then logout
+	  if !params[:user][:password].eql?(password_before_update)
+	    sign_out
+		redirect_to signin_path and return
+	  else
+        redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
+      end
+	  if params[:send_mail].blank?
         @user.user_details_change_email(current_user.first_name, path)
         @user.user_email_change_email(current_user.first_name, path, [email_before_save, email_after_save]).deliver unless (email_before_save == email_after_save)
       end
     else
-    get_all_reading_grades
+      get_all_reading_grades
       @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-    @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank?
-    render :action=> 'edit'
+      @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank?
+      render :action=> 'edit'
     end
   end
   
