@@ -11,16 +11,9 @@
 	        	<%= form_for @license, :html=>{:class=>"form_validation"}, :remote=>true  do |f| %>
 				 <div class="panel-body">
 					<%= f.hidden_field :school_id, :value=>@school_id %>
-				    <% if @license.errors.any? %>
-				    <div id="error_explanation">
-				        <!-- <h2><%#= pluralize(@license.errors.count, "error") %> prohibited this user from being saved:</h2> -->
-				        <ul>
-				            <% @license.errors.full_messages.each do |msg| %>
-				               <%= msg %>
-				            <% end %>
-				        </ul>
-				    </div>
-				  	<% end %>
+					<div id="errorbox">	
+					    <%= render "shared/error_messages", :object=>@license %>
+					</div>
 		            <div class="row">
 		                <div class="col-sm-6">
 		                    <div class="form-group">
