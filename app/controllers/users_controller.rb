@@ -264,12 +264,12 @@ class UsersController < ApplicationController
       end 
       add_user_level_setting if @user.role.name.eql?('Student')
 	  #Check if user updated his own password, if yes then logout
-	  if !params[:user][:password].eql?(password_before_update)
-	    sign_out
-		redirect_to signin_path and return
-	  else
+	  # if !params[:user][:password].eql?(password_before_update)
+# 	    sign_out
+# 		redirect_to signin_path and return
+# 	  else
         redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
-      end
+      #end
 	  if params[:send_mail].blank?
         @user.user_details_change_email(current_user.first_name, path)
         @user.user_email_change_email(current_user.first_name, path, [email_before_save, email_after_save]).deliver unless (email_before_save == email_after_save)
@@ -318,7 +318,7 @@ class UsersController < ApplicationController
 
   def user_destroy
     unless @user.license.blank?
-      @user.remove_license(@user.license_id)
+      #@user.remove_license(@user.license_id)
       remove_license_from_user
     end
       @user.update_attributes(:delete_flag=>true)
