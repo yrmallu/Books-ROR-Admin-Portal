@@ -151,7 +151,7 @@
         <%unless current_user.blank?%>  
         <% if current_user.role.name.eql?('Web Admin')%>  
             <li><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "My Profile", user_path(current_user, :role_id=>current_user.role_id) %></li>  
-			<!-- <li><%#= link_to '<i class="fa fa-lock increase_size"></i>'.html_safe + "Change Password", '', :class=>"change_password", data: { toggle: "modal", target: "#changePassword", input: current_user.id} %></li> -->
+			<li><%= link_to '<i class="fa fa-lock increase_size"></i>'.html_safe + "Change Password", '', :class=>"change_password", data: { toggle: "modal", target: "#changePassword", input: current_user.id} %></li>
         <%else%>
             <li><%= link_to '<i class="glyphicon glyphicon-user"></i>'.html_safe + "My Profile", user_path(current_user, :role_id=>current_user.role_id, :school_id=>current_user.school_id) %></li>  
         <%end%>
@@ -183,7 +183,7 @@
 
 
 
-<!-- <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -195,40 +195,40 @@
 	  </div>
     </div>
   </div>
-</div> -->	
+</div>	
 
 
 <script type="text/javascript">
-// $( ".change_password" ).click(function() {
-//           jQuery.get("<%#=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%#=current_user.role_id%>},
-// function(data) {
-// 	         
-//              if(data)
-//               {
-// 			   jQuery("#change_user_password_info").html(data);
-//              }
-//       });
-// });
+$( ".change_password" ).click(function() {
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%=current_user.role_id%>},
+function(data) {
+	         
+             if(data)
+              {
+			   jQuery("#change_user_password_info").html(data);
+             }
+      });
+});
 
-// $(document).ready(function(){
-// $('#changePassword').click(function() {
-// 	$(".form_validation").validate({
-// 		rules: {
-// 			"user[password]":{ minlength: 5, required: true} ,
-// 			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} 
-// 		},
-// 		messages: {
-// 			"user[password]":{
-// 				required: "Please provide a password",
-// 				minlength: "Your password must be at least 5 characters long."
-// 			},
-// 			"user[password_confirmation]": {
-// 				required: "Please provide a password",
-// 				minlength: "Your password must be at least 5 characters long.",
-// 				equalTo: "Please enter the same password as above."
-// 			}
-// 		}
-// 		});
-// });
-// });
+$(document).ready(function(){
+$('#changePassword').click(function() {
+	$(".form_validation").validate({
+		rules: {
+			"user[password]":{ minlength: 5, required: true} ,
+			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} 
+		},
+		messages: {
+			"user[password]":{
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long."
+			},
+			"user[password_confirmation]": {
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long.",
+				equalTo: "Please enter the same password as above."
+			}
+		}
+		});
+});
+});
 </script>

@@ -6,7 +6,7 @@
 	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
-				<%= form_for(@classroom, :html=>{:class=>"form_validation classroom_form"} ) do |f| %>
+				<%= form_for(@classroom, :html=>{:class=>"form_validation"} ) do |f| %>
 				    <%=f.hidden_field :school_id, :value=>@school.id%>
 					<div id="errorbox">	
 					    <%= render "shared/error_messages", :object=>@classroom %>
@@ -121,6 +121,6 @@
 	<% unless current_user.is_web_admin?%>
 	  showHideMenu('li_options');	
 	<%end%>
-/script>
+</script>
 
 
