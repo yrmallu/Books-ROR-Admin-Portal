@@ -9,16 +9,9 @@
 	        <div class="panel-body">
 				<%= form_for(@school, :html=>{:class=>"form_validation"} ) do |f| %>
 				    <%=f.hidden_field :school_id, :value=>@school.id%>
-				    <% if @school.errors.any? %>
-				    <div id="error_explanation">
-				        <!-- <h4><%#= pluralize(@school.errors.count, "error") %> prohibited this school from being saved:</h4> -->
-				        <ul>
-				            <% @school.errors.full_messages.each do |msg| %>
-				                <%= msg %>
-				            <% end %>
-				        </ul>
-				    </div>
-				  	<% end %>
+					<div id="errorbox">	
+					    <%= render "shared/error_messages", :object=>@school %>
+					</div>
 	            <div class="row">
 	            	<% if params["action"] == "edit"%>
 	                <div class="col-sm-3">

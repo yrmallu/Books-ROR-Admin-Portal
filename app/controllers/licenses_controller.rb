@@ -14,9 +14,9 @@ class LicensesController < ApplicationController
 
   def new
     get_license_list
-    @license = License.new
+	@license = License.new
     @school_id = params["school_id"]
-	  set_bread_crumb(@school_id)
+	set_bread_crumb(@school_id)
   end
 
   def edit
@@ -42,8 +42,10 @@ class LicensesController < ApplicationController
 			end
 		}  
 		format.js {
-              @license.save 
-              refresh_licenses_list
+		      if @license.valid?
+                @license.save 
+                refresh_licenses_list
+		      end
     }
 	end
   end
@@ -60,15 +62,26 @@ class LicensesController < ApplicationController
                       end 
                   }   
       format.js {
-	              @license.update_attributes(license_params) 
-                  refresh_licenses_list
+	              if @license.update_attributes(license_params).eql?(true)
+	                @license.update_attributes(license_params)
+				    refresh_licenses_list
+				  else
+				    @license.valid?
+				  end
 				}                         
     end
   end
   
  def destroy
+   @user_licenses = User.where("license_id = '#{params[:id]}'") 
+   unless @user_licenses.blank?
+     @user_licenses.each do |user|
+       user.update_attributes(:license_id=>"", :license_expiry_date=>"")
+     end
+   end
    @license.update_attributes(:delete_flag=>true)
    @licenses = License.where("school_id = '#{@license.school_id}'").by_newest.page params[:page]
+   
    respond_to do |format|
       format.html { redirect_to licenses_url }
       format.js {  }

@@ -1,22 +1,31 @@
-$('#license_license_batch_name').val('');
-$('#license_no_of_licenses').val('');
-$('#datepicker').val('');
+<% if @license.errors.any? %>
+  $('#errorbox').html('<%= j(render "shared/error_messages", :object=>@license) %>')
+<% else %>
+  $('#license_license_batch_name').val('');
+  $('#license_no_of_licenses').val('');
+  $('#datepicker').val('');
 
-$('#id_license').html('<%= j(render "form") %>');
-$('#id_license_info').html('<%= j(render "licenses_info") %>')
-$('#datepicker').datepicker({ 
+  $('#id_license').html('<%= j(render "form") %>');
+  $('#id_license_info').html('<%= j(render "licenses_info") %>')
+  $('#datepicker').datepicker({ 
 	dateFormat: 'yy-mm-dd',
     minDate: 0		 
-}).val();
-$('.input-group-addon').click(function() {
+  }).val();
+  $('.input-group-addon').click(function() {
 	$("#datepicker").datepicker( "show" );
-});
+  });
 
-$('#id_update_license').removeClass('hide').addClass('show');
-$('#id_create_license').removeClass('show').addClass('hide');
-$('#id_archive_license').removeClass('show').addClass('hide');
+  $('#id_update_license').removeClass('hide').addClass('show');
+  $('#id_create_license').removeClass('show').addClass('hide');
+  $('#id_archive_license').removeClass('show').addClass('hide');
+<%end%>
 
 $(document).ready(function(){
+	$( "#license_license_batch_name" ).click(function() {
+	    $('#id_create_license').removeClass('show').addClass('hide');
+	    $('#id_update_license').removeClass('show').addClass('hide');
+	    $('#id_archive_license').removeClass('show').addClass('hide');
+	});
 	$(".form_validation").validate({
 		rules: {
 			"license[license_batch_name]":{required: true} ,
