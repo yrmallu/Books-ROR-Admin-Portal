@@ -101,7 +101,7 @@ class SchoolsController < ApplicationController
       end
       @schools = get_file_data(session[:file], School, save = false)
     rescue ActiveRecord::UnknownAttributeError => e
-      FileUtils.rm data_file
+      # FileUtils.rm data_file
       flash[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
       params['commit']=nil
       render 'import_list'

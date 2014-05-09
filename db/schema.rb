@@ -52,6 +52,12 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.datetime "updated_at"
   end
 
+  create_table "classroom_books", force: true do |t|
+    t.integer "classroom_id"
+    t.integer "book_id"
+    t.integer "user_id"
+  end
+
   create_table "classrooms", force: true do |t|
     t.string   "code"
     t.string   "name"
@@ -75,6 +81,12 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.string   "license_batch_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "notes", force: true do |t|
+    t.integer "user_id"
+    t.integer "book_id"
+    t.text    "note_data"
   end
 
   create_table "parents", force: true do |t|
@@ -131,6 +143,16 @@ ActiveRecord::Schema.define(version: 20140419121059) do
     t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_books", id: false, force: true do |t|
+    t.integer "id",                 limit: 8
+    t.hstore  "reading_percentage"
+    t.hstore  "last_reading_info"
+    t.integer "user_id",            limit: 8
+    t.string  "device_id"
+    t.integer "book_id"
+    t.string  "reading_info"
   end
 
   create_table "user_classrooms", force: true do |t|
