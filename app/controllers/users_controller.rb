@@ -75,36 +75,36 @@ class UsersController < ApplicationController
   end
   
   def new
-  unless current_user.is_web_admin?
-    current_user_create_accessrights
-     unless @access_right_name.kind_of?(Array)
-       if @current_user_accessrights.include?(@access_right_name)
-         user_new
-       else
-         raise CanCan::Unauthorized.new("You are not authorized to access this page.", :create, User)
-       end
-     else
-       user_new
-     end 
+    unless current_user.is_web_admin?
+      current_user_create_accessrights
+      unless @access_right_name.kind_of?(Array)
+        if @current_user_accessrights.include?(@access_right_name)
+	      user_new
+        else
+          raise CanCan::Unauthorized.new("You are not authorized to access this page.", :create, User)
+        end
+      else
+        user_new
+      end 
     else
-    user_new
-  end
+      user_new
+    end
   end
   
   def current_user_read_accessrights
-  @current_user_accessrights = []
+    @current_user_accessrights = []
     @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
-  if @role_id.name.eql?('School Admin')
-    @access_right_name = 'View School Admin'
-  elsif @role_id.name.eql?('Teacher')
-    @access_right_name = 'View Teacher'
-  elsif @role_id.name.eql?('Student')
-    @access_right_name = 'View Student'
-    unless current_user.user_accessrights.blank?
-      @access_right_name = []
-      @access_right_name << 'View Student'
-    @access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
-       end
+    if @role_id.name.eql?('School Admin')
+      @access_right_name = 'View School Admin'
+    elsif @role_id.name.eql?('Teacher')
+      @access_right_name = 'View Teacher'
+    elsif @role_id.name.eql?('Student')
+      @access_right_name = 'View Student'
+      unless current_user.user_accessrights.blank?
+        @access_right_name = []
+        @access_right_name << 'View Student'
+        @access_right_name << 'Can Manage Student' if current_user.user_accessrights.last.access_flag.eql?(false)
+      end
     end
   end 
 
@@ -145,7 +145,7 @@ class UsersController < ApplicationController
     unless params[:school_id].blank?
       set_bread_crumb(@role_id.id, @school.id)
     else
-      set_bread_crumb(@role_id.id)
+	  set_bread_crumb(@role_id.id)
     end
     @assigned_classrooms = []
     @parent = @user.parents.build
@@ -166,10 +166,11 @@ class UsersController < ApplicationController
       redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
       @user.welcome_email(path) unless params[:user][:email].blank?
     else 
-    get_all_reading_grades
+      get_all_reading_grades
       @assigned_classrooms = []
-    @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank? 
-      render :action=> 'new'
+      @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank? 
+	  render :action=> 'new'
+	  #set_bread_crumb(@role_id.id)
     end
   end
    
@@ -440,9 +441,9 @@ class UsersController < ApplicationController
   def get_role_id
     unless params[:role_id].blank?
       @role_id = Role.where("id = '#{params[:role_id]}' ").last 
-  else
+    else
       @role_id = Role.where("id = '#{params[:user][:role_id]}' ").last 
-  end
+    end
   end
   
   def email_validation
