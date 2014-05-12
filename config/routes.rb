@@ -66,6 +66,7 @@ BooksThatGrow::Application.routes.draw do
       get 'get_schoolwise_license_list'
       get 'check_school_name_uniqueness'
       post 'update_license_expiration_date'
+	  get 'update_school'
     end
   end
   get '/schools/subregion_options' => 'schools#subregion_options'

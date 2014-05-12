@@ -138,6 +138,11 @@ class SchoolsController < ApplicationController
     redirect_to schools_url 
   end
   
+  def update_school
+    binding.pry
+    render :json=> {:status=>false}.to_json and return
+  end
+  
   private
     def set_school
       @school = School.find(params[:id])
