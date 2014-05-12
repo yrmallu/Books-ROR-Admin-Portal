@@ -27,9 +27,9 @@
 	            </thead>
 	            <tbody>
 					<% @books.each do |book| %>
-                 		<tr class="odd gradeX">
+                 		<tr class="odd gradeX" data-no-turbolink>
                    			<td class=""><%= check_box_tag 'book_ids[]', book.id, false, :class => "book-check-box" %></td>
-                      		<td class="center"><%= book.title %></td>
+                      		<td class="center"><%= link_to book.title, book_path(:id=>book) %></td>
                       		<td class="center"><%= book.author %></td>
                       		<td class="center"><%= book.description %></td>
       						<td data-no-turbolink>

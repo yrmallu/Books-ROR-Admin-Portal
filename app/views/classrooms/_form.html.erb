@@ -109,8 +109,8 @@
   	  		        </div>
 			</div>  
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
-				<%= link_to 'Cancel', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
+	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
+				<%= link_to 'Return to Classroom List', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
 	       </div>
  	       <% end %>
 	</div>    
