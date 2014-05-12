@@ -109,9 +109,9 @@ jQuery(document).ready(function() {
    "bInfo": false,
    "bAutoWidth": false,
    "sDom": 't',
- 	   // "aoColumnDefs": [
- 	               // { "bSortable": false, "aTargets": [3] },
-				   // { "bSortable": false, "aTargets": [0] }]
+ 	    "aoColumnDefs": [
+ 	            { "bSortable": false, "aTargets": [-1] },
+			   { "bSortable": false, "aTargets": [0] }]
         });
   
 });

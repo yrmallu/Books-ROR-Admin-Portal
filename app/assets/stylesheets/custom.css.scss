@@ -59,6 +59,7 @@ span.page{padding: 10px !important;}
 #example_info{padding-right: 10px !important;}
 .delete-school-list{height:27px !important;}
 .delete-user-list{height:27px !important;}
+.delete-book-list{height:27px !important;}
 
 label.label-rights { display: inline-block; overflow: hidden; width: 190px;margin-bottom: 10px; }
 label.label-rights input[type=checkbox] {display:inline-block; float:left; margin:4px 5px 0 0;}
@@ -66,7 +67,8 @@ label.error {display:block;}
 
 
 /* form validation design issues */
-	.form-group .field_with_errors:first-child {float:left;}
+    .field_with_errors{clear:both;}
+	.form-group .field_with_errors:first-child {float:left; clear:none;}
 	.form-lable-multiselect{display:block;}
 	.table-responsive{margin-top:-27px;}
 	
@@ -94,4 +96,5 @@ label.error {display:block;}
 
 .date-picker-margin {margin: 0;}
 .input-group .hasDatepicker + label.error{position:absolute;top:42px;}
-	
+
+.image-file-name{text-overflow:ellipsis; white-space:nowrap; overflow:hidden; width:300px;}	

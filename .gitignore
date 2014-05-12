@@ -14,6 +14,7 @@ capybara-*.html
 /public/tmp_files/*
 /public/images/*
 /public/books/*
+/public/users/
 /coverage/
 /spec/tmp/*
 **.orig
