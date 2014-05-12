@@ -96,6 +96,7 @@
 	        </div><!-- panel-body -->
 	        <div class="panel-footer" data-no-turbolink>
 	            <%= f.submit "Submit", class: "btn btn-primary btn-sm", data: { disable_with: 'Saving...' }, :onclick => "return validateForm();"  %>
+				<%= link_to 'Return to Book List', books_path, class: "btn btn-white btn-xs"%>
 	        </div>
 			<% end %>
 	    </div>

@@ -2,6 +2,7 @@
 <div class="panel panel-default">
     <div class="panel-body"> 
         <%= form_tag(update_license_expiration_date_schools_path, :method => "post") do %>
+		<% unless @licenses.blank? %>
 	    <div class="table-responsive">
 		    <table class="table" id="license_detail_table">
                 <thead>
@@ -18,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-				    <% @licenses.each do |lic| %>
+					<% @licenses.each do |lic| %>
                         <tr class="odd gradeX">
                             <!-- <td class=""><%#= check_box_tag 'license_ids[]', lic.id, false, :class => "license-check-box" %></td>    -->
                  	        <td class=""><%= lic.license_batch_name %></td>
@@ -35,6 +36,9 @@
             </table>
 	    </div>
         <div style="text-align:center;"> <%= submit_tag "Submit" %></div>
+		<%else%>
+		    <h3 class="no-rec-found">No Licenses Available</h3>
+		<%end%>
         <% end %>
 	    <div data-no-turbolink>
 		    <%= paginate @licenses %>

@@ -272,7 +272,7 @@ class UsersController < ApplicationController
         redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
       #end
 	  if params[:send_mail].blank?
-        @user.user_details_change_email(current_user.first_name, path)
+	    @user.user_details_change_email(current_user.first_name, path)
         @user.user_email_change_email(current_user.first_name, path, [email_before_save, email_after_save]).deliver unless (email_before_save == email_after_save)
       end
     else
