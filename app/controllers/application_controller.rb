@@ -138,9 +138,9 @@ class ApplicationController < ActionController::Base
   end
   
   #enable_authorization
-    rescue_from CanCan::Unauthorized do |exception|
-      redirect_to dashboard_users_path, :alert => exception.message
-    end
+  rescue_from CanCan::Unauthorized do |exception|
+    redirect_to dashboard_users_path, :alert => exception.message
+  end
 
   def set_bread_crumb(*extras)
     parameters = []
