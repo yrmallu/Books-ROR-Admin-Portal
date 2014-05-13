@@ -1,6 +1,6 @@
 class School < ActiveRecord::Base
 
-	include CommonQueries 
+  # include CommonQueries 
 	
 	paginates_per 10
 	max_paginates_per 10
@@ -53,7 +53,7 @@ class School < ActiveRecord::Base
   end
 
   def self.search(query_string)
-  	qs = query_string.tr("%","").to_i 
+  	qs = query_string.tr("%","").to_s 
   	school = School.arel_table
   	schools = School.where(
   		school[:code].eq(qs).or(

@@ -10,7 +10,7 @@ class UsersController < ApplicationController
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent]
   before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent, :create, :update]
   before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent]
-  
+  before_action :assign_root_path
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
@@ -272,8 +272,10 @@ class UsersController < ApplicationController
         redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
       #end
 	  if params[:send_mail].blank?
-	    @user.user_details_change_email(current_user.first_name, path)
+      if @s
+	      @user.user_details_change_email(current_user.first_name, path)
         @user.user_email_change_email(current_user.first_name, path, [email_before_save, email_after_save]).deliver unless (email_before_save == email_after_save)
+      end
       end
     else
       get_all_reading_grades
@@ -543,9 +545,17 @@ class UsersController < ApplicationController
     end
   end
   
+  def app_route
+    @app_path = request.host
+  end
+  
   private
   def set_user
     @user = User.where("id = '#{params[:id]}' ").last
+  end
+  
+  def assign_root_path
+    User.app_route = app_route
   end
  
   def user_params
