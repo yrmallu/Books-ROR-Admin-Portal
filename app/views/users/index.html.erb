@@ -60,14 +60,14 @@
                          <tr class="odd gradeX" data-no-turbolink>
                  	         <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
 							 <%unless @role_id.name.eql?('Web Admin')%>
-                                 <td class=""><%= link_to user.first_name, user_path(user, :role_id => @role_id, :school_id=>@school.id), :title=>"View User Details" %></td>
+                                 <td class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%><%#= link_to user.first_name, user_path(user, :role_id => @role_id, :school_id=>@school.id), :title=>"View User Details" %></td>
 							 <%else%>
-							     <td class=""><%= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
+							     <td class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%><%#= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
 							 <%end%>
-                             <td class=""><%= user.last_name %></td>
-							 <td class=""><%= user.username %></td>
-                             <td class="center "><%= user.email %></td>
-					         <td class=""><%= user.phone_number %></td>
+                             <td class="quick-edit" data-col="last_name" data-id='<%= user.id%>'><%= user.last_name %></td>
+							 <td class="" data-col="username" data-id='<%= user.id%>'><%= user.username %></td>
+                             <td class="" data-col="email" data-id='<%= user.id%>'><%= user.email %></td>
+					         <td class="" data-col="phone_number" data-id='<%= user.id%>'><%= user.phone_number %></td>
 					         <%unless @role_id.name.eql?('Web Admin')%>
 					             <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
 					         <%end%>
@@ -262,6 +262,27 @@ $('#changePassword').click(function() {
 		});
 });
 });
+
+// $('.quick-edit').click(
+//     function(){
+//         var text = $(this).text();
+//         $(this).text('');
+// 		var edited_column_name = $(this).data('col');
+// 		var edited_user_id = $(this).data('id');
+//         $('<textarea />').appendTo($(this)).val(text).select().blur(
+// 		    function(){
+//                var newText = $(this).val();
+// 		       jQuery.get("<%#= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_user_id},
+//  	              function(data) {
+// 					 if (data.status == false)
+// 					 {
+// 						 alert('Edited field is unique and it already exist');
+// 					 }   
+// 	              });
+// 			   $(this).parent().text(newText),find('textarea').remove();
+//             });
+//     });
+
 </script>
 
 
