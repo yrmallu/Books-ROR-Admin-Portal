@@ -26,7 +26,6 @@ class User < ActiveRecord::Base
   has_many :parents
   belongs_to :license
   before_update :update_license_count
-  before_update :check_record
   #after_update :check_user_changed_own_password
   accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
 
