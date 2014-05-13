@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   max_paginates_per 10
   has_secure_password
   store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on
-
+  cattr_accessor :app_route
   ###########################################################################################
   ## Callbacks
   ###########################################################################################      
@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
       return false
     end unless self.role.blank?
   end
-
+  
   def is_web_admin?
   	 self.role.name.eql?("Web Admin") unless self.role.blank?
   end
