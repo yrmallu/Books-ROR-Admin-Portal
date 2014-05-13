@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   before_action :get_classrooms, :only => [:new]
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent]
   before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent, :create, :update]
-  before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent]
+  before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent, :index]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -544,11 +544,12 @@ class UsersController < ApplicationController
   end
   
   def quick_edit_user
-    return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+    #binding.pry
+ 	return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
 	if return_val.eql?(true)
       render :json=> true and return
 	else
-	  render :json=> {:status=>false}.to_json and return
+	  render :json=> {:status=>false, :message=>"'#{params[:column_name]}' already exist."}.to_json and return
 	end
   end
   

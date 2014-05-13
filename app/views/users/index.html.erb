@@ -60,20 +60,46 @@
                          <tr class="odd gradeX" data-no-turbolink>
                  	         <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
 							 <%unless @role_id.name.eql?('Web Admin')%>
-                                 <td class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%><%#= link_to user.first_name, user_path(user, :role_id => @role_id, :school_id=>@school.id), :title=>"View User Details" %></td>
+                                 <td>
+									 <div class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%></div>
+									 <textarea class="invisible dynamic"></textarea>
+									 <%#= link_to user.first_name, user_path(user, :role_id => @role_id, :school_id=>@school.id), :title=>"View User Details" %>
+								 </td>
 							 <%else%>
-							     <td class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%><%#= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
+							     <td>
+									 <div class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%></div>
+									 <textarea class="invisible dynamic"></textarea>
+									 <%#= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
 							 <%end%>
-                             <td class="quick-edit" data-col="last_name" data-id='<%= user.id%>'><%= user.last_name %></td>
-							 <td class="" data-col="username" data-id='<%= user.id%>'><%= user.username %></td>
-                             <td class="" data-col="email" data-id='<%= user.id%>'><%= user.email %></td>
-					         <td class="" data-col="phone_number" data-id='<%= user.id%>'><%= user.phone_number %></td>
+                             <td>
+								 <div class="quick-edit" data-col="last_name" data-id='<%= user.id%>'><%= user.last_name %></div>
+								 <textarea class="invisible dynamic"></textarea>
+							 </td>
+							 <td>
+								 <div class="quick-edit" data-col="username" data-id='<%= user.id%>'><%= user.username %></div>
+							     <textarea class="invisible dynamic"></textarea>
+							 </td>
+                             <td>
+								 <div class="quick-edit" data-col="email" data-id='<%= user.id%>'><%= user.email %></div>
+							     <textarea class="invisible dynamic"></textarea>
+							 </td>
+					         <td>
+								 <div class="quick-edit" data-col="phone_number" data-id='<%= user.id%>'><%= user.phone_number %></div>
+							     <input type="text" class="mask-phone invisible dynamic"></input>	 
+							 </td>
 					         <%unless @role_id.name.eql?('Web Admin')%>
 					             <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
 					         <%end%>
   					         <%if @role_id.name.eql?('Student')%>
-					             <td class=""><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></td>
-					             <td class=""><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></td>
+					             <td class="">
+									 <div class="" data-col="grade" data-id='<%= user.id%>'><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></div>
+									 
+								     <%#= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_name", "id"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dynamic"} %>
+								 </td>
+					             <td class="">
+									 <div class="" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></div>
+									 
+								 </td>
   					         <%end%>
   					         <td>
 					         <% if ((can? :update, :users) && (can? :update_sa, :users)) && params[:role_id].eql?('2') %>
@@ -242,6 +268,8 @@ $(".download_sample").click(function(){
 });
 
 $(document).ready(function(){
+$(".mask-phone").mask("(999) 999-9999");
+	
 $('#changePassword').click(function() {
 	$(".form_validation").validate({
 		rules: {
@@ -263,26 +291,44 @@ $('#changePassword').click(function() {
 });
 });
 
-// $('.quick-edit').click(
-//     function(){
-//         var text = $(this).text();
-//         $(this).text('');
-// 		var edited_column_name = $(this).data('col');
-// 		var edited_user_id = $(this).data('id');
-//         $('<textarea />').appendTo($(this)).val(text).select().blur(
-// 		    function(){
-//                var newText = $(this).val();
-// 		       jQuery.get("<%#= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_user_id},
-//  	              function(data) {
-// 					 if (data.status == false)
-// 					 {
-// 						 alert('Edited field is unique and it already exist');
-// 					 }   
-// 	              });
-// 			   $(this).parent().text(newText),find('textarea').remove();
-//             });
-//     });
+$.valHooks.textarea = {
+    get: function(elem) {
+        return elem.value.replace(/\r?\n/g, "<br/>");
+    }
+};
 
+$(".quick-edit").click(function(e) {
+    e.preventDefault();
+    var text = $(this).text();
+	text.replace("<br />", "\n");
+    $(this).parent().children(".dynamic").html(text).removeClass("invisible");
+    $(this).addClass("invisible");
+});
+
+$(".dynamic").keydown(function(e) {
+    if (e.which === 13 && !e.shiftKey) {
+        e.preventDefault();
+        var text = $(this).val();
+		var this_val = $(this);
+		var edited_column_name = $(this).prev(".quick-edit").data('col');
+		var edited_user_id = $(this).prev(".quick-edit").data('id')
+		
+		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_user_id},
+		  function(data, this_val) {  
+			 if (data.status == false)
+			 {
+				 alert(data.message);
+			 }
+			 else
+			 {
+
+			 } 
+		  });
+  		  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
+          $(this).addClass("invisible");
+		
+    }
+});
 </script>
 
 

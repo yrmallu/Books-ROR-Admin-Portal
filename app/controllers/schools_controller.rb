@@ -139,8 +139,7 @@ class SchoolsController < ApplicationController
   end
   
   def quick_edit_school
-    #school = School.where("code = '#{params[:school_code]}'").last
-	@school.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+   	@school.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
     render :json=> true and return
   end
   

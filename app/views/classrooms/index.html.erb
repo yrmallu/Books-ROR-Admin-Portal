@@ -34,17 +34,20 @@
               <tbody>
 				 <% @classrooms.each do |classroom| %>
 				    <tr class="odd gradeX" data-no-turbolink>
-                 	  <td class=""><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "classroom-check-box" %></td>	
-                      <td class=""><%= classroom.code %></td>
-                      <td class=""><%= link_to classroom.name, classroom_path(classroom, :school_id=>@school.id), :title=>"View Classroom Details" %></td>
-					  <td class="">
+                 	  <td><%= check_box_tag 'classroom_ids[]', classroom.id, false, :class => "classroom-check-box" %></td>	
+                      <td><%= classroom.code %></td>
+                      <td>
+						 <div class="quick-edit" data-col="name" data-id='<%= classroom.id%>'><%=classroom.name%></div>
+						 <textarea class="invisible dynamic"></textarea>
+						  <%#= link_to classroom.name, classroom_path(classroom, :school_id=>@school.id), :title=>"View Classroom Details" %></td>
+					  <td>
 						  <% unless classroom.school_year_start_date.blank? || classroom.school_year_end_date.blank? %>
 						      <%= classroom.school_year_start_date.year %> - <%= classroom.school_year_end_date.year %>
 						  <%end%>
 				      </td>
-					  <td class="" align="center"><%= classroom.users.school_admins.count %></td>
-					  <td class="" align="center"><%= classroom.users.teachers.count %></td>
-					  <td class="" align="center"><%= classroom.users.students.count %></td>
+					  <td><%= classroom.users.school_admins.count %></td>
+					  <td><%= classroom.users.teachers.count %></td>
+					  <td><%= classroom.users.students.count %></td>
                       <td data-no-turbolink>
 						  <% if can? :update, :classrooms %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
@@ -71,4 +74,43 @@ showHideMenu('li_school');
 <% unless current_user.is_web_admin?%>
   showHideMenu('li_options');	
 <%end%>
+
+$.valHooks.textarea = {
+    get: function(elem) {
+        return elem.value.replace(/\r?\n/g, "<br/>");
+    }
+};
+
+$(".quick-edit").click(function(e) {
+    e.preventDefault();
+    var text = $(this).text();
+	text.replace("<br />", "\n");
+    $(this).parent().children(".dynamic").html(text).removeClass("invisible");
+    $(this).addClass("invisible");
+});
+
+$(".dynamic").keydown(function(e) {
+    if (e.which === 13 && !e.shiftKey) {
+        e.preventDefault();
+        var text = $(this).val();
+		var this_val = $(this);
+		var edited_column_name = $(this).prev(".quick-edit").data('col');
+		var edited_classroom_id = $(this).prev(".quick-edit").data('id')
+		
+		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_classroom')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_classroom_id},
+		  function(data, this_val) {  
+			 if (data.status == false)
+			 {
+				 alert(data.message);
+			 }
+			 else
+			 {
+
+			 } 
+		  });
+  		  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
+          $(this).addClass("invisible");
+		
+    }
+});
 </script>
