@@ -1,7 +1,7 @@
 class SchoolsController < ApplicationController
 
   before_action :logged_in?
-  before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list], except: [:save_school_list]
+  before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list, :quick_edit_school], except: [:save_school_list]
   before_action :get_schools, only: [:index]
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new, :import_list]
   
@@ -47,7 +47,7 @@ class SchoolsController < ApplicationController
     redirect_to @school
     else
       render :action=> 'edit'
-  end
+    end
   end
 
   def destroy
@@ -136,6 +136,12 @@ class SchoolsController < ApplicationController
    end if params[:license_expiry_date] && !params[:license_expiry_date].blank?
     #params[:license_ids].each{|lic| License.find(lic).update_attributes(:expiry_date => nil) } if params[:license_ids] && !params[:license_ids].blank?
     redirect_to schools_url 
+  end
+  
+  def quick_edit_school
+    #school = School.where("code = '#{params[:school_code]}'").last
+	@school.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+    render :json=> true and return
   end
   
   private

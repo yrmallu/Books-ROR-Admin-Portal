@@ -5,8 +5,8 @@ class ApplicationController < ActionController::Base
   
   include SessionsHelper
   hide_action :current_user
-  before_filter :authentication_check
-  USER, PASSWORD = 'books-that-grow', 'qwerty123'
+  #before_filter :authentication_check
+  #USER, PASSWORD = 'books-that-grow', 'qwerty123'
   
   #rescue_from Exception, :with => :render_error
   rescue_from ActiveRecord::RecordNotFound, :with => :render_not_found   
@@ -19,11 +19,11 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
   end
   
-  def authentication_check
-    authenticate_or_request_with_http_basic do |user, password|
-      user == USER && password == PASSWORD
-    end
-  end
+  # def authentication_check
+#     authenticate_or_request_with_http_basic do |user, password|
+#       user == USER && password == PASSWORD
+#     end
+#   end
   
   #called by last route matching unmatched routes.  Raises RoutingError which will be rescued from in the same way as other exceptions.
   def raise_not_found!
@@ -138,9 +138,9 @@ class ApplicationController < ActionController::Base
   end
   
   #enable_authorization
-    rescue_from CanCan::Unauthorized do |exception|
-      redirect_to dashboard_users_path, :alert => exception.message
-    end
+  rescue_from CanCan::Unauthorized do |exception|
+    redirect_to dashboard_users_path, :alert => exception.message
+  end
 
   def set_bread_crumb(*extras)
     parameters = []
@@ -309,7 +309,16 @@ class ApplicationController < ActionController::Base
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
             "Add Web Admin"=> "",
           }
-        }   
+        }  
+		when "users#create-1"
+  		@breadcrumb = {
+            :title=>"Add Web Admin",
+  		    :icon=>"fa fa-user",
+            :breadcrumb=>{
+              "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
+              "Add Web Admin"=> "",
+           }
+        } 
         when "users#index-1"
         @breadcrumb = {
           :title=>"Web Admin List",

@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   max_paginates_per 10
   has_secure_password
   store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on
-
+  cattr_accessor :app_route
   ###########################################################################################
   ## Callbacks
   ###########################################################################################      
@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
   has_many :parents
   belongs_to :license
   before_update :update_license_count
+  before_update :check_record
   #after_update :check_user_changed_own_password
   accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
 
@@ -75,7 +76,7 @@ class User < ActiveRecord::Base
       return false
     end unless self.role.blank?
   end
-
+  
   def is_web_admin?
   	 self.role.name.eql?("Web Admin") unless self.role.blank?
   end

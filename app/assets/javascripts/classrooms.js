@@ -1,6 +1,5 @@
 jQuery(document).ready(function(){
 // checking school year validation
-//$( ".classroom_form" ).submit(function( event ) {	
 $( "#classroom_school_year_end_date" ).change(function() {
   if ($('#classroom_school_year_start_date').val() >= $('#classroom_school_year_end_date').val() )
   {
@@ -25,8 +24,23 @@ $( "#classroom_school_year_start_date" ).change(function() {
 	return true;
   }
 });
-//});
+
+$( ".classroom_form" ).submit(function( event ) {
+	  if ($('#classroom_school_year_start_date').val() >= $('#classroom_school_year_end_date').val() )
+	  {
+		$('#id_end_msg').show();
+		event.preventDefault();
+		return false;
+	  }
+	  else
+	  {
+		$('#id_end_msg').hide();
+		return true;
+	  }
 });
+
+});
+
 
 // Assign student to a classroom, multi select
     $(function () {
@@ -68,6 +82,6 @@ $( "#classroom_school_year_start_date" ).change(function() {
             break;
         }
     }
-}
+}   
 
 

@@ -22,8 +22,8 @@ module SessionsHelper
   #To check the user is already loggedin or not
   def check_sign_in
      if session? then
-       flash[:error] = "You are already loggedin"
-       redirect_to dashboard_users_path
+       #flash[:error] = "You are already loggedin"
+       redirect_to root_url
      end
   end
 

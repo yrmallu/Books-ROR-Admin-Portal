@@ -16,7 +16,7 @@
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 	                    	<%= f.label :username, "Username", :class=>"control-label" %><span class="asterisk">*</span>
-							<%= f.text_field :username, :class=>"form-control" %>
+							<%= f.text_field :username, :class=>"form-control clearfix" %>
 		    			    <%#= f.text_field :username, :class=>"form-control username_validation" %>
 							<span class="help-inline error_box"></span>
 	                    </div>
@@ -61,7 +61,7 @@
 				        </div>
 				    <%end%>
 			    <%end%>
-			    <% unless ('edit').eql?action_name%>
+			    <% unless ((('edit').eql?action_name) || (('update').eql?action_name)) %>
 	                <div class="row">
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
@@ -119,7 +119,7 @@
 			   			    </tr>
 			   			    <tr>
 			   				    <td>
-			   					    <%= f.file_field :photos %>
+			   					    <%= f.file_field :photos, :class=>"image-file-name" %>
 			   				    </td>
 			   			    </tr>
 			   		    </table>
