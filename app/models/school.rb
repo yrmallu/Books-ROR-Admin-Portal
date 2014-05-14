@@ -20,7 +20,7 @@ class School < ActiveRecord::Base
 
 	before_validation :strip_whitespace
 	before_create :generate_random_code
-
+  before_save :reset_params_datatype
 	###########################################################################################
   ## Scopes
   ###########################################################################################
@@ -45,7 +45,12 @@ class School < ActiveRecord::Base
   ###########################################################################################
 
   def generate_random_code
-  	self.code = School.count == 0 ? (1000001.to_i) : (School.maximum("code").to_i + 1.to_i)
+    self.code = School.count == 0 ? (1000001.to_i) : (School.maximum("code").to_i + 1.to_i) if [nil,"",0].include?(code)
+  end
+  
+  def reset_params_datatype
+    self.code = code.to_i
+   # self.phone = phone.to_i
   end
 
   def strip_whitespace

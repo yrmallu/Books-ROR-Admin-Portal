@@ -28,8 +28,10 @@ $(document).ready(function () {
 				split_params.shift();
 			    new_url = split_url[0] + "?" + split_params.join("&") + "&query_string=" + search_query;
 				
+			}else if((split_params.length >=2) && (split_url[1].split("&")[1].split("=")[0] == "school_id")){
+				new_url = split_url[0]+ "?" + split_url[1].split("&")[0]+ "&" + split_url[1].split("&")[1] + "&query_string=" + search_query;
 			}else{
-				new_url = document.URL + "&query_string=" + search_query;
+				new_url = split_url[0]+ "?" + split_url[1].split("&")[0] + "&query_string=" + search_query;
 			}
 			// alert(split_params[split_params.length]);
 		   // var new_url = split_url[0] + split_params.join("&") + "&query_string=" + search_query;
@@ -54,7 +56,8 @@ $(document).ready(function () {
 			    new_url = split_url[0] + "?" + split_params.join("&") + "&query_string=" + search_query;
 				
 			}else{
-				new_url = document.URL + "&query_string=" + search_query;
+				new_url = split_url[0]+ "?" + split_url[1].split("&")[0] + "&query_string=" + search_query;
+				//new_url = document.URL + "&query_string=" + search_query;
 			}
 		   $(location).attr('href', new_url);
 		}
