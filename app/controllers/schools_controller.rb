@@ -7,7 +7,7 @@ class SchoolsController < ApplicationController
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
-  def index 
+  def index
     if params[:query_string] && !(params[:query_string].blank?)
       @schools = School.search("%#{params[:query_string]}%").page(params[:page]).per(10) 
       @search_flag = true
@@ -102,7 +102,7 @@ class SchoolsController < ApplicationController
       @schools = get_file_data(session[:file], School, save = false)
     rescue ActiveRecord::UnknownAttributeError => e
       # FileUtils.rm data_file
-      flash[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
+      flash.now[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
       params['commit']=nil
       render 'import_list'
     end
@@ -139,9 +139,13 @@ class SchoolsController < ApplicationController
   end
   
   def quick_edit_school
-    #school = School.where("code = '#{params[:school_code]}'").last
-	@school.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
-    render :json=> true and return
+   	return_val = @school.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+	if return_val.eql?(true)
+      render :json=> true and return
+	else
+	   column_name = params[:column_name].capitalize
+	  render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
+	end
   end
   
   private

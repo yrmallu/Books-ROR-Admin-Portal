@@ -78,7 +78,11 @@
 	            </div>
 	        </div>
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
+				<% if action_name.eql?('new') || action_name.eql?('create') %>
+	                <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
+				<%else%>
+				    <%= f.submit "Update", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Updating...' } %>
+				<%end%>	
 				<%= link_to 'Return to School List', schools_path, class: "btn btn-white btn-xs"%>
 	        </div>
 			<% end %>

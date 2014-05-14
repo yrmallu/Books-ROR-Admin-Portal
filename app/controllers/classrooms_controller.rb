@@ -1,7 +1,7 @@
 class ClassroomsController < ApplicationController
   
   before_action :logged_in?
-  before_action :set_classroom, only: [:show, :edit, :update, :destroy]
+  before_action :set_classroom, only: [:show, :edit, :update, :destroy, :quick_edit_classroom]
   #before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
   before_action :get_school_by_id, only: [:new, :index, :edit, :update]
   before_action :get_school_year_range, only: [:new, :edit, :update]
@@ -111,6 +111,11 @@ class ClassroomsController < ApplicationController
       @school_specific_teachers = @school.users.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:school_id].blank? 
       @school_specific_students = @school.users.includes(:role).where("name='Student'").references(:role) unless params[:school_id].blank? 
     end
+  end
+  
+  def quick_edit_classroom
+   	@classroom.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+    render :json=> true and return
   end
 
   private
