@@ -14,8 +14,9 @@ end
 def user_details_changed(user_info)
   @email = user_info[:email]
 	#@email = 'kalyani.bagale@cuelogic.co.in'
+  @changed_attributes = user_info[:changed_attributes]
   @username = user_info[:username]
-  @logged_in_user = user_info[:current_user]
+  #@logged_in_user = user_info[:current_user]
   @changed_values = user_info[:changed_values]
   @link =  user_info[:link]
   @login_url  = user_info[:login_url]

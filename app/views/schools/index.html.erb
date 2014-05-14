@@ -37,10 +37,20 @@
 		                <tr class="odd gradeX" data-no-turbolink>
 		                  <td class=""><%= check_box_tag 'school_ids[]', school.id, false, :class => "school-check-box" %></td>	
 		                  <td class=""><%= school.code %></td>
-		                  <td class="quick-edit" data-col="name" data-id='<%= school.id%>'><%= school.name %><%#= link_to school.name, school_path(school), :title=>"View School Details" %></td>
-		                  <td class="quick-edit" data-col="district" data-id='<%= school.id%>'><%= school.district %></td>
-		                  <td class="quick-edit" data-col="city" data-id='<%= school.id%>'><%= school.city %></td>
-		                  <%#= @country = Carmen::Country.coded('US') %>
+		                  <td>
+							  <div class="quick-edit" data-col="name" data-id='<%= school.id%>'><%= school.name %></div>
+							  <textarea class="invisible dynamic"></textarea>
+							  <%#= link_to school.name, school_path(school), :title=>"View School Details" %>
+						  </td>
+						  <td>
+							  <div class="quick-edit" data-col="district" data-id='<%= school.id%>'><%= school.district %></div>
+						      <textarea class="invisible dynamic"></textarea>
+					      </td>
+						  <td>
+							  <div class="quick-edit" data-col="city" data-id='<%= school.id%>'><%= school.city %></div>
+							  <textarea class="invisible dynamic"></textarea>
+						  </td>
+						  <%#= @country = Carmen::Country.coded('US') %>
 						  <%#= Carmen::Country.coded('US').subregions.coded(school.state) %>
 						  <td class=""><%= Carmen::Country.coded('US').subregions.coded(school.state).try(:name) unless school.state.blank? %></td>
 						  <td class=""><%= school.country %></td>
@@ -77,6 +87,14 @@
 					<% end %>
 	        	</tbody>
 	    	</table>
+			
+			
+			    <div class="quick-edit">This is some text! Click to edit!<br/>
+			Shift + Enter for a new line.<br/>
+			Enter when done.</div>
+			    <textarea cols="50" rows="5" class="invisible dynamic"></textarea>
+			
+			
 		</div>
         <% if @schools.count && @schools.count > 1 %>
 		<div data-no-turbolink>
@@ -138,26 +156,30 @@
 	      });
 	});	
 	
-$(document).ready(function(){	
-	$('.quick-edit').click(
-	    function(){
-	        var text = $(this).text();
-	        $(this).text('');
-			//             alert($(this).parentsUntil( $( "tr.odd gradeX" ), ".table" ).data('controller'));
-			// alert($(this).data('col'));
-			// alert($(this).data('code'));
-			// controller_name = $(this).parentsUntil( $( "tr.odd gradeX" ), ".table" ).data('controller');
-			var edited_column_name = $(this).data('col');
-			var edited_school_id = $(this).data('id');
-	        $('<textarea />').appendTo($(this)).val(text).select().blur(
-			    function(){
- 	               var newText = $(this).val();
-   			    jQuery.get("<%#= url_for(:controller => controller_name, :action=>'quick_edit_school')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_school_id},
-     	              function(data) {
-					    // jQuery("#school-dist").html(data);
-    	              });
-				   $(this).parent().text(newText),find('textarea').remove();
-	            });
-	    });
- });		
+$.valHooks.textarea = {
+    get: function(elem) {
+        return elem.value.replace(/\r?\n/g, "<br/>");
+    }
+};
+
+$(".quick-edit").click(function(e) {
+    e.preventDefault();
+    var text = $(this).text();
+	text.replace("<br />", "\n");
+    $(this).parent().children(".dynamic").html(text).removeClass("invisible");
+    $(this).addClass("invisible");
+});
+
+$(".dynamic").keydown(function(e) {
+    if (e.which === 13 && !e.shiftKey) {
+        e.preventDefault();
+        var text = $(this).val();
+		var edited_column_name = $(this).prev(".quick-edit").data('col');
+		var edited_school_id = $(this).prev(".quick-edit").data('id')
+		$(this).parent().children(".quick-edit").html(text).removeClass("invisible");
+        $(this).addClass("invisible");
+		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_school')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_school_id},
+		  function(data) {  });
+    }
+});
 </script>

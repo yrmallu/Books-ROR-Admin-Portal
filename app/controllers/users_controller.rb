@@ -9,8 +9,10 @@ class UsersController < ApplicationController
   before_action :get_classrooms, :only => [:new]
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent]
   before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent, :create, :update]
-  before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent]
+  before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent, :index]
   before_action :assign_root_path
+  #before_action :get_session_variable
+
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
   def index
@@ -264,19 +266,13 @@ class UsersController < ApplicationController
         end
       end 
       add_user_level_setting if @user.role.name.eql?('Student')
-	  #Check if user updated his own password, if yes then logout
-	  # if !params[:user][:password].eql?(password_before_update)
-# 	    sign_out
-# 		redirect_to signin_path and return
-# 	  else
-        redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
-      #end
-	  if params[:send_mail].blank?
-      if @s
-	      @user.user_details_change_email(current_user.first_name, path)
-        @user.user_email_change_email(current_user.first_name, path, [email_before_save, email_after_save]).deliver unless (email_before_save == email_after_save)
-      end
-      end
+      redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
+	  # if params[:send_mail].blank?
+#       if @s
+# 	      @user.user_details_change_email(current_user.first_name, path)
+#         @user.user_email_change_email(current_user.first_name, path, [email_before_save, email_after_save]).deliver unless (email_before_save == email_after_save)
+#       end
+#       end
     else
       get_all_reading_grades
       @assigned_classrooms = @user.classrooms if @user && @user.classrooms
@@ -549,13 +545,18 @@ class UsersController < ApplicationController
     @app_path = request.host
   end
   
+  def get_session_variable
+    session[:user_id] = nil  
+    session.delete(:user)
+  end
+  
   def quick_edit_user
-    return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
-	  if return_val.eql?(true)
+ 	return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+	if return_val.eql?(true)
       render :json=> true and return
-	  else
-	    render :json=> {:status=>false}.to_json and return
-	  end
+	else
+	  render :json=> {:status=>false, :message=>"'#{params[:column_name]}' already exist or '#{params[:column_name]}' is invalid."}.to_json and return
+	end
   end
   
   private

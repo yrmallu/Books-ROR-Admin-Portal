@@ -98,8 +98,14 @@ label.error {display:block;}
 .date-picker-margin {margin: 0;}
 .input-group .hasDatepicker + label.error{position:absolute;top:42px;}
 
-.image-file-name{text-overflow:ellipsis; white-space:nowrap; overflow:hidden; width:300px;}	
+.image-file-name {text-overflow:ellipsis; white-space:nowrap; overflow:hidden; width:300px;}	
 
 #school_state_wrapper select, .country-state-select{height:21px; padding:1px 0;}
 
 .no-rec-found{text-align:center;}
+
+// Quick edit css
+.invisible{display:none;}
+
+.quick-edit:hover{border: solid 2px #ccc;padding: 5px;margin: -5px;}
+.quick-edit{padding:2px;}
