@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
   has_secure_password
   store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on
   cattr_accessor :app_route
+  #cattr_accessor :get_session_variable
   ###########################################################################################
   ## Callbacks
   ###########################################################################################      
@@ -27,6 +28,8 @@ class User < ActiveRecord::Base
   belongs_to :license
   before_update :update_license_count
   #after_update :check_user_changed_own_password
+  before_update :user_details_change_email
+  
   accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
 
   ###########################################################################################
@@ -85,10 +88,10 @@ class User < ActiveRecord::Base
   end
   
   # def check_user_changed_own_password
-#   binding .pry
 #     if !self.password_digest_was.eql?(self.password_digest)
-# 	  sign_out
-# 	  redirect_to root_path
+# 	  binding.pry
+#       get_session_variable
+# 	  redirect_to app_route
 # 	end
 #   end
   
@@ -120,10 +123,24 @@ class User < ActiveRecord::Base
 	UserMailer.welcome_email(user_info).deliver
   end
   
-  def user_details_change_email(current_user, path)
-    user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+  def user_details_change_email
+    #binding.pry
+    arr_changed_attributes = []
+	if !first_name_was.eql?(first_name)
+	  arr_changed_attributes << 'First_Name'
+	eslif !last_name_was.eql?(last_name)
+	  arr_changed_attributes << 'Last_Name'
+	end
+	unless arr_changed_attributes.empty?
+      user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :changed_attributes => arr_changed_attributes, :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+app_route } 
 	  UserMailer.user_details_changed(user_info).deliver
+    end
   end
+  
+  # def user_details_change_email(current_user, path)
+#     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+# 	UserMailer.user_details_changed(user_info).deliver
+#   end
   
   def user_email_change_email(current_user, path, emails)
     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
@@ -165,19 +182,22 @@ class User < ActiveRecord::Base
   end
   
   def self.search(query_string, role_id, school_id)
-    roleid = role_id.to_i
-    schoolid = school_id.to_i 
+    puts "sssssssss", school_id
+    roleid = role_id.id.to_i
+    schoolid = role_id.name.eql?("Web Admin") ? nil : school_id.to_i  
     user = User.arel_table
     users = User.where(
       user[:role_id].eq(roleid).and(
         user[:school_id].eq(schoolid).and(
-          user[:last_name].matches(query_string).or(
-            user[:username].matches(query_string).or(
-              user[:email].matches(query_string)
+          user[:first_name].matches(query_string).or(
+            user[:last_name].matches(query_string).or(
+              user[:username].matches(query_string).or(
+                user[:email].matches(query_string)
+                )
+              )
             )
           )
         )
       )
-    )
   end
 end

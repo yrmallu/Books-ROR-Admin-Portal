@@ -100,7 +100,6 @@ class ApplicationController < ActionController::Base
 
   def parse_spreadsheet(file, obj, role, save_list)
     require 'roo'
-
     spreadsheet = Roo::Excel.new(file, nil, :ignore)
    
     header = spreadsheet.row(1).map{|h| h.to_sym.try(:downcase) unless h.blank?}
@@ -110,7 +109,14 @@ class ApplicationController < ActionController::Base
       row.merge!(:role_id => role) if role && !role.blank?
       data_obj = obj.new(row)
       if save_list
-        data_obj.valid? ? data_obj.save : data_list << data_obj
+        db_exist = User.eql?(obj) ? obj.find_by_username(data_obj.username) : obj.find_by_code(data_obj.code.to_i.to_s)
+        if data_obj.valid? 
+            data_obj.save
+         elsif !db_exist.blank?
+            db_exist.update_attributes(row.to_hash)
+         else
+            data_list << data_obj
+         end
       else
         error_hash = {:is_valid => data_obj.valid?, :error_messages  => data_obj.errors.full_messages}
         data_list << [data_obj, error_hash]
@@ -124,9 +130,12 @@ class ApplicationController < ActionController::Base
     require 'csv'
     data_list = []
     CSV.foreach(file, headers: true, :header_converters => lambda { |h| h.to_sym.try(:downcase) }) do |row|
+      puts "comingggggg", row
       row = row.to_hash
+      puts "comingggggg hashhhhh", row
       row.merge!(:role_id => role) if role && !role.blank?
       data_obj = obj.new(row)
+      puts "before savinghhh", data_obj
       if save_list
         data_obj.valid? ? data_obj.save : data_list << data_obj
       else
