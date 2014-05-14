@@ -50,7 +50,7 @@ class UsersController < ApplicationController
   
   def user_index
     if params[:query_string] && !(params[:query_string].blank?) 
-      @users = User.search("%#{params[:query_string]}%", params[:role_id], params[:school_id]).page(params[:page]).per(10) 
+      @users = User.search("%#{params[:query_string]}%", @role_id, params[:school_id]).page(params[:page]).per(10) 
     else
       if !@role_id.blank? && params[:school_id].blank?
         @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
@@ -441,9 +441,9 @@ class UsersController < ApplicationController
   end
   
   def get_role_id
-    unless params[:role_id].blank?
+    if !params[:role_id].blank?
       @role_id = Role.where("id = '#{params[:role_id]}' ").last 
-    else
+    elsif !params[:user][:role_id].blank?
       @role_id = Role.where("id = '#{params[:user][:role_id]}' ").last 
     end
   end
@@ -481,9 +481,9 @@ class UsersController < ApplicationController
       end
     else
       if params[:format] == "xls"
-        send_file "#{Rails.root}/public/download_student_list.xls", :type => "application/vnd.ms-excel", :filename => "school_admin_list.xls", :stream => false    
+        send_file "#{Rails.root}/public/download_student_list.xls", :type => "application/vnd.ms-excel", :filename => "student_list.xls", :stream => false    
       else
-        send_file "#{Rails.root}/public/download_student_list.csv", :type => "application/vnd.ms-excel", :filename => "school_admin_list.csv", :stream => false    
+        send_file "#{Rails.root}/public/download_student_list.csv", :type => "application/vnd.ms-excel", :filename => "student_list.csv", :stream => false    
       end
     end
   end
@@ -502,7 +502,7 @@ class UsersController < ApplicationController
   end
 
   def import
-    flash[:notice].clear
+    #flash[:notice].clear
     begin
       data_file = ""
       @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
@@ -513,7 +513,7 @@ class UsersController < ApplicationController
       end
       @users = get_file_data(session[:file], User, save = false, @role_id)
     rescue ActiveRecord::UnknownAttributeError => e
-      FileUtils.rm data_file
+      #FileUtils.rm data_file
       @list_type = params[:list_type]
       flash[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
       params['commit']=nil
@@ -523,10 +523,10 @@ class UsersController < ApplicationController
 
   def save_user_list
     @users =  get_file_data(session[:file], User, save = true, params[:role_id])
-    FileUtils.rm session[:file]
+    #FileUtils.rm session[:file]
     session[:file] = ""
     flash[:success] = "School's list saved successfully." 
-    redirect_to users_path, :notice => "Users Created."
+    redirect_to users_path(:role_id=>params[:role_id]), :notice => "Users Created."
   end
   
   def get_all_reading_grades

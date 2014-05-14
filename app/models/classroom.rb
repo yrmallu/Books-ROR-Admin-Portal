@@ -37,7 +37,7 @@ class Classroom < ActiveRecord::Base
   end
 
   def self.search(query_string)
-  qs = query_string.tr("%","").to_i 
+  qs = query_string.tr("%","").to_s
   classroom = Classroom.arel_table
   classrooms = Classroom.where(
     classroom[:code].eq(qs).or(

@@ -165,19 +165,22 @@ class User < ActiveRecord::Base
   end
   
   def self.search(query_string, role_id, school_id)
-    roleid = role_id.to_i
-    schoolid = school_id.to_i 
+    puts "sssssssss", school_id
+    roleid = role_id.id.to_i
+    schoolid = role_id.name.eql?("Web Admin") ? nil : school_id.to_i  
     user = User.arel_table
     users = User.where(
       user[:role_id].eq(roleid).and(
         user[:school_id].eq(schoolid).and(
-          user[:last_name].matches(query_string).or(
-            user[:username].matches(query_string).or(
-              user[:email].matches(query_string)
+          user[:first_name].matches(query_string).or(
+            user[:last_name].matches(query_string).or(
+              user[:username].matches(query_string).or(
+                user[:email].matches(query_string)
+                )
+              )
             )
           )
         )
       )
-    )
   end
 end
