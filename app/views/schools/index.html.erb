@@ -20,6 +20,7 @@
 		 
 		<div class="table-responsive">
 			<table class="table school-table" data-controller="schools" id="school_table">
+				<div class="error-message error quick-edit-error-msg"></div>
 	            <thead>
 	                <tr>
 	                	<th><%= link_to :All, 'javascript:checkAll("school")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("school")', :class => "lnk-typ2" %>  </th>
@@ -87,14 +88,6 @@
 					<% end %>
 	        	</tbody>
 	    	</table>
-			
-			
-			    <div class="quick-edit">This is some text! Click to edit!<br/>
-			Shift + Enter for a new line.<br/>
-			Enter when done.</div>
-			    <textarea cols="50" rows="5" class="invisible dynamic"></textarea>
-			
-			
 		</div>
         <% if @schools.count && @schools.count > 1 %>
 		<div data-no-turbolink>
@@ -174,12 +167,26 @@ $(".dynamic").keydown(function(e) {
     if (e.which === 13 && !e.shiftKey) {
         e.preventDefault();
         var text = $(this).val();
+		var this_val = $(this);
 		var edited_column_name = $(this).prev(".quick-edit").data('col');
 		var edited_school_id = $(this).prev(".quick-edit").data('id')
 		$(this).parent().children(".quick-edit").html(text).removeClass("invisible");
         $(this).addClass("invisible");
 		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_school')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_school_id},
-		  function(data) {  });
+		  function(data) { 
+ 			 if (data.status == false)
+ 			 {
+ 				 $('.error-message').removeClass('hide').addClass('show');	
+ 				 $('div.error-message').text(data.message);
+ 				 return;
+ 			 }
+ 			 else
+ 			 {
+ 				 $('.error-message').removeClass('show').addClass('hide');	
+ 				 this_val.parent().children(".quick-edit").html(text).removeClass("invisible");
+ 	             this_val.addClass("invisible");	
+ 			 } 
+		   });
     }
 });
 </script>

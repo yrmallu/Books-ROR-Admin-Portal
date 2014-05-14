@@ -36,7 +36,8 @@
 	</div>
 	<div class="table-responsive">
 		<table class="table class_common_table" id="users_table">
-            <thead>
+            <div class="error-message error quick-edit-error-msg"></div>
+			<thead>
                 <tr>
                 	<th><%= link_to :All, 'javascript:checkAll("user")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("user")', :class => "lnk-typ2" %></th>
                     <th>First Name</th>
@@ -91,14 +92,12 @@
 					             <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
 					         <%end%>
   					         <%if @role_id.name.eql?('Student')%>
-					             <td class="">
+					             <td>
 									 <div class="" data-col="grade" data-id='<%= user.id%>'><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></div>
-									 
-								     <%#= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_name", "id"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dynamic"} %>
+									 <%= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_name", "id"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dynamic class-grade"} %>
 								 </td>
-					             <td class="">
-									 <div class="" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></div>
-									 
+					             <td>
+									 <div class="quick-edit" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></div>
 								 </td>
   					         <%end%>
   					         <td>
@@ -268,6 +267,8 @@ $(".download_sample").click(function(){
 });
 
 $(document).ready(function(){
+//$('.class-grade').removeClass('show').addClass('hide');	
+$('.error-message').removeClass('show').addClass('hide');	
 $(".mask-phone").mask("(999) 999-9999");
 	
 $('#changePassword').click(function() {
@@ -314,18 +315,21 @@ $(".dynamic").keydown(function(e) {
 		var edited_user_id = $(this).prev(".quick-edit").data('id')
 		
 		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_user_id},
-		  function(data, this_val) {  
+		  function(data) {  
 			 if (data.status == false)
 			 {
-				 alert(data.message);
+				 $('.error-message').removeClass('hide').addClass('show');	
+				 $('div.error-message').text(data.message);
+				 return;
 			 }
 			 else
 			 {
-
+				 $('.error-message').removeClass('show').addClass('hide');	
+				 this_val.parent().children(".quick-edit").html(text).removeClass("invisible");
+	             this_val.addClass("invisible");	
 			 } 
 		  });
-  		  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
-          $(this).addClass("invisible");		
+	
     }
 });
 </script>

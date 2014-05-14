@@ -139,8 +139,13 @@ class SchoolsController < ApplicationController
   end
   
   def quick_edit_school
-   	@school.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
-    render :json=> true and return
+   	return_val = @school.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+	if return_val.eql?(true)
+      render :json=> true and return
+	else
+	   column_name = params[:column_name].capitalize
+	  render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
+	end
   end
   
   private
