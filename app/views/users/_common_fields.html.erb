@@ -7,8 +7,8 @@
 	                </div>
 	                <div class="col-sm-3">
 	                    <div class="form-group">
-			     		   <%= f.label :last_name, "Last Name", :class=>"control-label" %>
-			     		   <%= f.text_field :last_name, :class=>"form-control" %>
+			     		   <%= f.label :last_name, "Last Name", :class=>"control-label" %><span class="asterisk">*</span>
+			     		   <%= f.text_field :last_name, :required=>true, :class=>"form-control" %>
 	                    </div>
 	                </div>
 	            </div>
@@ -66,13 +66,13 @@
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
 			    		        <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
-			    			    <%= f.password_field :password, :required=>true, :class=>"form-control class_password" %>
+			    			    <%= f.password_field :password, :required=>true, :class=>"form-control class_password class_no_space" %>
 	                        </div>
 	                    </div>
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
 			    			    <%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
-			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control" %>
+			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control class_no_space" %>
 	                        </div>
 	                    </div>
 	                </div>
@@ -83,15 +83,17 @@
 	        		    <%=render 'parent_fields', f: fb%>
 	        	    <%end%>
 					<div class="add-parent">
-				    <%= link_to_add_fields "Add More Parent Details", f, :parents %>
-				</div>
+					    <%= link_to_add_fields "Add More Parent Details", f, :parents %>
+				    </div>
 				<div class="row">
-	            	<div class="col-sm-3">
+	            	<div class="col-sm-6">
 	                	<div class="form-group">
 	                    	<%= f.label :grade, "Grade Level", :class=>"control-label add-student-label" %>
 		    			    <%= f.select :grade, options_for_select(@reading_grades.collect {|g| [ g.grade_name, g.id ] }, :selected=>f.object.grade), {:prompt=>"Select Grade Level", :class=>"form-control"} %>
 	                    </div>
 	                </div>
+				</div>	
+				<div class="row">
 	                <div class="col-sm-6">
 	                    <div class="form-group">
 	                    	<%= f.label :reading_ability, "Reading Ability", :class=>"control-label add-student-label" %>
@@ -158,3 +160,20 @@
 		        </div>
         <%end%>
             
+<script type="text/javascript">
+$('.add_fields').addClass('show').removeClass('hide');
+$('.add_fields').click(function(){
+	if ($('.fieldset-parents').length > 4)
+	{
+		$('.add_fields').addClass('hide').removeClass('show');
+	}
+});
+$('.add-parent').on('click','.remove_fields',function(){
+	if ($('.add-parent.fieldset-parents').length < 5)
+	{
+		$('.add_fields').addClass('show').removeClass('hide');
+	}
+});
+</script>		
+
+

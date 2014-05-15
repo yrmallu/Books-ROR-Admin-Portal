@@ -2,6 +2,11 @@
 $.validator.addMethod("parent_email_valid", $.validator.methods.email, "Please enter a valid email.");
 $.validator.addClassRules("class_parent_email", {parent_email_valid:true});
 
+$.validator.addMethod("noSpace", function(value, element) { 
+  return value.indexOf(" ") < 0 && value != ""; 
+}, "Spaces not allowed.");
+$.validator.addClassRules("class_no_space", {noSpace:true});
+
 var required_field;
 required_field = function(){
 	$(".form_validation").validate({
@@ -16,6 +21,7 @@ required_field = function(){
 			"license[no_of_licenses]":{ required: true, number: true, min: 1 },
 			"user[school_id]":{required: true} ,
 			"user[first_name]":{required: true} ,
+			"user[last_name]":{required: true} ,
 			//"user[email]":{ email:true, required: true} ,
 			"user[password]":{ minlength: 5, required: true} ,
 			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} ,
@@ -29,10 +35,12 @@ required_field = function(){
 			 },
  			password: {
  				required: true,
+				noSpace: true,
  				minlength: 5
  			},
  			password_confirmation: {
  				required: true,
+				noSpace: true,
  				minlength: 5,
  				equalTo: "#password"
  			}
@@ -65,6 +73,7 @@ required_field = function(){
 			"license[no_of_licenses]":"Please enter number greater than zero.",
 			"user[school_id]":"Select School.",
 			"user[first_name]":"First Name can't be blank.",
+			"user[last_name]":"Last Name can't be blank.",
 			//"user[email]":"Enter a valid email address.",
 			"user[password]":{
 				required: "Please provide a password",

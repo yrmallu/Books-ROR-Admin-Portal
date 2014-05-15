@@ -10,6 +10,7 @@ class Book < ActiveRecord::Base
   
   # relationships .............................................................
   has_many :preview_images, :dependent => :destroy  
+  has_and_belongs_to_many :reading_grades
   
   # attachments ...............................................................
   has_attached_file :epub,
