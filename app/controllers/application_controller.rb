@@ -162,6 +162,7 @@ class ApplicationController < ActionController::Base
     p "extras=====",parameters = extra.split(",")
 	selector =  parameters.empty? ? "#{params[:controller]}##{params[:action]}" : (("classrooms").eql?("#{params[:controller]}") || ("licenses").eql?("#{params[:controller]}")) ? "#{params[:controller]}##{params[:action]}" : "#{params[:controller]}##{params[:action]}".concat("-"+parameters[0])  
     p "selector=====",selector
+	
     case selector
 
       when "users#dashboard"
@@ -234,7 +235,15 @@ class ApplicationController < ActionController::Base
             "Import School List"=> "",
           }
         }	
-	
+	 when "schools#import"
+       @breadcrumb = {
+         :title=>"Import School List",
+	     :icon=>"fa fa-building-o",
+         :breadcrumb=>{
+           "School List"=> schools_path,
+           "Import School List"=> "",
+         }
+       }
 
       when "users#new-2"
 	  @breadcrumb = {
@@ -320,7 +329,7 @@ class ApplicationController < ActionController::Base
           }
         }  
 		when "users#create-1"
-  		@breadcrumb = {
+		@breadcrumb = {
             :title=>"Add Web Admin",
   		    :icon=>"fa fa-user",
             :breadcrumb=>{
@@ -500,7 +509,15 @@ class ApplicationController < ActionController::Base
               "Import Student List"=> "",
             }
           }
-		
+        when "users#import"
+          @breadcrumb = {
+            :title=>"Import User List",
+  		    :icon=>"fa fa-user",
+            :breadcrumb=>{
+             # "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+              "Import User List"=> "",
+            }
+          }
         when "classrooms#index"
           @breadcrumb = {
             :title=>"Classroom List",

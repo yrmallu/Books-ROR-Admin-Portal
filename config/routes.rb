@@ -54,6 +54,7 @@ BooksThatGrow::Application.routes.draw do
       post 'save_user_list'
 	  get 'delete_parent'
 	  get 'quick_edit_user'
+	  get 'remove_bulk_licenses'
      end
   end
 

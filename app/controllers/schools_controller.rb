@@ -3,7 +3,7 @@ class SchoolsController < ApplicationController
   before_action :logged_in?
   before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list, :quick_edit_school], except: [:save_school_list]
   before_action :get_schools, only: [:index]
-  before_action :set_bread_crumb, only: [:index, :show, :edit, :new, :import_list]
+  before_action :set_bread_crumb, only: [:index, :show, :edit, :new, :import_list, :import]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -63,10 +63,10 @@ class SchoolsController < ApplicationController
   def get_schoolwise_license_list
     @license_assign_count = []
     @licenses = @school.licenses.order("created_at DESC").page params[:page]
-  @licenses_allocated = User.select("school_id, license_id, role_id, count(license_id) as total_license_count").group("role_id,license_id, school_id").having("school_id =?", params[:id])
-  #@licenses_allocated.each{|x|  p x.school_id,x.license_id, x.role_id,  x.total_license_count}
-  @licenses_allocated.each{|x|  @license_assign_count << x.total_license_count}
-  render :partial=>"license_list"
+    @licenses_allocated = User.select("school_id, license_id, role_id, count(license_id) as total_license_count").group("role_id,license_id, school_id").having("school_id =?", params[:id])
+    #@licenses_allocated.each{|x|  p x.school_id,x.license_id, x.role_id,  x.total_license_count}
+    @licenses_allocated.each{|x|  @license_assign_count << x.total_license_count}
+    render :partial=>"license_list"
   end
   
   def delete_school
@@ -100,7 +100,7 @@ class SchoolsController < ApplicationController
         session[:file] = file.path
       end
       @schools = get_file_data(session[:file], School, save = false)
-    rescue ActiveRecord::UnknownAttributeError => e
+      rescue ActiveRecord::UnknownAttributeError => e
       # FileUtils.rm data_file
       flash.now[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
       params['commit']=nil

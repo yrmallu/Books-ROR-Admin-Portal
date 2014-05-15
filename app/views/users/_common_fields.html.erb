@@ -16,7 +16,7 @@
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 	                    	<%= f.label :username, "Username", :class=>"control-label" %><span class="asterisk">*</span>
-							<%= f.text_field :username, :class=>"form-control clearfix class_no_space" %>
+							<%= f.text_field :username, :class=>"form-control clearfix" %>
 		    			    <%#= f.text_field :username, :class=>"form-control username_validation" %>
 							<span class="help-inline error_box"></span>
 	                    </div>
@@ -160,3 +160,20 @@
 		        </div>
         <%end%>
             
+<script type="text/javascript">
+$('.add_fields').addClass('show').removeClass('hide');
+$('.add_fields').click(function(){
+	if ($('.fieldset-parents').length > 4)
+	{
+		$('.add_fields').addClass('hide').removeClass('show');
+	}
+});
+$('.add-parent').on('click','.remove_fields',function(){
+	if ($('.add-parent.fieldset-parents').length < 5)
+	{
+		$('.add_fields').addClass('show').removeClass('hide');
+	}
+});
+</script>		
+
+

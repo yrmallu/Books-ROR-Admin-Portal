@@ -173,7 +173,6 @@ class UsersController < ApplicationController
       @assigned_classrooms = []
       @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank? 
 	  render :action=> 'new'
-	  #set_bread_crumb(@role_id.id)
     end
   end
    
@@ -254,13 +253,11 @@ class UsersController < ApplicationController
           end
         end
       end 
-      array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
-      unless array_classroom_ids.blank?
-        unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-          @user.user_classrooms.destroy_all
-          array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-        end
-      end  
+	  array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
+      unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
+      	@user.user_classrooms.destroy_all
+        array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+      end
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
     else
@@ -342,8 +339,8 @@ class UsersController < ApplicationController
   
   def delete_user
     deleted_user = ''
-  User.where(id: params[:user_ids]).each do |user|
-    deleted_user = user
+    User.where(id: params[:user_ids]).each do |user|
+      deleted_user = user
       user.update_attributes(delete_flag: true)
     end
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
@@ -364,6 +361,16 @@ class UsersController < ApplicationController
   
   def remove_license_from_user 
     @user.update_attributes(:license_id=>"", :license_expiry_date=>"")
+  end
+  
+  def remove_bulk_licenses
+    params[:bulk_remove_user_ids].each do |user_id|
+	  @user = User.find(user_id)
+	  unless @user.license_id.blank?
+	    remove_license_from_user
+	  end
+	end
+	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
   end
   
   def get_user_school_licenses
@@ -415,14 +422,14 @@ class UsersController < ApplicationController
  
   def email_for_password
     @user = User.find_by_email(params[:email].downcase)
-  if @user.blank?
-      flash[:error] = "Email does not exist."
-    redirect_to forgot_password_path
-  else
-    user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
-    UserMailer.forgot_password_email(user_info).deliver
-    flash[:success] = "Email sent with password reset instructions."
-    redirect_to signin_path
+    if @user.blank?
+      flash[:error] = "That email address is not associated with a Books That Grow account. Please try a different email address or contact your administrator for help"
+      redirect_to forgot_password_path
+    else
+      user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
+      UserMailer.forgot_password_email(user_info).deliver
+      flash[:success] = "Instructions will be sent to the email address you enter."
+      redirect_to signin_path
     end
   end
   
@@ -489,6 +496,7 @@ class UsersController < ApplicationController
 
   def import
     #flash[:notice].clear
+	set_bread_crumb
     begin
       data_file = ""
       @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id

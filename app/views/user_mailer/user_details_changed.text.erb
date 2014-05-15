@@ -1,19 +1,16 @@
-Welcome to Books That Grow
+Hello, <%= @name %>  
 
-Hello, <%= @username %>  
+An administrator has updated your Books That Grow account. 
 
-Your account information has been edited by: <%= @logged_in_user%>
+You can log in to Books That Grow using the following information.
 
-Following details have been modified : <%= @changed_attributes%>
+Username: <%= @username %> 
+Email Address: <%= @email %>
 
-To login to the site, just follow this link: <%= @login_url %> 
+To reset your password, click on the following link: <%= @reset_pass_url %> 
 
-OR 
+If you believe this update was made in error, please immediately contact your school administrator.
 
-To reset password click on following link: <%= @reset_pass_url %> 
+Thanks,
 
-OR
-
-To check out account changes follow this link: <%= @link%>
-
-Thanks, Books That Grow Team!
+The Books That Grow Team
