@@ -128,7 +128,7 @@ class User < ActiveRecord::Base
     arr_changed_attributes = []
 	if !first_name_was.eql?(first_name)
 	  arr_changed_attributes << 'First_Name'
-	eslif !last_name_was.eql?(last_name)
+	elsif !last_name_was.eql?(last_name)
 	  arr_changed_attributes << 'Last_Name'
 	end
 	unless arr_changed_attributes.empty?

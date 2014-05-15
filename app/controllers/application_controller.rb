@@ -89,16 +89,16 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def get_file_data(file, obj, save_list = false, role = nil)
+  def get_file_data(file, obj, save_list = false, role = nil, school = nil)
     data_list = []
     case File.extname(file)
       when ".csv" then data_list = parse_csv(file, obj, role, save_list)
-      when ".xls" then data_list = parse_spreadsheet(file, obj, role, save_list)
+      when ".xls" then data_list = parse_spreadsheet(file, obj, role, save_list, school)
     end
     data_list
   end
 
-  def parse_spreadsheet(file, obj, role, save_list)
+  def parse_spreadsheet(file, obj, role, save_list, school)
     require 'roo'
     spreadsheet = Roo::Excel.new(file, nil, :ignore)
    
@@ -107,13 +107,16 @@ class ApplicationController < ActionController::Base
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       row.merge!(:role_id => role) if role && !role.blank?
+      row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)
+      puts "new recode", row.to_hash
       if save_list
         db_exist = User.eql?(obj) ? obj.find_by_username(data_obj.username) : obj.find_by_code(data_obj.code.to_i.to_s)
-        if data_obj.valid? 
-            data_obj.save
-         elsif !db_exist.blank?
+        p "old recod", !db_exist.blank?
+        if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
+         elsif data_obj.valid?
+             data_obj.save
          else
             data_list << data_obj
          end
