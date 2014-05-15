@@ -8,7 +8,11 @@ BooksThatGrow::Application.routes.draw do
   resources :classrooms do
     collection do
       post 'delete_classroom'
-	  get 'quick_edit_classroom'
+	    get 'quick_edit_classroom'
+      get 'download_classroom_list'
+      get 'import_list'
+      post 'import'
+      post 'save_classroom_list'
     end
   end
 

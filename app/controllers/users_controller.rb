@@ -491,12 +491,15 @@ class UsersController < ApplicationController
 
   def import_list
     @list_type = params[:list_type]
+    @school_id = params[:school_id]
+    @role_id = params[:role_id]
 	set_bread_crumb(@list_type, params[:role_id], params[:school_id])
   end
 
   def import
     #flash[:notice].clear
-	set_bread_crumb
+    @school_id = params[:school_id]
+	  set_bread_crumb
     begin
       data_file = ""
       @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
@@ -516,7 +519,7 @@ class UsersController < ApplicationController
   end
 
   def save_user_list
-    @users =  get_file_data(session[:file], User, save = true, params[:role_id])
+    @users =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
     #FileUtils.rm session[:file]
     session[:file] = ""
     flash[:success] = "School's list saved successfully." 

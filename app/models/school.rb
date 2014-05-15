@@ -1,6 +1,6 @@
 class School < ActiveRecord::Base
 
-  # include CommonQueries 
+  #include CommonQueries 
 	
 	paginates_per 10
 	max_paginates_per 10
