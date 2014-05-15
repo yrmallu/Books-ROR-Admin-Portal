@@ -80,7 +80,7 @@ class Book < ActiveRecord::Base
     when '192'
       server_ip = "#{local_ip}:3000"
     when '10'
-      server_ip = "54.83.84.222"
+      server_ip = "54.225.184.100"
     end
     xhtml_files = get_xhtml_files list_files   
     css_tags, js_tags = get_css_js_tags list_files, server_ip
