@@ -89,16 +89,16 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  def get_file_data(file, obj, save_list = false, role = nil)
+  def get_file_data(file, obj, save_list = false, role = nil, school = nil)
     data_list = []
     case File.extname(file)
       when ".csv" then data_list = parse_csv(file, obj, role, save_list)
-      when ".xls" then data_list = parse_spreadsheet(file, obj, role, save_list)
+      when ".xls" then data_list = parse_spreadsheet(file, obj, role, save_list, school)
     end
     data_list
   end
 
-  def parse_spreadsheet(file, obj, role, save_list)
+  def parse_spreadsheet(file, obj, role, save_list, school)
     require 'roo'
     spreadsheet = Roo::Excel.new(file, nil, :ignore)
    
@@ -107,13 +107,16 @@ class ApplicationController < ActionController::Base
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       row.merge!(:role_id => role) if role && !role.blank?
+      row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)
+      puts "new recode", row.to_hash
       if save_list
         db_exist = User.eql?(obj) ? obj.find_by_username(data_obj.username) : obj.find_by_code(data_obj.code.to_i.to_s)
-        if data_obj.valid? 
-            data_obj.save
-         elsif !db_exist.blank?
+        p "old recod", !db_exist.blank?
+        if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
+         elsif data_obj.valid?
+             data_obj.save
          else
             data_list << data_obj
          end
@@ -162,6 +165,7 @@ class ApplicationController < ActionController::Base
     p "extras=====",parameters = extra.split(",")
 	selector =  parameters.empty? ? "#{params[:controller]}##{params[:action]}" : (("classrooms").eql?("#{params[:controller]}") || ("licenses").eql?("#{params[:controller]}")) ? "#{params[:controller]}##{params[:action]}" : "#{params[:controller]}##{params[:action]}".concat("-"+parameters[0])  
     p "selector=====",selector
+	
     case selector
 
       when "users#dashboard"
@@ -234,7 +238,15 @@ class ApplicationController < ActionController::Base
             "Import School List"=> "",
           }
         }	
-	
+	 when "schools#import"
+       @breadcrumb = {
+         :title=>"Import School List",
+	     :icon=>"fa fa-building-o",
+         :breadcrumb=>{
+           "School List"=> schools_path,
+           "Import School List"=> "",
+         }
+       }
 
       when "users#new-2"
 	  @breadcrumb = {
@@ -320,7 +332,7 @@ class ApplicationController < ActionController::Base
           }
         }  
 		when "users#create-1"
-  		@breadcrumb = {
+		@breadcrumb = {
             :title=>"Add Web Admin",
   		    :icon=>"fa fa-user",
             :breadcrumb=>{
@@ -500,7 +512,15 @@ class ApplicationController < ActionController::Base
               "Import Student List"=> "",
             }
           }
-		
+        when "users#import"
+          @breadcrumb = {
+            :title=>"Import User List",
+  		    :icon=>"fa fa-user",
+            :breadcrumb=>{
+             # "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+              "Import User List"=> "",
+            }
+          }
         when "classrooms#index"
           @breadcrumb = {
             :title=>"Classroom List",

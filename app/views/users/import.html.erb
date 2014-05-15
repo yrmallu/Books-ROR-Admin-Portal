@@ -33,7 +33,7 @@
 	         <div width="50%" style="border : 1px solid #CCCCCC; border-radius : 10px; float :left; padding: 30px;">
 	         	<p>Let me save all the valid users only</p>
 	         	<div style="text-align: center;">
-	         		<%= link_to "Save", {:action => :save_user_list, :role_id => @role_id}, :method => 'post' %>
+	         		<%= link_to "Save", {:action => :save_user_list, :role_id => @role_id, :school_id => @school_id}, :method => 'post' %>
 	         	</div>	
 	         </div>
 	         <div width="50%" align="right" style="border : 1px solid #CCCCCC; border-radius : 10px; float: right; padding: 30px;">

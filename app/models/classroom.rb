@@ -13,7 +13,7 @@ class Classroom < ActiveRecord::Base
   ## Callbacks
   ###########################################################################################
   before_create :generate_random_code
-  
+  before_save :reset_params_datatype
   ###########################################################################################
   ## Scopes
   ###########################################################################################
@@ -33,7 +33,11 @@ class Classroom < ActiveRecord::Base
   ## Methods
   ###########################################################################################
   def generate_random_code
-    self.code = Classroom.count == 0 ? (10001.to_i) : (Classroom.maximum("code").to_i + 1.to_i)
+    self.code = Classroom.count == 0 ? (10001.to_i) : (Classroom.maximum("code").to_i + 1.to_i) if [nil,"",0].include?(code)
+  end
+  
+  def reset_params_datatype
+    self.code = code.to_i
   end
 
   def self.search(query_string)

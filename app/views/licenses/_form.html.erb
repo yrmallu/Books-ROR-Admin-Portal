@@ -45,12 +45,22 @@
 		            </div>
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
-	            <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
-		        <%if current_user.role.name.eql?('Web Admin')%>
-				    <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+				<% if action_name.eql?('new') || action_name.eql?('create') %>
+	                <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
+			        <%if current_user.role.name.eql?('Web Admin')%>
+					    <%= link_to 'Return to School List', schools_path, class: "btn btn-white btn-xs"%>
+					<%else%>
+					    <%= link_to 'Return to School List', school_path(current_user.school_id), class: "btn btn-white btn-xs"%>
+					<%end%>
 				<%else%>
-				    <%= link_to 'Cancel', school_path(current_user.school_id), class: "btn btn-white btn-xs"%>
-				<%end%>
+				    <%= f.submit "Update", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
+			        <%if current_user.role.name.eql?('Web Admin')%>
+					    <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
+					<%else%>
+					    <%= link_to 'Cancel', school_path(current_user.school_id), class: "btn btn-white btn-xs"%>
+					<%end%>
+				<%end%>	
+		        
 	        </div>
 			<% end %>
 	    </div>

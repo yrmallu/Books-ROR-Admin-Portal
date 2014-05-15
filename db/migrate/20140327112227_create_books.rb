@@ -10,7 +10,7 @@ class CreateBooks < ActiveRecord::Migration
       t.string :book_unique_id
       t.hstore :thumb_name
       t.string :cover
-      t.string :interest_level, limit: 60
+	  t.string :interest_level, limit: 60
 	  t.attachment :book_cover
 	  t.attachment :epub
       t.boolean :delete_flag, default: false

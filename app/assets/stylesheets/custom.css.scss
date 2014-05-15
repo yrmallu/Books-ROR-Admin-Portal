@@ -21,8 +21,6 @@
 .pageheader .btg-admin:before{vertical-align: top;}
 .pageheader .btg-teacher:before{vertical-align: top;}
 .pageheader .btg-student:before{vertical-align: top;}
-//table td {border:solid 1px #fab; width:100px; word-wrap:break-word;}
-//a, button {margin:2px;}
 
 .fa-lock.increase_size{font-size:20px;}
 .logo_image{width:80px; height:80px;}
@@ -34,6 +32,7 @@
 .alert_license_success{ background-color: #dff0d8;border-color: #d6e9c6;color: #3c763d;padding: 10px !important;}
 
 textarea {resize:vertical;}
+input[type=checkbox] {cursor:pointer;}
 
 .logopanel h1 {font-size: 28px !important;}
 .error_box{ font-weight: normal; line-height: 20px; color: #B94A48; display: block; }
@@ -68,29 +67,29 @@ label.error {display:block;}
 
 
 /* form validation design issues */
-    .field_with_errors{clear:both;}
-	.form-group .field_with_errors:first-child {float:left; clear:none;}
-	.form-lable-multiselect{display:block;}
-	.table-responsive{margin-top:-27px;}
+.field_with_errors{clear:both;}
+.form-group .field_with_errors:first-child {float:left; clear:none;}
+.form-lable-multiselect{display:block;}
+.table-responsive{margin-top:-27px;}
 	
 	
 /* School table data-grid design chagnes */
-	.school-table tr th:nth-child(1){width:8%;}
-	.school-table tr th:nth-child(2){width:11%;}
-	.school-table tr th:nth-child(3){width:23%;}
-	.school-table tr th:nth-child(4){width:10%;}
-	.school-table tr th:nth-child(5){width:9%;}
-	.school-table tr th:nth-child(6){width:9%;}
-	.school-table tr th:nth-child(7){width:10%;}
-	.school-table tr th:nth-child(8){width:20%;}
+.school-table tr th:nth-child(1){width:8%;}
+.school-table tr th:nth-child(2){width:11%;}
+.school-table tr th:nth-child(3){width:23%;}
+.school-table tr th:nth-child(4){width:10%;}
+.school-table tr th:nth-child(5){width:9%;}
+.school-table tr th:nth-child(6){width:9%;}
+.school-table tr th:nth-child(7){width:10%;}
+.school-table tr th:nth-child(8){width:20%;}
 
 /* Fieldset */
-	.fieldset-parents{height:110px;}
-	.add-parent{ margin-bottom:20px; display:block;}
-	.add-student-label{padding-right:10px;}
+.fieldset-parents{height:110px;}
+.add-parent{ margin-bottom:20px; display:block;}
+.add-student-label{padding-right:10px; width:140px;}
 
 /* Student profile pic */
-	.student-profil-pic{width:100px; border-radius:100px; margin-bottom:10px;}
+.student-profil-pic{width:100px; border-radius:100px; margin-bottom:10px;}
 	
 .no-access{width:100%; min-height:850px; background:#fff;}
 .no-access img {padding-top:100px;}	
@@ -106,6 +105,6 @@ label.error {display:block;}
 
 // Quick edit css
 .invisible{display:none;}
-
-.quick-edit:hover{border: solid 2px #ccc;padding: 5px;margin: -5px;}
+.quick-edit:hover{border: solid 2px #ccc;padding: 5px;margin: -5px;cursor:pointer;}
 .quick-edit{padding:2px;}
+.quick-edit-error-msg{text-align: center;margin: 41px auto 0;position: absolute !important;left: 0;right: 0;z-index: 10;}

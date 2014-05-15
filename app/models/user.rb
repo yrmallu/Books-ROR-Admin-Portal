@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   has_secure_password
   store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on
   cattr_accessor :app_route
-  #cattr_accessor :get_session_variable
+  cattr_accessor :current_user
+  cattr_accessor :user_session
   ###########################################################################################
   ## Callbacks
   ###########################################################################################      
@@ -27,7 +28,6 @@ class User < ActiveRecord::Base
   has_many :parents
   belongs_to :license
   before_update :update_license_count
-  #after_update :check_user_changed_own_password
   before_update :user_details_change_email
   
   accepts_nested_attributes_for :parents, :allow_destroy=> true, :reject_if => :all_blank
@@ -61,9 +61,9 @@ class User < ActiveRecord::Base
   validates :email, :presence=> true, :length => {:maximum => 255}, :if => :not_student?
   validates :email, :format=>{:with=> VALID_EMAIL_REGEX }, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
   validates :first_name, :presence=> true, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
-  validates :last_name, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX },:allow_blank=>true
+  validates :last_name, :presence=> true, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
   #validates :school_id, :presence=> {:message => "Select School."}
-  #validates :password, :presence => true, :confirmation => true, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
+  #validates :password, :presence => true, :confirmation => true, :format => {:with=> NO_SPACE_REGEX}, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
   validates_attachment_size :photos, :less_than => 5.megabytes
   validates_attachment_content_type :photos, :content_type => /\Aimage\/.*\Z/
   
@@ -86,15 +86,7 @@ class User < ActiveRecord::Base
   def is_school_admin?
   	 self.role.name.eql?("School Admin") unless self.role.blank?
   end
-  
-  # def check_user_changed_own_password
-#     if !self.password_digest_was.eql?(self.password_digest)
-# 	  binding.pry
-#       get_session_variable
-# 	  redirect_to app_route
-# 	end
-#   end
-  
+ 
   def assign_accessright(accessright_id)
     self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?
   end
@@ -119,33 +111,58 @@ class User < ActiveRecord::Base
   end
   
   def welcome_email(path)
-    user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+    user_info = {:email => self.email, :firstname => self.first_name, :lastname => self.last_name.to_s, :username=> self.username.to_s, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
 	UserMailer.welcome_email(user_info).deliver
   end
   
   def user_details_change_email
-    #binding.pry
-    arr_changed_attributes = []
-	if !first_name_was.eql?(first_name)
-	  arr_changed_attributes << 'First_Name'
-	eslif !last_name_was.eql?(last_name)
-	  arr_changed_attributes << 'Last_Name'
-	end
-	unless arr_changed_attributes.empty?
-      user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :changed_attributes => arr_changed_attributes, :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+app_route } 
-	  UserMailer.user_details_changed(user_info).deliver
+    unless self.school_id.blank?
+      link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s 
+    else
+      link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s
     end
+    
+	  arr_changed_attributes = []
+	  own_password_changed = false
+	  if !self.first_name_was.eql?(self.first_name) && !self.first_name.blank?
+	    arr_changed_attributes << 'First Name'
+	  end
+    if !self.last_name_was.eql?(self.last_name) && !self.last_name.blank?
+      arr_changed_attributes << 'Last Name'
+    end
+    if !self.username_was.eql?(self.username) && !self.username.blank?
+	    arr_changed_attributes << 'Username'
+    end
+	  if !self.userinfo_was.eql?(self.userinfo) && !self.userinfo.blank?
+	    arr_changed_attributes << 'Phone Number OR Grade OR Reading level'
+	  end
+	  if !self.password_digest_was.eql?(self.password_digest) && !self.password_digest.blank?
+	     own_password_changed = true if current_user.id = self.id
+	     arr_changed_attributes << 'Password'
+	   end
+	   if !self.email_was.eql?(self.email) && !self.email.blank? 
+	     arr_changed_attributes << 'Email'
+	     user_info = {:email => email_was, :name => self.first_name+" "+self.last_name.to_s, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :new_email=> self.email, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
+	     UserMailer.user_email_changed(user_info).deliver
+	   end
+	   unless arr_changed_attributes.empty?
+       user_info = {:email => self.email, :name => self.first_name+" "+self.last_name.to_s, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
+	     UserMailer.user_details_changed(user_info).deliver
+	     if own_password_changed.eql?(true)
+	       user_session = nil  
+	     end
+     end
   end
   
-  # def user_details_change_email(current_user, path)
-#     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-# 	UserMailer.user_details_changed(user_info).deliver
-#   end
-  
-  def user_email_change_email(current_user, path, emails)
-    user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-    UserMailer.user_email_changed(user_info, emails).deliver
-  end
+	#   def user_details_change_email(current_user, path)
+	#     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+	# UserMailer.user_details_changed(user_info).deliver
+	#   end
+	#   
+	#   def user_email_change_email(current_user, path, emails)
+	#     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+	#     UserMailer.user_email_changed(user_info, emails).deliver
+	#   end
 
   def access_to_remove_or_add(options={})
     options[:accessright].each do |access|
