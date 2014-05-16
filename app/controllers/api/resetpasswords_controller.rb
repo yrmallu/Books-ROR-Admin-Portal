@@ -41,7 +41,7 @@ class Api::ResetpasswordsController < ApplicationController
       @user = User.where("email = '#{user_mail["email"]}'").last || Parent.where("email = '#{user_mail["email"]}'").last
       unless @user.blank?
         unless user_mail["username"].blank?
-          user_info = {:email => @user.email, :username => @user.name, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?username="+Base64.encode64(user_mail["username"])+"&school_id="+Base64.encode64(user_mail["school_id"].to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
+          user_info = {:email => @user.email, :username => @user.first_name, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?username="+Base64.encode64(user_mail["username"])+"&school_id="+Base64.encode64(user_mail["school_id"].to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
         else
           user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
         end
