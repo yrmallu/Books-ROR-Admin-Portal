@@ -54,7 +54,7 @@
 					    <div class="row">
 					        <div class="col-sm-3">
 						        <div class="form-group">
-							        <%= f.label :license_expiry_date, "License Expiry Date", :class=>"control-label"%>
+							        <%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
 								    <%= f.text_field :license_expiry_date, :class=>"form-control", :readonly=>true %>
 						        </div>
 						    </div> 
@@ -145,13 +145,15 @@
                     <div class="col-sm-9">
                         <div class="form-group margin-t-10">
 							<%= label_tag 'classrooms', "Classrooms", :class=>"control-label form-lable-multiselect"%>
+							<!-- <span>Assigned Classrooms</span> -->
                             <div style="float:left;" id="assigned_div">
-                                <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+                                <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"classroom-info-hover", :size=>"8", :multiple=>"multiple" %>
                             </div>
                             <div class="assign_arrows">
-                                <a href="#Remove" class="remove"> Remove >> </a><br />
-                                <a href="#Add" class="add"> << Add </a>
+                                <a href="#Remove" class="remove btn"> > </a><br />
+                                <a href="#Add" class="add btn"> < </a>
                             </div>
+							<!-- <span>All Classrooms</span> -->
                             <div style="float:left;" id="all_div">
                                 <%= select_tag "all_present_id", options_from_collection_for_select(@school_specific_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
                             </div>
@@ -161,6 +163,29 @@
         <%end%>
             
 <script type="text/javascript">
+
+// $.ajax(url: "/test").done (html) ->
+//   $("#results").append html
+
+
+// $('#classroom_remnove').qtip({
+//     content: {
+//         text: function(event, api) {
+//             $.ajax({
+//                 url: element.data('users/get_classroom_details') // Use data-url attribute for the URL
+//             })
+//             .then(function(content) {
+//                 // Set the tooltip content upon successful retrieval
+//                 api.set('content.text', content);
+//             }, function(xhr, status, error) {
+//                 // Upon failure... set the tooltip content to the status and error value
+//                 api.set('content.text', status + ': ' + error);
+//             });
+//             return 'Loading...'; // Set some initial text
+//         }
+//     }
+// });
+
 $('.add_fields').addClass('show').removeClass('hide');
 $('.add_fields').click(function(){
 	if ($('.fieldset-parents').length > 4)

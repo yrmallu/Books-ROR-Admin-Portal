@@ -196,37 +196,37 @@ class UsersController < ApplicationController
   def edit
     unless current_user.is_web_admin?
       current_user_update_accessrights
-    unless @access_right_name.kind_of?(Array)
+      unless @access_right_name.kind_of?(Array)
         if @current_user_accessrights.include?(@access_right_name)
-        user_edit
+          user_edit
+        else
+          raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        end
       else
-        raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        user_edit
       end
     else
       user_edit
     end
-  else
-    user_edit
-  end
   end 
    
   def update
     unless current_user.is_web_admin?
       current_user_update_accessrights
-    unless @access_right_name.kind_of?(Array)
+      unless @access_right_name.kind_of?(Array)
         if @current_user_accessrights.include?(@access_right_name)
           user_update  
+        else
+          raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        end
       else
-        raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
-      end
-    else
-      get_school_after_render
-      user_update
+        get_school_after_render
+        user_update
       end
     else
     get_school_after_render
       user_update
-  end   
+    end   
   end
   
   def user_edit
@@ -554,6 +554,10 @@ class UsersController < ApplicationController
 	   column_name = params[:column_name].capitalize
 	  render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
 	end
+  end
+  
+  def get_classroom_details
+    binding.pry
   end
   
   private

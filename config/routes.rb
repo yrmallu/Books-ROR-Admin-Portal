@@ -59,6 +59,7 @@ BooksThatGrow::Application.routes.draw do
 	  get 'delete_parent'
 	  get 'quick_edit_user'
 	  get 'remove_bulk_licenses'
+	  get 'get_classroom_details'
      end
   end
 
