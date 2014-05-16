@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
   ## Validations
   ###########################################################################################  
 
-  validates :username, :presence=> true, :length => {:maximum => 255}, :format => {:with=> NO_SPACE_REGEX}, :uniqueness=> {scope: :school, conditions: -> { where.not(delete_flag: 'true') }}
+  validates :username, :presence=> true, :length => {:maximum => 255}, :format => {:with=> NO_SPACE_REGEX}, :uniqueness=>{:case_sensitive=>false}, :if => :username_uniqness?
   validates :email, :presence=> true, :length => {:maximum => 255}, :if => :not_student?
   validates :email, :format=>{:with=> VALID_EMAIL_REGEX }, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
   validates :first_name, :presence=> true, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
@@ -76,6 +76,19 @@ class User < ActiveRecord::Base
     else
       return false
     end unless self.role.blank?
+  end
+  
+  def username_uniqness?
+    query = "username = '#{username}'"
+    query << " and school_id = '#{school_id}'" unless school_id.blank?
+    query << " and id != #{id}" unless id.blank?
+    query << " and role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
+    user = User.where(query)
+    unless user.blank?
+      return true
+    else
+      return false
+    end
   end
   
   def is_web_admin?
@@ -116,12 +129,13 @@ class User < ActiveRecord::Base
   
   def user_details_change_email
     if !self.email.blank? && !current_user.blank?
-      unless self.school_id.blank?
+      unless self.school_id.blank? 
         link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s 
       else
         link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s
       end
-      arr_changed_attributes = []
+    
+	  arr_changed_attributes = []
 	  if !self.first_name_was.eql?(self.first_name) && !self.first_name.blank?
 	    arr_changed_attributes << 'First Name'
 	  end
@@ -137,7 +151,7 @@ class User < ActiveRecord::Base
 	  if !self.password_digest_was.eql?(self.password_digest) && !self.password_digest.blank?
 	    arr_changed_attributes << 'Password'
 	  end
-	  if !self.email_was.eql?(self.email) && !self.email.blank? 
+      if !self.email_was.eql?(self.email) && !self.email.blank? 
 	    arr_changed_attributes << 'Email'
 	    user_info = {:email => email_was, :name => self.first_name+" "+self.last_name.to_s, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :new_email=> self.email, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
 	    UserMailer.user_email_changed(user_info).deliver

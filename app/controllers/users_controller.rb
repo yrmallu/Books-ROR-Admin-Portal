@@ -394,7 +394,10 @@ class UsersController < ApplicationController
   end
    
   def reset_password
-    @email_id = Base64.decode64(params[:email])
+    @email_id = Base64.decode64(params[:email].to_s)
+    @username = Base64.decode64(params[:username].to_s)
+    puts "ssss",@username
+    @school_id = Base64.decode64(params[:school_id].to_s)
     render :layout=>"login"
   end
 
@@ -404,7 +407,7 @@ class UsersController < ApplicationController
   
   def set_new_password
     if params[:password] != ""
-    @user = User.find_by_email(params[:email_id].downcase)
+    @user = User.find_by_email(params[:email_id].downcase) || User.find_by_username(params[:username])
     @user.password = params[:password]
     @user.password_confirmation = params[:password]
     if @user.save
