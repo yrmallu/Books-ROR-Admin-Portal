@@ -177,14 +177,22 @@ class ApplicationController < ActionController::Base
           }
         }
 		
-      when "accessrights#new"
+      when "accessrights#edit"
         @breadcrumb = {
-          :title=>"Assign Accessrights",
+          :title=>"Edit Accessrights",
 		  :icon=>"glyphicon glyphicon-ban-circle",
           :breadcrumb=>{
-            "Assign Accessright"=> ""
+            "Edit Accessrights"=> ""
           }
         }
+        when "accessrights#new"
+          @breadcrumb = {
+            :title=>"Assign Accessrights",
+  		  :icon=>"glyphicon glyphicon-ban-circle",
+            :breadcrumb=>{
+              "Assign Accessrights"=> ""
+            }
+          }
       when "accessrights#index"
         @breadcrumb = {
           :title=>"Accessrights List",

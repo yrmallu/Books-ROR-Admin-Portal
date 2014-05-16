@@ -412,7 +412,7 @@ class UsersController < ApplicationController
     @user.password_confirmation = params[:password]
     if @user.save
       flash[:success] = "Signin with new password."
-    redirect_to signin_path
+      redirect_to signin_path
     end
    else
      flash[:error] = "Please enter new password."
