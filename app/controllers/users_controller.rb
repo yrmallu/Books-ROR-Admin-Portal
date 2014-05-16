@@ -12,7 +12,6 @@ class UsersController < ApplicationController
   before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent, :index]
   before_action :assign_root_path
   before_action :get_current_user
-  before_action :get_current_user_session
 
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -253,11 +252,13 @@ class UsersController < ApplicationController
           end
         end
       end 
-	  array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
-      unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-      	@user.user_classrooms.destroy_all
-        array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-      end
+	  unless params[:selected_ids].eql?(nil)
+	    array_classroom_ids = params[:selected_ids].split(' ').map { |s| s.to_i } unless params[:selected_ids].blank?
+        unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
+	  	  @user.user_classrooms.destroy_all
+          array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+        end
+	  end
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
     else
@@ -573,10 +574,6 @@ class UsersController < ApplicationController
     User.current_user = current_user
   end  
  
-  def get_current_user_session
-    User.user_session = session[:user_id] 
-  end
-  
   def user_params
     params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :photos, :parents_attributes=>[:id,:name,:email,:_destroy])
   end

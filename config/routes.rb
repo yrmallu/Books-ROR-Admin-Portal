@@ -23,7 +23,6 @@ BooksThatGrow::Application.routes.draw do
         get 'table_of_content'
       end
     end
-
   end
 
   resources :licenses

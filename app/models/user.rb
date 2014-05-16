@@ -7,7 +7,6 @@ class User < ActiveRecord::Base
   store_accessor :userinfo, :phone_number, :user_level, :grade, :reading_ability, :reading_based_on
   cattr_accessor :app_route
   cattr_accessor :current_user
-  cattr_accessor :user_session
   ###########################################################################################
   ## Callbacks
   ###########################################################################################      
@@ -116,14 +115,13 @@ class User < ActiveRecord::Base
   end
   
   def user_details_change_email
-    unless self.email.blank?
+    if !self.email.blank? && !current_user.blank?
       unless self.school_id.blank?
         link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s 
       else
         link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s
       end
       arr_changed_attributes = []
-	  own_password_changed = false
 	  if !self.first_name_was.eql?(self.first_name) && !self.first_name.blank?
 	    arr_changed_attributes << 'First Name'
 	  end
@@ -137,7 +135,6 @@ class User < ActiveRecord::Base
 	    arr_changed_attributes << 'Phone Number OR Grade OR Reading level'
 	  end
 	  if !self.password_digest_was.eql?(self.password_digest) && !self.password_digest.blank?
-	    own_password_changed = true if current_user.id = self.id
 	    arr_changed_attributes << 'Password'
 	  end
 	  if !self.email_was.eql?(self.email) && !self.email.blank? 
@@ -148,9 +145,6 @@ class User < ActiveRecord::Base
 	  unless arr_changed_attributes.empty?
         user_info = {:email => self.email, :name => self.first_name+" "+self.last_name.to_s, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
 	    UserMailer.user_details_changed(user_info).deliver
-	    if own_password_changed.eql?(true)
-	      user_session = nil  
-	    end
       end
     end
   end
