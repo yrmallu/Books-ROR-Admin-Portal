@@ -6,9 +6,9 @@ class Api::ResetpasswordsController < ApplicationController
       student_info = JSON.parse(params[:p])
       query = ""
       query << "username = '#{student_info["username"]}'"
-      query << " and school_id = '#{student_info["school_id"]}'" unless params[:school_id].blank?
-      query << " and role_id = '#{student_info["role_id"]}'" unless params[:role_id].blank?
-      @user = User.includes(:classrooms).where(query).last
+      query << " and school_id = '#{student_info["school_id"]}'" unless student_info["school_id"].blank?
+      query << " and role_id = '#{student_info["role_id"]}'" unless student_info["role_id"].blank?
+      @user = User.includes(:classrooms, :parents).where(query).last
       json_data = {"return_code" => 1, "return_msg" => "linked email addresses for student"}
       response_data = []
       teachers = {}
@@ -23,12 +23,13 @@ class Api::ResetpasswordsController < ApplicationController
           end
         end
         @user.parents.each do |parent|
-          parent.store("id",parent.id)
-          parent.store("name",parent.name)
-          parent.store("email",parent.email)
-          parent.store("role","parent")
+          parents.store("id",parent.id)
+          parents.store("name",parent.name)
+          parents.store("email",parent.email)
+          parents.store("role","parent")
         end
       end
+      puts "parentssss",parents, @user.blank?
       response_data << parents << teachers
       json_data.store("response_data",response_data)
       render :json => json_data
