@@ -7,7 +7,6 @@
     end  
 
    %>
- 
   <% if !breadcrumbError then %>
   <div class="pageheader">
    <h2><i class="<%= @breadcrumb[:icon]%>"></i> <%= @breadcrumb[:title] %></h2>
@@ -23,5 +22,9 @@
         <% end %>
      </ol>
    </div>
+  </div>
+  <% else %>
+  <div class="pageheader">
+   <h2><i class="glyphicon glyphicon-remove"></i>Form contains error</h2>
   </div>
   <% end %> 

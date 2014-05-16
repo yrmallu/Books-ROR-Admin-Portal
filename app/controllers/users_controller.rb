@@ -12,7 +12,6 @@ class UsersController < ApplicationController
   before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent, :index]
   before_action :assign_root_path
   before_action :get_current_user
-  before_action :get_current_user_session
 
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -173,7 +172,6 @@ class UsersController < ApplicationController
       @assigned_classrooms = []
       @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank? 
 	  render :action=> 'new'
-	  #set_bread_crumb(@role_id.id)
     end
   end
    
@@ -197,37 +195,37 @@ class UsersController < ApplicationController
   def edit
     unless current_user.is_web_admin?
       current_user_update_accessrights
-    unless @access_right_name.kind_of?(Array)
+      unless @access_right_name.kind_of?(Array)
         if @current_user_accessrights.include?(@access_right_name)
-        user_edit
+          user_edit
+        else
+          raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        end
       else
-        raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        user_edit
       end
     else
       user_edit
     end
-  else
-    user_edit
-  end
   end 
    
   def update
     unless current_user.is_web_admin?
       current_user_update_accessrights
-    unless @access_right_name.kind_of?(Array)
+      unless @access_right_name.kind_of?(Array)
         if @current_user_accessrights.include?(@access_right_name)
           user_update  
+        else
+          raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        end
       else
-        raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
-      end
-    else
-      get_school_after_render
-      user_update
+        get_school_after_render
+        user_update
       end
     else
     get_school_after_render
       user_update
-  end   
+    end   
   end
   
   def user_edit
@@ -254,13 +252,13 @@ class UsersController < ApplicationController
           end
         end
       end 
-      array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
-      unless array_classroom_ids.blank?
+	  unless params[:selected_ids].eql?(nil)
+	    array_classroom_ids = params[:selected_ids].split(' ').map { |s| s.to_i } unless params[:selected_ids].blank?
         unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-          @user.user_classrooms.destroy_all
+	  	  @user.user_classrooms.destroy_all
           array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
         end
-      end  
+	  end
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
     else
@@ -342,8 +340,8 @@ class UsersController < ApplicationController
   
   def delete_user
     deleted_user = ''
-  User.where(id: params[:user_ids]).each do |user|
-    deleted_user = user
+    User.where(id: params[:user_ids]).each do |user|
+      deleted_user = user
       user.update_attributes(delete_flag: true)
     end
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
@@ -366,6 +364,16 @@ class UsersController < ApplicationController
     @user.update_attributes(:license_id=>"", :license_expiry_date=>"")
   end
   
+  def remove_bulk_licenses
+    params[:bulk_remove_user_ids].each do |user_id|
+	  @user = User.find(user_id)
+	  unless @user.license_id.blank?
+	    remove_license_from_user
+	  end
+	end
+	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
+  end
+  
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
@@ -386,7 +394,10 @@ class UsersController < ApplicationController
   end
    
   def reset_password
-    @email_id = Base64.decode64(params[:email])
+    @email_id = Base64.decode64(params[:email].to_s)
+    @username = Base64.decode64(params[:username].to_s)
+    puts "ssss",@username
+    @school_id = Base64.decode64(params[:school_id].to_s)
     render :layout=>"login"
   end
 
@@ -396,7 +407,7 @@ class UsersController < ApplicationController
   
   def set_new_password
     if params[:password] != ""
-    @user = User.find_by_email(params[:email_id].downcase)
+    @user = User.find_by_email(params[:email_id].downcase) || User.find_by_username(params[:username])
     @user.password = params[:password]
     @user.password_confirmation = params[:password]
     if @user.save
@@ -415,14 +426,14 @@ class UsersController < ApplicationController
  
   def email_for_password
     @user = User.find_by_email(params[:email].downcase)
-  if @user.blank?
-      flash[:error] = "Email does not exist."
-    redirect_to forgot_password_path
-  else
-    user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
-    UserMailer.forgot_password_email(user_info).deliver
-    flash[:success] = "Email sent with password reset instructions."
-    redirect_to signin_path
+    if @user.blank?
+      flash[:error] = "That email address is not associated with a Books That Grow account. Please try a different email address or contact your administrator for help"
+      redirect_to forgot_password_path
+    else
+      user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
+      UserMailer.forgot_password_email(user_info).deliver
+      flash[:success] = "Instructions will be sent to the email address you enter."
+      redirect_to signin_path
     end
   end
   
@@ -484,11 +495,15 @@ class UsersController < ApplicationController
 
   def import_list
     @list_type = params[:list_type]
+    @school_id = params[:school_id]
+    @role_id = params[:role_id]
 	set_bread_crumb(@list_type, params[:role_id], params[:school_id])
   end
 
   def import
     #flash[:notice].clear
+    @school_id = params[:school_id]
+	  set_bread_crumb
     begin
       data_file = ""
       @role_id =  Role.find_by_name(params[:list_type].downcase.tr('_', ' ').titleize).id
@@ -508,7 +523,7 @@ class UsersController < ApplicationController
   end
 
   def save_user_list
-    @users =  get_file_data(session[:file], User, save = true, params[:role_id])
+    @users =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
     #FileUtils.rm session[:file]
     session[:file] = ""
     flash[:success] = "School's list saved successfully." 
@@ -545,6 +560,10 @@ class UsersController < ApplicationController
 	end
   end
   
+  def get_classroom_details
+    binding.pry
+  end
+  
   private
   def set_user
     @user = User.where("id = '#{params[:id]}' ").last
@@ -558,10 +577,6 @@ class UsersController < ApplicationController
     User.current_user = current_user
   end  
  
-  def get_current_user_session
-    User.user_session = session[:user_id] 
-  end
-  
   def user_params
     params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :photos, :parents_attributes=>[:id,:name,:email,:_destroy])
   end

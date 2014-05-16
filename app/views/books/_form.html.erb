@@ -6,16 +6,9 @@
 	        </div>
 	        <div class="panel-body">
 				<%= form_for @book, :html=>{:class=>"form_validation"}, :html => { :multipart => true } do |f| %>
-				    <% if @book.errors.any? %>
-				    <div id="error_explanation">
-				        <h4><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h4>
-				        <ul>
-				            <% @book.errors.full_messages.each do |msg| %>
-				                <li><%= msg %></li>
-				            <% end %>
-				        </ul>
-				    </div>
-				  	<% end %>
+					<div id="errorbox">	
+					    <%= render "shared/error_messages", :object=>@book %>
+					</div>
 	            <div class="row">
 	                <div class="col-sm-4">
 	                    <div class="form-group">
@@ -42,19 +35,18 @@
 	            <div class="form-row form-group">
 					<div class="row">
 				    	<div class="col-md-4">
-							<label class="form-label">Small Book Cover</label>	
+							<label class="form-label">Small Book Cover</label><span class="asterisk">*</span> 	<br />	
 							<% if f.object.book_cover_file_name && !f.object.book_cover_file_name.blank? %>
 								<%= image_tag f.object.book_cover.url(:small) %>
 							<% end %>
-							<%= f.file_field :book_cover %>
+							<%= f.file_field :book_cover, :class=>"image-file-name"%>
 				    	</div> 
 				    	<div class="col-md-4" >
 							<label class="form-label">EPub Book</label><span class="asterisk">*</span> 	<br />
 							<%if f.object.epub_file_name && !f.object.epub_file_name.blank? %>
 								<%= f.object.epub_file_name %>
 							<% end %>
-							<br />
-							<%= f.file_field :epub %>
+							<%= f.file_field :epub, :class=>"image-file-name" %>
 				    	</div>  
 					</div>
 				</div>

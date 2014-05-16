@@ -80,11 +80,12 @@
 	        <div class="panel-footer" data-no-turbolink>
 				<% if action_name.eql?('new') || action_name.eql?('create') %>
 	                <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
+					<%= link_to 'Return to School List', schools_path, class: "btn btn-white btn-xs"%>
 				<%else%>
 				    <%= f.submit "Update", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Updating...' } %>
+					<%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
 				<%end%>	
-				<%= link_to 'Return to School List', schools_path, class: "btn btn-white btn-xs"%>
-	        </div>
+			</div>
 			<% end %>
 	    </div>
     </div>       

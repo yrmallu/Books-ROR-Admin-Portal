@@ -13,6 +13,8 @@
 			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
 			<%end%>
 			<%=link_to 'List All Records', classrooms_path, :class=>"btn btn-success btn-xs" if @search_flag %>
+			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
+			<%=link_to 'Import Classroom List', import_list_classrooms_path(:school_id => @school.id), :class=>"btn btn-success btn-xs"%>
 			<%#= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
        		<%#= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<%= submit_tag 'Archive', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
@@ -68,6 +70,26 @@
     </div>
 </div>		  
 
+<div class="modal fade" id="download_list_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:800px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Download Sample List</h4>
+      </div>
+      <div class="modal-body sample_list_links_div">
+		  <div id="school_admin">
+		  		<%=link_to 'Download xls format sample', download_classroom_list_classrooms_path(:format => :xls), :class=>"btn btn-success btn-xs"%>
+		  		<%#=link_to 'Download csv format sample', download_classroom_list_classrooms_path(:format => :csv), :class=>"btn btn-success btn-xs"%>
+		  </div>
+	  </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Assign</button>
+      </div> -->
+    </div>
+  </div>
+</div>		
 
 <script type="text/javascript">
 showHideMenu('li_school');
@@ -110,7 +132,11 @@ $(".dynamic").keydown(function(e) {
 		  });
   		  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
           $(this).addClass("invisible");
-		
     }
+});
+$(".dynamic").blur(function(e) {
+  var text = $(this).val();
+  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
+  $(this).addClass("invisible");
 });
 </script>

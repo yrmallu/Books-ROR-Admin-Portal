@@ -32,6 +32,7 @@
 			<%=link_to 'Download Sample', "", :class=>"btn btn-success btn-xs download_sample", :'data-list_type' => "student", :"data-toggle" => "modal", :"data-target" => "#download_list_modal"  %>
 			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student",:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%end%>
+		<%=link_to 'Remove License', "", :class=>"btn btn-success btn-xs bulk-remove-license", :disabled => true %>
 		<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
 	</div>
 	<div class="table-responsive">
@@ -59,7 +60,7 @@
 				 <% @users.each do |user| %>
 				     <% unless user.id == current_user.id%>
                          <tr class="odd gradeX" data-no-turbolink>
-                 	         <td class=""><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
+                 	         <td class="bulk-remove-license-checkbox"><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
 							 <%unless @role_id.name.eql?('Web Admin')%>
                                  <td>
 									 <div class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%></div>
@@ -94,7 +95,7 @@
   					         <%if @role_id.name.eql?('Student')%>
 					             <td>
 									 <div class="" data-col="grade" data-id='<%= user.id%>'><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></div>
-									 <%= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_name", "id"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dynamic class-grade"} %>
+									 <%#= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_name", "id"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dynamic class-grade"} %>
 								 </td>
 					             <td>
 									 <div class="quick-edit" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></div>
@@ -184,17 +185,17 @@
       <div class="modal-body sample_list_links_div">
 		  <div id="school_admin" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>  
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="teacher" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%>  
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="student" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 	  </div>
       <!-- <div class="modal-footer">
@@ -236,7 +237,7 @@
 	<%end%>
 	
 $( ".assign_license" ).click(function() {
-          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), no_mail:"true", role_id:<%=@role_id.id%>},
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), role_id:<%=@role_id.id%>},
 function(data) {
 	         
              if(data)
@@ -258,7 +259,6 @@ function(data) {
       });
 });
 
-
 $(".download_sample").click(function(){
 	list_type = $(this).attr('data-list_type');
 	$(".sample_list_links_div").children('div').filter("#"+list_type).show();
@@ -267,7 +267,17 @@ $(".download_sample").click(function(){
 });
 
 $(document).ready(function(){
-//$('.class-grade').removeClass('show').addClass('hide');	
+	var arr_clicked_id = [];
+	$('.user-check-box').click(function(){
+		arr_clicked_id.push($(this).val());
+	});
+
+	$( ".bulk-remove-license" ).click(function() {
+	          jQuery.get("<%=url_for(:controller=>'users',:action=>'remove_bulk_licenses')%>",{ bulk_remove_user_ids : arr_clicked_id},
+	function(data) {
+	      });
+	});	
+
 $('.error-message').removeClass('show').addClass('hide');	
 $(".mask-phone").mask("(999) 999-9999");
 	
@@ -329,8 +339,12 @@ $(".dynamic").keydown(function(e) {
 	             this_val.addClass("invisible");	
 			 } 
 		  });
-	
-    }
+	 }
+});
+$(".dynamic").blur(function(e) {
+  var text = $(this).val();
+  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
+  $(this).addClass("invisible");
 });
 </script>
 

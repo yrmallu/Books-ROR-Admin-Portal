@@ -1,6 +1,6 @@
 class School < ActiveRecord::Base
 
-  # include CommonQueries 
+  #include CommonQueries 
 	
 	paginates_per 10
 	max_paginates_per 10
@@ -54,7 +54,7 @@ class School < ActiveRecord::Base
   end
 
   def strip_whitespace
-  	self.name = self.name.strip
+  	self.name = self.name.strip unless self.name.blank?
   end
 
   def self.search(query_string)

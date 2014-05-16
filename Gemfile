@@ -34,6 +34,7 @@ gem 'carmen-rails', '1.0.1'
 
 # provide uploading functionality 
 gem 'paperclip', '4.1.1'
+gem "puma",         "~> 2.7.1"
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '3.1.5'
