@@ -12,7 +12,6 @@ class UsersController < ApplicationController
   before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent, :index]
   before_action :assign_root_path
   before_action :get_current_user
-  before_action :get_current_user_session
 
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -196,37 +195,37 @@ class UsersController < ApplicationController
   def edit
     unless current_user.is_web_admin?
       current_user_update_accessrights
-    unless @access_right_name.kind_of?(Array)
+      unless @access_right_name.kind_of?(Array)
         if @current_user_accessrights.include?(@access_right_name)
-        user_edit
+          user_edit
+        else
+          raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        end
       else
-        raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        user_edit
       end
     else
       user_edit
     end
-  else
-    user_edit
-  end
   end 
    
   def update
     unless current_user.is_web_admin?
       current_user_update_accessrights
-    unless @access_right_name.kind_of?(Array)
+      unless @access_right_name.kind_of?(Array)
         if @current_user_accessrights.include?(@access_right_name)
           user_update  
+        else
+          raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
+        end
       else
-        raise CanCan::Unauthorized.new("You are not authorized to access this page.", :update, User)
-      end
-    else
-      get_school_after_render
-      user_update
+        get_school_after_render
+        user_update
       end
     else
     get_school_after_render
       user_update
-  end   
+    end   
   end
   
   def user_edit
@@ -253,11 +252,13 @@ class UsersController < ApplicationController
           end
         end
       end 
-	  array_classroom_ids = params[:selected_ids].split(' ') unless params[:selected_ids].blank?
-      unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
-      	@user.user_classrooms.destroy_all
-        array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
-      end
+	  unless params[:selected_ids].eql?(nil)
+	    array_classroom_ids = params[:selected_ids].split(' ').map { |s| s.to_i } unless params[:selected_ids].blank?
+        unless array_classroom_ids.blank? && @user.classrooms.pluck(:id) == array_classroom_ids
+	  	  @user.user_classrooms.destroy_all
+          array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
+        end
+	  end
       add_user_level_setting if @user.role.name.eql?('Student')
       redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
     else
@@ -559,6 +560,10 @@ class UsersController < ApplicationController
 	end
   end
   
+  def get_classroom_details
+    binding.pry
+  end
+  
   private
   def set_user
     @user = User.where("id = '#{params[:id]}' ").last
@@ -572,10 +577,6 @@ class UsersController < ApplicationController
     User.current_user = current_user
   end  
  
-  def get_current_user_session
-    User.user_session = session[:user_id] 
-  end
-  
   def user_params
     params.require(:user).permit(:first_name, :last_name, :username, :email, :password, :password_confirmation, :role_id, :phone_number, :school_id, :license_expiry_date, :license_id, :grade, :reading_ability, :assign_reading_based_on, :photos, :parents_attributes=>[:id,:name,:email,:_destroy])
   end

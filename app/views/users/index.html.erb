@@ -185,17 +185,17 @@
       <div class="modal-body sample_list_links_div">
 		  <div id="school_admin" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>  
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="teacher" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%>  
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="student" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 	  </div>
       <!-- <div class="modal-footer">
@@ -339,8 +339,12 @@ $(".dynamic").keydown(function(e) {
 	             this_val.addClass("invisible");	
 			 } 
 		  });
-	
-    }
+	 }
+});
+$(".dynamic").blur(function(e) {
+  var text = $(this).val();
+  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
+  $(this).addClass("invisible");
 });
 </script>
 
