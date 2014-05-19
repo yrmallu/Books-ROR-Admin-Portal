@@ -166,32 +166,34 @@ $(".quick-edit").click(function(e) {
 $(".dynamic").keydown(function(e) {
     if (e.which === 13 && !e.shiftKey) {
         e.preventDefault();
-        var text = $(this).val();
-		var this_val = $(this);
-		var edited_column_name = $(this).prev(".quick-edit").data('col');
-		var edited_school_id = $(this).prev(".quick-edit").data('id')
-		$(this).parent().children(".quick-edit").html(text).removeClass("invisible");
-        $(this).addClass("invisible");
-		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_school')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_school_id},
-		  function(data) { 
- 			 if (data.status == false)
- 			 {
- 				 $('.error-message').removeClass('hide').addClass('show');	
- 				 $('div.error-message').text(data.message);
- 				 return;
- 			 }
- 			 else
- 			 {
- 				 $('.error-message').removeClass('show').addClass('hide');	
- 				 this_val.parent().children(".quick-edit").html(text).removeClass("invisible");
- 	             this_val.addClass("invisible");	
- 			 } 
-		   });
+        update_on_quick_edit($(this));
     }
 });
 $(".dynamic").blur(function(e) {
-  var text = $(this).val();
-  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
-  $(this).addClass("invisible");
+	update_on_quick_edit($(this));
 });
+
+function update_on_quick_edit(this_val)
+{
+    var text = this_val.val();
+	var edited_column_name = this_val.prev(".quick-edit").data('col');
+	var edited_school_id = this_val.prev(".quick-edit").data('id')
+	this_val.parent().children(".quick-edit").html(text).removeClass("invisible");
+    this_val.addClass("invisible");
+	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_school')%>",{ column_name : edited_column_name, edited_value : this_val.val(), id : edited_school_id},
+	  function(data) { 
+		 if (data.status == false)
+		 {
+			 $('.error-message').removeClass('hide').addClass('show');	
+			 $('div.error-message').text(data.message);
+			 return;
+		 }
+		 else
+		 {
+			 $('.error-message').removeClass('show').addClass('hide');	
+			 this_val.parent().children(".quick-edit").html(text).removeClass("invisible");
+             this_val.addClass("invisible");	
+		 } 
+	   });
+}
 </script>

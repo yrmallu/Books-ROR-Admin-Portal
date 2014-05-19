@@ -114,29 +114,35 @@ $(".quick-edit").click(function(e) {
 $(".dynamic").keydown(function(e) {
     if (e.which === 13 && !e.shiftKey) {
         e.preventDefault();
-        var text = $(this).val();
-		var this_val = $(this);
-		var edited_column_name = $(this).prev(".quick-edit").data('col');
-		var edited_classroom_id = $(this).prev(".quick-edit").data('id')
-		
-		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_classroom')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_classroom_id},
-		  function(data, this_val) {  
-			 if (data.status == false)
-			 {
-				 alert(data.message);
-			 }
-			 else
-			 {
-
-			 } 
-		  });
+		  var text = $(this).val();
+          update_on_quick_edit($(this));
   		  $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
           $(this).addClass("invisible");
     }
 });
 $(".dynamic").blur(function(e) {
-  var text = $(this).val();
+  var text = $(this).val();	
+  update_on_quick_edit($(this));
   $(this).parent().children(".quick-edit").html(text).removeClass("invisible");
   $(this).addClass("invisible");
 });
+
+function update_on_quick_edit(this_val)
+{
+    var text = this_val.val();
+	var edited_column_name = this_val.prev(".quick-edit").data('col');
+	var edited_classroom_id = this_val.prev(".quick-edit").data('id')
+	
+	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_classroom')%>",{ column_name : edited_column_name, edited_value : this_val.val(), id : edited_classroom_id},
+	  function(data) {  
+		 if (data.status == false)
+		 {
+			 alert(data.message);
+		 }
+		 else
+		 {
+
+		 } 
+	  });
+}
 </script>

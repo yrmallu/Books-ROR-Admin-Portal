@@ -413,7 +413,7 @@ class UsersController < ApplicationController
     if @user.save
       flash[:success] = "Signin with new password."
       redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?
-    redirect_to signin_path
+      redirect_to signin_path
     end
    else
      flash[:error] = "Please enter new password."
