@@ -10,26 +10,30 @@ class Api::ResetpasswordsController < ApplicationController
       query << " and role_id = '#{student_info["role_id"]}'" unless student_info["role_id"].blank?
       @user = User.includes(:classrooms, :parents).where(query).last
       response_data = []
-      teachers = {}
-      parents = {}
+      s_teachers = []
+      s_parents = []
       unless @user.blank?
         json_data = {"return_code" => 1, "return_msg" => "linked email addresses for student"}
         @user.classrooms.each do |room|
           room.users.teachers.each do |teacher|
+            teachers = {}
             teachers.store("id",teacher.id)
-            teachers.store("name",teacher.first_name)
+            teachers.store("name",teacher.first_name+" "+teacher.last_name.to_s)
             teachers.store("email",teacher.email)
             teachers.store("role","teacher")
+            s_teachers << teachers
           end
         end
         @user.parents.each do |parent|
+          parents = {}
           parents.store("id",parent.id)
           parents.store("name",parent.name)
           parents.store("email",parent.email)
           parents.store("role","parent")
+          s_parents << parents
         end
-        response_data << parents unless parents.blank?
-        response_data << teachers unless teachers.blank?
+        response_data += s_parents unless s_parents.blank?
+        response_data += s_teachers unless s_teachers.blank?
         json_data.store("response_data",response_data)
       else
         json_data = {"return_code" => 0, "return_msg" => "not found"}
