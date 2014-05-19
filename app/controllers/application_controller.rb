@@ -106,12 +106,13 @@ class ApplicationController < ActionController::Base
     data_list = []
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
+      next if row.blank?
       row.merge!(:role_id => role) if role && !role.blank?
       row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)
       puts "new recode", row.to_hash
       if save_list
-        db_exist = User.eql?(obj) ? obj.find_by_username(data_obj.username) : obj.find_by_code(data_obj.code.to_i.to_s)
+        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'") : obj.find_by_code(data_obj.code.to_i.to_s)
         p "old recod", !db_exist.blank?
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
@@ -176,14 +177,22 @@ class ApplicationController < ActionController::Base
           }
         }
 		
-      when "accessrights#new"
+      when "accessrights#edit"
         @breadcrumb = {
-          :title=>"Assign Accessrights",
+          :title=>"Edit Accessrights",
 		  :icon=>"glyphicon glyphicon-ban-circle",
           :breadcrumb=>{
-            "Assign Accessright"=> ""
+            "Edit Accessrights"=> ""
           }
         }
+        when "accessrights#new"
+          @breadcrumb = {
+            :title=>"Assign Accessrights",
+  		  :icon=>"glyphicon glyphicon-ban-circle",
+            :breadcrumb=>{
+              "Assign Accessrights"=> ""
+            }
+          }
       when "accessrights#index"
         @breadcrumb = {
           :title=>"Accessrights List",

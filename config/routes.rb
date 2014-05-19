@@ -23,7 +23,12 @@ BooksThatGrow::Application.routes.draw do
         get 'table_of_content'
       end
     end
-
+    resources :resetpasswords do 
+      collection do
+        match 'get_student_email', via: [:get, :post]
+        match 'send_reset_password_email', via: [:get, :post]
+      end
+    end
   end
 
   resources :licenses
@@ -59,6 +64,7 @@ BooksThatGrow::Application.routes.draw do
 	  get 'delete_parent'
 	  get 'quick_edit_user'
 	  get 'remove_bulk_licenses'
+	  get 'get_classroom_details'
      end
   end
 

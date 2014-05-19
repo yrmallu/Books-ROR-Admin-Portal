@@ -76,14 +76,14 @@
 	                      <div class="col-sm-9">
 	                          <div class="form-group">
 	                              <%= label_tag "teachers", "Teachers", :class=>"control-label form-lable-multiselect" %>
-								  <div style="float:left;" id="assigned_div">
+								  <div style="listbox-alig;" id="assigned_div">
 									  <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
 	                              </div>
 	                              <div class="assign_arrows">
-	                                  <a href="#Remove" class="remove"> Remove >> </a><br />
-	                                  <a href="#Add" class="add"> << Add </a>
+	                                  <a href="#Remove" class="remove btn"> > </a><br />
+	                                  <a href="#Add" class="add btn"> < </a>
 	                              </div>
-	                              <div style="float:left;" id="all_div">
+	                              <div style="listbox-alig;" id="all_div">
 									  <%= select_tag "all_present_id", options_from_collection_for_select(@school_specific_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
 	                              </div>
 	                          </div>
@@ -98,8 +98,8 @@
   	                                  <%= select_tag "student_assigned_id", options_from_collection_for_select(@assigned_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
   	                              </div>
   	                              <div class="assign_arrows">
-  	                                  <a href="#Remove" class="remove_stud"> Remove >> </a><br />
-  	                                  <a href="#Add" class="add_stud"> << Add </a>
+  	                                  <a href="#Remove" class="remove_stud btn"> > </a><br />
+  	                                  <a href="#Add" class="add_stud btn"> < </a>
   	                              </div>
   	                              <div style="float:left;" id="all_student_div">
   	                                  <%= select_tag "all_student_id", options_from_collection_for_select(@school_specific_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>

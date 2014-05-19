@@ -185,17 +185,17 @@
       <div class="modal-body sample_list_links_div">
 		  <div id="school_admin" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>  
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="teacher" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%>  
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="student" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
-		  		<%=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
+		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 	  </div>
       <!-- <div class="modal-footer">
@@ -319,29 +319,35 @@ $(".quick-edit").click(function(e) {
 $(".dynamic").keydown(function(e) {
     if (e.which === 13 && !e.shiftKey) {
         e.preventDefault();
-        var text = $(this).val();
-		var this_val = $(this);
-		var edited_column_name = $(this).prev(".quick-edit").data('col');
-		var edited_user_id = $(this).prev(".quick-edit").data('id')
-		
-		jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : $(this).val(), id : edited_user_id},
-		  function(data) {  
-			 if (data.status == false)
-			 {
-				 $('.error-message').removeClass('hide').addClass('show');	
-				 $('div.error-message').text(data.message);
-				 return;
-			 }
-			 else
-			 {
-				 $('.error-message').removeClass('show').addClass('hide');	
-				 this_val.parent().children(".quick-edit").html(text).removeClass("invisible");
-	             this_val.addClass("invisible");	
-			 } 
-		  });
-	
-    }
+        update_on_quick_edit($(this));
+	 }
 });
+$(".dynamic").blur(function(e) {
+   update_on_quick_edit($(this));
+});
+
+function update_on_quick_edit(this_val)
+{
+    var text = this_val.val();
+	var edited_column_name = this_val.prev(".quick-edit").data('col');
+	var edited_user_id = this_val.prev(".quick-edit").data('id')
+	
+	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : this_val.val(), id : edited_user_id},
+	  function(data) {  
+		 if (data.status == false)
+		 {
+			 $('.error-message').removeClass('hide').addClass('show');	
+			 $('div.error-message').text(data.message);
+			 return;
+		 }
+		 else
+		 {
+			 $('.error-message').removeClass('show').addClass('hide');	
+			 this_val.parent().children(".quick-edit").html(text).removeClass("invisible");
+             this_val.addClass("invisible");	
+		 } 
+	  });
+}
 </script>
 
 
