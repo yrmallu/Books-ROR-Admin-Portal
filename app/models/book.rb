@@ -1,7 +1,7 @@
 require 'zip/zip'
 class Book < ActiveRecord::Base
 
-  self.primary_key = "id"
+  #self.primary_key = "id"
 
   # extends ...................................................................
 
