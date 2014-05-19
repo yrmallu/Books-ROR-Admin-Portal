@@ -5,7 +5,7 @@ class Api::ResetpasswordsController < ApplicationController
   def get_student_email
       student_info = JSON.parse(params[:p])
       query = ""
-      query << "username = '#{student_info["username"]}'"
+      query << "lower(username) = lower('#{student_info["username"]}')"
       query << " and school_id = '#{student_info["school_id"]}'" unless student_info["school_id"].blank?
       query << " and role_id = '#{student_info["role_id"]}'" unless student_info["role_id"].blank?
       @user = User.includes(:classrooms, :parents).where(query).last
