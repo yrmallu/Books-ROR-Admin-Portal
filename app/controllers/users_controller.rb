@@ -394,10 +394,10 @@ class UsersController < ApplicationController
   end
    
   def reset_password
-    @email_id = Base64.decode64(params[:email].to_s)
-    @username = Base64.decode64(params[:username].to_s)
-    @school_id = Base64.decode64(params[:school_id].to_s)
-    @app_type = Base64.decode64(params[:a_type].to_s)
+    @a = ""
+    data_info = Base64.decode64(params[:password_key].to_s)
+    @a = JSON.parse(data_info) unless data_info.blank?
+    @email_id = Base64.decode64(params[:email].blank? ? @a[:email].to_s : params[:email].to_s)
     render :layout=>"login"
   end
 
@@ -411,12 +411,12 @@ class UsersController < ApplicationController
     @user.password = params[:password]
     @user.password_confirmation = params[:password]
     if @user.save
-      flash[:success] = "Signin with new password."
+      flash.now[:success] = "Signin with new password."
       redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?
       redirect_to signin_path
     end
    else
-     flash[:error] = "Please enter new password."
+     flash.now[:error] = "Please enter new password."
      redirect_to reset_password_path
    end
   end
