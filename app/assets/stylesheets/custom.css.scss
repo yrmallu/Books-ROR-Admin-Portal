@@ -112,4 +112,8 @@ label.error {display:block;}
 .invisible{display:none;}
 .quick-edit:hover{border: solid 2px #ccc;padding: 5px;margin: -5px;cursor:pointer;}
 .quick-edit{padding:2px;}
+.dropdown-quick-edit:hover{border: solid 2px #ccc;padding: 5px;margin: -5px;cursor:pointer;}
+.dropdown-quick-edit{padding:2px;}
 .quick-edit-error-msg{text-align: center;margin: 37px auto 0;position: absolute !important;left: 0;right: 0;z-index: 10;}
+.diasble-arrors{color:black;background:#a1a1a1 !important;cursor:default !important;}
+.enable-arrors{color:#428bca;background:#e0e0e0 ;cursor:pointer !important;}

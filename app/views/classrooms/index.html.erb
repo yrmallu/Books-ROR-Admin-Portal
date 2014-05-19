@@ -26,7 +26,7 @@
                 	<th><%= link_to :All, 'javascript:checkAll("classroom")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("classroom")', :class => "lnk-typ2" %></th>
 					<th>Classroom Code</th>
                     <th>Classroom Name</th>
-					<th>School Year</th>
+					<!-- <th>School Year</th> -->
 					<th>Number Of School Admins</th>
 					<th>Number Of Teachers</th>
 					<th>Number Of Students</th>
@@ -42,11 +42,11 @@
 						 <div class="quick-edit" data-col="name" data-id='<%= classroom.id%>'><%=classroom.name%></div>
 						 <textarea class="invisible dynamic"></textarea>
 						  <%#= link_to classroom.name, classroom_path(classroom, :school_id=>@school.id), :title=>"View Classroom Details" %></td>
-					  <td>
-						  <% unless classroom.school_year_start_date.blank? || classroom.school_year_end_date.blank? %>
-						      <%= classroom.school_year_start_date.year %> - <%= classroom.school_year_end_date.year %>
-						  <%end%>
-				      </td>
+					  <!-- <td>
+						  <%#= unless classroom.school_year_start_date.blank? || classroom.school_year_end_date.blank? %>
+						      <%#= classroom.school_year_start_date.year %> - <%#= classroom.school_year_end_date.year %>
+						  <%#=end%>
+				      </td> -->
 					  <td><%= classroom.users.school_admins.count %></td>
 					  <td><%= classroom.users.teachers.count %></td>
 					  <td><%= classroom.users.students.count %></td>

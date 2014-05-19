@@ -54,6 +54,40 @@ jQuery(document).ready(function(){
     }
 }
 
+// Disable arrows by default, enable when clicked on left or right lists
+$(document).ready(function(){
+$('.disable-add').bind('click', false);
+$('.disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.disable-remove').bind('click', false);
 
+$('.stud-disable-add').bind('click', false);
+$('.stud-disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.stud-disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.stud-disable-remove').bind('click', false);
+
+
+$('.left-listbox').on('click','.lbjs-item',function(){
+	$('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+	$('.left-listbox.disable-remove').unbind('click', false);
+});
+
+$('.right-listbox').on('click','.lbjs-item',function(){
+	$('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+	$('.right-listbox.disable-add').unbind('click', false);
+});
+
+$('.left-stud-listbox').on('click','.lbjs-item',function(){
+	$('.stud-disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+	$('.left-stud-listbox.stud-disable-remove').unbind('click', false);
+});
+
+$('.right-stud-listbox').on('click','.lbjs-item',function(){
+	$('.stud-disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+	$('.right-stud-listbox.stud-disable-remove').unbind('click', false);
+});
+
+
+});
  
 
