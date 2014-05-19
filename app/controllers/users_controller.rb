@@ -67,8 +67,8 @@ class UsersController < ApplicationController
   end
   
   def user_show
-    @grade = ReadingGrade.find(@user.grade).grade_name unless @user.grade.blank?
-    @reading = ReadingGrade.find(@user.reading_ability).grade_name unless @user.reading_ability.blank?
+    @grade = ReadingGrade.find(@user.grade).grade_short unless @user.grade.blank?
+    @reading = ReadingGrade.find(@user.reading_ability) unless @user.reading_ability.blank?
 	unless @school.blank?
 	  set_bread_crumb(@role_id.id, @school.id, @user.id)
 	else
@@ -559,10 +559,6 @@ class UsersController < ApplicationController
 	   column_name = params[:column_name].capitalize
 	  render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
 	end
-  end
-  
-  def get_classroom_details
-    binding.pry
   end
   
   private

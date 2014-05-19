@@ -51,40 +51,39 @@
 					</div>
 				</div>
 
-	            <div class="form-row form-group" style="margin-top:50px;">
+	            <!-- <div class="form-row form-group" style="margin-top:50px;">
 					<div class="row">
 				    	<div class="col-md-8">
 							<label class="form-label">Preview Book Image</label>	
 							<div>
-								<%=f.fields_for :preview_images do |fb|%>
-									<% unless fb.object.new_record? %>
+								<%#=f.fields_for :preview_images do |fb|%>
+									<%#= unless fb.object.new_record? %>
 									 	<div class="single_document_div">
-				                          <div style="height:130px;"><%= image_tag fb.object.preview_image.url(:thumb) %></div>
-				                          <%= fb.check_box :_destroy %> <%= fb.label :remove %>
+				                          <div style="height:130px;"><%#= image_tag fb.object.preview_image.url(:thumb) %></div>
+				                          <%#= fb.check_box :_destroy %> <%#= fb.label :remove %>
 				                        </div>
-				                     <% end %>
-							    <% end%>
+				                     <%#= end %>
+							    <%#= end%>
 							</div>
-							
 				    	</div>  
 					</div>
-				</div>
+				</div> -->
 
-				 <div class="form-row form-group" >
+				 <!-- <div class="form-row form-group" >
 					<div class="row">
 				    	<div class="col-md-6">
 							<label class="form-label">Add Preview Book Image</label>	
 							<div>
-						    	<%= f.fields_for :preview_images do |fb|%>
-							    	<% if fb.object.new_record? %>
-							        	<%=render 'preview_book_image_fields', f: fb%>
-							        <% end %>
-						    	<% end%>
+						    	<%#= f.fields_for :preview_images do |fb|%>
+							    	<%#= if fb.object.new_record? %>
+							        	<%#=render 'preview_book_image_fields', f: fb%>
+							        <%#= end %>
+						    	<%#= end%>
 					    	</div>
-							<%= link_to_add_fields "Add File", f, :preview_images, options: 'preview_book_image' %>
+							<%#= link_to_add_fields "Add File", f, :preview_images, options: 'preview_book_image' %>
 				    	</div>  
 					</div>
-				</div>
+				</div> -->
 
 	        </div><!-- panel-body -->
 	        <div class="panel-footer" data-no-turbolink>

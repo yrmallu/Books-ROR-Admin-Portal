@@ -2,8 +2,6 @@
   <div class="panel panel-default">
 	<div class="panel-body"> 
 		<%= text_field_tag :text_field_search %>
-		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
-
 		<button class="btn btn-primary btn-xs" id="user_search" >
 						    Search
 		</button>
@@ -71,7 +69,7 @@
 							     <td>
 									 <div class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%></div>
 									 <textarea class="invisible dynamic"></textarea>
-									 <%#= link_to user.first_name, user_path(user, :role_id => @role_id), :title=>"View User Details" %></td>
+								 </td>
 							 <%end%>
                              <td>
 								 <div class="quick-edit" data-col="last_name" data-id='<%= user.id%>'><%= user.last_name %></div>
@@ -94,11 +92,12 @@
 					         <%end%>
   					         <%if @role_id.name.eql?('Student')%>
 					             <td>
-									 <div class="" data-col="grade" data-id='<%= user.id%>'><%= ReadingGrade.find(user.grade).grade_name unless  user.grade.blank? %></div>
-									 <%#= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_name", "id"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dynamic class-grade"} %>
+									 <div class="dropdown-quick-edit" data-col="grade" data-id='<%= user.id%>'><%= ReadingGrade.find(user.grade).grade_short unless  user.grade.blank? %></div>
+									 <%= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_short", "grade_short"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
 								 </td>
 					             <td>
-									 <div class="quick-edit" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_name unless user.reading_ability.blank? %></div>
+									 <div class="dropdown-quick-edit" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_short + " (" + ReadingGrade.find(user.reading_ability).grade_name + ") " unless user.reading_ability.blank? %></div>
+									 <%= select_tag "reading_ability", options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.grade_short ] }), {:prompt=>"Select Reading Level", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
 								 </td>
   					         <%end%>
   					         <td>
@@ -127,15 +126,12 @@
 							             <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
 						             <% end %>
 								     <% if (can? :remove_license, :users) && params[:role_id].eql?('4') %>
-						                 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } unless user.license_expiry_date.blank? %>   
+						                 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: "Are you sure you want to remove this user's license? The user will no longer be able to log in to Books That Grow." } unless user.license_expiry_date.blank? %>   
 								     <% end %>
 								 <%else%>
 								     <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
-									 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: 'Are you sure?' } unless user.license_expiry_date.blank? %>  
+									 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: "Are you sure you want to remove this user's license? The user will no longer be able to log in to Books That Grow." } unless user.license_expiry_date.blank? %>  
 						         <%end%>
-							<!-- <button class="btn btn-primary btn-xs change_password" data-toggle="modal" data-target="#changePassword" data-input='<%#=user.id%>' >
-					       Change Password
-					    </button> -->
 							<%else%>
 						        <%= render 'edit_link', user: user%> 
 						        <%= render 'delete_link', user: user%>
@@ -167,10 +163,6 @@
       <div class="modal-body">
 		  <div id="school_licenses_list"></div>
 	  </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Assign</button>
-      </div> -->
     </div>
   </div>
 </div>		
@@ -185,23 +177,16 @@
       <div class="modal-body sample_list_links_div">
 		  <div id="school_admin" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%>  
-		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "school_admin"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="teacher" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%>  
-		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "teacher"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 
 		  <div id="student" style='display:none;'>
 		  		<%=link_to 'Download xls format sample', download_sample_list_users_path(:format => :xls, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
-		  		<%#=link_to 'Download csv format sample', download_sample_list_users_path(:format => :csv, :list_type => "student"), :class=>"btn btn-success btn-xs"%> 
 		  </div>
 	  </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Assign</button>
-      </div> -->
     </div>
   </div>
 </div>		
@@ -307,6 +292,30 @@ $.valHooks.textarea = {
         return elem.value.replace(/\r?\n/g, "<br/>");
     }
 };
+
+$(".dropdown-quick-edit").click(function(e) {
+    e.preventDefault();
+    var text = $(this).text();
+	$(this).parent().children(".dropdown-dynamic").removeClass("invisible");
+	$(this).addClass("invisible");
+});
+
+$('.dropdown-dynamic').change(function(e) {
+    e.preventDefault();
+	dropdown_update_on_quick_edit($(this));
+});	
+
+function dropdown_update_on_quick_edit(this_val)
+{
+    var edited_column_name = this_val.prev(".dropdown-quick-edit").data('col');
+	var edited_user_id = this_val.prev(".dropdown-quick-edit").data('id')
+	
+	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : parseInt(this_val.val()) + 1, id : edited_user_id},
+	  function(data) {  
+	  });
+	this_val.parent().children(".dropdown-quick-edit").html(this_val.find('option:selected').text()).removeClass("invisible");
+    this_val.addClass("invisible");	
+}
 
 $(".quick-edit").click(function(e) {
     e.preventDefault();
