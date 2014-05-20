@@ -407,7 +407,7 @@ class UsersController < ApplicationController
   
   def set_new_password
     if params[:password] != ""
-    @user = User.find_by_email(params[:email_id].downcase) || User.find_by_username(params[:username])
+    @user = params[:email_id].blank? ? User.where("lower(username) = lower('#{params[:username]}') and school_id = '#{params[:school_id]}'").last : User.find_by_email(params[:email_id].downcase)
     @user.password = params[:password]
     @user.password_confirmation = params[:password]
     if @user.save
