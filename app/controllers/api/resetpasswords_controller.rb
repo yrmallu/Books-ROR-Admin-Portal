@@ -14,9 +14,9 @@ class Api::ResetpasswordsController < ApplicationController
       s_parents = []
       unless @user.blank?
         json_data = {"return_code" => 1, "return_msg" => "linked email addresses for student"}
+        teachers = {}
         @user.classrooms.each do |room|
           room.users.teachers.each do |teacher|
-            teachers = {}
             teachers.store("id",teacher.id)
             teachers.store("name",teacher.first_name+" "+teacher.last_name.to_s)
             teachers.store("email",teacher.email)
@@ -31,9 +31,10 @@ class Api::ResetpasswordsController < ApplicationController
           parents.store("email",parent.email)
           parents.store("role","parent")
           s_parents << parents
+          p s_parents
         end
-        response_data += s_parents unless s_parents.blank?
-        response_data += s_teachers unless s_teachers.blank?
+        response_data += s_parents.uniq unless s_parents.blank?
+        response_data += s_teachers.uniq unless s_teachers.blank?
         json_data.store("response_data",response_data)
       else
         json_data = {"return_code" => 0, "return_msg" => "not found"}
@@ -47,9 +48,11 @@ class Api::ResetpasswordsController < ApplicationController
       @user = User.where("email = '#{user_mail["email"]}'").last || Parent.where("email = '#{user_mail["email"]}'").last
       unless @user.blank?
         unless user_mail["username"].blank?
-          user_info = {:email => @user.email, :username => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?username="+Base64.encode64(user_mail["username"])+"&school_id="+Base64.encode64(user_mail["school_id"].to_s)+"&a_type="+Base64.encode64('angular'), :url =>  "http://"+request.env['HTTP_HOST'] } 
+          pwd_param = {"username" => user_mail["username"], "school_id" => user_mail["school_id"], "a_type" => "angular"}.to_json
+          user_info = {:email => @user.email, :username => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
         else
-          user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email)+"&a_type="+Base64.encode64('angular'), :url =>  "http://"+request.env['HTTP_HOST'] } 
+          pwd_param = {"email" => @user.email, "a_type" => "angular"}.to_json
+          user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
         end
         UserMailer.forgot_password_email(user_info).deliver
         json_data = {"return_code" => 1, "return_msg" => "sent successfully", "response_data" => ""}
