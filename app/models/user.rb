@@ -154,7 +154,7 @@ class User < ActiveRecord::Base
       if !self.email_was.eql?(self.email) && !self.email.blank? 
 	    arr_changed_attributes << 'Email'
 	    user_info = {:email => email_was, :name => self.first_name+" "+self.last_name.to_s, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :new_email=> self.email, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
-	    UserMailer.user_email_changed(user_info).deliver
+	    UserMailer.user_email_changed(user_info).deliver unless self.email_was.blank?
 	  end
 	  unless arr_changed_attributes.empty?
         user_info = {:email => self.email, :name => self.first_name+" "+self.last_name.to_s, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
