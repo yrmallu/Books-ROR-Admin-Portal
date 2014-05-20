@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
 	      flash[:error] = "Invalid email/password combination"
           redirect_to signin_path
         end
-	  else
+	  elsif !@user.role.name.eql?("Student")
 	    if @user && @user.authenticate(params[:session][:password]) && (@user.license_expiry_date.to_s > "#{Time.now.to_date.to_s}")
           session[:user_id] = @user.id
           redirect_to school_path(:id=>@user.school_id)
@@ -25,6 +25,9 @@ class SessionsController < ApplicationController
 	      flash[:error] = "Invalid email/password combination OR license must have expired."
           redirect_to signin_path
         end
+	  else
+        flash[:error] = "Student login is prohibited."
+        redirect_to signin_path
 	  end
 	else
        flash[:error] = "Email does not exist."

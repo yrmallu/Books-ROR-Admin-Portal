@@ -22,7 +22,7 @@ class License < ActiveRecord::Base
   ## Validations
   ###########################################################################################
 
-  validates :no_of_licenses, :presence => { :message => "Please enter number greater than zero." }
+  validates :no_of_licenses, :presence => { :message => "Please enter number greater than zero." }, :length => {:maximum => 8}
   validates :license_batch_name, :presence => { :message => "Please enter license batch name." }, :length => {:maximum => 255}
   validates :expiry_date, :presence => { :message => "Please enter license expiration date." }
 
