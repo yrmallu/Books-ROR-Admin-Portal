@@ -92,7 +92,7 @@ class ApplicationController < ActionController::Base
   def get_file_data(file, obj, save_list = false, role = nil, school = nil)
     data_list = []
     case File.extname(file)
-      when ".csv" then data_list = parse_csv(file, obj, role, save_list)
+      when ".csv" then data_list = parse_csv(file, obj, role, save_list, school)
       when ".xls" then data_list = parse_spreadsheet(file, obj, role, save_list, school)
     end
     data_list
@@ -113,7 +113,6 @@ class ApplicationController < ActionController::Base
       puts "new recode", row.to_hash
       if save_list
         db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'") : obj.find_by_code(data_obj.code.to_i.to_s)
-        p "old recod", !db_exist.blank?
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
          elsif data_obj.valid?
@@ -130,18 +129,23 @@ class ApplicationController < ActionController::Base
     data_list
   end
 
-  def parse_csv(file, obj, role, save_list)
+  def parse_csv(file, obj, role, save_list, school)
     require 'csv'
     data_list = []
     CSV.foreach(file, headers: true, :header_converters => lambda { |h| h.to_sym.try(:downcase) }) do |row|
-      puts "comingggggg", row
       row = row.to_hash
-      puts "comingggggg hashhhhh", row
       row.merge!(:role_id => role) if role && !role.blank?
+      row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)
-      puts "before savinghhh", data_obj
       if save_list
-        data_obj.valid? ? data_obj.save : data_list << data_obj
+        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'") : obj.find_by_code(data_obj.code.to_i.to_s)
+        if !db_exist.blank?
+            db_exist.update_attributes(row.to_hash)
+         elsif data_obj.valid?
+             data_obj.save
+         else
+            data_list << data_obj
+         end
       else
         error_hash = {:is_valid => data_obj.valid?, :error_messages  => data_obj.errors.full_messages}
         data_list << [data_obj, error_hash]

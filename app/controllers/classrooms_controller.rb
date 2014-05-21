@@ -123,7 +123,7 @@ class ClassroomsController < ApplicationController
     if params[:format] == "xls"
       send_file "#{Rails.root}/public/download_classroom_list.xls", :type => "application/vnd.ms-excel", :filename => "classroom_list.xls", :stream => false
     else
-      send_file "#{Rails.root}/public/ddownload_classroom_list.xls", :type => "application/vnd.ms-excel", :filename => "classroom_list.xls", :stream => false
+      send_file "#{Rails.root}/public/download_classroom_list.csv", :type => "application/vnd.ms-excel", :filename => "classroom_list.csv", :stream => false
     end
   end
   
