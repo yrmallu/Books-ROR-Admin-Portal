@@ -319,7 +319,7 @@ function dropdown_update_on_quick_edit(this_val)
     var edited_column_name = this_val.prev(".dropdown-quick-edit").data('col');
 	var edited_user_id = this_val.prev(".dropdown-quick-edit").data('id')
 	
-	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : parseInt(this_val.val()) + 1, id : edited_user_id},
+	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : parseInt(this_val.val()) , id : edited_user_id},
 	  function(data) {  
 	  });
 	this_val.parent().children(".dropdown-quick-edit").html(this_val.find('option:selected').text()).removeClass("invisible");
