@@ -1,0 +1,45 @@
+	
+<div class="panel panel-default">
+	<div class="panel-body"> 	
+		<div class= "all-user-search">	
+			<%= text_field_tag :text_field_search,'', :placeholder=>"Search by firstname, lastname, username or email", :class=>"all-search-width" %>
+			<button class="btn btn-primary btn-xs" id="all_user_search" >
+							    Search
+			</button>
+		</div>	
+		<div class="table-responsive">
+			<table class="table" id="all_user_table">
+	            <thead>
+	                <tr>
+	                	<th>First Name</th>
+	                    <th>Last Name</th>
+						<th>Username</th>
+						<th>Email</th>
+						<th>School Name</th>
+						<th>Role</th>
+	                </tr>
+	            </thead>
+				<% unless @users.blank?%>
+	            <tbody>
+					<% @users.each do |user| %>
+		                <tr class="odd gradeX" data-no-turbolink>
+							<td class=""><%= user.first_name %></td>
+							<td class=""><%= user.last_name %></td>
+							<td class=""><%= user.username %></td>
+							<td class=""><%= user.email %></td>
+							<td class=""><%= user.school.name unless user.school.blank? %></td>
+							<td class=""><%= user.role.name %></td>
+					    </tr>
+					<% end %>
+				</tbody>
+				<% end %>
+			</table>
+		</div>	
+		<% unless @users.blank?%>
+		<div data-no-turbolink>
+			<%= paginate @users %>
+		</div>
+		<% end %>
+		</div>	
+	</div>	
+		

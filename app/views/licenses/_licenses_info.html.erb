@@ -1,5 +1,12 @@
 <div class="panel panel-default">
     <div class="panel-body"> 
+		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text' %>
+		<button class="btn btn-primary btn-xs" id="license_search" >
+						    Search
+		</button>
+	   	<div class="index_page_btns" data-no-turbolink>
+			<%=link_to 'List All Records', new_license_path(:school_id=>params[:school_id]), :class=>"btn btn-success btn-xs" if @search_flag %>
+	    </div>
 	    <div class="">
 		    <table class="table" id="licenses_table">
                 <thead>

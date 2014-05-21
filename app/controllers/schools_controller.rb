@@ -9,7 +9,7 @@ class SchoolsController < ApplicationController
   
   def index
     if params[:query_string] && !(params[:query_string].blank?)
-      @schools = School.search("%#{params[:query_string]}%").page(params[:page]).per(10) 
+      @schools = School.search("%#{params[:query_string]}%").un_archived.page params[:page]
       @search_flag = true
     else
       @search_flag = false
@@ -57,12 +57,13 @@ class SchoolsController < ApplicationController
       license.update_attributes(:delete_flag=>true)
     end
     flash[:success] = "School archived." 
-    redirect_to schools_url 
+	redirect_to schools_url
+    #redirect_to schools_url(:school_id=>@school.id) 
   end
   
   def get_schoolwise_license_list
     @license_assign_count = []
-    @licenses = @school.licenses.order("created_at DESC").page params[:page]
+    @licenses = @school.licenses.un_archived.by_newest.page params[:page]
     @licenses_allocated = User.select("school_id, license_id, role_id, count(license_id) as total_license_count").group("role_id,license_id, school_id").having("school_id =?", params[:id])
     #@licenses_allocated.each{|x|  p x.school_id,x.license_id, x.role_id,  x.total_license_count}
     @licenses_allocated.each{|x|  @license_assign_count << x.total_license_count}
@@ -73,7 +74,7 @@ class SchoolsController < ApplicationController
     School.where(id: params[:school_ids]).each do |school|
       school.update_attributes(delete_flag: true)
     end
-    redirect_to schools_url 
+    redirect_to schools_url(:school_id=>params[:school_ids]) 
   end
   
   def subregion_options
@@ -146,6 +147,23 @@ class SchoolsController < ApplicationController
 	   column_name = params[:column_name].capitalize
 	  render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
 	end
+  end
+  
+  def undo_school
+    if params[:id].kind_of?(Array)
+	  params[:id].each do |id|
+	    school = School.where("id = '#{id}' AND delete_flag = true ").last
+	    set_school_delete_flag(school)
+	  end
+	else
+      school = School.where("id = '#{params[:id]}' AND delete_flag = true ").last
+      set_school_delete_flag(school)
+	end
+	redirect_to schools_url, notice: "School un-archived."
+  end
+   
+  def set_school_delete_flag(school)
+    school.update_attributes(:delete_flag=>false)
   end
   
   private

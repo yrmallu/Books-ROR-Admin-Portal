@@ -68,8 +68,7 @@
 		     <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Book List", books_path %></li>
 		   <%end%>
        </ul>
-      </li>
-    
+    </li>
     <li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
       <span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
@@ -80,7 +79,13 @@
 			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
             <%end%>
 		  </ul>
-        </li>
+    </li>
+	<!-- <li class="nav-parent" id="li_search"><a href=""><i class="glyphicon glyphicon-search"></i> <span>Search</span></a>
+        <span class="arrow arrw-pos" container_li="li_search"></span>
+	    <ul class="children">
+		    <li><%#= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "User Search", user_search_users_path %></li>
+	    </ul>
+	</li> -->
     
     <%else%>
     <li class="nav-parent" id="li_options"><a href=""><i class="fa fa-chevron-circle-down"></i> <span>Options</span></a>
@@ -129,7 +134,7 @@
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Licenses Listing", licenses_path(:school_id => current_user.school_id) %></li>
       <%end%>
           </ul>
-        </li>
+    </li>
     <%end%>
     <%end%>
       </ul>
@@ -169,7 +174,7 @@
   
   <% flash.each do |key, value| %>
     <div class="alert alert-<%= key %>"> <%= value %>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
     </div>
   <% end %>
 
@@ -202,9 +207,8 @@
 $( ".change_password" ).click(function() {
           jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%=current_user.role_id%>},
 function(data) {
-	         
-             if(data)
-              {
+		if(data)
+             {
 			   jQuery("#change_user_password_info").html(data);
              }
       });

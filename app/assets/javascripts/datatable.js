@@ -1,8 +1,8 @@
 jQuery(document).ready(function() {
 
-	jQuery('#users_table').dataTable({
-		"bRetrieve": true,
-		"bDestroy": true,
+  jQuery('#users_table').dataTable({
+   "bRetrieve": true,
+   "bDestroy": true,
    "bPaginate": false,
    "bAutoWidth": false,
    "bLengthChange": false,
@@ -13,6 +13,19 @@ jQuery(document).ready(function() {
    { "bSortable": false, "aTargets": [-1] },
    { "bSortable": false, "aTargets": [0] }
    ]
+ });
+ 
+  jQuery('#all_user_table').dataTable({
+  "bRetrieve": true,
+  "bDestroy": true,
+  "bPaginate": false,
+  "bAutoWidth": false,
+  "bLengthChange": false,
+  "bInfo": false,
+  "bAutoWidth": false,
+  "sDom": 't',
+  "aoColumnDefs": [
+ ]
  });
   
   jQuery('#school_table').dataTable({

@@ -45,6 +45,7 @@ class User < ActiveRecord::Base
   ###########################################################################################
 
   scope :by_newest, -> {order("created_at DESC")}
+  scope :un_archived, -> {where(delete_flag: false)}
   scope :web_admins, -> { where(role_id: 1) }
   scope :school_admins, -> { where(role_id: 2) }
   scope :teachers, -> { where(role_id: 3) }
@@ -208,7 +209,6 @@ class User < ActiveRecord::Base
   end
   
   def self.search(query_string, role_id, school_id)
-    puts "sssssssss", school_id
     roleid = role_id.id.to_i
     schoolid = role_id.name.eql?("Web Admin") ? nil : school_id.to_i  
     user = User.arel_table
@@ -226,4 +226,19 @@ class User < ActiveRecord::Base
         )
       )
   end
+  
+  def self.search_all(query_string)
+  	qs = query_string.tr("%","").to_s 
+  	user = User.arel_table
+  	users = User.where(
+  	    user[:first_name].matches(query_string).or(
+  			user[:last_name].matches(query_string).or(
+			   user[:email].matches(query_string).or(
+  				  user[:username].matches(query_string)
+ 				  )
+				)
+			)
+  		)
+  end
+  
 end

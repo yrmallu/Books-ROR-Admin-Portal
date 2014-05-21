@@ -1,18 +1,16 @@
 
 <div class="panel panel-default">
 	<div class="panel-body"> 
-		<%= text_field_tag :text_field_search %>
-		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
-
+		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text' %>
 		<button class="btn btn-primary btn-xs" id="classroom_search" >
 						    Search
-						    </button>
+	    </button>
 		<%= form_tag 'classrooms/delete_classroom' do %>
 		<div class="index_page_btns" data-no-turbolink>
 			<% if can? :create, :classrooms %> 
 			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
 			<%end%>
-			<%=link_to 'List All Records', classrooms_path, :class=>"btn btn-success btn-xs" if @search_flag %>
+			<%=link_to 'List All Records', classrooms_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs" if @search_flag %>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 			<%=link_to 'Import Classroom List', import_list_classrooms_path(:school_id => @school.id), :class=>"btn btn-success btn-xs"%>
 			<%#= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
@@ -47,9 +45,9 @@
 						      <%#= classroom.school_year_start_date.year %> - <%#= classroom.school_year_end_date.year %>
 						  <%#=end%>
 				      </td> -->
-					  <td><%= classroom.users.school_admins.count %></td>
-					  <td><%= classroom.users.teachers.count %></td>
-					  <td><%= classroom.users.students.count %></td>
+					  <td><%= classroom.users.un_archived.school_admins.count %></td>
+					  <td><%= classroom.users.un_archived.teachers.count %></td>
+					  <td><%= classroom.users.un_archived.students.count %></td>
                       <td data-no-turbolink>
 						  <% if can? :update, :classrooms %>
 						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  

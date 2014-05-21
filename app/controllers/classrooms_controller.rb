@@ -12,13 +12,13 @@ class ClassroomsController < ApplicationController
    
   def index
     if params[:query_string] && !(params[:query_string].blank?)
-      @classrooms = Classroom.includes(:users).search("%#{params[:query_string]}%").page(params[:page]).per(10) 
-      @search_flag = true
+      @classrooms = Classroom.includes(:users).search("%#{params[:query_string]}%", params[:school_id]).page(params[:page]).per(10) 
+	  @search_flag = true
     else
-      @classrooms = Classroom.includes(:users).where("classrooms.delete_flag is not true AND classrooms.school_id = '#{params[:school_id]}'").references(:users).page params[:page]
+      @classrooms = Classroom.includes(:users).un_archived.where("classrooms.delete_flag is not true AND classrooms.school_id = '#{params[:school_id]}'").references(:users).page params[:page]
       @search_flag = false
     end
-    set_bread_crumb(@school.id)
+	set_bread_crumb(@school.id)
     #@classrooms = Classroom.joins(:users).select("users.role_id as role_id, classrooms.id as id, classrooms.name as name, classrooms.school_year_start_date as school_year_start_date, classrooms.school_year_end_date as school_year_end_date, classrooms.code as code, classrooms.school_id as school_id, count(user_classrooms.user_id) as total_users_count").group("classrooms.id,users.role_id, classrooms.school_id").having("classrooms.delete_flag is not true and classrooms.school_id = '#{params[:school_id]}' ").preload(:users).page params[:page]
 
   end
@@ -36,9 +36,9 @@ class ClassroomsController < ApplicationController
 
   def edit
     @role_wise_count = []
-    @assigned_teachers = @classroom.users.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
-    @assigned_students = @classroom.users.includes(:role).where("name='Student'").references(:role) if @classroom && @classroom.users
-    @role_wise_users = @classroom.users.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
+    @assigned_teachers = @classroom.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
+    @assigned_students = @classroom.users.un_archived.includes(:role).where("name='Student'").references(:role) if @classroom && @classroom.users
+    @role_wise_users = @classroom.users.un_archived.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
     @role_wise_users.each{|x| @role_wise_count << x.total_users_count} 
     set_bread_crumb(@school.id)
   end
@@ -72,9 +72,9 @@ class ClassroomsController < ApplicationController
       redirect_to classroom_path(:school_id=> @classroom.school_id), notice: 'Classroom updated.'
     else
       @role_wise_count = []
-      @assigned_teachers = @classroom.users.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
-      @assigned_students = @classroom.users.includes(:role).where("name='Student'").references(:role) if @classroom && @classroom.users
-      @role_wise_users = @classroom.users.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
+      @assigned_teachers = @classroom.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
+      @assigned_students = @classroom.users.un_archived.includes(:role).where("name='Student'").references(:role) if @classroom && @classroom.users
+      @role_wise_users = @classroom.users.un_archived.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
       @role_wise_users.each{|x| @role_wise_count << x.total_users_count} 
       render :action=> 'edit'
     end
@@ -82,7 +82,7 @@ class ClassroomsController < ApplicationController
 
   def destroy
     @classroom.update_attributes(:delete_flag=>true)
-    redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom deleted.' 
+    redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom archived.' 
   end
 
   def delete_classroom
@@ -106,11 +106,11 @@ class ClassroomsController < ApplicationController
   def get_school_specific_users
     if params[:action] == 'update'
       @school = School.find(params[:classroom][:school_id])
-      @school_specific_teachers = @school.users.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:classroom][:school_id].blank?
-      @school_specific_students = @school.users.includes(:role).where("name='Student'").references(:role) unless params[:classroom][:school_id].blank?
+      @school_specific_teachers = @school.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:classroom][:school_id].blank?
+      @school_specific_students = @school.users.un_archived.includes(:role).where("name='Student'").references(:role) unless params[:classroom][:school_id].blank?
     else
-      @school_specific_teachers = @school.users.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:school_id].blank? 
-      @school_specific_students = @school.users.includes(:role).where("name='Student'").references(:role) unless params[:school_id].blank? 
+      @school_specific_teachers = @school.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:school_id].blank? 
+      @school_specific_students = @school.users.un_archived.includes(:role).where("name='Student'").references(:role) unless params[:school_id].blank? 
     end
   end
   

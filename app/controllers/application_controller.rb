@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
   def get_schools
     @schools = []
     if current_user.role.name.eql?("Web Admin")
-      @schools = School.by_newest.page params[:page]
+      @schools = School.un_archived.by_newest.page params[:page]
 	else
 	  @schools << @current_user.school
 	end
@@ -176,7 +176,16 @@ class ApplicationController < ActionController::Base
             "Dashboard"=> ""
           }
         }
-		
+	
+      when "users#user_search"
+        @breadcrumb = {
+          :title=>"User Search",
+		  :icon=>"glyphicon glyphicon-search",
+          :breadcrumb=>{
+            "User Search"=> ""
+          }
+        }
+			
       when "accessrights#edit"
         @breadcrumb = {
           :title=>"Edit Accessrights",

@@ -20,13 +20,14 @@ class School < ActiveRecord::Base
 
 	before_validation :strip_whitespace
 	before_create :generate_random_code
-  before_save :reset_params_datatype
+    before_save :reset_params_datatype
 	###########################################################################################
   ## Scopes
   ###########################################################################################
 	
 	scope :by_newest, -> {order("created_at DESC")}
-	default_scope {where.not(delete_flag: true)}	
+	scope :un_archived, -> {where(delete_flag: false)}
+	#default_scope {where.not(delete_flag: true)}	
 
   ###########################################################################################
   ## Validations

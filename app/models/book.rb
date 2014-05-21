@@ -37,6 +37,8 @@ class Book < ActiveRecord::Base
   after_save :update_preview_name
 
   # scopes ....................................................................
+  scope :by_newest, -> {order("created_at DESC")}
+  scope :un_archived, -> {where(delete_flag: false)}
 
   # additional config (i.e. accepts_nested_attribute_for etc...) ..............
   paginates_per 10
