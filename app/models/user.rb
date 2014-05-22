@@ -236,14 +236,16 @@ class User < ActiveRecord::Base
 	arrayConditions << '(username ILIKE ' + "'%" + arr_query_string[2].tr("%'","").to_s + "%')" unless(arr_query_string[2].tr("%'","").to_s.blank?)
 	arrayConditions << '(email ILIKE ' + "'%" + arr_query_string[3].tr("%'","").to_s + "%')" unless(arr_query_string[3].tr("%'","").to_s.blank?)
 	strConditions = arrayConditions.join(' OR ') unless arrayConditions.empty?
-
-	if strConditions.blank? && !arr_query_string[4].tr("%'","").to_s.blank?
+    if strConditions.blank? && !arr_query_string[4].tr("%'","").to_s.blank?
 	  school_ids = School.where('(name ILIKE ' + "'%" + arr_query_string[4].tr("%'","").to_s + "%') AND delete_flag = false").map(&:id)
 	  arrayConditions << 'school_id IN ' + '(' + school_ids.join(",") + ')' unless school_ids.blank?
 	  final_strCondition = arrayConditions unless arrayConditions.empty?
-	else
-	  school_ids = School.where('(name ILIKE ' + "'%" + arr_query_string[4].tr("%'","").to_s + "%') AND delete_flag = false").map(&:id)
-	  final_strCondition = '(' + strConditions + ')' + 'AND (school_id IN ' + '(' + school_ids.join(",") + '))' unless school_ids.blank?
+	else 
+	  unless arr_query_string[4].tr("%'","").to_s.blank?
+	    school_ids = School.where('(name ILIKE ' + "'%" + arr_query_string[4].tr("%'","").to_s + "%') AND delete_flag = false").map(&:id)
+	    final_strCondition = '(' + strConditions + ')' + 'AND (school_id IN ' + '(' + school_ids.join(",") + '))' unless school_ids.blank?
+	  end
+	  final_strCondition = strConditions
 	end
 	users = User.where(final_strCondition)
 

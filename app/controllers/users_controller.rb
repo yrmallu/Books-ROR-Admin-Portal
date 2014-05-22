@@ -373,7 +373,7 @@ class UsersController < ApplicationController
   
   def remove_bulk_licenses
     params[:bulk_remove_user_ids].each do |user_id|
-	  @user = User.find(user_id).un_archived
+	  @user = User.find(user_id)
 	  unless @user.license_id.blank?
 	    remove_license_from_user
 	  end
