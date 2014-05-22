@@ -112,7 +112,7 @@ class ApplicationController < ActionController::Base
       data_obj = obj.new(row)
       puts "new recode", row.to_hash
       if save_list
-        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'") : obj.find_by_code(data_obj.code.to_i.to_s)
+        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
          elsif data_obj.valid?
@@ -138,7 +138,7 @@ class ApplicationController < ActionController::Base
       row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)
       if save_list
-        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'") : obj.find_by_code(data_obj.code.to_i.to_s)
+        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
          elsif data_obj.valid?
