@@ -65,6 +65,8 @@ BooksThatGrow::Application.routes.draw do
 	  get 'quick_edit_user'
 	  get 'remove_bulk_licenses'
 	  get 'get_classroom_details'
+	  get 'user_search'
+	  get 'undo_user'
      end
   end
 
@@ -80,6 +82,7 @@ BooksThatGrow::Application.routes.draw do
       get 'check_school_name_uniqueness'
       post 'update_license_expiration_date'
 	  get 'quick_edit_school'
+	  get 'undo_school'
     end
   end
   get '/schools/subregion_options' => 'schools#subregion_options'

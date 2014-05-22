@@ -9,10 +9,10 @@ class BooksController < ApplicationController
 
   def index
     if params[:query_string] && !(params[:query_string].blank?)
-      @books = Book.search("%#{params[:query_string]}%").page(params[:page]).per(10) 
+      @books = Book.search("%#{params[:query_string]}%").un_archived.page(params[:page]).per(10) 
       @search_flag = true
     else
-      @books = Book.page params[:page]
+      @books = Book.un_archived.by_newest.page params[:page]
       @search_flag = false
     end
     
@@ -62,7 +62,7 @@ class BooksController < ApplicationController
     @book.update_attributes(:delete_flag => true)
     FileUtils.rm_rf  "#{Rails.root}/public/books/#{@book.book_unique_id}"
     respond_to do |format|
-      format.html { redirect_to books_url }
+      format.html { redirect_to books_url, notice: 'Book archived.' }
       format.json { head :no_content }
     end
   end

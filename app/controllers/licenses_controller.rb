@@ -13,8 +13,14 @@ class LicensesController < ApplicationController
   end
 
   def new
-    get_license_list
-	@license = License.new
+    if params[:query_string] && !(params[:query_string].blank?)
+	  @licenses = License.search("%#{params[:query_string]}%", params[:school_id]).un_archived.by_newest.page params[:page]
+	  @search_flag = true
+	else
+	  get_license_list
+	  @search_flag = false
+	end
+    @license = License.new
     @school_id = params["school_id"]
 	set_bread_crumb(@school_id)
   end
@@ -27,7 +33,7 @@ class LicensesController < ApplicationController
 
 
   def get_license_list
-    @licenses = License.where("school_id = #{params[:school_id]}").by_newest.page params[:page]
+    @licenses = License.where("school_id = #{params[:school_id]}").un_archived.by_newest.page params[:page]
   end
   
   def create
@@ -64,6 +70,10 @@ class LicensesController < ApplicationController
       format.js {
 	              if @license.update_attributes(license_params).eql?(true)
 	                @license.update_attributes(license_params)
+					users = @license.users
+					users.each do |user|
+					  user.update_attributes(:license_expiry_date=>@license.expiry_date)
+					end
 				    refresh_licenses_list
 				  else
 				    @license.valid?
@@ -80,7 +90,7 @@ class LicensesController < ApplicationController
      end
    end
    @license.update_attributes(:delete_flag=>true)
-   @licenses = License.where("school_id = '#{@license.school_id}'").by_newest.page params[:page]
+   @licenses = License.where("school_id = '#{@license.school_id}'").un_archived.by_newest.page params[:page]
    
    respond_to do |format|
       format.html { redirect_to licenses_url }
@@ -99,6 +109,6 @@ class LicensesController < ApplicationController
 
     def refresh_licenses_list
       @license = License.new
-      @licenses = License.where("school_id = #{@school_id}").by_newest.page params[:page]
+      @licenses = License.where("school_id = #{@school_id}").un_archived.by_newest.page params[:page]
     end  
 end

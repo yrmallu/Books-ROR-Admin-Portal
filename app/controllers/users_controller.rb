@@ -2,7 +2,6 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-  #before_action :get_all_schools, :only=> [:new, :edit]
   before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :quick_edit_user, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent, :create, :update] 
   before_action :get_manage_student_accessright, :only => [:new, :edit, :create, :update]
@@ -52,17 +51,24 @@ class UsersController < ApplicationController
   
   def user_index
     if params[:query_string] && !(params[:query_string].blank?) 
-      @users = User.search("%#{params[:query_string]}%", @role_id, params[:school_id]).page(params[:page]).per(10) 
+      @users = User.search("%#{params[:query_string]}%", @role_id, params[:school_id]).un_archived.page params[:page]
+	  unless @school.blank?
+	    set_bread_crumb(@role_id.id, @school.id)
+	  else
+	    set_bread_crumb(@role_id.id)
+	  end
+	  @search_flag = true
     else
-      if !@role_id.blank? && params[:school_id].blank?
-        @users = User.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+	  if !@role_id.blank? && params[:school_id].blank?
+        @users = User.where("role_id = '#{@role_id.id}'").un_archived.by_newest.page params[:page]
         set_bread_crumb(@role_id.id)
       elsif !@role_id.blank? && !params[:school_id].blank?
-        @users = @school.users.where("delete_flag is not true AND role_id = '#{@role_id.id}'").order("created_at DESC").page params[:page]
+        @users = @school.users.where("role_id = '#{@role_id.id}'").un_archived.by_newest.page params[:page]
         set_bread_crumb(@role_id.id, @school.id)
       else
-        @users = User.where("delete_flag is not true").order("created_at DESC").page params[:page]
+        @users = User.un_archived.by_newest.page params[:page]
       end
+	  @search_flag = false
     end
   end
   
@@ -133,9 +139,9 @@ class UsersController < ApplicationController
   def get_school_after_render
     unless @role_id.name.eql?('Web Admin')
       if !params[:school_id].blank?
-        @school = School.find(params[:school_id]) 
+        @school = School.find(params[:school_id])
       elsif !params[:user][:school_id].blank?
-        @school = School.find(params[:user][:school_id]) 
+        @school = School.find(params[:user][:school_id])
     else
       @school = School.find(@user.school_id) 
       end
@@ -165,7 +171,7 @@ class UsersController < ApplicationController
         array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
       end  
       add_user_level_setting if @user.role.name.eql?('Student')
-      redirect_to users_path(:id=>@user, :school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
+      redirect_to users_path(:school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
       @user.welcome_email(path) unless params[:user][:email].blank?
     else 
       get_all_reading_grades
@@ -308,10 +314,11 @@ class UsersController < ApplicationController
       #@user.remove_license(@user.license_id)
       remove_license_from_user
     end
-      @user.update_attributes(:delete_flag=>true)
-    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User archived.'
+    @user.update_attributes(:delete_flag=>true)
+	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User archived.'
+    #redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id, :user_id=>@user.id), notice: 'User archived.'
   end
-  
+ 
   def current_user_destroy_accessrights
     @current_user_accessrights = []
     @current_user_accessrights = current_user.user_permission_names.collect{|i| i.name}
@@ -348,7 +355,7 @@ class UsersController < ApplicationController
   end
   
   def get_school_specific_classrooms
-    @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless params[:school_id].blank? 
+    @school_specific_classrooms = @school.classrooms.un_archived unless params[:school_id].blank? 
   end
   
   def get_manage_student_accessright
@@ -366,7 +373,7 @@ class UsersController < ApplicationController
   
   def remove_bulk_licenses
     params[:bulk_remove_user_ids].each do |user_id|
-	  @user = User.find(user_id)
+	  @user = User.find(user_id).un_archived
 	  unless @user.license_id.blank?
 	    remove_license_from_user
 	  end
@@ -538,12 +545,12 @@ class UsersController < ApplicationController
   def delete_parent
     @user = User.find(params[:id])
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-  @parent = Parent.find(params[:parent_id])
+    @parent = Parent.find(params[:parent_id])
     @parent.destroy
     respond_to do |format|
-    format.html {
-    }
-    format.js{}
+    	format.html {
+    	}
+    	format.js{}
     end
   end
   
@@ -561,9 +568,22 @@ class UsersController < ApplicationController
 	end
   end
   
+  def user_search
+    if params[:query_string] && !(params[:query_string].blank?)
+      @users = User.search_all("%#{params[:query_string]}%").un_archived.page(params[:page]).per(10) 
+    end
+    set_bread_crumb
+  end
+  
+  def undo_user
+    @user = User.where("id = '#{params[:id]}' AND delete_flag = true ").last
+	@user.update_attributes(:delete_flag=>false)
+    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User un-archived.'
+  end
+  
   private
   def set_user
-    @user = User.where("id = '#{params[:id]}' ").last
+    @user = User.where("id = '#{params[:id]}' ").un_archived.last
   end
   
   def assign_root_path

@@ -32,19 +32,19 @@
 						<div class="col-sm-3">
 	                        <div class="form-group">
 	                    	    <%= label_tag "teachers_count", "Number Of School Admins", :class=>"control-label" %> : 
-								<%= @classroom.users.school_admins.count %>
+								<%= @classroom.users.un_archived.school_admins.count %>
 	                        </div>
 	                    </div>
 						<div class="col-sm-3">
 	                        <div class="form-group">
 	                    	    <%= label_tag "teachers_count", "Number Of Teachers", :class=>"control-label" %> : 
-								<%= @classroom.users.teachers.count %>
+								<%= @classroom.users.un_archived.teachers.count %>
 	                        </div>
 	                    </div>
 						<div class="col-sm-6">
 	                        <div class="form-group">
 			     		        <%= label_tag "students_count", "Number Of Students", :class=>"control-label" %> :
-								<%= @classroom.users.students.count %>
+								<%= @classroom.users.un_archived.students.count %>
 	                        </div>
 	                    </div>
 	               </div>

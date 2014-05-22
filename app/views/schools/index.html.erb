@@ -1,13 +1,13 @@
-
+<div data-no-turbolink class="alert-warning undo-alert">
+<%= link_to '<i class="fa fa-undo"></i>'.html_safe + ' Undo', undo_school_schools_path(:id=>params[:school_id]) unless params[:school_id].blank? %>
+<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+</div>
 <div class="panel panel-default">
 	<div class="panel-body"> 
-		
-		<%= text_field_tag :text_field_search %>
-		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
-
+		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text' %>
 		<button class="btn btn-primary btn-xs" id="school_search" >
 						    Search
-						    </button>
+	    </button>
 
 		<%= form_tag 'schools/delete_school' do %>
 		<div class="index_page_btns" data-no-turbolink>
@@ -136,7 +136,18 @@
 </div>		
 
 <script type="text/javascript">
-	showHideMenu('li_school');
+$(document).ready(function(){
+  if (<%= params[:school_id].blank?%>)
+  {
+    $('.undo-alert').addClass('hide').removeClass('show');
+  }
+  else
+  {
+    $('.undo-alert').addClass('show').removeClass('hide');	 
+  }
+});
+
+showHideMenu('li_school');
 	
 	$( ".license_details" ).click(function() {
 	          jQuery.get("<%=url_for(:controller=>'schools',:action=>'get_schoolwise_license_list')%>",{ id : $(this).attr('data-input')},

@@ -17,6 +17,7 @@ class License < ActiveRecord::Base
   ###########################################################################################
 
   scope :by_newest, -> {order("created_at DESC")}
+  scope :un_archived, -> {where(delete_flag: false)}
 	
   ###########################################################################################
   ## Validations
@@ -33,4 +34,18 @@ class License < ActiveRecord::Base
   def get_license_batch_name_date
     self.license_batch_name + " (" + self.expiry_date.to_s + ") " + "(" + self.used_liscenses.to_s + "/" + self.no_of_licenses.to_s + ")"  unless self.expiry_date.blank?
   end
+  
+  def self.search(query_string, school_id)
+  qs = query_string.tr("%","").to_s
+  license = License.arel_table
+  licenses = License.where(
+  license[:school_id].eq(school_id).and(
+    license[:no_of_licenses].eq(qs).or(
+        license[:license_batch_name].matches(query_string)
+      )
+    )
+  )
+  end
+  
+  
 end

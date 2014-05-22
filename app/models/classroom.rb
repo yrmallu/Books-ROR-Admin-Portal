@@ -18,6 +18,7 @@ class Classroom < ActiveRecord::Base
   ## Scopes
   ###########################################################################################
   scope :by_newest, -> {order("created_at DESC")}
+  scope :un_archived, -> {where(delete_flag: false)}
   #store_accessor :classroom_count, :student_count, :teacher_count, :school_admin_count
   
   paginates_per 10
@@ -40,13 +41,15 @@ class Classroom < ActiveRecord::Base
     self.code = code.to_i
   end
 
-  def self.search(query_string)
+  def self.search(query_string, school_id)
   qs = query_string.tr("%","").to_s
   classroom = Classroom.arel_table
   classrooms = Classroom.where(
+  classroom[:school_id].eq(school_id).and(
     classroom[:code].eq(qs).or(
         classroom[:name].matches(query_string)
       )
     )
+  )
   end
 end
