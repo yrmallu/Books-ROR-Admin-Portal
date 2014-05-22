@@ -39,7 +39,7 @@
 	         <div width="50%" align="right" style="border : 1px solid #CCCCCC; border-radius : 10px; float: right; padding: 30px;">
 	         	<p>Let me Correct all the data and upload the List again </p>
 	         	<div style="text-align: center;">
-	         		<%= link_to "Upload Again", :action => :import_list, :method => 'post' %>
+	         		<%= link_to "Upload Again", {:action => :import_list, :role_id => @role_id, :school_id => @school_id, :list_type => params[:list_type]} %>
 	         	</div>	
 	         </div>
 	     </div>
