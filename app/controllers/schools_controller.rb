@@ -74,7 +74,8 @@ class SchoolsController < ApplicationController
     School.where(id: params[:school_ids]).each do |school|
       school.update_attributes(delete_flag: true)
     end
-    redirect_to schools_url(:school_id=>params[:school_ids]) 
+	redirect_to schools_url
+    #redirect_to schools_url(:school_id=>params[:school_ids]) 
   end
   
   def subregion_options
