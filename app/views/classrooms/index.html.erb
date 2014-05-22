@@ -1,10 +1,8 @@
 
 <div class="panel panel-default">
 	<div class="panel-body"> 
-		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text' %>
-		<button class="btn btn-primary btn-xs" id="classroom_search" >
-						    Search
-	    </button>
+		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
+		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="classroom_search" title="Search Classroom" >	</i>
 		<%= form_tag 'classrooms/delete_classroom' do %>
 		<div class="index_page_btns" data-no-turbolink>
 			<% if can? :create, :classrooms %> 

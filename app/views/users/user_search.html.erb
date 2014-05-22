@@ -1,11 +1,29 @@
 	
 <div class="panel panel-default">
 	<div class="panel-body"> 	
-		<div class= "all-user-search">	
-			<%= text_field_tag :text_field_search,'', :placeholder=>"Search by firstname, lastname, username or email", :class=>"all-search-width" %>
+		<div class= "all-user-search row">	
+			<div class="text-field-first col-sm-9">
+			<div class="col-sm-6">	
+			<%= text_field_tag :text_field_search_by_fn,'', :placeholder=>"Search by Firstname", :class=>"all-search-width search-box " %>
+		    </div>
+			<div class="col-sm-6">
+			<%= text_field_tag :text_field_search_by_ln,'', :placeholder=>"Search by Lastname", :class=>"all-search-width search-box" %>
+			</div>
+		    <div class="col-sm-6"> 
+			<%= text_field_tag :text_field_search_by_un,'', :placeholder=>"Search by Username", :class=>"all-search-width search-box"  %>
+			</div>
+			<div class="col-sm-6">
+			<%= text_field_tag :text_field_search_by_email,'', :placeholder=>"Search by Email", :class=>"all-search-width search-box" %>
+			</div>
+			<div class="col-sm-9">
+			<%= text_field_tag :text_field_search_by_school,'', :placeholder=>"Search by School", :class=>"all-search-width search-box" %>
+			</div>
+		    </div>
+		   <div class="col-sm-3 all-user-search-btn-margin">
 			<button class="btn btn-primary btn-xs" id="all_user_search" >
-							    Search
+							    Search User
 			</button>
+		   </div>
 		</div>	
 		<div class="table-responsive">
 			<table class="table" id="all_user_table">

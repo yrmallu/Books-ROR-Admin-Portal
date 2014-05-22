@@ -2,7 +2,7 @@
 jQuery(document).ready(function(){
 	$('#datepicker').datepicker({ 
 		dateFormat: 'yy-mm-dd',
-	    minDate: 0
+	    minDate: 1
 	}).val();
 	$('.input-group-addon').click(function() {
 		$("#datepicker").datepicker( "show" );
@@ -16,12 +16,10 @@ jQuery(document).ready(function(){
 			var new_url
 			var split_url = document.URL.split("?");
 			var split_params = split_url[1].split("&");
-			// alert(split_params[split_params.length -1]);
 			if (split_params[split_params.length -1].split("=")[0] == "query_string"){
 				split_params.pop();
 			}
 			if (split_url[1].split("&")[0].split("=")[0] == "page"){
-				// split_params = split_url[1].split("&");
 				split_params.shift();
 			    new_url = split_url[0] + "?" + split_params.join("&") + "&query_string=" + search_query;
 				
@@ -30,17 +28,42 @@ jQuery(document).ready(function(){
 			}else{
 				new_url = split_url[0]+ "?" + split_url[1].split("&")[0] + "&query_string=" + search_query;
 			}
-			// alert(split_params[split_params.length]);
-		   // var new_url = split_url[0] + split_params.join("&") + "&query_string=" + search_query;
-		   // alert("hiii");
-					   // var new_url = url[0] + "?query_string=" + search_query;
 		   $(location).attr('href', new_url);
 		}
 	});
 
     // All users search	
  	$("#all_user_search").on('click',function(){
- 		var search_query = jQuery.trim($('#text_field_search').val());
+ 		var search_query_fn = jQuery.trim($('#text_field_search_by_fn').val());
+		var search_query_ln = jQuery.trim($('#text_field_search_by_ln').val());
+		var search_query_un = jQuery.trim($('#text_field_search_by_un').val());
+		var search_query_email = jQuery.trim($('#text_field_search_by_email').val());
+		var search_query_school = jQuery.trim($('#text_field_search_by_school').val());
+		var search_query = [];
+		if (search_query_fn.length > 0)
+		{ search_query.push(search_query_fn); }
+		else
+		{ search_query.push(""); }
+		
+		if (search_query_ln.length > 0)
+		{ search_query.push(search_query_ln); }
+		else
+		{ search_query.push(""); }
+		
+		if (search_query_un.length > 0)
+		{ search_query.push(search_query_un); }
+		else{ search_query.push(""); }
+		
+		if (search_query_email.length > 0)
+		{ search_query.push(search_query_email); }
+		else
+		{ search_query.push(""); }
+		
+		if (search_query_school.length > 0)
+		{ search_query.push(search_query_school); }
+		else
+		{ search_query.push(""); }
+		
 		if (search_query.length > 0) {
 			url = document.URL.split("?");
 	   	 	var new_url = url[0] + "?query_string=" + search_query;

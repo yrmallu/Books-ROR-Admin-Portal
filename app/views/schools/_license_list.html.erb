@@ -26,9 +26,9 @@
                             <td class=""><%= lic.expiry_date %></td>
                             <td class="center "><%= lic.no_of_licenses %></td>
 					        <td class=""><%= lic.no_of_licenses - lic.used_liscenses %></td>
-					        <td class=""><%= lic.users.school_admins.count %></td>
-					        <td class=""><%= lic.users.teachers.count %></td>
-					        <td class=""><%= lic.users.students.count %></td>
+					        <td class=""><%= lic.users.un_archived.school_admins.count %></td>
+					        <td class=""><%= lic.users.un_archived.teachers.count %></td>
+					        <td class=""><%= lic.users.un_archived.students.count %></td>
                             <td><%= text_field_tag "license_expiry_date[#{lic.id}]",lic.expiry_date ,:class=>"form-control datepicker lic-listing-width", :placeholder=>"yyyy-mm-dd", :readonly=>true%></td>
                         </tr>
 				   <% end %>
@@ -47,7 +47,7 @@
 </div>
 <script>
     jQuery(document).ready(function(){
-      $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd',minDate: 0 }).val();
+      $('.datepicker').datepicker({ dateFormat: 'yy-mm-dd',minDate: 1 }).val();
 	  
     //   $('.license-check-box').change(function () {
     //     var check = ($('.license-check-box').filter(":checked").length == $('.license-check-box').length);

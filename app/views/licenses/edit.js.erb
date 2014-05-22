@@ -1,7 +1,7 @@
 $('#id_license').html('<%=j (render "form") %>');
 $('#datepicker').datepicker({ 
 	dateFormat: 'yy-mm-dd',
-    minDate: 0		 
+    minDate: 1		 
 }).val();
 $('.input-group-addon').click(function() {
 	$("#datepicker").datepicker( "show" );

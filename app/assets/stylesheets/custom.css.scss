@@ -75,8 +75,8 @@ label.error {display:block;}
 .form-group .field_with_errors:first-child {float:left; clear:none;}
 .form-lable-multiselect{display:block;}
 .table-responsive{margin-top:-27px;}
-	
-	
+
+
 /* School table data-grid design chagnes */
 .school-table tr th:nth-child(1){width:8%;}
 .school-table tr th:nth-child(2){width:11%;}
@@ -94,7 +94,7 @@ label.error {display:block;}
 
 /* Student profile pic */
 .student-profil-pic{width:100px; border-radius:100px; margin-bottom:10px;}
-	
+
 .no-access{width:100%; min-height:850px; background:#fff;}
 .no-access img {padding-top:100px;}	
 
@@ -120,6 +120,9 @@ label.error {display:block;}
 
 // All user search css
 .all-user-search {margin-bottom: 40px !important;}
-.all-search-width {width:350px;}
+.all-search-width {width:350px !important; margin-bottom: 20px;}
 
 .undo-alert{padding:8px;margin-bottom:20px;}
+.all-user-search-btn-margin{margin-top:30px;}
+.search-icon-align{vertical-align: top !important;}
+.search-box{width: 150px;height: 30px;padding: 6px 12px;font-size: 14px;line-height: 1.428571429;color: #555;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;}

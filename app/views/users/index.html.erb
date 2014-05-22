@@ -3,10 +3,10 @@
 </div>
   <div class="panel panel-default">
 	<div class="panel-body"> 
-		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text' %>
-		<button class="btn btn-primary btn-xs" id="user_search" >
-						    Search
-		</button>
+		<div class="">
+		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
+		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="user_search" title="Search User" >	</i>
+		</div>						
 		<%= form_tag 'users/delete_user' do %>
 	  <div class="index_page_btns" data-no-turbolink>
 		<% if @role_id.name.eql?('Web Admin')%>

@@ -228,17 +228,35 @@ class User < ActiveRecord::Base
   end
   
   def self.search_all(query_string)
-  	qs = query_string.tr("%","").to_s 
-  	user = User.arel_table
-  	users = User.where(
-  	    user[:first_name].matches(query_string).or(
-  			user[:last_name].matches(query_string).or(
-			   user[:email].matches(query_string).or(
-  				  user[:username].matches(query_string)
- 				  )
-				)
-			)
-  		)
+    arr_query_string = query_string.split(',')
+    arrayConditions = Array.new
+	school_ids = []
+	arrayConditions << '(first_name ILIKE ' + "'%" + arr_query_string[0].tr("%'","").to_s + "%')" unless(arr_query_string[0].tr("%'","").to_s.blank?)
+	arrayConditions << '(last_name ILIKE ' + "'%" + arr_query_string[1].tr("%'","").to_s + "%')" unless(arr_query_string[1].tr("%'","").to_s.blank?)
+	arrayConditions << '(username ILIKE ' + "'%" + arr_query_string[2].tr("%'","").to_s + "%')" unless(arr_query_string[2].tr("%'","").to_s.blank?)
+	arrayConditions << '(email ILIKE ' + "'%" + arr_query_string[3].tr("%'","").to_s + "%')" unless(arr_query_string[3].tr("%'","").to_s.blank?)
+	strConditions = arrayConditions.join(' OR ') unless arrayConditions.empty?
+
+	if strConditions.blank? && !arr_query_string[4].tr("%'","").to_s.blank?
+	  school_ids = School.where('(name ILIKE ' + "'%" + arr_query_string[4].tr("%'","").to_s + "%') AND delete_flag = false").map(&:id)
+	  arrayConditions << 'school_id IN ' + '(' + school_ids.join(",") + ')' unless school_ids.blank?
+	  final_strCondition = arrayConditions unless arrayConditions.empty?
+	else
+	  school_ids = School.where('(name ILIKE ' + "'%" + arr_query_string[4].tr("%'","").to_s + "%') AND delete_flag = false").map(&:id)
+	  final_strCondition = '(' + strConditions + ')' + 'AND (school_id IN ' + '(' + school_ids.join(",") + '))' unless school_ids.blank?
+	end
+	users = User.where(final_strCondition)
+
+    #user = User.arel_table
+	# users = User.where(
+#   	    user[:first_name].matches(qs_fn).or(
+#   			user[:last_name].matches(qs_ln).or(
+# 			   user[:email].matches(qs_email).or(
+#   				  user[:username].matches(qs_un)
+#  				  )
+# 				)
+# 			)
+#   		)
   end
   
 end
