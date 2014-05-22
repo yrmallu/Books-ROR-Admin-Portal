@@ -349,6 +349,10 @@ class UsersController < ApplicationController
     deleted_user = ''
     User.where(id: params[:user_ids]).each do |user|
       deleted_user = user
+	  @user = user
+      unless @user.license.blank?
+        remove_license_from_user
+      end
       user.update_attributes(delete_flag: true)
     end
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
