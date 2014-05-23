@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: 'cuelogic.test.acc@gmail.com'
+  default from: 'noreply@borne-digital.com'
   
   def welcome_email(user_info)
     @email = user_info[:email]
@@ -39,6 +39,7 @@ class UserMailer < ActionMailer::Base
 
   def forgot_password_email(user_info)
     @email = user_info[:email]
+	@name = user_info[:name]
 	@username = user_info[:username]
     @link =  user_info[:link]
     @url  = user_info[:url]

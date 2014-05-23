@@ -49,10 +49,10 @@
 							<td class=""><%= user.school.name unless user.school.blank? %></td>
 							<td class=""><%= user.role.name %></td>
 							<td class="">
-								<%unless user.school.blank?%>		
-    								<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => user.role_id, :school_id=>user.school.id) %> 
+								<%if !user.school.blank?%>		
+    								<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => user.role_id, :school_id=>user.school_id, :search=>true) %> 
 								<%else%>
-   							 		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => user.role_id) %>
+   							 		<%= link_to '<i title="Edit User" class="fa fa-pencil"></i>'.html_safe, edit_user_path(user, :role_id => user.role_id, :search=>true) %>
 								<% end %>
 							</td>
 					    </tr>

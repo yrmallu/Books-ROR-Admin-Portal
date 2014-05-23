@@ -199,6 +199,7 @@ class UsersController < ApplicationController
   end 
    
   def edit
+    @user_search_param = params[:search]
     unless current_user.is_web_admin?
       current_user_update_accessrights
       unless @access_right_name.kind_of?(Array)
@@ -266,8 +267,12 @@ class UsersController < ApplicationController
         end
 	  end
       add_user_level_setting if @user.role.name.eql?('Student')
-      redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
-    else
+	  unless params[:user_search_param].blank?
+	    redirect_to user_search_users_path
+	  else
+        redirect_to  user_path(:role_id=>@user.role_id, :school_id=>@user.school_id), notice: 'User updated.'
+      end
+	else
       get_all_reading_grades
       @assigned_classrooms = @user.classrooms if @user && @user.classrooms
       @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank?
@@ -442,7 +447,7 @@ class UsersController < ApplicationController
       flash[:error] = "That email address is not associated with a Books That Grow account. Please try a different email address or contact your administrator for help"
       redirect_to forgot_password_path
     else
-      user_info = {:email => @user.email, :username => @user.first_name+" "+@user.last_name.to_s, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
+      user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
       UserMailer.forgot_password_email(user_info).deliver
       flash[:success] = "Instructions will be sent to the email address you enter."
       redirect_to signin_path

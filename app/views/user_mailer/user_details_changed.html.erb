@@ -10,15 +10,25 @@
       <table width="650" id="main" border="0" cellpadding="0" cellspacing="0">
         <tr style="background:#1d2939;">
           <td width="30" id="header" style="padding:20px;">
-            <a href="javscript:void(0);" ><img src="logo.png" width="30" height="31" alt="Books That Grow"></a>
+            <a href="javscript:void(0);" >
+				<!-- <img src="http://p1.pichost.me/640/45/1685125.jpg" width="30" height="31" alt="Books That Grow"> -->
+					
+					<%= image_tag('"http://"+request.env['HTTP_HOST']/assets/logo.png')%>
+			</a>
           </td>
           <td width="620" style="font-size:24px; font-weight:bold; text-transform:uppercase; padding:20px; text-align:left; color:#fff">Books That Grow</td>
         </tr>
         <tr class="episode">
           <td valign="top" colspan="2" style="padding:20px">
-            <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Forgot password for Books That Grow.</h2>
+            <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow account has been updated.</h2>
             <p style="margin:15px 0; font-size:13px">
-              Dear <%= @name %>,
+              Dear <%= @name %>, 
+            </p>
+            <p style="margin:0 0; font-size:13px">
+              An administrator has updated your Books That Grow account. 
+            </p>
+            <p style="margin:0 0; font-size:13px">
+              You can log in to Books That Grow using the following information.
             </p>
             <p style="margin:15px 0; font-size:13px">
               <p style="margin:0 0; font-size:13px">
@@ -27,14 +37,13 @@
               <p style="margin:0 0; font-size:13px">
                 Email Address: <%= @email %>
               </p>
+            </p> 
+            <p style="margin:0 0; font-size:13px">
+              To reset your password, click on the following link: <a href = '<%= @reset_pass_url %>'>reset password</a>
             </p>
             <p style="margin:0 0; font-size:13px">
-			 To reset password click on following
-			 link: <a href = '<%= @link %>'>reset password</a>
+              If you believe this update was made in error, please immediately contact your school administrator.
             </p>
-			<p style="margin:0 0; font-size:13px">
-			  To login to the site, just follow this link: <%= @url %>
-			</p>	
             <p style="margin:15px 0 0; font-size:13px">
               Thanks,
             </p>
@@ -56,5 +65,4 @@
   </table>
 </body>
 </html>
-
 
