@@ -18,7 +18,7 @@ class ClassroomsController < ApplicationController
       @classrooms = Classroom.includes(:users).un_archived.where("classrooms.delete_flag is not true AND classrooms.school_id = '#{params[:school_id]}'").references(:users).page params[:page]
       @search_flag = false
     end
-	set_bread_crumb(@school.id)
+	  set_bread_crumb(@school.id)
     #@classrooms = Classroom.joins(:users).select("users.role_id as role_id, classrooms.id as id, classrooms.name as name, classrooms.school_year_start_date as school_year_start_date, classrooms.school_year_end_date as school_year_end_date, classrooms.code as code, classrooms.school_id as school_id, count(user_classrooms.user_id) as total_users_count").group("classrooms.id,users.role_id, classrooms.school_id").having("classrooms.delete_flag is not true and classrooms.school_id = '#{params[:school_id]}' ").preload(:users).page params[:page]
 
   end
@@ -53,7 +53,7 @@ class ClassroomsController < ApplicationController
           @classroom.user_classrooms.create(:user_id=> @user.id, :role_id=>@user.role_id) 
         end
       end
-      redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom created.'
+      redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Class created.'
     else
       render :action=> 'new'
     end
@@ -69,7 +69,7 @@ class ClassroomsController < ApplicationController
           @classroom.user_classrooms.create(:user_id=> @user.id, :role_id=>@user.role_id) 
         end
       end
-      redirect_to classroom_path(:school_id=> @classroom.school_id), notice: 'Classroom updated.'
+      redirect_to classroom_path(:school_id=> @classroom.school_id), notice: 'Class updated.'
     else
       @role_wise_count = []
       @assigned_teachers = @classroom.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
@@ -82,7 +82,7 @@ class ClassroomsController < ApplicationController
 
   def destroy
     @classroom.update_attributes(:delete_flag=>true)
-    redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Classroom archived.' 
+    redirect_to classrooms_path(:school_id=> @classroom.school_id), notice: 'Class archived.' 
   end
 
   def delete_classroom
@@ -91,7 +91,7 @@ class ClassroomsController < ApplicationController
      deleted_classroom = classroom
      classroom.destroy
    end
-   redirect_to classrooms_path(:school_id=> deleted_classroom.school_id)
+     redirect_to classrooms_path(:school_id=> deleted_classroom.school_id), notice: 'Classes archived.' 
   end
 
   def get_school_year_range

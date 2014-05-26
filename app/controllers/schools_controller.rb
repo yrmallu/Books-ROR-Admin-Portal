@@ -57,7 +57,7 @@ class SchoolsController < ApplicationController
       license.update_attributes(:delete_flag=>true)
     end
     flash[:success] = "School archived." 
-	redirect_to schools_url
+	  redirect_to schools_url
     #redirect_to schools_url(:school_id=>@school.id) 
   end
   
@@ -74,7 +74,8 @@ class SchoolsController < ApplicationController
     School.where(id: params[:school_ids]).each do |school|
       school.update_attributes(delete_flag: true)
     end
-	redirect_to schools_url
+    flash[:success] = "Schools archived." 
+	  redirect_to schools_url
     #redirect_to schools_url(:school_id=>params[:school_ids]) 
   end
   

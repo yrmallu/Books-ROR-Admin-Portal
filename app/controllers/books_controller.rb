@@ -72,6 +72,7 @@ class BooksController < ApplicationController
       book.update_attributes(:delete_flag => true)
       FileUtils.rm_rf  "#{Rails.root}/public/books/#{book.book_unique_id}"
     end
+    flash[:success] = "Books archived." 
     redirect_to books_path
   end
 

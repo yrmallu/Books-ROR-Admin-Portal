@@ -327,6 +327,7 @@ function dropdown_update_on_quick_edit(this_val)
 }
 
 $(".quick-edit").click(function(e) {
+	//$(this).parent().children(".dynamic").focus();
     e.preventDefault();
     var text = $(this).text();
 	text.replace("<br />", "\n");

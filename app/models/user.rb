@@ -91,7 +91,11 @@ class User < ActiveRecord::Base
       return false
     end
   end
-  
+
+  def get_full_name
+    self.first_name + " " + self.last_name
+  end 
+ 
   def is_web_admin?
   	 self.role.name.eql?("Web Admin") unless self.role.blank?
   end

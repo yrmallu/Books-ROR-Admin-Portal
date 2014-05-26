@@ -545,42 +545,42 @@ class ApplicationController < ActionController::Base
           }
         when "classrooms#index"
           @breadcrumb = {
-            :title=>"Classroom List",
+            :title=>"Class List",
 			:icon=>"fa fa-users",
             :breadcrumb=>{
 			  "School List"=> schools_path,
-              "Classroom List"=> "",
+              "Class List"=> "",
             }
           }
         when "classrooms#new"
 		  @breadcrumb = {
-            :title=>"Add New Classroom",
+            :title=>"Add New Class",
 			:icon=>"fa fa-users",
             :breadcrumb=>{
               "School List"=> schools_path,
-			  "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Add New Classroom"=> "",
+			  "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+              "Add New Class"=> "",
             }
           }
         when "classrooms#edit"
           @breadcrumb = {
-            :title=>"Edit Classroom Information",
+            :title=>"Edit Class Information",
 			:icon=>"fa fa-users",
             :breadcrumb=>{
               "School List"=> schools_path,
-              "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Edit Classroom Information"=> "",
+              "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+              "Edit Class Information"=> "",
             }
           } 
 		  
           when "classrooms#show"
             @breadcrumb = {
-              :title=>"Classroom Information",
+              :title=>"Class Information",
   			  :icon=>"fa fa-users",
               :breadcrumb=>{
                 "School List"=> schools_path,
-                "Classroom List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-                "Edit Classroom Information"=> "",
+                "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+                "Edit Class Information"=> "",
               }
             }
 			

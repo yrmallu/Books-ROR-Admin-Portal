@@ -6,11 +6,11 @@
 		<%= form_tag 'classrooms/delete_classroom' do %>
 		<div class="index_page_btns" data-no-turbolink>
 			<% if can? :create, :classrooms %> 
-			    <%=link_to 'Add Classroom', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
+			    <%=link_to 'Add Class', new_classroom_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs"%> 
 			<%end%>
 			<%=link_to 'List All Records', classrooms_path(:school_id=>@school.id), :class=>"btn btn-success btn-xs" if @search_flag %>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
-			<%=link_to 'Import Classroom List', import_list_classrooms_path(:school_id => @school.id), :class=>"btn btn-success btn-xs"%>
+			<%=link_to 'Import Class List', import_list_classrooms_path(:school_id => @school.id), :class=>"btn btn-success btn-xs"%>
 			<%#= link_to 'Download Sample', new_classroom_path, :class=>"btn btn-success btn-xs"%>
        		<%#= link_to 'Import Classroom List', new_classroom_path, :class=>"btn btn-success btn-xs"%>
 			<%= submit_tag 'Archive', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
@@ -20,8 +20,8 @@
             <thead>
                 <tr>
                 	<th><%= link_to :All, 'javascript:checkAll("classroom")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("classroom")', :class => "lnk-typ2" %></th>
-					<th>Classroom Code</th>
-                    <th>Classroom Name</th>
+					<th>Class Code</th>
+                    <th>Class Name</th>
 					<!-- <th>School Year</th> -->
 					<th>Number Of School Admins</th>
 					<th>Number Of Teachers</th>
@@ -48,10 +48,10 @@
 					  <td><%= classroom.users.un_archived.students.count %></td>
                       <td data-no-turbolink>
 						  <% if can? :update, :classrooms %>
-						      <%= link_to '<i title="Edit Classroom" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
+						      <%= link_to '<i title="Edit Class" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
 						  <%end%>
    				   	      <% if can? :destroy, :classrooms %> 
-						      <%= link_to '<i title="Archive Classroom" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: 'Are you sure?' } %> 
+						      <%= link_to '<i title="Archive Class" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: 'Are you sure?' } %> 
 					      <%end%>
 					</td>
                    </tr>

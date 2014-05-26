@@ -360,7 +360,7 @@ class UsersController < ApplicationController
       end
       user.update_attributes(delete_flag: true)
     end
-    redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id)
+    redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id), notice: 'Users archived.'
   end
   
   def get_school_specific_classrooms

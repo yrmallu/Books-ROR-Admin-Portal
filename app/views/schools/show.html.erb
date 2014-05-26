@@ -44,14 +44,14 @@
 							<thead>
 								<tr>
 									<td><strong>License Batch Name</strong></td>
-									<td><strong>Expiry Date</strong></td>
+									<td><strong>Expiration Date</strong></td>
 									<td><strong>Total No. of Licenses</strong></td>
 									<td><strong>Licenses in Use</strong></td>
 									<td><strong>Unused Licenses</strong></td>
 								</tr>
 							</thead>
 							<tbody>	
-						        <%@school.licenses.each do |lic|%>
+						        <%@school.licenses.un_archived.each do |lic|%>
 						            <tr>
 										<td><%= lic.license_batch_name unless lic.blank?%></td>
 										<td><%= lic.expiry_date.to_date unless lic.blank?%></td>

@@ -15,14 +15,14 @@
 						<% if action_name.eql?("edit") || action_name.eql?("update")%> 
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
-	                    	    <%= f.label :code, "Classroom Code", :class=>"control-label" %> </br>
+	                    	    <%= f.label :code, "Class Code", :class=>"control-label" %> </br>
 	                    	    <%= @classroom.code %>
 	                        </div>
 	                    </div>
 						<%end%>
 	                    <div class="col-sm-6">
 	                        <div class="form-group">
-			     		        <%= f.label :name, "Classroom Name", :class=>"control-label" %><span class="asterisk">*</span>
+			     		        <%= f.label :name, "Class Name", :class=>"control-label" %><span class="asterisk">*</span>
 			     		        <%= f.text_field :name, :autofocus => true, :required=>true, :class=>"form-control" %>
 	                        </div>
 	                    </div>
@@ -77,14 +77,16 @@
 	                          <div class="form-group">
 	                              <%= label_tag "teachers", "Teachers", :class=>"control-label form-lable-multiselect" %>
 								  <div class="listbox-alig left-listbox" id="assigned_div">
-									  <%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+									  <%= select_tag :already_assigned_id, options_for_select(@assigned_teachers.collect {|m| [ m.get_full_name, m.id ] }),{:size=>"8", :multiple=>"multiple"}%>
+									  <%#= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
 	                              </div>
 	                              <div class="assign_arrows">
 	                                  <a href="#Remove" class="remove btn disable-remove"> > </a><br />
 	                                  <a href="#Add" class="add btn disable-add"> < </a>
 	                              </div>
 	                              <div class="listbox-alig right-listbox" id="all_div">
-									  <%= select_tag "all_present_id", options_from_collection_for_select(@school_specific_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+	                              	  <%= select_tag :all_present_id, options_for_select(@school_specific_teachers.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+									  <%#= select_tag "all_present_id", options_from_collection_for_select(@school_specific_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
 	                              </div>
 	                          </div>
 	                      </div>
@@ -95,14 +97,16 @@
   	                          <div class="form-group">
 								  <%= label_tag "studnts", "Students", :class=>"control-label form-lable-multiselect" %>
   	                              <div class="listbox-alig left-stud-listbox" id="student_assigned_div">
-  	                                  <%= select_tag "student_assigned_id", options_from_collection_for_select(@assigned_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+  	                                  <%= select_tag :student_assigned_id, options_for_select(@assigned_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+  	                                  <%#= select_tag "student_assigned_id", options_from_collection_for_select(@assigned_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
   	                              </div>
   	                              <div class="assign_arrows">
   	                                  <a href="#Remove" class="remove_stud btn stud-disable-remove"> > </a><br />
   	                                  <a href="#Add" class="add_stud btn stud-disable-add"> < </a>
   	                              </div>
   	                              <div class="listbox-alig right-stud-listbox" id="all_student_div">
-  	                                  <%= select_tag "all_student_id", options_from_collection_for_select(@school_specific_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+  	                              	  <%= select_tag :all_student_id, options_for_select(@school_specific_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+  	                                  <%#= select_tag "all_student_id", options_from_collection_for_select(@school_specific_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
   	                              </div>
   	                          </div>
   	                      </div>

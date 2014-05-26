@@ -130,9 +130,9 @@
       <% if can? :create, :licenses%>  
             <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add License", new_license_path(:school_id => current_user.school_id) %></li>
       <%end%>
-      <% if can? :read, :licenses %>  
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Licenses Listing", licenses_path(:school_id => current_user.school_id) %></li>
-      <%end%>
+      <!-- <%#= if can? :read, :licenses %>  
+            <li><%#= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Licenses Listing", licenses_path(:school_id => current_user.school_id) %></li>
+      <%#=end%> -->
           </ul>
     </li>
     <%end%>

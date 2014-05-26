@@ -144,7 +144,7 @@
 		        <div class="row">
                     <div class="col-sm-9">
                         <div class="form-group margin-t-10">
-							<%= label_tag 'classrooms', "Classrooms", :class=>"control-label form-lable-multiselect"%>
+							<%= label_tag 'classrooms', "Classes", :class=>"control-label form-lable-multiselect"%>
 							<div class="listbox-alig left-listbox" id="assigned_div">
                                 <!-- <span>Assigned Classrooms: </span> -->
 								<%= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_classrooms, "id", "name"), :class=>"classroom-info-hover", :size=>"8", :multiple=>"multiple" %>
