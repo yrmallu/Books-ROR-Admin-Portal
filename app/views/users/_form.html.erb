@@ -8,7 +8,7 @@
 	        	<%end%>
 	        	<div class="mandatory-align">Please enter all mandatory (<span class="asterisk">*</span>) fields.
 	        		<%unless @role_id.name.eql?('Web Admin')%>
-	        		<div class="tab-links">
+	        		<div class="tab-links" data-no-turbolink>
 		        		<div>
 		        		<% if ((can? :read, :users) && (can? :read_sa, :users)) %>
 		        			<%= link_to 'School Admin List', users_path(:role_id => 2, :school_id => @school.id)%> 
