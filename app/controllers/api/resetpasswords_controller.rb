@@ -20,7 +20,7 @@ class Api::ResetpasswordsController < ApplicationController
             teachers.store("id",teacher.id)
             teachers.store("name",teacher.first_name+" "+teacher.last_name.to_s)
             teachers.store("email",teacher.email)
-            teachers.store("role","teacher")
+            teachers.store("role","Teacher")
             s_teachers << teachers
           end
         end
@@ -29,7 +29,7 @@ class Api::ResetpasswordsController < ApplicationController
           parents.store("id",parent.id)
           parents.store("name",parent.name)
           parents.store("email",parent.email)
-          parents.store("role","parent")
+          parents.store("role","Parent")
           s_parents << parents
           p s_parents
         end
