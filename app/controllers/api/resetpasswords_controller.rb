@@ -16,7 +16,7 @@ class Api::ResetpasswordsController < ApplicationController
         json_data = {"return_code" => 1, "return_msg" => "linked email addresses for student"}
         teachers = {}
         @user.classrooms.each do |room|
-          room.users.teachers.each do |teacher|
+          room.users.un_archived.teachers.each do |teacher|
             teachers.store("id",teacher.id)
             teachers.store("name",teacher.first_name+" "+teacher.last_name.to_s)
             teachers.store("email",teacher.email)
