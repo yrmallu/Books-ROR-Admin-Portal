@@ -94,6 +94,7 @@ a:focus {
     vertical-align: text-bottom;
 }
 .login label{display:block; width:58%; margin:auto; text-align:left;}
+.error{ color: #B94A48;}
 .login input[type=text], .login input[type=password], .login select {
     background:#eaedf0;
     border:solid 1px #dddfe2;
