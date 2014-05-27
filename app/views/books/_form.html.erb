@@ -27,39 +27,48 @@
 	            <div class="row">
                     <div class="col-sm-8">
                         <div class="form-group">
-		     		        <%= f.label :teacher_description, " Teacher Book Description", :class=>"control-label" %>
-		     		        <%= f.text_area :teacher_description, :class=>"form-control" %>
+                        	<%= f.label :description, "Book Description", :class=>"control-label" %>
+		     		        <%= f.text_area :description, :class=>"form-control" %>
+                       	</div>
+                    </div> 
+	            </div>
+
+	            <!-- <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+		     		        <%#= f.label :teacher_description, " Teacher Book Description", :class=>"control-label" %>
+		     		        <%#= f.text_area :teacher_description, :class=>"form-control" %>
                         </div>
                     </div> 
                     <div class="col-sm-8">
                         <div class="form-group">
-		     		        <%= f.label :student_description, " Student Book Description", :class=>"control-label" %>
-		     		        <%= f.text_area :student_description, :class=>"form-control" %>
+		     		        <%#= f.label :student_description, " Student Book Description", :class=>"control-label" %>
+		     		        <%#= f.text_area :student_description, :class=>"form-control" %>
                         </div>
                     </div> 
 	            </div>
 	            <div class="row">
 	            	<div class="col-sm-3">
                         <div class="form-group">
-		     		        <%= f.label :interest_level_from, " Interest Level From", :class=>"control-label" %>
-		     		        <%= f.select :interest_level_from, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_from), {:prompt=>"Select Interest Level From", :class=>"form-control"} %>
+		     		        <%#= f.label :interest_level_from, " Interest Level From", :class=>"control-label" %>
+		     		        <%#= f.select :interest_level_from, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_from), {:prompt=>"Select Interest Level From", :class=>"form-control"} %>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-		     		        <%= f.label :interest_level_to, " Interest Level To", :class=>"control-label" %>
-		     		        <%= f.select :interest_level_to, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_to), {:prompt=>"Select Interest Level To", :class=>"form-control"} %>
+		     		        <%#= f.label :interest_level_to, " Interest Level To", :class=>"control-label" %>
+		     		        <%#= f.select :interest_level_to, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_to), {:prompt=>"Select Interest Level To", :class=>"form-control"} %>
                         </div>
                     </div>
 	            </div>	
 	            <div class="row">
 	            	<div class="col-sm-4">
                         <div class="form-group">
-		     		        <%= label "reading_level", "Reading Level", :class=>"control-label" %>
-		     		        <%= select_tag :reading_level, options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.id ] }), {:prompt=>"Select Reading Level", :class=>"form-control"}%>
+		     		        <%#= label "reading_level", "Reading Level", :class=>"control-label" %>
+		     		        <%#= select_tag :reading_level, options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.id ] }), {:prompt=>"Select Reading Level", :class=>"form-control"}%>
                         </div>
                     </div>
-	            </div>	
+	            </div>	 -->
 	            <div class="form-row form-group">
 					<div class="row">
 				    	<div class="col-md-4">
