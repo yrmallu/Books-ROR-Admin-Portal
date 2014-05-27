@@ -45,7 +45,7 @@ class Api::ResetpasswordsController < ApplicationController
   def send_reset_password_email
     user_mail = JSON.parse(params[:p])
     unless user_mail["email"].blank?
-      @user = User.where("email = '#{user_mail["email"]}'").last || Parent.where("email = '#{user_mail["email"]}'").last
+      @user = User.where("lower(email) = lower('#{user_mail["email"]}')").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
       unless @user.blank?
         unless user_mail["username"].blank?
           pwd_param = {"username" => user_mail["username"], "school_id" => user_mail["school_id"], "a_type" => "angular"}.to_json
