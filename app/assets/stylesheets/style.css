@@ -516,7 +516,7 @@ a:focus {
 }
 /* DIVIDER */
  .section-divider {
-    background:url(../images/divider-line.jpg) 0 0 repeat-x;
+    background:url(divider-line.jpg) 0 0 repeat-x;
     height:57px;
     margin:30px 0 0
 }
@@ -524,7 +524,7 @@ a:focus {
     display:block;
     width:118px;
     height:57px;
-    background:url(../images/divider-center.jpg) 0 0 no-repeat;
+    background:url(divider-center.jpg) 0 0 no-repeat;
     margin:auto
 }
 /* STUDENT LIST */
@@ -757,7 +757,7 @@ a:focus {
     width:130px
 }
 .app-button.next {
-    background:url(../images/nxt-btn.png) 0 0 no-repeat;
+    background:url(nxt-btn.png) 0 0 no-repeat;
     border:none;
     width:106px;
     height:35px;
@@ -766,7 +766,7 @@ a:focus {
     cursor: pointer;
 }
 .app-button.prev {
-    background:url(../images/back-btn.png) 0 0 no-repeat;
+    background:url(back-btn.png) 0 0 no-repeat;
     border:none;
     width:106px;
     height:35px;
@@ -781,7 +781,7 @@ a:focus {
     margin-top:30px
 }
 .settings-btn {
-    background:url(../images/settings-btn.png) 0 0 no-repeat;
+    background:url(settings-btn.png) 0 0 no-repeat;
     border:none;
     width:186px;
     height:35px;
@@ -794,7 +794,7 @@ a:focus {
     clear:both
 }
 .settings-btn.active {
-    background:url(../images/settings-btn-active.png) 0 0 no-repeat;
+    background:url(settings-btn-active.png) 0 0 no-repeat;
 }
 .settings-rightcol {
     width:75%;
@@ -951,7 +951,7 @@ label.switch-toggle.hidden {
 .assignbook-sidebar .sidebar-header .close {
     width:32px;
     height:32px;
-    background:url(../images/sidebar-close.png) 0 0 no-repeat;
+    background:url(sidebar-close.png) 0 0 no-repeat;
     display:block;
     float:left;
     opacity:1;
@@ -1010,8 +1010,7 @@ label.switch-toggle.hidden {
     margin: 0 auto;
     height: 26px;
     width: 140px;
-    background: url(../images/switch-bg.png);
-    0 0 no-repeat;
+    background: url(switch-bg.png) 0 0 no-repeat;
     background-color: rgba(0, 0, 0, 0.25);
     border-radius: 3px;
     -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
@@ -1316,7 +1315,7 @@ label.switch-toggle.hidden {
     position: absolute;
 }
 .app-button.next.disabled {
-    background:url(../images/nxt-btn-disabled.png) 0 0 no-repeat;
+    background:url(nxt-btn-disabled.png) 0 0 no-repeat;
     border:none;
     width:106px;
     height:35px;
@@ -1327,7 +1326,7 @@ label.switch-toggle.hidden {
 }
 .app-button.save.disabled {
     display:inline-block;
-    background:url(../images/button-patter-disabled.png) 0 0 repeat;
+    background:url(button-patter-disabled.png) 0 0 repeat;
     border:solid 2px #7B95ED;
 }
 .app-button.next.disabled:hover {
