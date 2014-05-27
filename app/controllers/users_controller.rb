@@ -410,10 +410,12 @@ class UsersController < ApplicationController
   end
    
   def reset_password
-    @a = ""
+    @a = @user = ""
     data_info = Base64.decode64(params[:password_key].to_s)
     @a = JSON.parse(data_info) unless data_info.blank?
     @email_id = Base64.decode64(params[:email].blank? ? @a[:email].to_s : params[:email].to_s)
+    @user = User.where("lower(username) = lower('#{@a["username"]}') and school_id = '#{@a["school_id"]}'").last unless @a["username"].blank?
+    render :layout=>"angular" and return unless @a["a_type"].blank?
     render :layout=>"login"
   end
 

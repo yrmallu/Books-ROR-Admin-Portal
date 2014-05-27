@@ -75,7 +75,8 @@ a:focus {
     float:none;
 }
 .login div {
-    margin-bottom:40px;
+    /*margin-bottom:40px;*/
+	height:100px;
     text-align:center;
 }
 .radio-group {
@@ -92,6 +93,7 @@ a:focus {
     margin-right: 5px;
     vertical-align: text-bottom;
 }
+.login label{display:block; width:58%; margin:auto; text-align:left;}
 .login input[type=text], .login input[type=password], .login select {
     background:#eaedf0;
     border:solid 1px #dddfe2;
