@@ -83,9 +83,9 @@ BooksThatGrow::Application.routes.draw do
       post 'update_license_expiration_date'
 	  get 'quick_edit_school'
 	  get 'undo_school'
+    get 'subregion_options'
     end
   end
-  get '/schools/subregion_options' => 'schools#subregion_options'
   
   resources :sessions, only: [:new, :create, :destroy]
   match '/signin',  to: 'sessions#new',         via: 'get'
