@@ -27,10 +27,10 @@
 			    	<%= @user.phone_number %>
             	</address>
 				<% unless @role_id.name.eql?('Web Admin')%>
-				<address>
+				<address data-no-turbolink>
 			    	<strong>License Expiration Date:</strong>
 			    	<%= @user.license_expiry_date %>
-            	</address>
+			    </address>
 				<%end%>
 				<address>
 			    	<strong>Email:</strong>
@@ -59,13 +59,56 @@
 					<% elsif @role_id.name.eql?('Teacher')%>
 					    <%= link_to 'Return to User List', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>	
 					<% elsif @role_id.name.eql?('Student')%>
+					    <%= link_to 'Change Password', '', :class=>"change_password btn btn-success btn-xs", data: { toggle: "modal", target: "#changePassword", input: @user.id} %>
+					    <%if @user.license.blank?%>
+					    	<% if (can? :get_user_school_licenses, :users) && params[:role_id].eql?('4')  %>
+					    		<%= link_to 'Assign License', '', :class=>"assign_license btn btn-success btn-xs", data: { toggle: "modal", target: "#myModal", input: @user.id}%> 
+							<% end %>
+					    <%else%>
+					  	    <% if (can? :get_user_school_licenses, :users) && params[:role_id].eql?('4')  %>
+							    <%= link_to 'Update License', '', :class=>"assign_license btn btn-success btn-xs", data: { toggle: "modal", target: "#myModal", input: @user.id}%> 
+							<% end %>
+					    <%end%>
+						<% if (can? :remove_license, :users) && params[:role_id].eql?('4') %>
+					    	<%= link_to 'Remove License', remove_license_users_path(:id=>@user.id), :class=>"btn btn-success btn-xs" , data: { confirm: "Are you sure you want to remove this user's license? The user will no longer be able to log in to Books That Grow." } unless @user.license_expiry_date.blank? %>   
+						<% end %>
+
 					    <%= link_to 'Return to User List', users_path(:role_id => @role_id.id, :school_id=>@school.id), class: "btn btn-white btn-xs"%>
 					<%end%>
-        	    </div>
+				</div>
 		    </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+      </div>
+      <div class="modal-body">
+		  <div id="change_user_password_info"></div>
+	  </div>
+    </div>
+  </div>
+</div>	
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Assign License</h4>
+      </div>
+      <div class="modal-body">
+		  <div id="school_licenses_list"></div>
+	  </div>
+    </div>
+  </div>
+</div>	
+
 <script type="text/javascript">
 if( <%= @role_id.name.eql?('Web Admin')%>)
 {
@@ -75,4 +118,27 @@ else if(<%= @role_id.name.eql?('School Admin')%>)
 {
     showHideMenu('li_school');	
 }
+
+$( ".assign_license" ).click(function() {
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), role_id:<%=@role_id.id%>},
+function(data) {
+	         
+             if(data)
+              {
+			   jQuery("#school_licenses_list").html(data);
+             }
+      });
+});
+
+
+$( ".change_password" ).click(function() {
+          jQuery.get("<%=url_for(:controller=>'users',:action=>'change_user_password')%>",{ id : $(this).attr('data-input'), role_id:<%=@role_id.id%>},
+function(data) {
+	         
+             if(data)
+              {
+			   jQuery("#change_user_password_info").html(data);
+             }
+      });
+});
 </script>

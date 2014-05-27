@@ -1,11 +1,23 @@
 
 
-$(document).on("click","#school_country",function(){
-	select_wrapper = $('#school_state_wrapper')		
+// $(document).on("click","#school_country",function(){
+// 	select_wrapper = $('#school_state_wrapper')		
+//     $('select', select_wrapper).attr('disabled', true);
+//     country_code = $(this).val();
+//     alert(country_code);
+//     url = "/schools/subregion_options?parent_region=#{country_code}"
+//     select_wrapper.load(url)
+// });
+
+$(function() {
+  return $('select#school_country').change(function(event) {
+    var country_code, select_wrapper, url;
+    select_wrapper = $('#school_state_wrapper');
     $('select', select_wrapper).attr('disabled', true);
     country_code = $(this).val();
-    url = "/schools/subregion_options?parent_region=#{country_code}"
-    select_wrapper.load(url)
+    url = "/schools/subregion_options?parent_region=" + country_code;
+    return select_wrapper.load(url);
+  });
 });
 
 function validateform()
