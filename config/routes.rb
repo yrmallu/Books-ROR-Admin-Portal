@@ -52,7 +52,7 @@ BooksThatGrow::Application.routes.draw do
       post 'email_for_password'
       get 'get_user_school_licenses'
       get 'email_validation'
-	  get 'username_validation'
+	    get 'username_validation'
       get 'remove_license'
       get 'get_user_accessright'
       post 'update_user_accessright'
@@ -61,12 +61,12 @@ BooksThatGrow::Application.routes.draw do
       get 'import_list'
       post 'import'
       post 'save_user_list'
-	  get 'delete_parent'
-	  get 'quick_edit_user'
-	  get 'remove_bulk_licenses'
-	  get 'get_classroom_details'
-	  get 'user_search'
-	  get 'undo_user'
+	    get 'delete_parent'
+	    get 'quick_edit_user'
+	    get 'remove_bulk_licenses'
+	    get 'get_classroom_details'
+	    get 'user_search'
+	    get 'undo_user'
      end
   end
 
@@ -81,9 +81,9 @@ BooksThatGrow::Application.routes.draw do
       get 'get_schoolwise_license_list'
       get 'check_school_name_uniqueness'
       post 'update_license_expiration_date'
-	  get 'quick_edit_school'
-	  get 'undo_school'
-    get 'subregion_options'
+	    get 'quick_edit_school'
+	    get 'undo_school'
+      get 'subregion_options'
     end
   end
   
