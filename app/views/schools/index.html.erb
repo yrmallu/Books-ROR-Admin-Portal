@@ -48,10 +48,9 @@
 							  <div class="quick-edit" data-col="city" data-id='<%= school.id%>'><%= school.city %></div>
 							  <textarea class="invisible dynamic"></textarea>
 						  </td>
-						  <%#= @country = Carmen::Country.coded('US') %>
-						  <%#= Carmen::Country.coded('US').subregions.coded(school.state) %>
-						  <td class=""><%= Carmen::Country.coded('US').subregions.coded(school.state).try(:name) unless school.state.blank? %></td>
-						  <td class=""><%= school.country %></td>
+						  <% @country = Carmen::Country.coded(school.country) unless school.country.blank?%>
+						  <td><%= Carmen::Country.coded(school.country).subregions.coded(school.state).try(:name) unless school.country.blank? %></td>
+						  <td><%= @country.name unless school.country.blank?%></td>
 						  <td>
 						  	<% if can? :update, :schools %>
 						    	<%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %>  

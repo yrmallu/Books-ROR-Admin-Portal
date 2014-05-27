@@ -28,11 +28,11 @@
             	</address>
             	<address>
 			    	<strong>State:</strong>
-			    	<%= Carmen::Country.coded('US').subregions.coded(@school.state).name unless @school.state.blank? %>
+			    	<%= Carmen::Country.coded(@school.country).subregions.coded(@school.state).name unless @school.country.blank? %>
             	</address>
             	<address>
 			    	<strong>Country:</strong>
-			    	<%= @school.country %>
+			    	<%= Carmen::Country.coded(@school.country).name unless @school.country.blank?  %>
             	</address>
             	<address>
 			    	<strong>Phone:</strong>

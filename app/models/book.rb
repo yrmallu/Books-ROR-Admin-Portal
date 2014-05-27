@@ -11,7 +11,8 @@ class Book < ActiveRecord::Base
   # relationships .............................................................
   has_many :preview_images, :dependent => :destroy  
   has_and_belongs_to_many :reading_grades
-  
+  has_many :reading_grades, :through => :book_reading_grades 
+
   # attachments ...............................................................
   has_attached_file :epub,
   :url  => "/images/assets/template/books/:id/:style/:basename.:extension",

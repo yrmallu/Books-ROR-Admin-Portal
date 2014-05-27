@@ -4,7 +4,8 @@ class BooksController < ApplicationController
   before_action :logged_in?
   before_action :set_book, only: [:show, :edit, :update, :destroy]
   before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
-  
+  before_action :get_reading_grades, only: [:new, :edit]
+
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
 
   def index
@@ -36,7 +37,10 @@ class BooksController < ApplicationController
       if @book.save
         @book.parse_epub 
         format.html { redirect_to @book, notice: 'Book created.' }
-        format.json { render action: 'show', status: :created, location: @book }
+        format.json { 
+          
+          render action: 'show', status: :created, location: @book 
+        }
       else
         format.html { render action: 'new' }
         format.json { render json: @book.errors, status: :unprocessable_entity }
@@ -74,6 +78,10 @@ class BooksController < ApplicationController
     end
     flash[:success] = "Books archived." 
     redirect_to books_path
+  end
+
+  def get_reading_grades
+    @reading_grades = ReadingGrade.all
   end
 
   private

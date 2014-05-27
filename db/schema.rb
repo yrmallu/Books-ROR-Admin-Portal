@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140514123334) do
+ActiveRecord::Schema.define(version: 20140527131811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(version: 20140514123334) do
 
   create_table "books", force: true do |t|
     t.string   "title"
-    t.text     "description"
     t.string   "author"
     t.hstore   "preview_name"
     t.string   "book_file_name"
@@ -57,6 +56,10 @@ ActiveRecord::Schema.define(version: 20140514123334) do
     t.datetime "updated_at"
     t.integer  "chapters",                default: 40
     t.text     "interest_level"
+    t.text     "teacher_description"
+    t.text     "student_description"
+    t.string   "interest_level_from"
+    t.string   "interest_level_to"
   end
 
   create_table "classroom_books", force: true do |t|

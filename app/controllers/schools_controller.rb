@@ -31,7 +31,6 @@ class SchoolsController < ApplicationController
 
   def create
     @school = School.new(school_params)
-    @school.country = 'US'
     if @school.save
       flash[:success] = "School created."
     redirect_to schools_path  
@@ -41,7 +40,6 @@ class SchoolsController < ApplicationController
   end
 
   def update
-    @school.country = 'US'
     if @school.update(school_params)
       flash[:success] = "School updated." 
     redirect_to @school
