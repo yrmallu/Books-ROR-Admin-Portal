@@ -50,6 +50,7 @@ form .form-group {margin-bottom: 15px !important;}
 .index_page_btns{ margin-bottom: 20px !important; float:right;}
 
 .alert { padding: 10px !important;}
+.alert-form-error{padding: 0px !important;}
 
 .alert-notice {background-color: #dff0d8; border-color: #d6e9c6; color: #3c763d;}
 
@@ -133,3 +134,6 @@ label.error {display:block;}
 hr.school-heading-hr{margin-top: 21px;}
 .mandatory-align{margin-top:-10px !important;color:#77818e;}
 .tab-links{float:right; display:block}
+
+.user-info-page-lic{margin-top: -24px;margin-left: 400px;}
+.total{background:#d3d7db}

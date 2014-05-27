@@ -373,7 +373,7 @@ class UsersController < ApplicationController
   
   def remove_license
     remove_license_from_user
-    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
+    redirect_to user_path(@user.id, :role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
   end
   
   def remove_license_from_user 
@@ -572,8 +572,16 @@ class UsersController < ApplicationController
 	if return_val.eql?(true)
       render :json=> true and return
 	else
-	   column_name = params[:column_name].capitalize
-	  render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
+     arrValues = []
+     arrValues = params[:column_name].split('_') if params[:column_name].include? "_"
+	   if !arrValues.blank?
+       arrValues[0].capitalize!
+       arrValues[1].capitalize! 
+       column_name = arrValues.join(' ')
+     else
+       column_name = params[:column_name].capitalize 
+     end 
+     render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
 	end
   end
   
