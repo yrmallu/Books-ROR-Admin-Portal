@@ -8,9 +8,9 @@
   <!-- <link rel="shortcut icon" href="images/favicon.png" type="image/png"> -->
 
   <title>Books That Grow</title>
-  <%= stylesheet_link_tag "style.css" %>
   <%= stylesheet_link_tag "bootstrap.min.css" %>
 
+  <%= stylesheet_link_tag "style.css" %>
   
  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -24,8 +24,9 @@
     <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
 </div>
 <section>
-    <div class="signinpanel">
+    <div class="container page-content ng-scope">
         <div class="row">
+            <div ng-show="teacherActiveForm" class="col-md-9 forgot-pw-form">
 			<% flash.each do |key, value| %>
 				<div class="alert alert-info"> <%= value %>
 		        		<!-- <button class="close" data-dismiss="alert"></button> -->
@@ -34,15 +35,11 @@
 			<% end %>
             <%=yield%>
         </div>
-        <div class="signup-footer">
-            <div class="pull-left">
-                &copy; <%= Time.now.year %>. All Rights Reserved. Books That Grow
-            </div>
-            <div class="pull-right">
-                <!-- Created By: <a href="http://themepixels.com/" target="_blank">ThemePixels</a> -->
-            </div>
-        </div>
+		</div>
     </div>
 </section>
+<%= javascript_include_tag "1_jquery-1.10.2.js" %>
+<%= javascript_include_tag "jquery.validate.js" %>
+<%= javascript_include_tag "required_field_validation.js" %>
 </body>
 </html>

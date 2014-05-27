@@ -75,7 +75,8 @@ a:focus {
     float:none
 }
 .login div {
-    margin-bottom:40px;
+    /*margin-bottom:40px;*/
+	height:100px;
     text-align:center;
 }
 .radio-group {
@@ -94,6 +95,7 @@ a:focus {
     margin-right: 5px;
     vertical-align: text-bottom;
 }
+
 .login input[type=text], .login input[type=password], .login select {
     background:#eaedf0;
     border:solid 1px #dddfe2;
@@ -104,6 +106,7 @@ a:focus {
     font-size:18px;
     color:#444;
 }
+
 .login select {
     color:#909293;
 }
@@ -126,6 +129,7 @@ a:focus {
 .login select option:active {
     color:#444
 }
+.login label{display:block; width:58%; margin:auto; text-align:left;}
 .login input[type=submit] {
     background:url('button-pattern.png') 0 0 repeat;
     border:solid 1px #4f62ad;
@@ -378,7 +382,7 @@ a:focus {
     box-shadow:#d1d1d1 0 0 5px;
     display:block;
     margin:5px auto;
-    background:url(../images/class-thumb-bg.png) center center no-repeat;
+	    background:url(class-thumb-bg.png) center center no-repeat;
 }
 .classroom-list .classroom-block.selected {
     box-shadow:#333 0 0 10px;
@@ -405,7 +409,7 @@ a:focus {
  .back-btn {
     width:50px;
     height:35px;
-    background:url(../images/header-icon-sprite.png) 0 -368px no-repeat;
+    background:url('header-icon-sprite.png') 0 -368px no-repeat;
     display:block;
     float:left;
     margin:18px 30px 0 0
@@ -413,7 +417,7 @@ a:focus {
 .index-btn {
     width:50px;
     height:35px;
-    background:url(../images/header-icon-sprite.png) 0 -418px no-repeat;
+    background:url('header-icon-sprite.png') 0 -418px no-repeat;
     display:block;
     float:left;
     margin:18px 0 0 0
@@ -456,13 +460,13 @@ a:focus {
     font-size:14px;
     color:#444;
 }
-.student-progress {
+.student-'progress' {
     width:70%;
     float:right
 }
 .add-book, .go-to-library {
     display:inline-block;
-    background:url(../images/button-patter2.png) 0 0 repeat;
+    background:url('button-patter2.png') 0 0 repeat;
     border:solid 2px #cfcfcf;
     border-radius:5px;
     padding:5px 15px;
@@ -516,7 +520,7 @@ a:focus {
 }
 /* DIVIDER */
  .section-divider {
-    background:url(../images/divider-line.jpg) 0 0 repeat-x;
+    background:url('divider-line.jpg') 0 0 repeat-x;
     height:57px;
     margin:30px 0 0
 }
@@ -524,7 +528,7 @@ a:focus {
     display:block;
     width:118px;
     height:57px;
-    background:url(../images/divider-center.jpg) 0 0 no-repeat;
+    background:url(divider-center.jpg) 0 0 no-repeat;
     margin:auto
 }
 /* STUDENT LIST */
@@ -757,7 +761,7 @@ a:focus {
     width:130px
 }
 .app-button.next {
-    background:url(../images/nxt-btn.png) 0 0 no-repeat;
+    background:url(nxt-btn.png) 0 0 no-repeat;
     border:none;
     width:106px;
     height:35px;
@@ -766,7 +770,7 @@ a:focus {
     cursor: pointer;
 }
 .app-button.prev {
-    background:url(../images/back-btn.png) 0 0 no-repeat;
+    background:url(back-btn.png) 0 0 no-repeat;
     border:none;
     width:106px;
     height:35px;
@@ -781,7 +785,7 @@ a:focus {
     margin-top:30px
 }
 .settings-btn {
-    background:url(../images/settings-btn.png) 0 0 no-repeat;
+    background:url(settings-btn.png) 0 0 no-repeat;
     border:none;
     width:186px;
     height:35px;
@@ -794,7 +798,7 @@ a:focus {
     clear:both
 }
 .settings-btn.active {
-    background:url(../images/settings-btn-active.png) 0 0 no-repeat;
+    background:url(settings-btn-active.png) 0 0 no-repeat;
 }
 .settings-rightcol {
     width:75%;
@@ -847,10 +851,10 @@ label.switch-toggle {
     width:114px
 }
 label.switch-toggle.on {
-    background:url(../images/yesbtn.png);
+    background:url(yesbtn.png);
 }
 label.switch-toggle.off {
-    background:url(../images/nobtn.png);
+    background:url(nobtn.png);
 }
 label.switch-toggle.hidden {
     display: none;
@@ -951,7 +955,7 @@ label.switch-toggle.hidden {
 .assignbook-sidebar .sidebar-header .close {
     width:32px;
     height:32px;
-    background:url(../images/sidebar-close.png) 0 0 no-repeat;
+    background:url(sidebar-close.png) 0 0 no-repeat;
     display:block;
     float:left;
     opacity:1;
@@ -1010,7 +1014,7 @@ label.switch-toggle.hidden {
     margin: 0 auto;
     height: 26px;
     width: 140px;
-    background: url(../images/switch-bg.png);
+    background: url(switch-bg.png);
     0 0 no-repeat;
     background-color: rgba(0, 0, 0, 0.25);
     border-radius: 3px;
@@ -1228,7 +1232,7 @@ label.switch-toggle.hidden {
     list-style:none
 }
 .table-of-content li {
-    background:url(../images/toi-list-bg.jpg) 0 0 repeat-x;
+    background:url(toi-list-bg.jpg) 0 0 repeat-x;
     padding:15px 30px;
     font-size:20px;
     font-weight:bold;
@@ -1236,7 +1240,7 @@ label.switch-toggle.hidden {
 }
 /* LAZY LOADING */
  .library-books li div.loading {
-    background: url(../images/loading.gif) no-repeat center center;
+    background: url(loading.gif) no-repeat center center;
     background-size: 32px 32px
 }
 .loaded {
@@ -1316,7 +1320,7 @@ label.switch-toggle.hidden {
     position: absolute;
 }
 .app-button.next.disabled {
-    background:url(../images/nxt-btn-disabled.png) 0 0 no-repeat;
+    background:url(nxt-btn-disabled.png) 0 0 no-repeat;
     border:none;
     width:106px;
     height:35px;
@@ -1327,7 +1331,7 @@ label.switch-toggle.hidden {
 }
 .app-button.save.disabled {
     display:inline-block;
-    background:url(../images/button-patter-disabled.png) 0 0 repeat;
+    background:url(button-patter-disabled.png) 0 0 repeat;
     border:solid 2px #7B95ED;
 }
 .app-button.next.disabled:hover {
@@ -1413,14 +1417,14 @@ label.switch-toggle.hidden {
         padding:12px 10px
     }
     .nav-toggle li a {
-        background-image:url(../images/navigation-icon-sprite-big.png);
+        background-image:url(navigation-icon-sprite-big.png);
         background-position:
     }
     .nav-toggle .navigation {
         background-position:10px 8px
     }
     .sidebar-nav li a {
-        background-image:url(../images/navigation-icon-sprite-big.png);
+        background-image:url(navigation-icon-sprite-big.png);
         height:90px
     }
     .sidebar-nav .library {
@@ -1633,14 +1637,14 @@ label.switch-toggle.hidden {
         width: 28%;
     }
     .nav-toggle li a {
-        background-image:url(../images/navigation-icon-sprite-big.png);
+        background-image:url(navigation-icon-sprite-big.png);
         background-position:
     }
     .nav-toggle .navigation {
         background-position:10px 8px
     }
     .sidebar-nav li a {
-        background-image:url(../images/navigation-icon-sprite-big.png);
+        background-image:url(navigation-icon-sprite-big.png);
         height:90px
     }
     .sidebar-nav .library {
@@ -1747,14 +1751,14 @@ label.switch-toggle.hidden {
     }
     /* NAVIGATION */
     .nav-toggle li a {
-        background-image:url(../images/navigation-icon-sprite-big.png);
+        background-image:url(navigation-icon-sprite-big.png);
         background-position:
     }
     .nav-toggle .navigation {
         background-position:10px 8px
     }
     .sidebar-nav li a {
-        background-image:url(../images/navigation-icon-sprite-big.png);
+        background-image:url(navigation-icon-sprite-big.png);
         height:90px
     }
     .sidebar-nav .library {
