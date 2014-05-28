@@ -413,7 +413,11 @@ class UsersController < ApplicationController
     @a = @user = ""
     data_info = Base64.decode64(params[:password_key].to_s)
     @a = JSON.parse(data_info) unless data_info.blank?
-    @email_id = Base64.decode64(params[:email].blank? ? @a[:email].to_s : params[:email].to_s)
+    puts "sssssss", @a, @a["email"]
+    @coupon = Coupon.find_by_code(@a["coupon"])
+    redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :notice =>"The link is expired" and return if @coupon.blank? && !@a["a_type"].blank?
+    redirect_to signin_path, :notice =>"The link is expired" and return if @coupon.blank? && @a["a_type"].blank?
+    @email_id = Base64.decode64(params[:email].blank? ? @a["email"].to_s : params[:email].to_s)
     @user = User.where("lower(username) = lower('#{@a["username"]}') and school_id = '#{@a["school_id"]}'").last unless @a["username"].blank?
     render :layout=>"angular" and return unless @a["a_type"].blank?
     render :layout=>"login"
@@ -429,6 +433,7 @@ class UsersController < ApplicationController
     @user.password = params[:password]
     @user.password_confirmation = params[:password]
     if @user.save
+      Coupon.delete_all(:code=>params[:coupon])
       flash.now[:success] = "Signin with new password."
       redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?
       redirect_to signin_path
@@ -449,11 +454,18 @@ class UsersController < ApplicationController
       flash[:error] = "That email address is not associated with a Books That Grow account. Please try a different email address or contact your administrator for help"
       redirect_to forgot_password_path
     else
-      user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?email="+Base64.encode64(@user.email), :url =>  "http://"+request.env['HTTP_HOST'] } 
+      coupon = random_coupon
+      Coupon.create(:code=>coupon)
+      pwd_param = {"email" => @user.email, "coupon" => coupon}.to_json
+      user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
       UserMailer.forgot_password_email(user_info).deliver
       flash[:success] = "Instructions will be sent to the email address you enter."
       redirect_to signin_path
     end
+  end
+  
+  def random_coupon
+    SecureRandom.urlsafe_base64(16)
   end
   
   def get_role_id
