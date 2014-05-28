@@ -36,11 +36,11 @@ class BooksController < ApplicationController
     respond_to do |format|
       if @book.save
         @book.parse_epub 
-        format.html { redirect_to @book, notice: 'Book created.' }
-        format.json { 
-          
-          render action: 'show', status: :created, location: @book 
+        format.html { 
+          @book.book_reading_grades.create(:book_id=> @book.id, :reading_grade_id=>params[:reading_level])
+          redirect_to @book, notice: 'Book created.' 
         }
+        format.json { render action: 'show', status: :created, location: @book }
       else
         format.html { render action: 'new' }
         format.json { render json: @book.errors, status: :unprocessable_entity }
@@ -53,7 +53,13 @@ class BooksController < ApplicationController
       if @book.update(book_params)
         FileUtils.rm_rf  "#{Rails.root}/public/books/#{@book.book_unique_id}"
         @book.parse_epub 
-        format.html { redirect_to @book, notice: 'Book updated.' }
+        format.html { 
+          unless params[:reading_level].blank?
+            @book.book_reading_grades.destroy_all
+            @book.book_reading_grades.create(:book_id=> @book.id, :reading_grade_id=>params[:reading_level])
+          end
+          redirect_to @book, notice: 'Book updated.' 
+        }
         format.json { render action: 'show', status: :ok, location: @book }
       else
         format.html { render action: 'edit' }
