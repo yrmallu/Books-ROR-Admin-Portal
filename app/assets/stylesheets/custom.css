@@ -137,3 +137,6 @@ hr.school-heading-hr{margin-top: 21px;}
 
 .user-info-page-lic{margin-top: -24px;margin-left: 400px;}
 .total{background:#d3d7db}
+
+/* Making sign in btn clickable */
+.signin-btn-highlight{}
