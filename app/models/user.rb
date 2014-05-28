@@ -128,8 +128,9 @@ class User < ActiveRecord::Base
   end
   
   def welcome_email(path)
-    user_info = {:email => self.email, :firstname => self.first_name, :lastname => self.last_name.to_s, :username=> self.username.to_s, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-	  UserMailer.welcome_email(user_info).deliver
+    pwd_param = pwd_reset_params(self.email)
+    user_info = {:email => self.email, :firstname => self.first_name, :lastname => self.last_name.to_s, :username=> self.username.to_s, :reset_pass_url => "http://"+path+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+    UserMailer.welcome_email(user_info).deliver
   end
   
   def user_details_change_email
@@ -156,19 +157,31 @@ class User < ActiveRecord::Base
 	  if !self.password_digest_was.eql?(self.password_digest) && !self.password_digest.blank?
 	    arr_changed_attributes << 'Password'
 	  end
-      if !self.email_was.eql?(self.email) && !self.email.blank? 
+      if !self.email_was.eql?(self.email) && !self.email.blank?
 	    arr_changed_attributes << 'Email'
-	    user_info = {:email => email_was, :name => self.first_name, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :new_email=> self.email, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
+      pwd_param = pwd_reset_params(self.email)
+	    user_info = {:email => email_was, :name => self.first_name, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :new_email=> self.email, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => link_url, :login_url =>  "http://"+app_route } 
 	    UserMailer.user_email_changed(user_info).deliver unless self.email_was.blank?
 	  end
 	  unless arr_changed_attributes.empty?
         pass_changed = arr_changed_attributes.include?('Password') ? "Password Changed" : ""
-        user_info = {:email => self.email, :name => self.first_name, :password_changed =>pass_changed, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
+        pwd_param = pwd_reset_params(self.email)
+        user_info = {:email => self.email, :name => self.first_name, :password_changed =>pass_changed, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => link_url, :login_url =>  "http://"+app_route } 
 	      UserMailer.user_details_changed(user_info).deliver
       end
     end
   end
   
+  def pwd_reset_params(email)
+    coupon = random_coupon
+    Coupon.create(:code=>coupon)
+    return {"email" => email, "coupon" => coupon}.to_json
+  end
+  
+  def random_coupon
+    SecureRandom.urlsafe_base64(16)
+  end
+
   def access_to_remove_or_add(options={})
     options[:accessright].each do |access|
       unless (options[:removed] + options[:added]).include?(access)

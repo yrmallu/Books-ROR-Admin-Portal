@@ -414,10 +414,10 @@ class UsersController < ApplicationController
     data_info = Base64.decode64(params[:password_key].to_s)
     @a = JSON.parse(data_info) unless data_info.blank?
     @coupon = Coupon.find_by_code(@a["coupon"])
-    redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :notice =>"The link is expired" and return if @coupon.blank? && !@a["a_type"].blank?
-    redirect_to signin_path, :notice =>"The link is expired" and return if @coupon.blank? && @a["a_type"].blank?
+    redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return if @coupon.blank? && !@a["a_type"].blank?
+    redirect_to signin_path and return if @coupon.blank? && @a["a_type"].blank?
     @email_id = Base64.decode64(params[:email].blank? ? @a["email"].to_s : params[:email].to_s)
-    @user = User.where("lower(username) = lower('#{@a["username"]}') and school_id = '#{@a["school_id"]}'").last unless @a["username"].blank?
+    @user = User.un_archived.where("lower(username) = lower('#{@a["username"]}') and school_id = '#{@a["school_id"]}'").last unless @a["username"].blank?
     render :layout=>"angular" and return unless @a["a_type"].blank?
     render :layout=>"login"
   end
@@ -428,7 +428,7 @@ class UsersController < ApplicationController
   
   def set_new_password
     if params[:password] != ""
-    @user = params[:email_id].blank? ? User.where("lower(username) = lower('#{params[:username]}') and school_id = '#{params[:school_id]}'").last : User.find_by_email(params[:email_id].downcase)
+    @user = params[:email_id].blank? ? User.un_archived.where("lower(username) = lower('#{params[:username]}') and school_id = '#{params[:school_id]}'").last : User.un_archived.where("lower(email) = lower('#{params[:email_id]}')").last
     @user.password = params[:password]
     @user.password_confirmation = params[:password]
     if @user.save
