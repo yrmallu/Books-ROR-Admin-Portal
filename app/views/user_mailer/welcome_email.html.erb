@@ -11,7 +11,7 @@
         <tr style="background:#1d2939;">
           <td width="30" id="header" style="padding:20px;">
             <a href="javscript:void(0);" >
-				      <%= image_tag(@user_info[:login_url] + "/assets/logo.png", :width=>"50px", :height=>"50px")%>
+				      <%= image_tag(@user_info[:login_url] + "/assets/app_icon_60.png")%>
 			      </a>
           </td>
           <td width="620" style="font-size:24px; font-weight:bold; text-transform:uppercase; padding:20px; text-align:left; color:#fff">Books That Grow</td>
@@ -23,9 +23,9 @@
               Hello <%= @user_info[:firstname] %>,
             </p>
             <p style="margin:0 0; font-size:13px">
-              An administrator has created your account with Books That Grow. 
+              A Books That Grow account has been created for you.
             </p>
-            <p style="margin:0 0; font-size:13px">
+            <p style="margin:15px 0; font-size:13px">
               You can log in to Books That Grow using the following information.
             </p>
             <p style="margin:15px 0; font-size:13px">
@@ -39,10 +39,13 @@
             <p style="margin:0 0; font-size:13px">
               To reset your password, click on the following link: <a href = '<%= @user_info[:reset_pass_url] %>'>reset password</a>
             </p>
+            <p style="margin:15px 0; font-size:13px">
+              We hope you enjoy Books That Grow!
+            </p> 
             <p style="margin:15px 0 0; font-size:13px">
-              Thanks,
+              Sincerely,
             </p>
-            <p style="margin:0 0; font-size:13px">
+            <p style="margin:15px 0; font-size:13px">
               The Books That Grow Team
             </p>
           </td>
