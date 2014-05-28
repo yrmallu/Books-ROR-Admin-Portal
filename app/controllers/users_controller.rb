@@ -413,7 +413,6 @@ class UsersController < ApplicationController
     @a = @user = ""
     data_info = Base64.decode64(params[:password_key].to_s)
     @a = JSON.parse(data_info) unless data_info.blank?
-    puts "sssssss", @a, @a["email"]
     @coupon = Coupon.find_by_code(@a["coupon"])
     redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :notice =>"The link is expired" and return if @coupon.blank? && !@a["a_type"].blank?
     redirect_to signin_path, :notice =>"The link is expired" and return if @coupon.blank? && @a["a_type"].blank?
