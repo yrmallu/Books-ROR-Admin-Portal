@@ -42,9 +42,9 @@ class Api::ResetpasswordsController < ApplicationController
           student.store("role","Student")
           s_student << student
         end
+        response_data += s_student.uniq unless s_student.blank?
         response_data += s_parents.uniq unless s_parents.blank?
         response_data += s_teachers.uniq unless s_teachers.blank?
-        response_data += s_student.uniq unless s_student.blank?
         json_data.store("response_data",response_data)
       else
         json_data = {"return_code" => 0, "return_msg" => "not found"}
@@ -57,12 +57,14 @@ class Api::ResetpasswordsController < ApplicationController
     unless user_mail["email"].blank?
       @user = User.un_archived.where("lower(email) = lower('#{user_mail["email"]}')").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
       unless @user.blank?
+        coupon = random_coupon
+        Coupon.create(:code=>coupon)
         unless user_mail["username"].blank?
           student = User.where("lower(username) = lower('#{user_mail["username"]}') and school_id = '#{user_mail["school_id"]}'").last
-          pwd_param = {"username" => user_mail["username"], "school_id" => user_mail["school_id"], "a_type" => "angular"}.to_json
+          pwd_param = {"username" => user_mail["username"], "school_id" => user_mail["school_id"], "a_type" => "angular", "coupon" => coupon}.to_json
           user_info = {:email => @user.email, :name => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :username=>student.first_name+" "+student.last_name.to_s, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" } 
         else
-          pwd_param = {"email" => @user.email, "a_type" => "angular"}.to_json
+          pwd_param = {"email" => @user.email, "a_type" => "angular", "coupon" => coupon}.to_json
           user_info = {:email => @user.email, :name => @user.first_name+" "+@user.last_name.to_s, :username=>@user.username, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" } 
         end
         UserMailer.forgot_password_email(user_info).deliver
@@ -72,6 +74,10 @@ class Api::ResetpasswordsController < ApplicationController
       end
     end
     render :json => json_data
+  end
+  
+  def random_coupon
+    SecureRandom.urlsafe_base64(16)
   end
 	
 	 def set_headers
