@@ -38,12 +38,13 @@ class UserMailer < ActionMailer::Base
   end
 
   def forgot_password_email(user_info)
-    @email = user_info[:email]
-	@name = user_info[:name]
-	@username = user_info[:username]
-    @link =  user_info[:link]
-    @url  = user_info[:url]
-    mail(to: @email, subject: 'Forgot password for Books That Grow.')
+    @user_info = user_info
+  #     @email = user_info[:email]
+  # @name = user_info[:name]
+  # @username = user_info[:username]
+  #     @link =  user_info[:link]
+  #     @url  = user_info[:url]
+    mail(to: @user_info[:email], subject: 'Forgot password for Books That Grow.')
   end
   
   # def user_password_changed(user_info)
