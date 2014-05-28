@@ -129,7 +129,7 @@ class User < ActiveRecord::Base
   
   def welcome_email(path)
     user_info = {:email => self.email, :firstname => self.first_name, :lastname => self.last_name.to_s, :username=> self.username.to_s, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-	UserMailer.welcome_email(user_info).deliver
+	  UserMailer.welcome_email(user_info).deliver
   end
   
   def user_details_change_email
@@ -162,22 +162,13 @@ class User < ActiveRecord::Base
 	    UserMailer.user_email_changed(user_info).deliver unless self.email_was.blank?
 	  end
 	  unless arr_changed_attributes.empty?
-        user_info = {:email => self.email, :name => self.first_name, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
-	    UserMailer.user_details_changed(user_info).deliver
+        pass_changed = arr_changed_attributes.include?('Password') ? "Password Changed" : ""
+        user_info = {:email => self.email, :name => self.first_name, :password_changed =>pass_changed, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?email="+Base64.encode64(self.email), :link => link_url, :login_url =>  "http://"+app_route } 
+	      UserMailer.user_details_changed(user_info).deliver
       end
     end
   end
   
-	#   def user_details_change_email(current_user, path)
-	#     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-	# UserMailer.user_details_changed(user_info).deliver
-	#   end
-	#   
-	#   def user_email_change_email(current_user, path, emails)
-	#     user_info = {:email => self.email, :username => self.first_name+" "+self.last_name.to_s, :current_user => current_user, :reset_pass_url => "http://"+path+"/reset_password?email="+Base64.encode64(self.email), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
-	#     UserMailer.user_email_changed(user_info, emails).deliver
-	#   end
-
   def access_to_remove_or_add(options={})
     options[:accessright].each do |access|
       unless (options[:removed] + options[:added]).include?(access)

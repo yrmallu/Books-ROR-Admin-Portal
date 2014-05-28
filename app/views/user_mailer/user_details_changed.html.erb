@@ -17,35 +17,58 @@
           <td width="620" style="font-size:24px; font-weight:bold; text-transform:uppercase; padding:20px; text-align:left; color:#fff">Books That Grow</td>
         </tr>
         <tr class="episode">
-          <td valign="top" colspan="2" style="padding:20px">
-            <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow account has been updated.</h2>
-            <p style="margin:15px 0; font-size:13px">
-              Dear <%= @user_info[:name] %>, 
-            </p>
-            <p style="margin:0 0; font-size:13px">
-              An administrator has updated your Books That Grow account. 
-            </p>
-            <p style="margin:15px 0; font-size:13px">
-              <p style="margin:0 0; font-size:13px">
-                Username: <%= @user_info[:username] %>
+
+          <%if @user_info[:password_changed].blank?%>
+            <td valign="top" colspan="2" style="padding:20px">
+              <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow account has been updated.</h2>
+              <p style="margin:15px 0; font-size:13px">
+                Hello <%= @user_info[:name] %>, 
               </p>
               <p style="margin:0 0; font-size:13px">
-                Email: <%= @user_info[:email] %>
+                An administrator has updated your Books That Grow account. 
               </p>
-            </p> 
-            <p style="margin:0 0; font-size:13px">
-              To reset your password, click on the following link: <a href = '<%= @user_info[:reset_pass_url] %>'>reset password</a>
-            </p>
-            <p style="margin:15px 0; font-size:13px">
-              If you believe this update was made in error, please immediately contact your school administrator.
-            </p>
-            <p style="margin:15px 0 0; font-size:13px">
-              Thanks,
-            </p>
-            <p style="margin:15px 0; font-size:13px">
-              The Books That Grow Team
-            </p>
-          </td>
+              <p style="margin:15px 0; font-size:13px">
+                <p style="margin:0 0; font-size:13px">
+                  Username: <%= @user_info[:username] %>
+                </p>
+                <p style="margin:0 0; font-size:13px">
+                  Email: <%= @user_info[:email] %>
+                </p>
+              </p> 
+              <p style="margin:0 0; font-size:13px">
+                To reset your password, click on the following link: <a href = '<%= @user_info[:reset_pass_url] %>'>reset password</a>
+              </p>
+              <p style="margin:15px 0; font-size:13px">
+                If you believe this update was made in error, please immediately contact your school administrator.
+              </p>
+              <p style="margin:15px 0 0; font-size:13px">
+                Thanks,
+              </p>
+              <p style="margin:15px 0; font-size:13px">
+                The Books That Grow Team
+              </p>
+            </td>
+          <%else%>
+            <td valign="top" colspan="2" style="padding:20px">
+              <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow password has been reset.</h2>
+              <p style="margin:15px 0; font-size:13px">
+                Hello <%= @user_info[:name] %>, 
+              </p>
+              <p style="margin:0 0; font-size:13px">
+                Your Books That Grow password has been reset. 
+              </p>
+              <p style="margin:15px 0; font-size:13px">
+                If you believe this was done in error, please immediately contact your school administrator and reset your password by clicking on the following link: <a href = '<%= @user_info[:reset_pass_url] %>'>reset password</a>
+              </p>
+              <p style="margin:15px 0 0; font-size:13px">
+                Thanks,
+              </p>
+              <p style="margin:15px 0; font-size:13px">
+                The Books That Grow Team
+              </p>
+            </td>
+          <%end%>  
+
         </tr>
         <tr>
           <td class="divider" colspan="2" bgcolor="#555555" height="2" style="background-color:#1d2939; height:2px;"></td>

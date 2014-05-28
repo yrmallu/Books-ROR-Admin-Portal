@@ -99,7 +99,7 @@
   					         <%if @role_id.name.eql?('Student')%>
 					             <td>
 									 <div class="dropdown-quick-edit" data-col="grade" data-id='<%= user.id%>'><%= ReadingGrade.find(user.grade).grade_short unless  user.grade.blank? %></div>
-									 <%= select_tag :grade, options_from_collection_for_select(@reading_grades,"grade_short", "grade_short"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
+									 <%= select_tag :grade, options_from_collection_for_select(@reading_grades,"id", "grade_short"), {:prompt=>"Select Grade Level", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
 								 </td>
 					             <td>
 									 <div class="dropdown-quick-edit" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_short + " (" + ReadingGrade.find(user.reading_ability).grade_name + ") " unless user.reading_ability.blank? %></div>
