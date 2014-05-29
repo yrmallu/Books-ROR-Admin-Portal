@@ -3,7 +3,7 @@
 	    <div class="panel panel-default">
 	        <div class="panel-heading align-school-header">
 	        	<%unless @school.blank?%>
-	        	<span class="top-school-heading"><%= link_to (@school.code) + " " + @school.name, school_path(@school)%></span>
+	        	<span class="top-school-heading"><%= link_to @school.name + " (" + @school.code + ")"  , school_path(@school)%></span>
 	        	<hr class="school-heading-hr">
 	        	<%end%>
 	        	<div class="mandatory-align">Please enter all mandatory (<span class="asterisk">*</span>) fields.

@@ -5,7 +5,7 @@
 	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
-				<%= form_for @book, :html=>{:class=>"form_validation"}, :html => { :multipart => true } do |f| %>
+				<%= form_for @book, :html=>{:class=>"form_validation book_form"}, :html => { :multipart => true } do |f| %>
 					<div id="errorbox">	
 					    <%= render "shared/error_messages", :object=>@book %>
 					</div>
@@ -48,24 +48,29 @@
                     </div> 
 	            </div>
 	            <div class="row">
-	            	<div class="col-sm-3">
+	            	<div class="col-sm-4">
                         <div class="form-group">
-		     		        <%= f.label :interest_level_from, " Interest Level From", :class=>"control-label" %>
+		     		        <%= f.label :interest_level_from, " Interest Level From", :class=>"control-label" %><span class="asterisk">*</span> </br>
 		     		        <%= f.select :interest_level_from, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_from), {:prompt=>"Select Interest Level From", :class=>"form-control"} %>
                         </div>
-                    </div>
-                    <div class="col-sm-3">
+					</div>
+                    <div class="col-sm-4">
                         <div class="form-group">
-		     		        <%= f.label :interest_level_to, " Interest Level To", :class=>"control-label" %>
+		     		        <%= f.label :interest_level_to, " Interest Level To", :class=>"control-label" %><span class="asterisk">*</span> </br>
 		     		        <%= f.select :interest_level_to, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_to), {:prompt=>"Select Interest Level To", :class=>"form-control"} %>
                         </div>
+						<div id="id_end_msg" class="hide error">Interest Level To should be greater than Interest Level From </div>
                     </div>
 	            </div>	
 	            <div class="row">
-	            	<div class="col-sm-4">
+	            	<div class="col-sm-3">
                         <div class="form-group">
-		     		        <%= label "reading_level", "Reading Level", :class=>"control-label" %>
-		     		        <%= select_tag :reading_level, options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.id ] }, :selected=>@book.book_reading_grades.last.reading_grade_id), {:prompt=>"Select Reading Level", :class=>"form-control"}%>
+		     		        <%= label_tag "reading_level", "Reading Level", :class=>"control-label" %>
+						    <% if @book.book_reading_grades.blank? %>
+							    <%= select_tag :reading_level, options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.id ] }), {:class=>"form-control",:multiple => true}%>
+							<%else%>
+								<%= select_tag :reading_level, options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.id ] }, :selected=>@book.book_reading_grades.map(&:reading_grade_id)), {:class=>"form-control",:multiple => true}%>
+							<%end%>
                         </div>
                     </div>
 	            </div>	

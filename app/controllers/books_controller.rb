@@ -20,6 +20,13 @@ class BooksController < ApplicationController
   end
 
   def show
+    @arr_concatinated_reading_levels = []
+    unless @book.book_reading_grades.blank?
+      arr_reading_level_ids = @book.book_reading_grades.map(&:reading_grade_id) 
+      arr_reading_level_ids.each do |reading_level_id|
+        @arr_concatinated_reading_levels << ReadingGrade.find(reading_level_id).grade_short + "( " + ReadingGrade.find(reading_level_id).grade_name + " )"
+      end
+    end  
   end
 
   def new
@@ -37,7 +44,7 @@ class BooksController < ApplicationController
       if @book.save
         @book.parse_epub 
         format.html { 
-          @book.book_reading_grades.create(:book_id=> @book.id, :reading_grade_id=>params[:reading_level])
+          params[:reading_level].each{|reading_level_id| @book.book_reading_grades.create(:book_id=> @book.id, :reading_grade_id=>reading_level_id) } unless params[:reading_level].blank?
           redirect_to @book, notice: 'Book created.' 
         }
         format.json { render action: 'show', status: :created, location: @book }
@@ -56,7 +63,7 @@ class BooksController < ApplicationController
         format.html { 
           unless params[:reading_level].blank?
             @book.book_reading_grades.destroy_all
-            @book.book_reading_grades.create(:book_id=> @book.id, :reading_grade_id=>params[:reading_level])
+            params[:reading_level].each{|reading_level_id| @book.book_reading_grades.create(:book_id=> @book.id, :reading_grade_id=>reading_level_id) } unless params[:reading_level].blank?
           end
           redirect_to @book, notice: 'Book updated.' 
         }
