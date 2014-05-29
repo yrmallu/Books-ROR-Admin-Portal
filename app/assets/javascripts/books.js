@@ -12,35 +12,35 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-$( "#book_interest_level_to" ).change(function() {	
-  if ($('#book_interest_level_from').val() >= $('#book_interest_level_to').val() )
-  {
-	show_message();
-	return false;
-  }
-  else
-  {
-	hide_message();  
-	return true;
-  }
-});
-$( "#book_interest_level_from" ).change(function() {
-  if($('#book_interest_level_to').val() != '')	
-  {
-  	if ($('#book_interest_level_from').val() >= $('#book_interest_level_to').val() )
-    {
-	  show_message();  
-	  return false;
-    }
-    else
-    {
-	  hide_message();
-	  return true;
-    }
-  }
-});
+// $( "#book_interest_level_to" ).change(function() {	
+//   if ($('#book_interest_level_from').val() >= $('#book_interest_level_to').val() )
+//   {
+// 	show_message();
+// 	return false;
+//   }
+//   else
+//   {
+// 	hide_message();  
+// 	return true;
+//   }
+// });
+// $( "#book_interest_level_from" ).change(function() {
+//   if($('#book_interest_level_to').val() != '')	
+//   {
+//   	if ($('#book_interest_level_from').val() >= $('#book_interest_level_to').val() )
+//     {
+// 	  show_message();  
+// 	  return false;
+//     }
+//     else
+//     {
+// 	  hide_message();
+// 	  return true;
+//     }
+//   }
+// });
 
-$( ".new_book" ).submit(function( event ) {
+$( ".book_form" ).submit(function( event ) {
 	  if ($('#book_interest_level_from').val() >= $('#book_interest_level_to').val() )
 	  {
 		show_message();

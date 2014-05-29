@@ -31,8 +31,8 @@ required_field = function(){
 			"book[title]":{required: true},
 			"book[interest_level_from]":{required: true},
 			"book[interest_level_to]":{required: true},
-			"book[book_cover]":{required: true},
-			"book[epub]":{required: true},
+			//"book[book_cover]":{required: true},
+			//"book[epub]":{required: true},
 			//"user[phone_number]":{ number: true },
             email: {
 				required:true,
@@ -62,8 +62,8 @@ required_field = function(){
 			"book[title]":"Book Title can't be blank.",
 			"book[interest_level_from]":"Select Interest Level From.",
 			"book[interest_level_to]":"Select Interest Level To.",
-			"book[book_cover]":"Upload Small Book Cover.",
-			"book[epub]":"Upload Epub Book.",
+			//"book[book_cover]":"Upload Small Book Cover.",
+			//"book[epub]":"Upload Epub Book.",
 			"session[password]": {
 								required: "Please provide a password.",
 								minlength: "Your password must be at least 5 characters long."
