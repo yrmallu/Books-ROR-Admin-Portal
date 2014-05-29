@@ -25,15 +25,18 @@ $( "#book_interest_level_to" ).change(function() {
   }
 });
 $( "#book_interest_level_from" ).change(function() {
-  if ($('#book_interest_level_from').val() >= $('#book_interest_level_to').val() )
+  if($('#book_interest_level_to').val() != '')	
   {
-	show_message();  
-	return false;
-  }
-  else
-  {
-	hide_message();
-	return true;
+  	if ($('#book_interest_level_from').val() >= $('#book_interest_level_to').val() )
+    {
+	  show_message();  
+	  return false;
+    }
+    else
+    {
+	  hide_message();
+	  return true;
+    }
   }
 });
 

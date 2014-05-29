@@ -28,8 +28,11 @@ required_field = function(){
 			"license[license_batch_name]":{required: true} ,
 			"classroom[name]":{required: true} ,
 			"user[parent_email]":{email:true },
+			"book[title]":{required: true},
 			"book[interest_level_from]":{required: true},
 			"book[interest_level_to]":{required: true},
+			"book[book_cover]":{required: true},
+			"book[epub]":{required: true},
 			//"user[phone_number]":{ number: true },
             email: {
 				required:true,
@@ -56,8 +59,11 @@ required_field = function(){
 			"classroom[name]": "Classroom Name can't be blank.",
 			"user[parent_email]":"Enter a valid email address.",
 			"user[username]": "Username can't be blank.",
-			"book[interest_level_from]":"Select Interest Level From",
-			"book[interest_level_to]":"Select Interest Level To",
+			"book[title]":"Book Title can't be blank.",
+			"book[interest_level_from]":"Select Interest Level From.",
+			"book[interest_level_to]":"Select Interest Level To.",
+			"book[book_cover]":"Upload Small Book Cover.",
+			"book[epub]":"Upload Epub Book.",
 			"session[password]": {
 								required: "Please provide a password.",
 								minlength: "Your password must be at least 5 characters long."
