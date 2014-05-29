@@ -6,19 +6,30 @@
         	</div>
         	<div class="panel-body">
             	<address>
-                	<strong>Book Title:</strong>
+                	<strong>Book Title: </strong>
                 	<%= @book.title %>
             	</address>
             	<address>
-			    	<strong>Book Description</strong>
-			    	<%= @book.description %>
-            	</address>
-            	<address>
-			    	<strong>Book Author</strong>
+			    	<strong>Book Author: </strong>
 			    	<%= @book.author %>
             	</address>
-            	
-			    <div data-no-turbolink>
+            	<address class="word-wrap">
+			    	<strong>Book Teacher Description: </strong>
+			    	<%= @book.teacher_description %>
+            	</address>
+            	<address class="word-wrap"> 
+			    	<strong>Book Student Description: </strong>
+			    	<%= @book.student_description %>
+            	</address>
+            	<address>
+			    	<strong>Interest Level: </strong>
+			    	<%= @book.interest_level_from + " - " + @book.interest_level_to %>
+            	</address>
+            	<address>
+			    	<strong>Reading Level: </strong>
+			    	<%= @arr_concatinated_reading_levels.join(', ') %>
+				</address>
+            	<div data-no-turbolink>
 					<%= link_to 'Edit', edit_book_path(@book), :class=>"btn btn-success btn-xs" %>
 			        <%= link_to 'Return to Book List', books_path, class: "btn btn-white btn-xs"%>
         	    </div>
