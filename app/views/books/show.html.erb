@@ -23,11 +23,11 @@
             	</address>
             	<address>
 			    	<strong>Interest Level: </strong>
-			    	<%= @book.interest_level_from + " - " + @book.interest_level_to %>
+			    	<%= @book.interest_level_from + " - " + @book.interest_level_to unless (@book.interest_level_from.blank? || @book.interest_level_to.blank) %>
             	</address>
             	<address>
 			    	<strong>Reading Level: </strong>
-			    	<%= @arr_concatinated_reading_levels.join(', ') %>
+			    	<%= @arr_concatinated_reading_levels.join(', ') unless @arr_concatinated_reading_levels.blank?%>
 				</address>
             	<div data-no-turbolink>
 					<%= link_to 'Edit', edit_book_path(@book), :class=>"btn btn-success btn-xs" %>
