@@ -158,7 +158,8 @@ class ClassroomsController < ApplicationController
   end
 
   def get_class_info
-    
+    @classroom = Classroom.includes(:users).where("id = #{params[:id]}").last
+    render :file=>"/classrooms/classroom_info", :layout=>false
   end
   
   private

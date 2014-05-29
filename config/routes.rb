@@ -13,6 +13,7 @@ BooksThatGrow::Application.routes.draw do
       get 'import_list'
       post 'import'
       post 'save_classroom_list'
+      get 'get_class_info'
     end
   end
 
