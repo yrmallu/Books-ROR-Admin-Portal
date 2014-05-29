@@ -97,7 +97,7 @@
 	                <div class="col-sm-6">
 	                    <div class="form-group">
 	                    	<%= f.label :reading_ability, "Reading Ability", :class=>"control-label add-student-label" %>
-		    			    <%= f.select :reading_ability, options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.id ] }, :selected=>f.object.reading_ability), {:prompt=>"Select Reading Ability", :class=>"form-control"}%>
+		    			    <%= f.select :reading_ability, options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " ,g.grade_short + " (" + g.grade_name + ") " ] }, :selected=>f.object.reading_ability), {:prompt=>"Select Reading Ability", :class=>"form-control"}%>
 	                    </div>
 	                </div>
 	            </div>

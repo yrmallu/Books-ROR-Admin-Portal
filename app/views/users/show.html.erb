@@ -39,11 +39,11 @@
 				<% if @role_id.name.eql?('Student')%>
 					<address>
 				    	<strong>Student Grade:</strong>
-				    	<%= @grade %>
+				    	<%= @user.grade unless @user.grade.blank?%>
 	            	</address>
 					<address>
 				    	<strong>Student Reading Ability:</strong>
-				    	<%= @reading.grade_short + " (" + @reading.grade_name + ") "  unless @reading.blank?%>
+				    	<%= @user.reading_ability  unless @user.reading_ability.blank?%>
 	            	</address>
 				<%end%>
 			    <div data-no-turbolink>

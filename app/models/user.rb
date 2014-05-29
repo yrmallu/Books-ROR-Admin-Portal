@@ -155,9 +155,9 @@ class User < ActiveRecord::Base
       if !self.username_was.eql?(self.username) && !self.username.blank?
 	    arr_changed_attributes << 'Username'
       end
-	  if !self.userinfo_was.eql?(self.userinfo) && !self.userinfo.blank?
-	    arr_changed_attributes << 'Phone Number OR Grade OR Reading level'
-	  end
+	  # if !self.userinfo_was.eql?(self.userinfo) && !self.userinfo.blank?
+	  #   arr_changed_attributes << 'Phone Number OR Grade OR Reading level'
+	  # end
 	  if !self.password_digest_was.eql?(self.password_digest) && !self.password_digest.blank?
 	    arr_changed_attributes << 'Password'
 	  end

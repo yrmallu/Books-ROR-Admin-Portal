@@ -103,7 +103,7 @@
 								 </td>
 					             <td>
 									 <div class="dropdown-quick-edit" data-col="reading_ability" data-id='<%= user.id%>'><%= ReadingGrade.find(user.reading_ability).grade_short + " (" + ReadingGrade.find(user.reading_ability).grade_name + ") " unless user.reading_ability.blank? %></div>
-									 <%= select_tag "reading_ability", options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.grade_short ] }), {:prompt=>"Select Reading Level", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
+									 <%= select_tag "reading_ability", options_for_select(@reading_grades.collect {|g| [ g.grade_short + " (" + g.grade_name + ") " , g.grade_short + " (" + g.grade_name + ") " ] }), {:prompt=>"Select Reading Level", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
 								 </td>
   					         <%end%>
   					         <td>
@@ -317,9 +317,8 @@ $('.dropdown-dynamic').change(function(e) {
 function dropdown_update_on_quick_edit(this_val)
 {
     var edited_column_name = this_val.prev(".dropdown-quick-edit").data('col');
-	var edited_user_id = this_val.prev(".dropdown-quick-edit").data('id')
-	
-	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value : parseInt(this_val.val()) , id : edited_user_id},
+	var edited_user_id = this_val.prev(".dropdown-quick-edit").data('id');
+	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value :this_val.val() , id : edited_user_id},
 	  function(data) {  
 	  });
 	this_val.parent().children(".dropdown-quick-edit").html(this_val.find('option:selected').text()).removeClass("invisible");
