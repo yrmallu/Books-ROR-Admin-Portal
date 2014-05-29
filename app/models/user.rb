@@ -99,6 +99,10 @@ class User < ActiveRecord::Base
   def is_web_admin?
   	 self.role.name.eql?("Web Admin") unless self.role.blank?
   end
+
+  def is_student?
+     self.role.name.eql?("Student") unless self.role.blank?
+  end
   
   def is_school_admin?
   	 self.role.name.eql?("School Admin") unless self.role.blank?

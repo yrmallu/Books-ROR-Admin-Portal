@@ -98,6 +98,7 @@
 								  <%= label_tag "studnts", "Students", :class=>"control-label form-lable-multiselect" %>
   	                              <div class="listbox-alig left-stud-listbox" id="student_assigned_div">
   	                                  <%= select_tag :student_assigned_id, options_for_select(@assigned_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+
   	                                  <%#= select_tag "student_assigned_id", options_from_collection_for_select(@assigned_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
   	                              </div>
   	                              <div class="assign_arrows">
@@ -130,6 +131,37 @@
 	<% unless current_user.is_web_admin?%>
 	  showHideMenu('li_options');	
 	<%end%>
+
+
+
+	$(document).ready(function()
+ 	{
+     $('.lbjs-item').each(function() {
+         $(this).qtip({
+            content: {
+                text: function(event, api) {
+                    $.ajax({
+                        url: "<%=url_for :controller => 'users', :action => 'get_user_info'%>",
+                        data: {id: $(this).attr("user_id")} 
+                    })
+                    .then(function(content) {
+                        // Set the tooltip content upon successful retrieval
+                        api.set('content.text', content);
+                    }, function(xhr, status, error) {
+                        // Upon failure... set the tooltip content to error
+                        api.set('content.text', status + ': ' + error);
+                    });
+        
+                    return 'Loading...'; // Set some initial text
+                }
+            },
+            position: {
+                viewport: $(window)
+            },
+            style: 'qtip-wiki'
+         });
+     });
+ });
 </script>
 
 

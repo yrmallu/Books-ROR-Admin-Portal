@@ -172,6 +172,7 @@
         var self = this;
         var item = $('<div>')
             .addClass(LIST_ITEM_CLASS)
+            .attr('user_id',parentItem.val())
             .appendTo(this._list)
             .text(parentItem.text())
             .click(function () {

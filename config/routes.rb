@@ -67,6 +67,7 @@ BooksThatGrow::Application.routes.draw do
 	    get 'get_classroom_details'
 	    get 'user_search'
 	    get 'undo_user'
+      get 'get_user_info'
      end
   end
 

@@ -1,0 +1,9 @@
+<%unless @user.blank?%>
+	<b>Name:</b> <%=@user.username%><br/>
+	<b>Email:</b> <%=@user.email%>
+	
+	<%if @user.is_student?%>
+		<br/><b>Grade:</b>  <%=@user.userinfo["grade"]%><br/>
+		<b>Reading Ability:</b> <%=@user.userinfo["reading_ability"]%>
+	<%end%>
+<%end%>

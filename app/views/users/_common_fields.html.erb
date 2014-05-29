@@ -179,6 +179,35 @@ $('.add-parent').on('click','.remove_fields',function(){
 	}
 });
 
+$(document).ready(function()
+ 	{
+     $('.lbjs-item').each(function() {
+         $(this).qtip({
+            content: {
+                text: function(event, api) {
+                    $.ajax({
+                        url: "<%=url_for :controller => 'classrooms', :action => 'get_class_info'%>",
+                        data: {id: $(this).attr("user_id")} 
+                    })
+                    .then(function(content) {
+                        // Set the tooltip content upon successful retrieval
+                        api.set('content.text', content);
+                    }, function(xhr, status, error) {
+                        // Upon failure... set the tooltip content to error
+                        api.set('content.text', status + ': ' + error);
+                    });
+        
+                    return 'Loading...'; // Set some initial text
+                }
+            },
+            position: {
+                viewport: $(window)
+            },
+            style: 'qtip-wiki'
+         });
+     });
+ });
+
 
 </script>		
 

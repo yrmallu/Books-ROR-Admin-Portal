@@ -156,6 +156,10 @@ class ClassroomsController < ApplicationController
     flash[:success] = "School's list imported." 
     redirect_to schools_url 
   end
+
+  def get_class_info
+    
+  end
   
   private
   def set_classroom

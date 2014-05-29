@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-  before_action :set_user, :only => [:show, :edit, :update, :destroy, :get_user_school_licenses, :quick_edit_user, :change_user_password, :remove_license ]
+  before_action :set_user, :only => [:get_user_info, :show, :edit, :update, :destroy, :get_user_school_licenses, :quick_edit_user, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent, :create, :update] 
   before_action :get_manage_student_accessright, :only => [:new, :edit, :create, :update]
   before_action :get_classrooms, :only => [:new]
@@ -609,6 +609,10 @@ class UsersController < ApplicationController
     @user = User.where("id = '#{params[:id]}' AND delete_flag = true ").last
 	@user.update_attributes(:delete_flag=>false)
     redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User un-archived.'
+  end
+
+  def get_user_info
+    render :file=>'/users/user_info.html.erb', :layout=>false
   end
   
   private
