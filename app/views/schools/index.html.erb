@@ -4,6 +4,8 @@
 </div>
 <div class="panel panel-default">
 	<div class="panel-body"> 
+		<div class="fade-bg"></div>
+		<div class="loader"><%= image_tag("loader5.gif")%></div>
 		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
 		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="school_search" title="Search School" >	</i>
 		<%= form_tag 'schools/delete_school' do %>
@@ -14,7 +16,7 @@
 			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
 			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
 		</div>
-		 
+		<div class="loader"><%= image_tag("loader5.gif")%></div>
 		<div class="table-responsive">
 			<table class="table school-table" data-controller="schools" id="school_table">
 				<div class="error-message error quick-edit-error-msg"></div>
@@ -132,6 +134,14 @@
 </div>		
 
 <script type="text/javascript">
+  $('.loader').ajaxStart(function () {
+        $(this).fadeIn('fast');
+        $('.fade-bg').show();
+    }).ajaxStop(function () {
+        $(this).stop().fadeOut('fast');
+        $('.fade-bg').hide();
+    });
+
 $(document).ready(function(){
   if (<%= params[:school_id].blank?%>)
   {
@@ -155,6 +165,17 @@ showHideMenu('li_school');
 	             }
 	      });
 	});	
+	
+$( ".quick-edit" ).mouseover(function() {
+		if ($(this).text() == '')
+		{
+			$(this).addClass('empty-quick-edit-field');
+		}
+		else
+		{
+			$(this).removeClass('empty-quick-edit-field');
+		}
+});	
 	
 $.valHooks.textarea = {
     get: function(elem) {

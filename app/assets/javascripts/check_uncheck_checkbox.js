@@ -24,10 +24,12 @@ function uncheckAll(chkBoxType){
 function checkIfAny(chkBoxType){
   if ($("input[id='"+ chkBoxType + "_ids_']:checked").length > 0){
       $("#delete_"+ chkBoxType).removeAttr('disabled');
-	  $(".bulk-remove-license").removeAttr('disabled');
+	    $(".bulk-remove-license").removeAttr('disabled');
+      $(".bulk-add-update-license").removeAttr('disabled');
       $(".lnk-typ2").css("color","#0d71b4");
   }else{
     $("#delete_"+ chkBoxType).attr('disabled', 'true'); 
-	$(".bulk-remove-license").attr('disabled', 'true'); 
+	  $(".bulk-remove-license").attr('disabled', 'true'); 
+    $(".bulk-add-update-license").attr('disabled', 'true'); 
   }
 }

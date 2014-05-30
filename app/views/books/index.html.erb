@@ -21,7 +21,8 @@
 	            		<th><%= link_to :All, 'javascript:checkAll("book")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("book")', :class => "lnk-typ2" %></th>
                     	<th>Title</th>
                     	<th>Author</th>
-                    	<th>Description</th>
+                    	<th>Description for Teachers</th>
+                    	<th>Description for Students</th>
 						<th>Actions</th>	
 	                </tr>
 	            </thead>
@@ -31,7 +32,8 @@
                    			<td class=""><%= check_box_tag 'book_ids[]', book.id, false, :class => "book-check-box" %></td>
                       		<td class="center"><%= link_to book.title, book_path(:id=>book) %></td>
                       		<td class="center"><%= book.author %></td>
-                      		<td class="center"><%= book.description %></td>
+                      		<td class="center"><%= book.teacher_description %></td>
+                      		<td class="center"><%= book.student_description %></td>
       						<td data-no-turbolink>
   								<% if can? :update, :books %>
 						      		<%= link_to '<i title="Edit Book" class="fa fa-pencil"></i>'.html_safe, edit_book_path(book) %> 						  
