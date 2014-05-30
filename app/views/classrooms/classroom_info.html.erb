@@ -2,5 +2,5 @@
 	Teachers: <%@classroom.users.un_archived.teachers.each do |teacher|%>
 				<%=teacher.get_full_name%></br>
 	<%end%><br/>
-	No.of Students: <%=@classroom.users.un_archived.students.count%>
+	Number of Students: <%=@classroom.users.un_archived.students.count%>
 <%end%>

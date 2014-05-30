@@ -36,13 +36,13 @@
 				 <div class="row">
                     <div class="col-sm-8">
                         <div class="form-group">
-		     		        <%= f.label :teacher_description, " Teacher Book Description", :class=>"control-label" %>
+		     		        <%= f.label :teacher_description, "Book Description for Teachers", :class=>"control-label" %>
 		     		        <%= f.text_area :teacher_description, :class=>"form-control" %>
                         </div>
                     </div> 
                     <div class="col-sm-8">
                         <div class="form-group">
-		     		        <%= f.label :student_description, " Student Book Description", :class=>"control-label" %>
+		     		        <%= f.label :student_description, "Book Description for Students", :class=>"control-label" %>
 		     		        <%= f.text_area :student_description, :class=>"form-control" %>
                         </div>
                     </div> 
@@ -50,13 +50,13 @@
 	            <div class="row">
 	            	<div class="col-sm-4">
                         <div class="form-group">
-		     		        <%= f.label :interest_level_from, " Interest Level From", :class=>"control-label" %><span class="asterisk">*</span> </br>
+		     		        <%= f.label :interest_level_from, "Interest Level From", :class=>"control-label" %><span class="asterisk">*</span> </br>
 		     		        <%= f.select :interest_level_from, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_from), {:prompt=>"Select Interest Level From", :class=>"form-control", :required=>true} %>
                         </div>
 					</div>
                     <div class="col-sm-4">
                         <div class="form-group">
-		     		        <%= f.label :interest_level_to, " Interest Level To", :class=>"control-label" %><span class="asterisk">*</span> </br>
+		     		        <%= f.label :interest_level_to, "Interest Level To", :class=>"control-label" %><span class="asterisk">*</span> </br>
 		     		        <%= f.select :interest_level_to, options_for_select(@reading_grades.collect {|g| [ g.grade_short, g.id ] }, :selected=>f.object.interest_level_to), {:prompt=>"Select Interest Level To", :class=>"form-control", :required=>true} %>
                         </div>
 						<div id="id_end_msg" class="hide error">Interest Level To should be greater than Interest Level From </div>
