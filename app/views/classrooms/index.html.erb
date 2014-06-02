@@ -115,6 +115,7 @@ $(".quick-edit").click(function(e) {
     var text = $(this).text();
 	text.replace("<br />", "\n");
     $(this).parent().children(".dynamic").html(text).removeClass("invisible");
+    $(this).parent().children(".dynamic").focus();
     $(this).addClass("invisible");
 });
 
