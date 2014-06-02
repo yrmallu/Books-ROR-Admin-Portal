@@ -382,19 +382,37 @@ class UsersController < ApplicationController
   
   def remove_bulk_licenses
     params[:bulk_remove_user_ids].each do |user_id|
-	  @user = User.find(user_id)
-	  unless @user.license_id.blank?
-	    remove_license_from_user
+	    @user = User.find(user_id)
+	    unless @user.license_id.blank?
+	      remove_license_from_user
+	    end
 	  end
-	end
-	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
+	  redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'License Removed.' 
   end
-  
+
   def get_user_school_licenses
     @no_mail = params[:no_mail] unless params[:no_mail].blank?
     @licenses = @user.school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"assign_license"
   end
+
+  def get_all_school_licenses
+    @school = School.find(params[:id])
+    @licenses = @school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
+    render :partial=>"add_update_bulk_licenses"
+  end
+
+  def add_update_bulk_licenses
+    binding.pry
+    params[:user_ids].split(',').each do |user_id|
+      @user = User.find(user_id)
+      unless @user.license_id.blank?
+        remove_license_from_user
+      end
+      @user.update_attributes(:license_id=>params[:license_id], :license_expiry_date=>params[:license_expiry_date])
+    end  
+    redirect_to  user_path(:role_id=>params[:role_id], :school_id=>params[:school_id]), notice: 'Added/Updated Licenses.'
+  end  
   
   def assign_license
   end

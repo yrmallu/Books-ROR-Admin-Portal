@@ -1,6 +1,8 @@
 
 <div class="panel panel-default">
 	<div class="panel-body"> 
+		<div class="fade-bg"></div>
+		<div class="loader"><%= image_tag("loader5.gif")%></div>
 		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
 		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="classroom_search" title="Search Classroom" >	</i>
 		<%= form_tag 'classrooms/delete_classroom' do %>
@@ -89,6 +91,14 @@
 </div>		
 
 <script type="text/javascript">
+$('.loader').ajaxStart(function () {
+        $(this).fadeIn('fast');
+        $('.fade-bg').show();
+    }).ajaxStop(function () {
+        $(this).stop().fadeOut('fast');
+        $('.fade-bg').hide();
+  });
+  
 showHideMenu('li_school');
 <% unless current_user.is_web_admin?%>
   showHideMenu('li_options');	
