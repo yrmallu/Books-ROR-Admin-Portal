@@ -104,7 +104,6 @@ class Book < ActiveRecord::Base
   end
 
   def get_book_reading_levels(arr_reading_level_ids)
-    p "fff",arr_reading_level_ids
     arr_concatinated_reading_levels = []
     arr_reading_level_ids.each do |reading_level_id| 
       arr_concatinated_reading_levels << ReadingGrade.find(reading_level_id).grade_short + "( " + ReadingGrade.find(reading_level_id).grade_name + " )" 
