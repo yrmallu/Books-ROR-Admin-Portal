@@ -586,8 +586,8 @@ class UsersController < ApplicationController
     @users =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
     #FileUtils.rm session[:file]
     session[:file] = ""
-    flash[:success] = "School's list saved successfully." 
-    redirect_to users_path(:role_id=>params[:role_id], :school_id => params[:school_id]), :notice => "Users Created."
+    flash.now[:success] = "User's list saved successfully." 
+    redirect_to users_path(:role_id=>params[:role_id], :school_id => params[:school_id])
   end
   
   def get_all_reading_grades
