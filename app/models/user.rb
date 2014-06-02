@@ -80,6 +80,7 @@ class User < ActiveRecord::Base
   end
   
   def username_uniqness?
+    return true if username.blank? 
     query = "username = '#{username}'"
     query << " and school_id = '#{school_id}'" unless school_id.blank?
     query << " and id != #{id}" unless id.blank?
