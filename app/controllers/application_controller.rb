@@ -134,6 +134,7 @@ class ApplicationController < ActionController::Base
     data_list = []
     CSV.foreach(file, headers: true, :header_converters => lambda { |h| h.to_sym.try(:downcase) }) do |row|
       row = row.to_hash
+      next if row.blank?
       row.merge!(:role_id => role) if role && !role.blank?
       row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)

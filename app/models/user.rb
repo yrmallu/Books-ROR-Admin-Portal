@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   ## Callbacks
   ###########################################################################################      
 
-  before_save { self.email = email.downcase }  
+  before_save { self.email = email.to_s.downcase }  
   
   ###########################################################################################
   ## Relationships
@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   scope :school_admins, -> { where(role_id: 2) }
   scope :teachers, -> { where(role_id: 3) }
   scope :students, -> { where(role_id: 4) }
-
+  scope :all_teachers, -> { where("users.role_id in (2,3)") }
 
 
   ###########################################################################################
