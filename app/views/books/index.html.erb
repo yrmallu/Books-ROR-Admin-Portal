@@ -23,17 +23,26 @@
                     	<th>Author</th>
                     	<th>Description for Teachers</th>
                     	<th>Description for Students</th>
+                    	<th>Interest Level</th>
+                    	<th>Reading Level</th>
+                    	<th>Status</th>
 						<th>Actions</th>	
 	                </tr>
 	            </thead>
 	            <tbody>
 					<% @books.each do |book| %>
                  		<tr class="odd gradeX" data-no-turbolink>
-                   			<td class=""><%= check_box_tag 'book_ids[]', book.id, false, :class => "book-check-box" %></td>
-                      		<td class="center"><%= link_to book.title, book_path(:id=>book) %></td>
-                      		<td class="center"><%= book.author %></td>
-                      		<td class="center"><%= book.teacher_description %></td>
-                      		<td class="center"><%= book.student_description %></td>
+                   			<td><%= check_box_tag 'book_ids[]', book.id, false, :class => "book-check-box" %></td>
+                      		<td><%= link_to book.title, book_path(:id=>book) %></td>
+                      		<td><%= book.author %></td>
+                      		<td><%= truncate(book.teacher_description, length: 150, omission: '...')  %></td>
+                      		<td><%= truncate(book.student_description, length: 150, omission: '...') %></td>
+                      		<td><%= book.interest_level_from + " - " + book.interest_level_to unless (book.interest_level_to.blank? && book.interest_level_from.blank? ) %></td>
+                      		<td>
+                      			<% arr_reading_levels = book.book_reading_grades.map(&:reading_grade_id)%>
+                      			<%= book.get_book_reading_levels(arr_reading_levels) unless arr_reading_levels.compact.blank? %>
+                      		</td>
+                      		<td><%= book.active_flag.eql?(false) ? "In Active" : "Active" %></td>
       						<td data-no-turbolink>
   								<% if can? :update, :books %>
 						      		<%= link_to '<i title="Edit Book" class="fa fa-pencil"></i>'.html_safe, edit_book_path(book) %> 						  

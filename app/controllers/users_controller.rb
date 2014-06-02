@@ -403,15 +403,27 @@ class UsersController < ApplicationController
   end
 
   def add_update_bulk_licenses
-    binding.pry
-    params[:user_ids].split(',').each do |user_id|
+    # First remove all license if previously allocated any for selected user.
+    params[:user_ids].split(" ").to_a.each do |user_id|
       @user = User.find(user_id)
       unless @user.license_id.blank?
         remove_license_from_user
       end
-      @user.update_attributes(:license_id=>params[:license_id], :license_expiry_date=>params[:license_expiry_date])
-    end  
-    redirect_to  user_path(:role_id=>params[:role_id], :school_id=>params[:school_id]), notice: 'Added/Updated Licenses.'
+    end
+
+    # Then allocate licenses to selected users by checking count of licenses avaliable and users selected.
+    license = License.find(params[:license_id])
+    if license.used_liscenses < license.no_of_licenses
+      if params[:user_ids].split(" ").to_a.count <= (license.no_of_licenses - license.used_liscenses)
+        params[:user_ids].split(" ").to_a.each do |user_id|
+          @user = User.find(user_id)
+          @user.update_attributes(:license_id=>params[:license_id], :license_expiry_date=>params[:license_expiry_date])
+        end
+      else
+        redirect_to users_path(:role_id=>params[:role_id], :school_id=>params[:school_id]), notice: 'Licenses could not be allocated as count of licenses is less than users selected.' and return
+      end
+    redirect_to users_path(:role_id=>params[:role_id], :school_id=>params[:school_id]), notice: 'Added/Updated Licenses.'
+    end
   end  
   
   def assign_license

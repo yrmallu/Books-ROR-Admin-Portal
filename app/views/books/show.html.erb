@@ -29,6 +29,10 @@
 			    	<strong>Reading Level: </strong>
 			    	<%= @arr_concatinated_reading_levels.join(', ') unless @arr_concatinated_reading_levels.blank?%>
 				</address>
+                <address>
+                    <strong>Book Status: </strong>
+                    <%= @book.active_flag.eql?(false) ? "In Active" : "Active" %>
+                </address>
             	<div data-no-turbolink>
 					<%= link_to 'Edit', edit_book_path(@book), :class=>"btn btn-success btn-xs" %>
 			        <%= link_to 'Return to Book List', books_path, class: "btn btn-white btn-xs"%>
