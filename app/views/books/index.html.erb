@@ -42,7 +42,7 @@
                       			<% arr_reading_levels = book.book_reading_grades.map(&:reading_grade_id)%>
                       			<%= book.get_book_reading_levels(arr_reading_levels) unless arr_reading_levels.compact.blank? %>
                       		</td>
-                      		<td><%= book.active_flag.eql?(false) ? "In Active" : "Active" %></td>
+                      		<td><%= book.active_flag.eql?(false) ? "Inactive" : "Active" %></td>
       						<td data-no-turbolink>
   								<% if can? :update, :books %>
 						      		<%= link_to '<i title="Edit Book" class="fa fa-pencil"></i>'.html_safe, edit_book_path(book) %> 						  
