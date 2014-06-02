@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528092355) do
+ActiveRecord::Schema.define(version: 20140602084856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20140528092355) do
     t.string   "interest_level_to"
     t.text     "description"
     t.string   "interest_level"
+    t.boolean  "active_flag",             default: false
   end
 
   create_table "classroom_books", force: true do |t|
@@ -160,6 +161,16 @@ ActiveRecord::Schema.define(version: 20140528092355) do
     t.integer  "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_books", id: false, force: true do |t|
+    t.integer "id",                 limit: 8
+    t.hstore  "reading_percentage"
+    t.hstore  "last_reading_info"
+    t.integer "user_id",            limit: 8
+    t.string  "device_id"
+    t.integer "book_id"
+    t.string  "reading_info"
   end
 
   create_table "user_classrooms", force: true do |t|

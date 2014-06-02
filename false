@@ -1,0 +1,2 @@
+      invoke  active_record
+      create    db/migrate/20140602084819_add_active_flag_to_book.rb
