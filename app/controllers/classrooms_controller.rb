@@ -121,9 +121,9 @@ class ClassroomsController < ApplicationController
   
   def download_classroom_list
     if params[:format] == "xls"
-      send_file "#{Rails.root}/public/download_classroom_list.xls", :type => "application/vnd.ms-excel", :filename => "classroom_list.xls", :stream => false
+      send_file "#{Rails.root}/public/download_classroom_list.xls", :type => "application/vnd.ms-excel", :filename => "class_list.xls", :stream => false
     else
-      send_file "#{Rails.root}/public/download_classroom_list.csv", :type => "application/vnd.ms-excel", :filename => "classroom_list.csv", :stream => false
+      send_file "#{Rails.root}/public/download_classroom_list.csv", :type => "application/vnd.ms-excel", :filename => "class_list.csv", :stream => false
     end
   end
   
@@ -140,7 +140,7 @@ class ClassroomsController < ApplicationController
         file.write(params[:file].read)
         session[:file] = file.path
       end
-      @classrooms = get_file_data(session[:file], Classroom, save = false, params[:role_id], params[:school_id])
+      @classrooms, @data_flag = get_file_data(session[:file], Classroom, save = false, params[:role_id], params[:school_id])
     rescue ActiveRecord::UnknownAttributeError => e
       # FileUtils.rm data_file
       flash.now[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
@@ -151,10 +151,14 @@ class ClassroomsController < ApplicationController
 
   def save_classroom_list
     # require 'fileutils'
-    @classrooms =  get_file_data(session[:file], Classroom, save = true, params[:role_id], params[:school_id])
+    @classrooms, @data_flag =  get_file_data(session[:file], Classroom, save = true, params[:role_id], params[:school_id])
     FileUtils.rm session[:file]
     session[:file] = ""
-    flash[:success] = "School's list imported." 
+    if @data_flag
+      flash[:success] = "Classroom's list imported." 
+    else
+      flash[:success] = "Classroom's list is not imported due to some incorrect data." 
+    end
     redirect_to schools_url 
   end
 

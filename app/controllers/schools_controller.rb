@@ -102,7 +102,7 @@ class SchoolsController < ApplicationController
         file.write(params[:file].read)
         session[:file] = file.path
       end
-      @schools = get_file_data(session[:file], School, save = false)
+      @schools, @data_flag = get_file_data(session[:file], School, save = false)
       rescue ActiveRecord::UnknownAttributeError => e
       # FileUtils.rm data_file
       flash.now[:notice] = 'Uploaded file is not in format specified, please refer sample sheets before uploading.'
@@ -113,11 +113,15 @@ class SchoolsController < ApplicationController
 
   def save_school_list
     # require 'fileutils'
-    @schools =  get_file_data(session[:file], School, save = true)
+    @schools, @data_flag =  get_file_data(session[:file], School, save = true)
     FileUtils.rm session[:file]
     session[:file] = ""
-    flash[:success] = "School's list imported." 
-    redirect_to schools_url 
+    if @data_flag
+      flash[:success] = "School's list imported." 
+    else
+      flash[:success] = "School's list is not imported due to some incorrect data." 
+    end
+    redirect_to schools_url
   end
 
   def check_school_name_uniqueness

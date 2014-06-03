@@ -108,6 +108,7 @@ class ApplicationController < ActionController::Base
    
     header = spreadsheet.row(1).map{|h| h.to_sym.try(:downcase) unless h.blank?}
     data_list = []
+    data_flag = false
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       next if row.blank?
@@ -119,8 +120,10 @@ class ApplicationController < ActionController::Base
         db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
+            data_flag = true
          elsif data_obj.valid?
              data_obj.save
+             data_flag = true
          else
             data_list << data_obj
          end
@@ -130,12 +133,13 @@ class ApplicationController < ActionController::Base
       end
       
     end
-    data_list
+    return data_list,data_flag
   end
 
   def parse_csv(file, obj, role, save_list, school)
     require 'csv'
     data_list = []
+    data_flag = false
     CSV.foreach(file, headers: true, :header_converters => lambda { |h| h.to_sym.try(:downcase) }) do |row|
       row = row.to_hash
       next if row.blank?
@@ -146,8 +150,10 @@ class ApplicationController < ActionController::Base
         db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
+            data_flag = true
          elsif data_obj.valid?
              data_obj.save
+             data_flag = true
          else
             data_list << data_obj
          end
@@ -156,7 +162,7 @@ class ApplicationController < ActionController::Base
         data_list << [data_obj, error_hash]
       end
     end
-    data_list
+    return data_list,data_flag
   end
   
   #enable_authorization
