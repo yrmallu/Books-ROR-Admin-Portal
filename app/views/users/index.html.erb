@@ -40,7 +40,7 @@
 		<%end%>
 		<% unless @role_id.name.eql?('Web Admin')%>
 			<%=link_to 'Remove Licenses', "", :class=>"btn btn-success btn-xs bulk-remove-license", :disabled => true %>
-			<%=link_to 'Add/Update Licenses', "", :class=>"btn btn-success btn-xs bulk-add-update-license", :disabled => true, data: { toggle: "modal", target: "#add_update_lic", input: 5} %>	
+			<%=link_to 'Add/Update Licenses', "", :class=>"btn btn-success btn-xs bulk-add-update-license", :disabled => true, data: { toggle: "modal", target: "#add_update_lic", input: params[:school_id]} %>	
 		<%end%>	
 	
 		<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
