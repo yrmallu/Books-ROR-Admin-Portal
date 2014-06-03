@@ -3,7 +3,7 @@
 		<!-- <h2>Import Schools</h2>   -->
 		<%= form_tag import_schools_path, multipart: true do %>  
 	  		<%= file_field_tag :file %>  
-	  		<%= submit_tag "Import", :onclick => "return validateform();", :class=>"margin-t-10" %>  
+	  		<%= submit_tag "Import", :onclick => "return validateform();", :class=>"margin-t-10 btn btn-success btn-xs" %>  
 		<% end %>
 	</div>
 </div>	

@@ -1,5 +1,5 @@
 <div data-no-turbolink>
-<%= link_to 'Undo', undo_user_users_path(:id=>params[:user_id]) unless params[:user_id].blank? %>
+<%#= link_to 'Undo', undo_user_users_path(:id=>params[:user_id]) unless params[:user_id].blank? %>
 </div>
   <div class="panel panel-default">
 	<div class="panel-body pos-rel"> 
@@ -51,19 +51,19 @@
 			<thead>
                 <tr>
                 	<th><%= link_to :All, 'javascript:checkAll("user")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("user")', :class => "lnk-typ2" %></th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-					<th>Username</th>
-                    <th>Email</th>
-					<th>Phone Number</th>
+                    <th><span class="table-header">First Name</span></th>
+                    <th><span class="table-header">Last Name</span></th>
+					<th><span class="table-header">Username</span></th>
+                    <th><span class="table-header">Email</span></th>
+					<th><span class="table-header">Phone Number</span></th>
 					<%unless @role_id.name.eql?('Web Admin')%>
-					    <th>License Expiration Date</th>
+					    <th><span class="table-header">License Expiration Date</span></th>
 					<%end%>
 					<%if @role_id.name.eql?('Student')%>
-					    <th>Grade</th>
-					    <th>Reading Level</th>
+					    <th><span class="table-header">Grade</span></th>
+					    <th><span class="table-header">Reading Level</span></th>
 					<%end%>
-					<th>Actions</th>
+					<th><span class="table-header">Actions</span></th>
                  </tr>
               </thead>
               <tbody>
@@ -291,14 +291,14 @@ $(".download_sample").click(function(){
 
 });
 
-$(document).ready(function(){
+//$(document).ready(function(){
   var arr_clicked_id = [];
   $('.user-check-box').click(function(){
 	arr_clicked_id.push($(this).val());
   });
 
   $( ".bulk-remove-license" ).click(function() {
-    jQuery.get("<%=url_for(:controller=>'users',:action=>'remove_bulk_licenses')%>",{ bulk_remove_user_ids : arr_clicked_id},
+    jQuery.get("<%=url_for(:controller=>'users',:action=>'remove_bulk_licenses')%>",{ bulk_remove_user_ids : arr_clicked_id, role_id:<%=@role_id.id%>, school_id:'<%=params[:school_id]%>'},
 	function(data) {
 	      });
   });	
@@ -311,7 +311,7 @@ function(data) {
 			   jQuery("#all_school_licenses_list").html(data);
              }
       });
-  });
+  //});
 
   $('.error-message').removeClass('show').addClass('hide');	
   $(".mask-phone").mask("(999) 999-9999");

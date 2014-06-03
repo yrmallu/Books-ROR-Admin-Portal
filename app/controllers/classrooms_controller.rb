@@ -134,6 +134,7 @@ class ClassroomsController < ApplicationController
   
   def import
     @school_id = params[:school_id]
+    set_bread_crumb(@school_id)
     begin
       File.open(Rails.root.join('public', 'tmp_files', params[:file].original_filename), 'wb') do |file|
         file.write(params[:file].read)

@@ -21,17 +21,22 @@ class LicensesController < ApplicationController
 	  @search_flag = false
 	end
     @license = License.new
-    @school_id = params["school_id"]
-	set_bread_crumb(@school_id)
+    @school_id = params[:school_id]
+	  #get_school(params[:school_id])
+    set_bread_crumb(@school_id)
   end
 
   def edit
      @license = License.find(params[:id])
      @school_id = @license.school_id
+     #get_school(params[:school_id])
      get_license_list
   end
 
-
+  # def get_school
+  #   @school = School.find(@school_id)
+  # end
+    
   def get_license_list
     @licenses = License.where("school_id = #{params[:school_id]}").un_archived.by_newest.page params[:page]
   end

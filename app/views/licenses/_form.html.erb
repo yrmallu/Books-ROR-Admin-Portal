@@ -1,8 +1,14 @@
 <div class="row">
 	<div class="col-md-12">
 	    <div class="panel panel-default">
-	        <div class="panel-heading">
+	        <!-- <div class="panel-heading">
                 <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	        </div> -->
+	        <div class="panel-heading">
+	        	<%unless @school.blank?%>
+	  			<span class="top-school-heading"><%= @school.name + " (" + @school.code + ")" %></span>
+				<%end%>
+	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 			<div id="id_create_license" class="alert_license_success hide">License Added.
 			    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -51,15 +57,16 @@
 		            </div>
 			</div>
 	        <div class="panel-footer" data-no-turbolink>
+	        	<%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
 				<% if action_name.eql?('new') || action_name.eql?('create') %>
-	                <%= f.submit "Save", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
+	                
 			        <%if current_user.role.name.eql?('Web Admin')%>
 					    <%= link_to 'Return to School List', schools_path, class: "btn btn-white btn-xs"%>
 					<%else%>
 					    <%= link_to 'Return to School List', school_path(current_user.school_id), class: "btn btn-white btn-xs"%>
 					<%end%>
 				<%else%>
-				    <%= f.submit "Update", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
+				    <%#= f.submit "Update", class: "btn btn-primary btn-xs", data: { disable_with: 'Saving...' }%>
 			        <%if current_user.role.name.eql?('Web Admin')%>
 					    <%= link_to 'Cancel', schools_path, class: "btn btn-white btn-xs"%>
 					<%else%>

@@ -1,8 +1,13 @@
 <div class="row">
 	<div class="col-md-12">
 	    <div class="panel panel-default">
+	        <!-- <div class="panel-heading">
+	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
+	        </div> -->
 	        <div class="panel-heading">
-	            <!-- <h4 class="panel-title">Classroom Form</h4> -->
+	        	<%unless @school.blank?%>
+	  			<span class="top-school-heading"><%= @school.name + " (" + @school.code + ")" %></span>
+				<%end%>
 	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">

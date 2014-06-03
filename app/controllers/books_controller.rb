@@ -12,11 +12,12 @@ class BooksController < ApplicationController
     if params[:query_string] && !(params[:query_string].blank?)
       @books = Book.search("%#{params[:query_string]}%").un_archived.page(params[:page]).per(10) 
       @search_flag = true
-    else
+    elsif params[:show_all].blank?
       @books = Book.un_archived.by_newest.page params[:page]
       @search_flag = false
-    end
-    
+    elsif params[:show_all].eql?('true')
+      @books = Book.un_archived.by_newest
+    end  
   end
 
   def show
@@ -96,6 +97,10 @@ class BooksController < ApplicationController
   def get_reading_grades
     @reading_grades = ReadingGrade.all
   end
+
+  def show_all_books
+
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.

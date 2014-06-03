@@ -1,7 +1,7 @@
-<div data-no-turbolink class="alert-warning undo-alert">
-<%= link_to '<i class="fa fa-undo"></i>'.html_safe + ' Undo', undo_school_schools_path(:id=>params[:school_id]) unless params[:school_id].blank? %>
+<!-- <div data-no-turbolink class="alert-warning undo-alert">
+<%#= link_to '<i class="fa fa-undo"></i>'.html_safe + ' Undo', undo_school_schools_path(:id=>params[:school_id]) unless params[:school_id].blank? %>
 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-</div>
+</div> -->
 <div class="panel panel-default">
 	<div class="panel-body"> 
 		<div class="fade-bg"></div>
@@ -23,13 +23,13 @@
 	            <thead>
 	                <tr>
 	                	<th><%= link_to :All, 'javascript:checkAll("school")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("school")', :class => "lnk-typ2" %>  </th>
-	                    <th>School Code</th>
-	                    <th>School Name</th>
-	                    <th>District</th>
-	                    <th>City</th>
-						<th>State</th>
-	                    <th>Country</th>
-						<th>Actions</th>
+	                    <th><span class="table-header">School Code</span></th>
+	                    <th><span class="table-header">School Name</span></th>
+	                    <th><span class="table-header">District</span></th>
+	                    <th><span class="table-header">City</span></th>
+						<th><span class="table-header">State</span></th>
+	                    <th><span class="table-header">Country</span></th>
+						<th><span class="table-header">Actions</span></th>
 	                </tr>
 	            </thead>
 	            <tbody>
