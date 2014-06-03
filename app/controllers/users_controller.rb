@@ -572,7 +572,7 @@ class UsersController < ApplicationController
         data_file = file
         session[:file] = file.path
       end
-      @users = get_file_data(session[:file], User, save = false, @role_id)
+      @users, @data_flag = get_file_data(session[:file], User, save = false, @role_id)
     rescue ActiveRecord::UnknownAttributeError => e
       #FileUtils.rm data_file
       @list_type = params[:list_type]
@@ -583,10 +583,14 @@ class UsersController < ApplicationController
   end
 
   def save_user_list
-    @users =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
+    @users, @data_flag =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
     #FileUtils.rm session[:file]
     session[:file] = ""
-    flash.now[:success] = "User's list saved successfully." 
+    if @data_flag
+      flash[:success] = "User's list saved successfully." 
+    else
+      flash[:success] = "User's list is not imported due to some incorrect data." 
+    end
     redirect_to users_path(:role_id=>params[:role_id], :school_id => params[:school_id])
   end
   
