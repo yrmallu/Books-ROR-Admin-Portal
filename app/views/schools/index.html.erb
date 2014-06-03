@@ -58,7 +58,7 @@
 						    	<%= link_to '<i title="Edit School" class="fa fa-pencil"></i>'.html_safe, edit_school_path(school) %>  
 						    <%end%>
 					   	    <% if can? :destroy, :schools %> 
-						      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: 'Are you sure?' } %> 
+						      <%= link_to '<i title="Archive School" class="glyphicon glyphicon-trash"></i>'.html_safe, school, method: :delete, data: { confirm: "Are you sure you want to delete #{school.name}?" } %> 
 					      	<%end%>
 							<% if can? :create, :licenses %> 
 							   <%= link_to '<i title="Add License" class="btg btg-lisence"></i>'.html_safe, new_license_path(:school_id=>school)%> 

@@ -572,7 +572,7 @@ class UsersController < ApplicationController
         data_file = file
         session[:file] = file.path
       end
-      @users, @data_flag = get_file_data(session[:file], User, save = false, @role_id)
+      @users, @data_flag = get_file_data(session[:file], User, save = false, @role_id, @school_id)
     rescue ActiveRecord::UnknownAttributeError => e
       #FileUtils.rm data_file
       @list_type = params[:list_type]
