@@ -514,23 +514,23 @@ class UsersController < ApplicationController
     end
   end
   
-  def email_validation
-     @check_unique_email = User.where("email = '#{params[:email]}' and id != #{params[:id]}")
-     unless (@check_unique_email.blank?)
-        render :text => "This email is already in use."
-      else
-        render :text => "avaiable"
-     end
-   end
+  # def email_validation
+  #    @check_unique_email = User.where("email = '#{params[:email]}' and id != #{params[:id]}")
+  #    unless (@check_unique_email.blank?)
+  #       render :text => "This email is already in use."
+  #     else
+  #       render :text => "avaiable"
+  #    end
+  #  end
    
-  def username_validation
-    @check_unique_username = User.where("username = '#{params[:username]}' and id != #{params[:id]}")
-    unless (@check_unique_username.blank?)
-       render :text => "This username is already in use."
-     else
-       render :text => "avaiable"
-    end
-  end 
+  # def username_validation
+  #   @check_unique_username = User.where("username = '#{params[:username]}' and id != #{params[:id]}")
+  #   unless (@check_unique_username.blank?)
+  #      render :text => "This username is already in use."
+  #    else
+  #      render :text => "avaiable"
+  #   end
+  # end 
   
   def download_sample_list
     if params[:list_type] == "school_admin"
@@ -624,7 +624,7 @@ class UsersController < ApplicationController
   end
   
   def quick_edit_user
- 	return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+  return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
 	if return_val.eql?(true)
       render :json=> true and return
 	else

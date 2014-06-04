@@ -369,7 +369,7 @@ $(".dropdown-quick-edit").click(function(e) {
     e.preventDefault();
     var text = $(this).text();
 	$(this).parent().children(".dropdown-dynamic").removeClass("invisible");
-	$(this).parent().children(".dropdown-dynamic").focus();
+	$(this).parent().children(".dropdown-dynamic").show().focus().click();
 	$(this).addClass("invisible");
 });
 
@@ -377,6 +377,11 @@ $('.dropdown-dynamic').change(function(e) {
     e.preventDefault();
 	dropdown_update_on_quick_edit($(this));
 });	
+
+$('.dropdown-dynamic').blur(function(e) {
+	e.preventDefault();
+	dropdown_update_on_quick_edit($(this));
+});
 
 
 function dropdown_update_on_quick_edit(this_val)
