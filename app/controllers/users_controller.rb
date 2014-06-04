@@ -354,7 +354,7 @@ class UsersController < ApplicationController
     deleted_user = ''
     User.where(id: params[:user_ids]).each do |user|
       deleted_user = user
-	  @user = user
+	    @user = user
       unless @user.license.blank?
         remove_license_from_user
       end
@@ -381,8 +381,8 @@ class UsersController < ApplicationController
   end
   
   def remove_bulk_licenses
-    unless params[:bulk_remove_user_ids].blank?
-      params[:bulk_remove_user_ids].each do |user_id|
+    unless params[:user_ids].blank?
+      params[:user_ids].split(",").each do |user_id|
 	      get_user(user_id)
 	      unless @user.license_id.blank?
 	        remove_license_from_user
@@ -405,6 +405,7 @@ class UsersController < ApplicationController
   end
 
   def get_all_school_licenses
+    @user_ids = params[:selected_user_ids]
     @school = School.find(params[:id])
     @licenses = @school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     render :partial=>"add_update_bulk_licenses"
@@ -413,10 +414,10 @@ class UsersController < ApplicationController
   def add_update_bulk_licenses
     license = License.find(params[:license_id])
     if license.used_liscenses < license.no_of_licenses
-      if params[:user_ids].split(" ").to_a.count <= (license.no_of_licenses - license.used_liscenses)
+      if params[:user_ids].split(",").to_a.count <= (license.no_of_licenses - license.used_liscenses)
         
         # First remove all license if previously allocated any for selected user.
-        params[:user_ids].split(" ").to_a.each do |user_id|
+        params[:user_ids].split(",").to_a.each do |user_id|
           get_user(user_id)
           unless @user.license_id.blank?
             remove_license_from_user
@@ -424,7 +425,7 @@ class UsersController < ApplicationController
         end
         
         # Then allocate licenses to selected users by checking count of licenses avaliable and users selected.
-        params[:user_ids].split(" ").to_a.each do |user_id|
+        params[:user_ids].split(",").to_a.each do |user_id|
           get_user(user_id)
           @user.update_attributes(:license_id=>params[:license_id], :license_expiry_date=>params[:license_expiry_date])
         end

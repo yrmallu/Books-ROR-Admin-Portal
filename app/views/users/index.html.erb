@@ -39,8 +39,12 @@
 			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student",:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%end%>
 		<% unless @role_id.name.eql?('Web Admin')%>
-			<%=link_to 'Remove Licenses', "", :class=>"btn btn-success btn-xs bulk-remove-license", :disabled => true %>
-			<%=link_to 'Add/Update Licenses', "", :class=>"btn btn-success btn-xs bulk-add-update-license", :disabled => true, data: { toggle: "modal", target: "#add_update_lic", input: params[:school_id]} %>	
+			<%=link_to 'Remove Licenses', remove_bulk_licenses_users_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs bulk-remove-license", :disabled => true %>
+			
+			<%#=link_to 'Add/Update Licenses', get_all_school_licenses_users_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs bulk-add-update-license", :disabled => true, data: { toggle: "modal", target: "#add_update_lic", input: params[:school_id]} %>
+			<button type="button" class="btn btn-success btn-xs bulk-add-update-license" data-input="<%=params[:school_id]%>" data-target="#add_update_lic" data-toggle="modal" disabled >Add/Update Licenses</button>
+
+			<%= hidden_field_tag 'selected_user_ids[]'%>
 		<%end%>	
 	
 		<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
@@ -297,14 +301,14 @@ $(".download_sample").click(function(){
 	arr_clicked_id.push($(this).val());
   });
 
-  $( ".bulk-remove-license" ).click(function() {
-    jQuery.get("<%=url_for(:controller=>'users',:action=>'remove_bulk_licenses')%>",{ bulk_remove_user_ids : arr_clicked_id, role_id:<%=@role_id.id%>, school_id:'<%=params[:school_id]%>'},
-	function(data) {
-	      });
-  });	
+ //  $( ".bulk-remove-license" ).click(function() {
+ //    jQuery.get("<%#=url_for(:controller=>'users',:action=>'remove_bulk_licenses')%>",{ bulk_remove_user_ids : arr_clicked_id, role_id:<%#=@role_id.id%>, school_id:'<%#=params[:school_id]%>'},
+	// function(data) {
+	//       });
+ //  });	
   
   $( ".bulk-add-update-license" ).click(function() {
-		jQuery.get("<%=url_for(:controller=>'users',:action=>'get_all_school_licenses')%>",{ id : $(this).attr('data-input'), selected_user_ids : arr_clicked_id, role_id:<%=@role_id.id%>},
+		jQuery.get("<%=url_for(:controller=>'users',:action=>'get_all_school_licenses')%>",{ id : $(this).attr('data-input'), selected_user_ids : $('#selected_user_ids_').val(), role_id:<%=@role_id.id%>},
 function(data) {
              if(data)
               {

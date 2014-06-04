@@ -1,8 +1,13 @@
 
 <div class="panel panel-default">
 	<div class="panel-body" data-no-turbolink> 
-		<%= text_field_tag :text_field_search %>
-		<button class="btn btn-primary btn-xs" id="book_search" >Search</button>
+		<div class="">
+		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
+		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="book_search" title="Search Book" >	</i>
+		</div>
+
+		<%#= text_field_tag :text_field_search %>
+		<!-- <button class="btn btn-primary btn-xs" id="book_search" >Search</button> -->
 		<%= form_tag 'books/delete_book' do %>
 		<div class="index_page_btns" data-no-turbolink>
 			<%= link_to 'List All Records', books_path, :class=>"btn btn-success btn-xs" if @search_flag %>
