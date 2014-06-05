@@ -24,7 +24,7 @@
                             <!-- <td class=""><%#= check_box_tag 'license_ids[]', lic.id, false, :class => "license-check-box" %></td>    -->
                  	        <td class=""><%= lic.license_batch_name %></td>
                             <td class=""><%= lic.expiry_date %></td>
-                            <td class="center "><%= lic.no_of_licenses %></td>
+                            <td class=""><%= lic.no_of_licenses %></td>
 					        <td class=""><%= lic.no_of_licenses - lic.used_liscenses %></td>
 					        <td class=""><%= lic.users.un_archived.school_admins.count %></td>
 					        <td class=""><%= lic.users.un_archived.teachers.count %></td>
@@ -35,7 +35,10 @@
                 </tbody>
             </table>
 	    </div>
-        <div style="text-align:center;"> <%= submit_tag "Submit" %></div>
+        <div style="text-align:center;"> 
+            <%= submit_tag "Update License Expiration Date", class: "btn btn-primary btn-xs" %>
+            <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close</button>
+        </div>
 		<%else%>
 		    <h3 class="no-rec-found">No Licenses Available</h3>
 		<%end%>

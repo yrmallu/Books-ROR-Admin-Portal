@@ -93,8 +93,7 @@ jQuery(document).ready(function() {
    "bLengthChange": false,
    "bInfo": false,
    "bAutoWidth": false,
-   "sDom": 't',
-   "aoColumnDefs": []
+   "sDom": 't'
  });
   
   

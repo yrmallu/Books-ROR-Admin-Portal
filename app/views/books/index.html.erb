@@ -73,4 +73,7 @@
 
 <script type="text/javascript">
 	showHideMenu('li_book');
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
 </script>

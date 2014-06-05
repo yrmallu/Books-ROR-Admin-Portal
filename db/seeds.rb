@@ -14,15 +14,15 @@
 	update_book_right = Accessright.create!(name: 'Update Book')
 	view_book_right = Accessright.create!(name: 'View Book')
 	delete_book_right = Accessright.create!(name: 'Delete Book')
-	update_accessright_right = Accessright.create!(name: 'Update Accessright')
- 	view_accessright_right = Accessright.create!(name: 'View Accessright')
+	view_update_accessright_right = Accessright.create!(name: 'Grant Accessrights')
+ 	#view_accessright_right = Accessright.create!(name: 'View Accessright')
 	
 	web_admin_role.accessrights <<  create_book_right
 	web_admin_role.accessrights <<  update_book_right
 	web_admin_role.accessrights <<  view_book_right
 	web_admin_role.accessrights <<  delete_book_right
-	web_admin_role.accessrights <<  update_accessright_right
-	web_admin_role.accessrights <<  view_accessright_right
+	web_admin_role.accessrights <<  view_update_accessright_right
+	#web_admin_role.accessrights <<  view_accessright_right
 	
 	
 	Role.create!([{name: 'School Admin'}, {name: 'Teacher'}, {name: 'Student'}])

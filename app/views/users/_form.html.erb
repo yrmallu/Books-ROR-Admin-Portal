@@ -57,6 +57,9 @@
 	{
 	    showHideMenu('li_school');	
 	}
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
 	
 // email_valid = "<%#= url_for :controller=> 'users', :action => 'email_validation', :id=> action_name.eql?("edit") ? @user.id : 0%>"	
 

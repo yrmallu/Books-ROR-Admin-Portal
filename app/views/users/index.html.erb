@@ -46,8 +46,15 @@
 
 			<%= hidden_field_tag 'selected_user_ids[]'%>
 		<%end%>	
-	
-		<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<% if ((can? :destroy, :users) && (can? :destroy_sa, :users)) && params[:role_id].eql?('2') %>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%end%>
+		<% if ((can? :destroy, :users) && (can? :destroy_teacher, :users)) && params[:role_id].eql?('3') %>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%end%>
+		<% if (((can? :destroy, :users) && (can? :destroy_student, :users)) || ((can? :destroy, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%end%>
 	</div>
 	<div class="table-responsive">
 		<table class="table class_common_table" id="users_table">
