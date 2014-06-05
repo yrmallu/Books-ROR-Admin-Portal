@@ -117,9 +117,9 @@ class SchoolsController < ApplicationController
     FileUtils.rm session[:file]
     session[:file] = ""
     if @data_flag
-      flash[:success] = "School's list imported." 
+      flash[:success] = "List imported successfully" 
     else
-      flash[:success] = "School's list is not imported due to some incorrect data." 
+      flash[:success] = "List is not imported due to some incorrect data." 
     end
     redirect_to schools_url
   end
