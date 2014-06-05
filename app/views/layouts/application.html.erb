@@ -72,12 +72,10 @@
     <li class="nav-parent" id="li_accessright"><a href=""><i class="glyphicon glyphicon-ban-circle"></i> <span>Access Rights</span></a>
       <span class="arrow arrw-pos" container_li="li_accessright"></span>
           <ul class="children">
-			<% if can? :update, :accessrights %>  
-              <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Assign Access Right", new_accessright_path %></li>
-			<%end%>  
-            <% if can? :read, :accessrights %>
-			  <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
-            <%end%>
+			<% if (can? :create, :accessrights) && (can? :update, :accessrights) && (can? :read, :accessrights) %>  
+          <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Assign Access Right", new_accessright_path %></li>
+			    <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
+      <%end%>
 		  </ul>
     </li>
 	<!-- <li class="nav-parent" id="li_search"><a href=""><i class="glyphicon glyphicon-search"></i> <span>Search</span></a>

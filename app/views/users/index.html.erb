@@ -348,6 +348,28 @@ function(data) {
 });
 });
 
+$('#myModal').click(function() {
+	$(".form_validation").validate({
+		rules: {
+			"user[license_id]":{required: true} 
+		},
+		messages: {
+			"user[license_id]": "Select License Expiration Date."
+		}
+		});
+});
+
+$('#add_update_lic').click(function() {
+	$(".form_validation").validate({
+		rules: {
+			"license_id":{required: true} 
+		},
+		messages: {
+			"license_id": "Select License Expiration Date."
+		}
+		});
+});
+
 $( ".quick-edit" ).mouseover(function() {
 		if ($(this).text() == '')
 		{
