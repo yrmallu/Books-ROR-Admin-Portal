@@ -587,9 +587,9 @@ class UsersController < ApplicationController
     #FileUtils.rm session[:file]
     session[:file] = ""
     if @data_flag
-      flash[:success] = "User's list saved successfully." 
+      flash[:success] = "List imported successfully." 
     else
-      flash[:success] = "User's list is not imported due to some incorrect data." 
+      flash[:success] = "List is not imported due to some incorrect data." 
     end
     redirect_to users_path(:role_id=>params[:role_id], :school_id => params[:school_id])
   end
