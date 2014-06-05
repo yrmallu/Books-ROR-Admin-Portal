@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
     return true if username.blank? 
     query = "username = '#{username}'"
     query << " and school_id = '#{school_id}'" unless school_id.blank?
-    # query << " and id != #{id}" unless id.blank?
+    query << " and id != #{id}" unless id.blank?
     query << " and role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
     user = User.where(query)
     unless user.blank?

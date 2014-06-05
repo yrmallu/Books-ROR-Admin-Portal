@@ -97,7 +97,7 @@
    $("#school_phone").mask("(999) 999-9999");
 	showHideMenu('li_school');
 	
-	<% unless current_user.role_id.eql?(1)%>
+	<% unless current_user.is_web_admin?%>
 	  showHideMenu('li_options');	
 	<%end%>
 	

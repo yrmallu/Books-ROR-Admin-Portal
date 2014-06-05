@@ -1,17 +1,18 @@
 
 <div class="panel panel-default">
-	<div class="panel-body"> 
-		<%= text_field_tag :text_field_search %>
-		<%#=link_to "Search", "#", :class=>"" , :id => "search" %>
+	<div class="panel-body" data-no-turbolink> 
+		<div class="">
+		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
+		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="book_search" title="Search Book" >	</i>
+		</div>
 
-		<button class="btn btn-primary btn-xs" id="book_search" >
-						    Search
-						    </button>
+		<%#= text_field_tag :text_field_search %>
+		<!-- <button class="btn btn-primary btn-xs" id="book_search" >Search</button> -->
 		<%= form_tag 'books/delete_book' do %>
 		<div class="index_page_btns" data-no-turbolink>
 			<%= link_to 'List All Records', books_path, :class=>"btn btn-success btn-xs" if @search_flag %>
 			<% if can? :create, :books %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>
-			<%= submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<%= submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>			
 		</div>
 		 
 		 <div class="table-responsive">
@@ -19,14 +20,14 @@
 	            <thead>
 	                <tr>
 	            		<th><%= link_to :All, 'javascript:checkAll("book")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("book")', :class => "lnk-typ2" %></th>
-                    	<th>Title</th>
-                    	<th>Author</th>
-                    	<th>Description for Teachers</th>
-                    	<th>Description for Students</th>
-                    	<th>Interest Level</th>
-                    	<th>Reading Level</th>
-                    	<th>Status</th>
-						<th>Actions</th>	
+                    	<th><span class="table-header">Title</span></th>
+                    	<th><span class="table-header">Author</span></th>
+                    	<th><span class="table-header">Description for Teachers</span></th>
+                    	<th><span class="table-header">Description for Students</span></th>
+                    	<th><span class="table-header">Interest Level</span></th>
+                    	<th><span class="table-header">Reading Level</span></th>
+                    	<th><span class="table-header">Status</span></th>
+						<th><span class="table-header">Actions</span></th>	
 	                </tr>
 	            </thead>
 	            <tbody>
@@ -56,10 +57,15 @@
 	        	</tbody>
 	    	</table>
 		</div>
-		<div data-no-turbolink>
-		    <%= paginate @books %>
-		</div>
-		<% end %>		
+		<% if !params[:show_all].eql?('true') %>
+			<div data-no-turbolink>
+		    	<%= paginate @books %>
+			</div>
+		<% end %>
+		<% end %>	
+		<% if !params[:show_all].eql?('true') %>
+			<div class="show-all"><%= link_to 'Show All Books', books_path(:show_all=>true) ,:class=>"btn btn-success btn-xs" %></div>
+		<% end %>	
 	</div>
 </div>		  
   
@@ -67,4 +73,7 @@
 
 <script type="text/javascript">
 	showHideMenu('li_book');
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
 </script>

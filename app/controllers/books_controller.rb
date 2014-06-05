@@ -12,11 +12,12 @@ class BooksController < ApplicationController
     if params[:query_string] && !(params[:query_string].blank?)
       @books = Book.search("%#{params[:query_string]}%").un_archived.page(params[:page]).per(10) 
       @search_flag = true
-    else
+    elsif params[:show_all].blank?
       @books = Book.un_archived.by_newest.page params[:page]
       @search_flag = false
-    end
-    
+    elsif params[:show_all].eql?('true')
+      @books = Book.un_archived.by_newest
+    end  
   end
 
   def show
@@ -97,6 +98,10 @@ class BooksController < ApplicationController
     @reading_grades = ReadingGrade.all
   end
 
+  def show_all_books
+
+  end  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book
@@ -105,8 +110,7 @@ class BooksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def book_params
-      params.require(:book).permit(:id, :title, :student_description, :teacher_description, :interest_level_from, :interest_level_to, :active_flag, :author, :book_cover, :epub, :preview_images_attributes=> [:preview_image, :book_id, :_destroy, :id ])
-      #params.require(:book).permit(:id, :title, :description, :author, :book_cover, :epub, :preview_images_attributes=> [:preview_image, :book_id, :_destroy, :id ])
+      params.require(:book).permit(:title, :student_description, :teacher_description, :interest_level_from, :interest_level_to, :active_flag, :author, :book_cover, :epub, :preview_images_attributes=> [:preview_image, :book_id, :_destroy, :id ])
     end
     
 end

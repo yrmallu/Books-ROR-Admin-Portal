@@ -91,10 +91,9 @@
     <li class="nav-parent" id="li_options"><a href=""><i class="fa fa-chevron-circle-down"></i> <span>Options</span></a>
       <span class="arrow arrw-pos" container_li="li_options"></span>
           <ul class="children">
-	  <% if can? :update, :accessrights %>  
-            <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Assign Access Right", new_accessright_path %></li>
-	  <%end%>  
-      <% if can? :read, :accessrights %>
+	  <% if (can? :create, :accessrights) && (can? :update, :accessrights) && (can? :read, :accessrights) %>  
+          <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Assign Access Right", new_accessright_path %></li>
+	  
 	        <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Access Right List", accessrights_path %></li>
       <%end%>		  
 	  <% if can? :create, :books %>

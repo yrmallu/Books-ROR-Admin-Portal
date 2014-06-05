@@ -35,9 +35,9 @@
 			<%=hidden_field_tag('unchecked_list[]')%>
 	        <div class="panel-footer" data-no-turbolink>
 				<% if action_name.eql?('new') || action_name.eql?('create') %>
-	                <%= submit_tag "Save", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Saving...' } %>
+	                <%= submit_tag "Save", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
 				<%else%>
-				    <%= submit_tag "Update", class: "btn btn-primary btn-sm btn-xs", data: { disable_with: 'Updating...' } %>
+				    <%= submit_tag "Update", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Updating...' } %>
 				<%end%>	
 				<%= link_to 'Cancel', accessrights_path, class: "btn btn-white btn-xs"%>
 	        </div>
@@ -48,4 +48,8 @@
 
 <script type="text/javascript">
 	showHideMenu('li_accessright');
+
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
 </script>	

@@ -1,7 +1,7 @@
-<div data-no-turbolink class="alert-warning undo-alert">
-<%= link_to '<i class="fa fa-undo"></i>'.html_safe + ' Undo', undo_school_schools_path(:id=>params[:school_id]) unless params[:school_id].blank? %>
+<!-- <div data-no-turbolink class="alert-warning undo-alert">
+<%#= link_to '<i class="fa fa-undo"></i>'.html_safe + ' Undo', undo_school_schools_path(:id=>params[:school_id]) unless params[:school_id].blank? %>
 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-</div>
+</div> -->
 <div class="panel panel-default">
 	<div class="panel-body"> 
 		<div class="fade-bg"></div>
@@ -10,11 +10,16 @@
 		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="school_search" title="Search School" >	</i>
 		<%= form_tag 'schools/delete_school' do %>
 		<div class="index_page_btns" data-no-turbolink>
-            <% if can? :create, :schools %> <%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> <%end%>
+            <% if can? :create, :schools %> 
+            	<%=link_to 'Add School', new_school_path, :class=>"btn btn-success btn-xs"%> 
+            <%end%>
 			<%=link_to 'List All Records', schools_path, :class=>"btn btn-success btn-xs" if @search_flag %>
 			<%=link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 			<%=link_to 'Import School List', import_list_schools_path, :class=>"btn btn-success btn-xs"%>
+			
+			<% if can? :destroy, :schools %> 
 			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-school-list", :id=>'delete_school',:disabled => true, data: { confirm: 'Are you sure?' } %>
+		 	<%end%>
 		</div>
 		<div class="loader"><%= image_tag("loader5.gif")%></div>
 		<div class="table-responsive">
@@ -23,13 +28,13 @@
 	            <thead>
 	                <tr>
 	                	<th><%= link_to :All, 'javascript:checkAll("school")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("school")', :class => "lnk-typ2" %>  </th>
-	                    <th>School Code</th>
-	                    <th>School Name</th>
-	                    <th>District</th>
-	                    <th>City</th>
-						<th>State</th>
-	                    <th>Country</th>
-						<th>Actions</th>
+	                    <th><span class="table-header">School Code</span></th>
+	                    <th><span class="table-header">School Name</span></th>
+	                    <th><span class="table-header">District</span></th>
+	                    <th><span class="table-header">City</span></th>
+						<th><span class="table-header">State</span></th>
+	                    <th><span class="table-header">Country</span></th>
+						<th><span class="table-header">Actions</span></th>
 	                </tr>
 	            </thead>
 	            <tbody>
@@ -154,6 +159,9 @@ $(document).ready(function(){
 });
 
 showHideMenu('li_school');
+<% unless current_user.is_web_admin?%>
+	showHideMenu('li_options');	
+<%end%>
 	
 	$( ".license_details" ).click(function() {
 	          jQuery.get("<%=url_for(:controller=>'schools',:action=>'get_schoolwise_license_list')%>",{ id : $(this).attr('data-input')},

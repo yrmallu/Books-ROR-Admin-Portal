@@ -24,7 +24,7 @@
         <p class="mt5 mb20">Login to access your account.</p>
         <%= f.text_field :email, :class => "form-control uname", :required=>true, :placeholder=>"Email"%>                          	       <%= f.password_field :password, :class => "form-control pword", :required=>true, :placeholder=>"Password" %>
 		<%= link_to 'Forgot password', forgot_password_path%>
-		<%= f.submit "Sign in", :class => "btn btn-success btn-block", :id=>"signin_btn" %>
+		<%= f.submit "Sign in", :class => "btn btn-success btn-block signin-btn-highlight", :id=>"signin_btn" %>
     <% end %>
 </div>
 

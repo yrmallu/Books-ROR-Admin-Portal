@@ -4,7 +4,7 @@
 		<%= form_tag import_classrooms_path, multipart: true do %>  
 			<%= hidden_field_tag :school_id, @school_id %>
 	  		<%= file_field_tag :file %>  
-	  		<%= submit_tag "Import", :onclick => "return validateform();", :class=>"margin-t-10" %>  
+	  		<%= submit_tag "Import", :onclick => "return validateform();", :class=>"margin-t-10 margin-t-10 btn btn-success btn-xs" %>  
 		<% end %>
 	</div>
 </div>	

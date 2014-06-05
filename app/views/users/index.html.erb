@@ -1,5 +1,5 @@
 <div data-no-turbolink>
-<%= link_to 'Undo', undo_user_users_path(:id=>params[:user_id]) unless params[:user_id].blank? %>
+<%#= link_to 'Undo', undo_user_users_path(:id=>params[:user_id]) unless params[:user_id].blank? %>
 </div>
   <div class="panel panel-default">
 	<div class="panel-body pos-rel"> 
@@ -39,11 +39,22 @@
 			<%=link_to 'Import Student List', import_list_users_path(:list_type => "student",:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs"%>
 		<%end%>
 		<% unless @role_id.name.eql?('Web Admin')%>
-			<%=link_to 'Remove Licenses', "", :class=>"btn btn-success btn-xs bulk-remove-license", :disabled => true %>
-			<%=link_to 'Add/Update Licenses', "", :class=>"btn btn-success btn-xs bulk-add-update-license", :disabled => true, data: { toggle: "modal", target: "#add_update_lic", input: params[:school_id]} %>	
+			<%=link_to 'Remove Licenses', remove_bulk_licenses_users_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs bulk-remove-license", :disabled => true %>
+			
+			<%#=link_to 'Add/Update Licenses', get_all_school_licenses_users_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs bulk-add-update-license", :disabled => true, data: { toggle: "modal", target: "#add_update_lic", input: params[:school_id]} %>
+			<button type="button" class="btn btn-success btn-xs bulk-add-update-license" data-input="<%=params[:school_id]%>" data-target="#add_update_lic" data-toggle="modal" disabled >Add/Update Licenses</button>
+
+			<%= hidden_field_tag 'selected_user_ids[]'%>
 		<%end%>	
-	
-		<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<% if ((can? :destroy, :users) && (can? :destroy_sa, :users)) && params[:role_id].eql?('2') %>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%end%>
+		<% if ((can? :destroy, :users) && (can? :destroy_teacher, :users)) && params[:role_id].eql?('3') %>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%end%>
+		<% if (((can? :destroy, :users) && (can? :destroy_student, :users)) || ((can? :destroy, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+		<%end%>
 	</div>
 	<div class="table-responsive">
 		<table class="table class_common_table" id="users_table">
@@ -51,19 +62,19 @@
 			<thead>
                 <tr>
                 	<th><%= link_to :All, 'javascript:checkAll("user")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("user")', :class => "lnk-typ2" %></th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-					<th>Username</th>
-                    <th>Email</th>
-					<th>Phone Number</th>
+                    <th><span class="table-header">First Name</span></th>
+                    <th><span class="table-header">Last Name</span></th>
+					<th><span class="table-header">Username</span></th>
+                    <th><span class="table-header">Email</span></th>
+					<th><span class="table-header">Phone Number</span></th>
 					<%unless @role_id.name.eql?('Web Admin')%>
-					    <th>License Expiration Date</th>
+					    <th><span class="table-header">License Expiration Date</span></th>
 					<%end%>
 					<%if @role_id.name.eql?('Student')%>
-					    <th>Grade</th>
-					    <th>Reading Level</th>
+					    <th><span class="table-header">Grade</span></th>
+					    <th><span class="table-header">Reading Level</span></th>
 					<%end%>
-					<th>Actions</th>
+					<th><span class="table-header">Actions</span></th>
                  </tr>
               </thead>
               <tbody>
@@ -240,7 +251,7 @@
 
 
 <script type="text/javascript">
-
+$(".mask-phone").mask("(999) 999-9999");
  $('.loader').ajaxStart(function () {
         $(this).fadeIn('fast');
         $('.fade-bg').show();
@@ -291,27 +302,27 @@ $(".download_sample").click(function(){
 
 });
 
-$(document).ready(function(){
+//$(document).ready(function(){
   var arr_clicked_id = [];
   $('.user-check-box').click(function(){
 	arr_clicked_id.push($(this).val());
   });
 
-  $( ".bulk-remove-license" ).click(function() {
-    jQuery.get("<%=url_for(:controller=>'users',:action=>'remove_bulk_licenses')%>",{ bulk_remove_user_ids : arr_clicked_id},
-	function(data) {
-	      });
-  });	
+ //  $( ".bulk-remove-license" ).click(function() {
+ //    jQuery.get("<%#=url_for(:controller=>'users',:action=>'remove_bulk_licenses')%>",{ bulk_remove_user_ids : arr_clicked_id, role_id:<%#=@role_id.id%>, school_id:'<%#=params[:school_id]%>'},
+	// function(data) {
+	//       });
+ //  });	
   
   $( ".bulk-add-update-license" ).click(function() {
-		jQuery.get("<%=url_for(:controller=>'users',:action=>'get_all_school_licenses')%>",{ id : $(this).attr('data-input'), selected_user_ids : arr_clicked_id, role_id:<%=@role_id.id%>},
+		jQuery.get("<%=url_for(:controller=>'users',:action=>'get_all_school_licenses')%>",{ id : $(this).attr('data-input'), selected_user_ids : $('#selected_user_ids_').val(), role_id:<%=@role_id.id%>},
 function(data) {
              if(data)
               {
 			   jQuery("#all_school_licenses_list").html(data);
              }
       });
-  });
+  //});
 
   $('.error-message').removeClass('show').addClass('hide');	
   $(".mask-phone").mask("(999) 999-9999");
@@ -369,7 +380,7 @@ $(".dropdown-quick-edit").click(function(e) {
     e.preventDefault();
     var text = $(this).text();
 	$(this).parent().children(".dropdown-dynamic").removeClass("invisible");
-	$(this).parent().children(".dropdown-dynamic").focus();
+	$(this).parent().children(".dropdown-dynamic").show().focus().click();
 	$(this).addClass("invisible");
 });
 
@@ -377,6 +388,11 @@ $('.dropdown-dynamic').change(function(e) {
     e.preventDefault();
 	dropdown_update_on_quick_edit($(this));
 });	
+
+$('.dropdown-dynamic').blur(function(e) {
+	e.preventDefault();
+	dropdown_update_on_quick_edit($(this));
+});
 
 
 function dropdown_update_on_quick_edit(this_val)

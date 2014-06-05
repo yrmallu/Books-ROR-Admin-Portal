@@ -1,9 +1,39 @@
+<!--<div class="panel-heading align-school-header">
+	<%#=unless @school.blank?%>
+	  	<span class="top-school-heading"><%#= link_to @school.name + " (" + @school.code + ")"  , school_path(@school)%></span>
+	   	<hr class="school-heading-hr"> 
+	<%#=end%>
+</div> -->
+
+
 <div class="row">
 	<div class="col-md-12">
     	<div class="panel panel-default">
-        	<div class="panel-heading">
-            	<h4 class="panel-title">School Details</h4>
-        	</div>
+        		<div class="mandatory-align">
+	        		<%#=unless @role.name.eql?('Web Admin')%>
+	        		<% unless @school.blank? %>
+	        		<div class="tab-links" data-no-turbolink>
+		        		<div>
+		        		<% if ((can? :read, :users) && (can? :read_sa, :users)) %>
+		        			<%= link_to 'School Admin List', users_path(:role_id => 2, :school_id => @school.id)%> 
+		        		<%end%>
+		        		<% if ((can? :read, :users) && (can? :read_teacher, :users)) %>
+		        			| <%= link_to 'Teacher List', users_path(:role_id => 3, :school_id => @school.id)%> 
+		        		<%end%>
+		        		<% if ((can? :read, :users) && (can? :read_student, :users)) %>
+		        			| <%= link_to 'Student List', users_path(:role_id => 4, :school_id => @school.id)%> 
+		        		<%end%>
+	        			<% if (can? :read, :classrooms) %>
+	        				| <%= link_to 'Class List', classrooms_path(:school_id => @school.id)%>
+	        			<%end%>
+	        			<% if can? :create, :licenses%>  
+            				| <%= link_to 'License List', new_license_path(:school_id => @school.id) %>
+      					<%end%>
+	        			</div>
+	        		</div>
+	        		<%end%>
+	        	</div>
+            
 			<p id="notice"><%= notice %></p>
         	<div class="panel-body">
             	<address>

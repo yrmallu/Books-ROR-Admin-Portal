@@ -5,8 +5,9 @@
 		   <div class="panel-body">
 			   <%= hidden_field_tag :send_mail, @no_mail%>
 			   <%= hidden_field_tag :role_id, params[:role_id]%>
-			   <%= hidden_field_tag :user_ids, params[:selected_user_ids]%>
+			   <%= hidden_field_tag :user_ids, @user_ids %>
 			   <%= hidden_field_tag :school_id, params[:id]%>
+
 
 			       <div class="row">
 		               <div class="col-sm-6">

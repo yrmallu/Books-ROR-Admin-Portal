@@ -74,7 +74,11 @@ class ApplicationController < ActionController::Base
   def get_school_by_id
     @school = School.find(params[:school_id]) unless params[:school_id].blank?
   end
-  
+
+  def get_particular_school(school_id)
+    @school_name = School.find(school_id)
+  end
+
   def get_accessright
     # if current_user.role_id.eql?(1)
 #       @accessrights = Accessright.where("id > 4")	
@@ -166,6 +170,7 @@ class ApplicationController < ActionController::Base
     redirect_to dashboard_users_path, :alert => exception.message
   end
 
+
   def set_bread_crumb(*extras)
     parameters = []
     if extras.empty? 
@@ -177,7 +182,7 @@ class ApplicationController < ActionController::Base
     p "extras=====",parameters = extra.split(",")
 	selector =  parameters.empty? ? "#{params[:controller]}##{params[:action]}" : (("classrooms").eql?("#{params[:controller]}") || ("licenses").eql?("#{params[:controller]}")) ? "#{params[:controller]}##{params[:action]}" : "#{params[:controller]}##{params[:action]}".concat("-"+parameters[0])  
     p "selector=====",selector
-	
+	  
     case selector
 
       when "users#dashboard"
@@ -185,458 +190,534 @@ class ApplicationController < ActionController::Base
           :title=>"Dashboard",
           :breadcrumb=>{
             "Dashboard"=> ""
-          }
         }
+      }
 	
       when "users#user_search"
         @breadcrumb = {
           :title=>"User Search",
-		  :icon=>"glyphicon glyphicon-search",
+		      :icon=>"glyphicon glyphicon-search",
           :breadcrumb=>{
             "User Search"=> ""
-          }
         }
+      }
 			
       when "accessrights#edit"
         @breadcrumb = {
           :title=>"Edit Accessrights",
-		  :icon=>"glyphicon glyphicon-ban-circle",
+		      :icon=>"glyphicon glyphicon-ban-circle",
           :breadcrumb=>{
             "Edit Accessrights"=> ""
-          }
         }
-        when "accessrights#new"
-          @breadcrumb = {
-            :title=>"Assign Accessrights",
-  		  :icon=>"glyphicon glyphicon-ban-circle",
-            :breadcrumb=>{
-              "Assign Accessrights"=> ""
-            }
-          }
+      }
+      
+      when "accessrights#new"
+        @breadcrumb = {
+          :title=>"Assign Accessrights",
+  		    :icon=>"glyphicon glyphicon-ban-circle",
+          :breadcrumb=>{
+            "Assign Accessrights"=> ""
+        }
+      }
+      
       when "accessrights#index"
         @breadcrumb = {
           :title=>"Accessrights List",
-		  :icon=>"glyphicon glyphicon-ban-circle",
+		      :icon=>"glyphicon glyphicon-ban-circle",
           :breadcrumb=>{
             "Accessrights List"=> ""
-          }
-        } 
+        }
+      } 
      	
-       when "schools#index"
+      when "schools#index"
         @breadcrumb = {
           :title=>"School List",
-		  :icon=>"fa fa-building-o",
+		      :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School List"=> "",
-          }
         }
+      }
 		
-      when "schools#show"
-       @breadcrumb = {
-       :title=>"School Information",
-	   :icon=>"fa fa-building-o",
-       :breadcrumb=>{
-	     "School List"=> schools_path,
-         "School Information"=> "",
-         }
-       }
+      when "schools#show-#{parameters[0]}"
+        get_particular_school(parameters[0])
+        @breadcrumb = {
+          :title=>"School Information",
+	        :icon=>"fa fa-building-o",
+          :breadcrumb=>{
+	          "School List"=> schools_path,
+            @school_name.name => school_path(parameters[0]),
+            "School Information"=> "",
+        }
+      }
 		
       when "schools#new"
         @breadcrumb = {
           :title=>"Add New School",
-		  :icon=>"fa fa-building-o",
+		      :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "Add New School"=> "",
-          }
         }
+      }
+      
       when "schools#edit"
         @breadcrumb = {
           :title=>"Edit School Information",
-		  :icon=>"fa fa-building-o",
+		      :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School List"=> schools_path,
             "Edit School Information"=> "",
-          }
         }
+      }
+      
       when "schools#import_list"
         @breadcrumb = {
           :title=>"Import School List",
-		  :icon=>"fa fa-building-o",
+		      :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School List"=> schools_path,
             "Import School List"=> "",
-          }
-        }	
-	 when "schools#import"
-       @breadcrumb = {
-         :title=>"Import School List",
-	     :icon=>"fa fa-building-o",
-         :breadcrumb=>{
-           "School List"=> schools_path,
-           "Import School List"=> "",
-         }
-       }
-
-      when "users#new-2"
-	  @breadcrumb = {
-        :title=>"Add School Admin",
-		:icon=>"btg btg-admin",
-        :breadcrumb=>{
-          "School List"=> schools_path,
-          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-          "Add School Admin"=> "",
         }
-      }    
-      when "users#index-2"
-      @breadcrumb = {
-        :title=>"School Admin List",
-		:icon=>"btg btg-admin",
-        :breadcrumb=>{
-          "School List"=> schools_path,
-		  "School Admin List"=> "",
+      }	
+	    
+      when "schools#import"
+        @breadcrumb = {
+          :title=>"Import School List",
+	        :icon=>"fa fa-building-o",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            "Import School List"=> "",
         }
       }
+
+      when "users#new-2"
+        get_particular_school(parameters[1])
+	      @breadcrumb = {
+          :title=>"Add School Admin",
+		      :icon=>"btg btg-admin",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Add School Admin"=> "",
+        }
+      }
+
+      when "users#index-2"
+        get_particular_school(parameters[1])
+        @breadcrumb = {
+          :title=>"School Admin List",
+		      :icon=>"btg btg-admin",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+		        "School Admin List"=> "",
+        }
+      }
+      
       when "users#show-2"
-	  if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
-        @breadcrumb = {
-        :title=>"My Information",
- 	   :icon=>"btg btg-admin",
-        :breadcrumb=>{
- 	     "School List"=> schools_path,
-          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-          "My Information"=> "",
+        get_particular_school(parameters[1])  
+	      if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+          @breadcrumb = {
+            :title=>"My Information",
+ 	          :icon=>"btg btg-admin",
+            :breadcrumb=>{
+ 	            "School List"=> schools_path,
+              "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+              "My Information"=> "",
           }
         }
-	  else
-        @breadcrumb = {
-        :title=>"School Admin Information",
- 	   :icon=>"btg btg-admin",
-        :breadcrumb=>{
- 	     "School List"=> schools_path,
-          "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-          "School Admin Information"=> "",
+	      else
+          @breadcrumb = {
+            :title=>"School Admin Information",
+ 	          :icon=>"btg btg-admin",
+            :breadcrumb=>{
+ 	            "School List"=> schools_path,
+              @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+              "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+              "School Admin Information"=> "",
           }
         }
-	  end
-     
+	    end
+
       when "users#edit-2"
-	  if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
-        @breadcrumb = {
-          :title=>"Edit My Information",
-  		:icon=>"btg btg-admin",
-          :breadcrumb=>{
-            "School List"=> schools_path,
-            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-            "Edit My Information"=> "",
+        get_particular_school(parameters[1])
+	      if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+          @breadcrumb = {
+            :title=>"Edit My Information",
+  		      :icon=>"btg btg-admin",
+            :breadcrumb=>{
+              "School List"=> schools_path,
+              "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+              "Edit My Information"=> "",
           }
         }
-	  else
-        @breadcrumb = {
-          :title=>"Edit School Admin Information",
-  		:icon=>"btg btg-admin",
-          :breadcrumb=>{
-            "School List"=> schools_path,
-            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-            "Edit School Admin Information"=> "",
+	      else
+          @breadcrumb = {
+            :title=>"Edit School Admin Information",
+  		      :icon=>"btg btg-admin",
+            :breadcrumb=>{
+              "School List"=> schools_path,
+              @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+              "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+              "Edit School Admin Information"=> "",
           }
         }
-	  end
+	    end
+      
       when "users#import_list-school_admin"
         @breadcrumb = {
           :title=>"Import School Admin List",
-		  :icon=>"fa fa-building-o",
+		      :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
             "Import School Admin List"=> "",
-          }
         }
+      }
 	  
       when "users#new-1"
-		@breadcrumb = {
+		    @breadcrumb = {
           :title=>"Add Web Admin",
-		  :icon=>"fa fa-user",
+		      :icon=>"fa fa-user",
           :breadcrumb=>{
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
             "Add Web Admin"=> "",
-          }
-        }  
-		when "users#create-1"
-		@breadcrumb = {
-            :title=>"Add Web Admin",
+        }
+      }  
+		
+      when "users#create-1"
+		    @breadcrumb = {
+          :title=>"Add Web Admin",
   		    :icon=>"fa fa-user",
-            :breadcrumb=>{
+          :breadcrumb=>{
               "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
               "Add Web Admin"=> "",
-           }
-        } 
-        when "users#index-1"
+        }
+      } 
+    
+      when "users#index-1"
         @breadcrumb = {
           :title=>"Web Admin List",
-		  :icon=>"fa fa-user",
+		      :icon=>"fa fa-user",
           :breadcrumb=>{
             "Web Admin List"=> "",
-          }
         }
-        when "users#show-1"
-		if !parameters[1].blank? && parameters[1].eql?(current_user.id.to_s)
+      }
+      
+      when "users#show-1"
+		    if !parameters[1].blank? && parameters[1].eql?(current_user.id.to_s)
           @breadcrumb = {
           :title=>"My Information",
-   	     :icon=>"fa fa-user",
+   	      :icon=>"fa fa-user",
           :breadcrumb=>{
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
             "My Information"=> "",
-            }
           }
-		else
+        }
+		    else
           @breadcrumb = {
           :title=>"Web Admin Information",
-   	     :icon=>"fa fa-user",
+   	      :icon=>"fa fa-user",
           :breadcrumb=>{
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
             "School Admin Information"=> "",
-            }
           }
-		end
+        }
+	 	  end
          
-        when "users#edit-1"
-		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+      when "users#edit-1"
+		    if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
           @breadcrumb = {
             :title=>"Edit My Information",
-  		  :icon=>"fa fa-user",
+  		      :icon=>"fa fa-user",
             :breadcrumb=>{
               "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
               "Edit My Information"=> "",
-            }
           }
-		else
+        }
+		    else
           @breadcrumb = {
             :title=>"Edit Web Admin Information",
-  		  :icon=>"fa fa-user",
+  		      :icon=>"fa fa-user",
             :breadcrumb=>{
               "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
               "Edit Web Admin Information"=> "",
-            }
           }
-		end
+        }
+		  end
          
-        when "users#new-3"
+      when "users#new-3"
+        get_particular_school(parameters[1])
         @breadcrumb = {
           :title=>"Add Teacher",
-		  :icon=>"btg btg-teacher",
+		      :icon=>"btg btg-teacher",
           :breadcrumb=>{
             "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
             "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
             "Add Teacher"=> "",
-          }
         }
-        when "users#index-3"
+      }
+      
+      when "users#index-3"
+        get_particular_school(parameters[1])
         @breadcrumb = {
           :title=>"Teacher List",
-		  :icon=>"btg btg-teacher",
+		      :icon=>"btg btg-teacher",
           :breadcrumb=>{
            "School List"=> schools_path,
+           @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
             "Teacher List"=> "",
-          }
         }
-        when "users#show-3"
-		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+      }
+      
+      when "users#show-3"
+        get_particular_school(parameters[1])
+		    if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
           @breadcrumb = {
           :title=>"My Information",
-   	     :icon=>"btg btg-teacher",
+   	      :icon=>"btg btg-teacher",
           :breadcrumb=>{
    	       "School List"=> schools_path,
             "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
             "My Information"=> "",
-            }
           }
-		else
+        }
+		    else
           @breadcrumb = {
           :title=>"Teacher Information",
-   	     :icon=>"btg btg-teacher",
+   	      :icon=>"btg btg-teacher",
           :breadcrumb=>{
    	       "School List"=> schools_path,
+           @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
             "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
             "Teacher Information"=> "",
-            }
           }
-		end
+        }
+		  end
          
-        when "users#edit-3"
-		if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
+      when "users#edit-3"
+        get_particular_school(parameters[1])
+		    if !parameters[2].blank? && parameters[2].eql?(current_user.id.to_s)
           @breadcrumb = {
             :title=>"Edit My Information",
-  		  :icon=>"btg btg-teacher",
+  		      :icon=>"btg btg-teacher",
             :breadcrumb=>{
              "School List"=> schools_path,
               "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
               "Edit My Information"=> "",
-            }
           }
-		else
+        }
+		    else
           @breadcrumb = {
             :title=>"Edit Teacher Information",
-  		  :icon=>"btg btg-teacher",
+  		      :icon=>"btg btg-teacher",
             :breadcrumb=>{
              "School List"=> schools_path,
+             @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
               "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
               "Edit Teacher Information"=> "",
-            }
-          }	
-		end
-        when "users#import_list-teacher"
-          @breadcrumb = {
-            :title=>"Import Teacher List",
-  		  :icon=>"fa fa-building-o",
-            :breadcrumb=>{
-              "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
-              "Import Teacher List"=> "",
-            }
           }
+        }	
+		  end
+      
+      when "users#import_list-teacher"
+        @breadcrumb = {
+          :title=>"Import Teacher List",
+  		    :icon=>"fa fa-building-o",
+          :breadcrumb=>{
+            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+            "Import Teacher List"=> "",
+        }
+      }
        
-        when "users#new-4"
+      when "users#new-4"
+        get_particular_school(parameters[1])
         @breadcrumb = {
           :title=>"Add Student",
-		  :icon=>"btg btg-student",
+		      :icon=>"btg btg-student",
           :breadcrumb=>{
             "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
             "Add Student"=> "",
-          }
         }
-        when "users#edit-4"
+      }
+      
+      when "users#edit-4"
+        get_particular_school(parameters[1])
         @breadcrumb = {
           :title=>"Edit Student Information",
-		  :icon=>"btg btg-student",
+		      :icon=>"btg btg-student",
           :breadcrumb=>{
             "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
             "Edit Student Information"=> "",
-          }
         }
-        when "users#show-4"
-         @breadcrumb = {
-         :title=>"Student Information",
-  	     :icon=>"btg btg-student",
-         :breadcrumb=>{
-  	       "School List"=> schools_path,
-           "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
-           "Student Information"=> "",
-           }
-         }
-        when "users#index-4"
+      }
+      
+      when "users#show-4"
+        get_particular_school(parameters[1])
+        @breadcrumb = {
+          :title=>"Student Information",
+  	      :icon=>"btg btg-student",
+          :breadcrumb=>{
+  	        "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Student Information"=> "",
+        }
+      }
+      
+      when "users#index-4"
+        get_particular_school(parameters[1])
         @breadcrumb = {
           :title=>"Student List",
-		  :icon=>"btg btg-student",
+		      :icon=>"btg btg-student",
           :breadcrumb=>{
-           "School List"=> schools_path,
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
             "Student List"=> "",
-          }
         }
-        when "users#import_list-student"
-          @breadcrumb = {
-            :title=>"Import Student List",
-  		  :icon=>"fa fa-building-o",
-            :breadcrumb=>{
-              "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
-              "Import Student List"=> "",
-            }
-          }
-        when "users#import"
-          @breadcrumb = {
-            :title=>"Import User List",
+      }
+      
+      when "users#import_list-student"
+        @breadcrumb = {
+          :title=>"Import Student List",
+  		    :icon=>"fa fa-building-o",
+          :breadcrumb=>{
+            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+            "Import Student List"=> "",
+        }
+      }
+      
+      when "users#import"
+        @breadcrumb = {
+          :title=>"Import User List",
   		    :icon=>"fa fa-user",
-            :breadcrumb=>{
-             # "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
-              "Import User List"=> "",
-            }
-          }
-        when "classrooms#index"
-          @breadcrumb = {
-            :title=>"Class List",
-			:icon=>"fa fa-users",
-            :breadcrumb=>{
-			  "School List"=> schools_path,
-              "Class List"=> "",
-            }
-          }
-        when "classrooms#new"
-		  @breadcrumb = {
-            :title=>"Add New Class",
-			:icon=>"fa fa-users",
-            :breadcrumb=>{
-              "School List"=> schools_path,
-			  "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Add New Class"=> "",
-            }
-          }
-        when "classrooms#edit"
-          @breadcrumb = {
-            :title=>"Edit Class Information",
-			:icon=>"fa fa-users",
-            :breadcrumb=>{
-              "School List"=> schools_path,
-              "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-              "Edit Class Information"=> "",
-            }
-          } 
+          :breadcrumb=>{
+           # "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
+            "Import User List"=> "",
+        }
+      }
+      
+      when "classrooms#import"
+        @breadcrumb = {
+          :title=>"Import Class List",
+          :icon=>"fa fa-users",
+          :breadcrumb=>{
+            "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+            "Import Class List"=> "",
+        }
+      }
+
+      when "classrooms#import_list"
+        @breadcrumb = {
+          :title=>"Import Class List",
+          :icon=>"fa fa-users",
+          :breadcrumb=>{
+            "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+            "Import Class List"=> "",
+        }
+      }
+
+      when "classrooms#index"
+        get_particular_school(parameters[0])
+        @breadcrumb = {
+          :title=>"Class List",
+			    :icon=>"fa fa-users",
+          :breadcrumb=>{
+			      "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[0]),
+            "Class List"=> "",
+        }
+      }
+      
+      when "classrooms#new"
+		    @breadcrumb = {
+          :title=>"Add New Class",
+			    :icon=>"fa fa-users",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+			      "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+            "Add New Class"=> "",
+        }
+      }
+      
+      when "classrooms#edit"
+        get_particular_school(parameters[0])
+        @breadcrumb = {
+          :title=>"Edit Class Information",
+			    :icon=>"fa fa-users",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[0]),
+            "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+            "Edit Class Information"=> "",
+        }
+      } 
 		  
-          when "classrooms#show"
-            @breadcrumb = {
-              :title=>"Class Information",
+      when "classrooms#show"
+        @breadcrumb = {
+          :title=>"Class Information",
   			  :icon=>"fa fa-users",
-              :breadcrumb=>{
-                "School List"=> schools_path,
-                "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-                "Edit Class Information"=> "",
-              }
-            }
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+            "Edit Class Information"=> "",
+        }
+      }
 			
-         when "licenses#new"
+      when "licenses#new"
+        get_particular_school(parameters[0])
   		  @breadcrumb = {
-            :title=>"Add / Edit / Delete License",
-  			:icon=>"btg btg-lisence",
-              :breadcrumb=>{
-              "School List"=> schools_path,
-  			  "School List"=> (url_for :controller => 'schools', :action => 'index', :school_id => parameters[0]),
-              "Add New License"=> "",
-              }
-            }
-         when "books#index"
-          @breadcrumb = {
-            :title=>"Book List",
+          :title=>"Add / Edit / Delete License",
+  		    :icon=>"btg btg-lisence",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[0]),
+  			    "School List"=> (url_for :controller => 'schools', :action => 'index', :school_id => parameters[0]),
+            "Add New License"=> "",
+        }
+      }
+      
+      when "books#index"
+        @breadcrumb = {
+          :title=>"Book List",
   		    :icon=>"glyphicon glyphicon-book",
-            :breadcrumb=>{
-              "Book List"=> "",
-            }
-          }
+          :breadcrumb=>{
+            "Book List"=> "",
+        }
+      }
 		
-        when "books#show"
-         @breadcrumb = {
-         :title=>"Book Information",
-  	     :icon=>"glyphicon glyphicon-book",
-         :breadcrumb=>{
-		   "Books List"=> books_path,
-           "Book Information"=> "",
-           }
-         }
+      when "books#show"
+        @breadcrumb = {
+          :title=>"Book Information",
+  	      :icon=>"glyphicon glyphicon-book",
+          :breadcrumb=>{
+		        "Books List"=> books_path,
+            "Book Information"=> "",
+        }
+      }
 		
-        when "books#new"
-          @breadcrumb = {
-            :title=>"Add New Book",
+      when "books#new"
+        @breadcrumb = {
+          :title=>"Add New Book",
   		    :icon=>"glyphicon glyphicon-book",
-            :breadcrumb=>{
-              "Add New Book"=> "",
-            }
-          }
-        when "books#edit"
-          @breadcrumb = {
-            :title=>"Edit Book Information",
-  		    :icon=>"glyphicon glyphicon-book",
-            :breadcrumb=>{
-              "Books List"=> books_path,
-              "Edit Book Information"=> "",
-            }
-          }	
+          :breadcrumb=>{
+            "Add New Book"=> "",
+        }
+      }
+      
+      when "books#edit"
+        @breadcrumb = {
+          :title=>"Edit Book Information",
+  	      :icon=>"glyphicon glyphicon-book",
+          :breadcrumb=>{
+            "Books List"=> books_path,
+            "Edit Book Information"=> "",
+        }
+      }	
          
       else
         @breadcrumb = {

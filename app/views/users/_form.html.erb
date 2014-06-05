@@ -1,31 +1,11 @@
 <div class="row" id="parent_info">
 	<div class="col-md-12">
 	    <div class="panel panel-default">
-	        <div class="panel-heading align-school-header">
+	        <div class="panel-heading">
 	        	<%unless @school.blank?%>
-	        	<span class="top-school-heading"><%= link_to @school.name + " (" + @school.code + ")"  , school_path(@school)%></span>
-	        	<hr class="school-heading-hr">
-	        	<%end%>
-	        	<div class="mandatory-align">Please enter all mandatory (<span class="asterisk">*</span>) fields.
-	        		<%unless @role_id.name.eql?('Web Admin')%>
-	        		<div class="tab-links" data-no-turbolink>
-		        		<div>
-		        		<% if ((can? :read, :users) && (can? :read_sa, :users)) %>
-		        			<%= link_to 'School Admin List', users_path(:role_id => 2, :school_id => @school.id)%> 
-		        		<%end%>
-		        		<% if ((can? :read, :users) && (can? :read_teacher, :users)) %>
-		        			| <%= link_to 'Teacher List', users_path(:role_id => 3, :school_id => @school.id)%> 
-		        		<%end%>
-		        		<% if ((can? :read, :users) && (can? :read_student, :users)) %>
-		        			| <%= link_to 'Student List', users_path(:role_id => 4, :school_id => @school.id)%> 
-		        		<%end%>
-	        			<% if (can? :read, :classrooms) %>
-	        				| <%= link_to 'Class List', classrooms_path(:school_id => @school.id)%>
-	        			<%end%>
-	        			</div>
-	        		</div>
-	        		<%end%>
-	        	</div>
+	  			<span class="top-school-heading"><%= @school.name + " (" + @school.code + ")" %></span>
+				<%end%>
+	            <p>Please enter all mandatory (<span class="asterisk">*</span>) fields.</p>
 	        </div>
 	        <div class="panel-body">
 	        	<%= form_for @user, :html=>{:class=>"form_validation user_form", multipart: true} do |f| %>
@@ -77,10 +57,13 @@
 	{
 	    showHideMenu('li_school');	
 	}
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
 	
-email_valid = "<%= url_for :controller=> 'users', :action => 'email_validation', :id=> action_name.eql?("edit") ? @user.id : 0%>"	
+// email_valid = "<%#= url_for :controller=> 'users', :action => 'email_validation', :id=> action_name.eql?("edit") ? @user.id : 0%>"	
 
-username_valid = "<%= url_for :controller=> 'users', :action => 'username_validation', :id=> action_name.eql?("edit") ? @user.id : 0%>"
+// username_valid = "<%#= url_for :controller=> 'users', :action => 'username_validation', :id=> action_name.eql?("edit") ? @user.id : 0%>"
 
 </script>
 
