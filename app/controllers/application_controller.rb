@@ -634,11 +634,13 @@ class ApplicationController < ActionController::Base
       }
       
       when "classrooms#new"
+        get_particular_school(parameters[0])
 		    @breadcrumb = {
           :title=>"Add New Class",
 			    :icon=>"fa fa-users",
           :breadcrumb=>{
             "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[0]),
 			      "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
             "Add New Class"=> "",
         }
@@ -658,13 +660,15 @@ class ApplicationController < ActionController::Base
       } 
 		  
       when "classrooms#show"
+        get_particular_school(parameters[0])
         @breadcrumb = {
           :title=>"Class Information",
   			  :icon=>"fa fa-users",
           :breadcrumb=>{
             "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[0]),
             "Class List"=> (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
-            "Edit Class Information"=> "",
+            "Class Information"=> "",
         }
       }
 			
@@ -677,7 +681,7 @@ class ApplicationController < ActionController::Base
             "School List"=> schools_path,
             @school_name.name => school_path(:id=>parameters[0]),
   			    "School List"=> (url_for :controller => 'schools', :action => 'index', :school_id => parameters[0]),
-            "Add New License"=> "",
+            "Add / Edit / Delete License"=> "",
         }
       }
       
