@@ -159,7 +159,7 @@ class ClassroomsController < ApplicationController
     else
       flash[:success] = "List is not imported due to some incorrect data." 
     end
-    redirect_to schools_url 
+    redirect_to classrooms_path(:school_id=> params[:school_id])
   end
 
   def get_class_info

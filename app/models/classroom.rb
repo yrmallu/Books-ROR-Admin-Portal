@@ -12,6 +12,7 @@ class Classroom < ActiveRecord::Base
   ###########################################################################################
   ## Callbacks
   ###########################################################################################
+  before_validation :reset_params_datatype
   before_create :generate_random_code
   before_save :reset_params_datatype
   ###########################################################################################
@@ -27,8 +28,9 @@ class Classroom < ActiveRecord::Base
   ###########################################################################################
   ## Validations
   ###########################################################################################
+  validates :code, :uniqueness => {:case_sensitive => false}
   validates :name, :presence => { :message => "Classroom Name can't be blank." }, :length => {:maximum => 255}
-
+  validate :check_class_code_existance
 
   ###########################################################################################
   ## Methods
@@ -38,7 +40,18 @@ class Classroom < ActiveRecord::Base
   end
   
   def reset_params_datatype
-    self.code = code.to_i
+    self.code = code.to_i unless code.blank?
+  end
+  
+  def check_class_code_existance
+    return true if self.code.blank? 
+    classroom = Classroom.where("code = '#{code.to_i}'").last
+    if classroom.blank?
+      errors.add( :code, "There is no class with the code #{code.to_i}. If you wish to create a new class, simply leave the field blank and the system will assign a code.")
+      return false
+    else
+      return true
+    end
   end
 
   def self.search(query_string, school_id)

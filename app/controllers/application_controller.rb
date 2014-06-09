@@ -117,7 +117,15 @@ class ApplicationController < ActionController::Base
       data_obj = obj.new(row)
       puts "new recode", row.to_hash
       if save_list
-        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
+        if User.eql?(obj)
+          db_exist = obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last
+        elsif(Classroom.eql?(obj))
+           # obj.find_by_code(data_obj.code.to_i.to_s)
+          db_exist =  obj.where("code = '#{data_obj.code.to_i.to_s}' and school_id = '#{school}'").last
+        else
+          db_exist = obj.find_by_code(data_obj.code.to_i.to_s)
+        end
+        #db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
             data_flag = true
@@ -147,7 +155,15 @@ class ApplicationController < ActionController::Base
       row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)
       if save_list
-        db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
+        if User.eql?(obj)
+          db_exist = obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last
+        elsif(Classroom.eql?(obj))
+           # obj.find_by_code(data_obj.code.to_i.to_s)
+          db_exist =  obj.where("code = '#{data_obj.code.to_i.to_s}' and school_id = '#{school}'").last
+        else
+          db_exist = obj.find_by_code(data_obj.code.to_i.to_s)
+        end
+        #db_exist = User.eql?(obj) ? obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last : obj.find_by_code(data_obj.code.to_i.to_s)
         if !db_exist.blank?
             db_exist.update_attributes(row.to_hash)
             data_flag = true
