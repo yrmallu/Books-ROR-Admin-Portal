@@ -20,7 +20,8 @@ class School < ActiveRecord::Base
 
 	before_validation :strip_whitespace
 	before_create :generate_random_code
-    before_save :reset_params_datatype
+  before_save :reset_params_datatype
+    
 	###########################################################################################
   ## Scopes
   ###########################################################################################
@@ -39,6 +40,7 @@ class School < ActiveRecord::Base
   validates :district, :length => {:maximum => 255}, :allow_blank=>true
   validates :state, :length => {:maximum => 255}, :allow_blank=>true
   validates :country, :length => {:maximum => 255}, :allow_blank=>true
+  validate :check_school_code_existance
   #validates :phone, :length => {:maximum => 255}, :allow_blank=>true
 
 	###########################################################################################
@@ -53,8 +55,20 @@ class School < ActiveRecord::Base
     self.code = code.to_i
    # self.phone = phone.to_i
   end
+  
+  def check_school_code_existance
+    return true if self.code.blank? 
+    school = School.where("code = '#{code.to_i}'").last
+    if school.blank?
+      errors.add( :code, "There is no school with the code #{code.to_i}. If you wish to create a new school, simply leave the field blank and the system will assign a code.")
+      return false
+    else
+      return true
+    end
+  end
 
   def strip_whitespace
+    self.code = code.to_i unless code.blank?
   	self.name = self.name.strip unless self.name.blank?
   end
 
