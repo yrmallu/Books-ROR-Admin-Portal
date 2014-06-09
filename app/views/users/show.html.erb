@@ -1,21 +1,21 @@
 <div class="row">
 	<div class="col-md-12">
     	<div class="panel panel-default">
-        	<% if @user.id == current_user.id%>
-        		<div class="panel-heading">
-	       			<%unless current_user.school.blank?%>
-	  					<span class="top-school-heading"><%= current_user.school.name + " (" + current_user.school.code + ")" %></span>
-					<%end%>
+        	<%#= if @user.id == current_user.id%>
+        		<!-- <div class="panel-heading">
+	       			<%#=unless current_user.school.blank?%>
+	  					 <span class="top-school-heading"><%#= current_user.school.name + " (" + current_user.school.code + ")" %></span> 
+					<%#=end%>
 	           		<h4 class="panel-title">My Information</h4>
 	        	</div>
-        	<%else%>
+        	<%#=else%>
 				<div class="panel-heading">
-	       			<%unless @school.blank?%>
-	  					<span class="top-school-heading"><%= @school.name + " (" + @school.code + ")" %></span>
-					<%end%>
+	       			<%#=unless @school.blank?%>
+	  					 <span class="top-school-heading"><%#= @school.name + " (" + @school.code + ")" %></span>
+					<%#=end%>
 	           		<h4 class="panel-title">User Details</h4>
-	        	</div>
-			<%end%>
+	        	</div> -->
+			<%#=end%>
             	
         	
         	<div class="panel-body">
@@ -127,6 +127,9 @@ else if(<%= @role_id.name.eql?('School Admin')%>)
 {
     showHideMenu('li_school');	
 }
+<% unless current_user.is_web_admin?%>
+	showHideMenu('li_options');	
+<%end%>
 
 $( ".assign_license" ).click(function() {
           jQuery.get("<%=url_for(:controller=>'users',:action=>'get_user_school_licenses')%>",{ id : $(this).attr('data-input'), role_id:<%=@role_id.id%>},
