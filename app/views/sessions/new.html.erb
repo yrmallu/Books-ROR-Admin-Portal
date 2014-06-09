@@ -22,7 +22,9 @@
     <%= form_for(:session, url: sessions_path, :html => { :class => "form_validation"}) do |f| %>
         <h4 class="nomargin">Sign In</h4>
         <p class="mt5 mb20">Login to access your account.</p>
-        <%= f.text_field :email, :class => "form-control uname", :required=>true, :placeholder=>"Email"%>                          	       <%= f.password_field :password, :class => "form-control pword", :required=>true, :placeholder=>"Password" %>
+        <%= select_tag "school_id", options_from_collection_for_select(@schools, "id", "name"), {:class=>"form-control", :prompt=>"Select School"} %>
+        <%= f.text_field :email, :class => "form-control uname", :required=>true, :placeholder=>"Email"%>                 
+        <%= f.password_field :password, :class => "form-control pword", :required=>true, :placeholder=>"Password" %>
 		<%= link_to 'Forgot password', forgot_password_path%>
 		<%= f.submit "Sign in", :class => "btn btn-success btn-block signin-btn-highlight", :id=>"signin_btn" %>
     <% end %>

@@ -57,6 +57,7 @@
           <ul class="children">
 		    <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Add Web Admin", new_user_path(:role_id =>Role.where("name='Web Admin'").last) %></li>
 		    <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Web Admin List", users_path(:role_id => Role.where("name='Web Admin'").last) %></li>
+        <li><%= link_to '<i class="fa fa-caret-right"></i>'.html_safe + "Un-archive Web Admins", un_archive_users_list_users_path(:role_id => Role.where("name='Web Admin'").last) %></li>
          </ul>
     </li>
     <li class="nav-parent" id="li_book"><%= link_to '<i class="glyphicon glyphicon-book"></i>'.html_safe + "Books", books_path %>

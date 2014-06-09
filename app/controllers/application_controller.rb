@@ -68,7 +68,7 @@ class ApplicationController < ActionController::Base
   end
   
   def get_all_schools
-    @schools = School.by_newest
+    @schools = School.un_archived.by_newest
   end
   
   def get_school_by_id
@@ -444,6 +444,15 @@ class ApplicationController < ActionController::Base
           }
         }
 		  end
+
+      when "users#un_archive_users_list-1"
+        @breadcrumb = {
+          :title=>"Un-archived Web Admin List",
+          :icon=>"fa fa-user",
+          :breadcrumb=>{
+            "Un-archived Web Admin List"=> "",
+        }
+      }
          
       when "users#new-3"
         get_particular_school(parameters[1])

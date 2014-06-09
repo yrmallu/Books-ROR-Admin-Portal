@@ -10,9 +10,13 @@
 	        <div class="panel-body">
 	        	<%= form_for @user, :html=>{:class=>"form_validation user_form", multipart: true} do |f| %>
 				    <%=f.hidden_field :role_id, :value=>@role_id.id%>
+				    <%= hidden_field_tag :un_archive, @un_archive%>
 					<%=f.hidden_field :school_id, :value=>@school.id unless @school.blank? %>
 					<div id="errorbox">	
 					    <%= render "shared/error_messages", :object=>@user %>
+					    <%if params[:un_archive].eql?('true')%>
+					    	<div class="error show">A user with this email address already exists. Please enter a new email address to restore this user from the archive.</div>
+					    <%end%>
 					</div>
 		        <%= render 'common_fields', f: f %>
 			</div>
@@ -43,6 +47,7 @@
 			</div>
 			<% end %>
 			<%#= hidden_field_tag :send_mail, @send_mail%>
+			
 	    </div>
     </div>       
 </div>
