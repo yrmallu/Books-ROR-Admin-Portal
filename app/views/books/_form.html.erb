@@ -135,7 +135,7 @@
 	        </div><!-- panel-body -->
 	        <div class="panel-footer" data-no-turbolink>
 				<% if action_name.eql?('new') || action_name.eql?('create') %>
-	                <%= f.submit "Submit", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
+	                <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
 	                <%#= f.submit "Submit", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' }, :onclick => "return validateForm();"  %>
 				<%else%>
 				    <%= f.submit "Update", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Updating...' } %>
