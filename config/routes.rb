@@ -71,6 +71,8 @@ BooksThatGrow::Application.routes.draw do
 	    get 'user_search'
 	    get 'undo_user'
       get 'get_user_info'
+      get 'un_archive_users_list'
+      get 'un_archive_user'
      end
   end
 

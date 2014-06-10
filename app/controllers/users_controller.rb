@@ -3,14 +3,16 @@ class UsersController < ApplicationController
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
   before_action :set_user, :only => [:show_user_data, :get_user_info, :show, :edit, :update, :destroy, :get_user_school_licenses, :quick_edit_user, :change_user_password, :remove_license ]
-  before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent, :create, :update] 
+  before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent, :create, :update, :un_archive_users_list] 
   before_action :get_manage_student_accessright, :only => [:new, :edit, :create, :update]
   before_action :get_classrooms, :only => [:new]
-  before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent]
+  before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent, :email_for_password, :un_archive_users_list]
   before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent, :create, :update]
   before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent, :index]
   before_action :assign_root_path
   before_action :get_current_user
+  before_action :get_all_schools, only: [:forgot_password]
+  
 
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -238,10 +240,17 @@ class UsersController < ApplicationController
     @existing_access_right = @user.user_permission_names.collect{|i| i.id.to_s}
     set_bread_crumb(@role_id.id, @user.school_id, @user.id)
     @assigned_classrooms = @user.classrooms if @user && @user.classrooms
+    @un_archive = params[:un_archive]
   end
   
   def user_update
+    @un_archive = params[:un_archive]
+    @user = params[:un_archive].eql?('true') ? User.where("id = #{params[:id]}").last : @user
+    #user_params.merge("delete_flag" => false) if params[:un_archive].eql?('true')
+    
     if @user.update_attributes(user_params)
+      @user.delete_flag = false if params[:un_archive].eql?('true')
+      @user.save if params[:un_archive].eql?('true')
       unless params[:accessright].blank?
         if params[:accessright].eql?('0')
           can_manage_access_right_id = get_manage_student_accessright
@@ -319,7 +328,7 @@ class UsersController < ApplicationController
       remove_license_from_user
     end
     @user.update_attributes(:delete_flag=>true)
-	redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User archived.'
+	  redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User archived.'
     #redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id, :user_id=>@user.id), notice: 'User archived.'
   end
  
@@ -487,20 +496,50 @@ class UsersController < ApplicationController
   end
  
   def email_for_password
-    @user = User.find_by_email(params[:email].downcase)
-    if @user.blank?
+    # Check if web admin
+    @user = User.where("(email = '#{params[:email].downcase}') AND (delete_flag is false)").last
+    unless @user.blank?
+      if @user.is_web_admin?
+        forgot_password_generate_coupon
+      else
+        if !params[:school_id].blank? #Check if school is selected
+          @user = @school.users.where("(email = '#{params[:email].downcase}') AND (delete_flag is false)").last
+          unless @user.blank?
+            forgot_password_generate_coupon
+          else
+            flash[:error] = "Entered email address is not associated with the selected school."
+            redirect_to forgot_password_path
+          end  
+        end
+      end  
+    else
       flash[:error] = "That email address is not associated with a Books That Grow account. Please try a different email address or contact your administrator for help"
       redirect_to forgot_password_path
-    else
-      coupon = random_coupon
-      Coupon.create(:code=>coupon)
-      pwd_param = {"email" => @user.email, "coupon" => coupon}.to_json
-      user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
-      UserMailer.forgot_password_email(user_info).deliver
-      flash[:success] = "Instructions will be sent to the email address you enter."
-      redirect_to signin_path
-    end
+    end  
+    # @user = User.find_by_email(params[:email].downcase)
+    # if @user.blank?
+    #   flash[:error] = "That email address is not associated with a Books That Grow account. Please try a different email address or contact your administrator for help"
+    #   redirect_to forgot_password_path
+    # else
+    #   coupon = random_coupon
+    #   Coupon.create(:code=>coupon)
+    #   pwd_param = {"email" => @user.email, "coupon" => coupon}.to_json
+    #   user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
+    #   UserMailer.forgot_password_email(user_info).deliver
+    #   flash[:success] = "Instructions will be sent to the email address you enter."
+    #   redirect_to signin_path
+    # end
   end
+
+  def forgot_password_generate_coupon
+    coupon = random_coupon
+    Coupon.create(:code=>coupon)
+    pwd_param = {"email" => @user.email, "coupon" => coupon}.to_json
+    user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
+    UserMailer.forgot_password_email(user_info).deliver
+    flash[:success] = "Instructions will be sent to the email address you enter."
+    redirect_to signin_path
+  end  
   
   def random_coupon
     SecureRandom.urlsafe_base64(16)
@@ -724,7 +763,28 @@ class UsersController < ApplicationController
   def show_user_data
     render :text => "#{user_path(@user,:role_id=>@user.role_id, :school_id=>@user.school_id)}"
   end
-  
+
+  def un_archive_users_list
+    if !@role_id.blank? && params[:school_id].blank?
+        @users = User.where("role_id = '#{@role_id.id}'").archived.by_newest.page params[:page]
+        set_bread_crumb(@role_id.id)
+    elsif !@role_id.blank? && !params[:school_id].blank?
+        @users = @school.users.where("role_id = '#{@role_id.id}'").archived.by_newest.page params[:page]
+        set_bread_crumb(@role_id.id, @school.id)
+    else
+        @users = User.archived.by_newest.page params[:page]
+    end
+  end  
+
+  def un_archive_user
+    @user = User.where("id = '#{params[:id]}' ").last
+    if @user.update_attributes(:delete_flag=>false).eql?(false)
+      redirect_to edit_user_path(@user, :role_id => @user.role_id, :school_id=>@user.school_id, :un_archive=>params[:un_archive]), notice: 'User cannot be un-archived.'
+    else
+      redirect_to un_archive_users_list_users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User un-archived.'
+    end  
+  end
+
   private
   def set_user
     @user = User.where("id = '#{params[:id]}' ").un_archived.last

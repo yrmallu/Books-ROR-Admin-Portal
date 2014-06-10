@@ -1,0 +1,69 @@
+<div class="panel panel-default">
+	<div class="panel-body pos-rel"> 
+	<div class="">
+		<table class="table class_common_table" id="users_table">
+			<thead>
+				<tr>
+                	<th><span class="table-header">First Name</span></th>
+                    <th><span class="table-header">Last Name</span></th>
+					<th><span class="table-header">Username</span></th>
+                    <th><span class="table-header">Email</span></th>
+					<th><span class="table-header">Phone Number</span></th>
+					<%unless @role_id.name.eql?('Web Admin')%>
+					    <th><span class="table-header">License Expiration Date</span></th>
+					<%end%>
+					<%if @role_id.name.eql?('Student')%>
+					    <th><span class="table-header">Grade</span></th>
+					    <th><span class="table-header">Reading Level</span></th>
+					<%end%>
+					<th><span class="table-header">Action</span></th>
+                 </tr>
+            </thead>
+            <tbody>
+				<% @users.each do |user| %>
+				 	<tr class="odd gradeX" data-no-turbolink>
+				 		<td><%=user.first_name%></td>
+				 		<td><%=user.last_name%></td>
+				 		<td><%=user.username%></td>
+				 		<td><%=user.email%></td>
+				 		<td><%=user.phone_number%></td>
+				 		<%unless @role_id.name.eql?('Web Admin')%>
+				 			<td><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
+				 		<%end%>
+						<%if @role_id.name.eql?('Student')%>
+				 			<td><%= user.grade unless  user.grade.blank? %></td>
+				 			<td><%= user.reading_ability unless user.reading_ability.blank? %></td>
+				 		<%end%>
+				 		<td>
+				 			<%unless @school.blank?%>		
+    							<%= link_to 'Un-archive', un_archive_user_users_path(:id=>user, :role_id => @role_id, :school_id=>@school.id, :un_archive=>true) %> 
+							<%else%>
+   								<%= link_to 'Un-archive', un_archive_user_users_path(:id=>user, :role_id => @role_id, :un_archive=>true) %>
+							<% end %>
+				 		</td>
+				 	</tr>
+				<%end%>
+			</tbody>	
+		</table>
+	</div>	
+	<div data-no-turbolink>
+		<%= paginate @users %>
+	</div>	
+	</div>	
+</div>	 
+
+<script type="text/javascript">
+
+	if( <%= @role_id.name.eql?('Web Admin')%>)
+	{
+	    showHideMenu('li_webadmin');	
+	}
+	else 
+	{
+	    showHideMenu('li_school');	
+	}
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
+
+</script>		
