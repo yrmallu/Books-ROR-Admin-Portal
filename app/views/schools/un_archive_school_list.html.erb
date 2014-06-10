@@ -1,0 +1,45 @@
+<div class="panel panel-default">
+	<div class="panel-body pos-rel"> 
+	<div class="">
+		<table class="table class_common_table" id="un_archive_school_table">
+			<thead>
+				<tr>
+                	<th><span class="table-header">School Code</span></th>
+	                <th><span class="table-header">School Name</span></th>
+	                <th><span class="table-header">District</span></th>
+	                <th><span class="table-header">City</span></th>
+					<th><span class="table-header">State</span></th>
+	                <th><span class="table-header">Country</span></th>
+					<th><span class="table-header">Actions</span></th>
+                 </tr>
+            </thead>
+            <tbody>
+				<% @schools.each do |school| %>
+				 	<tr class="odd gradeX" data-no-turbolink>
+				 		<td><%= school.code %></td>
+				 		<td><%= school.name %></td>
+				 		<td><%= school.district %></td>
+					  	<td><%= school.city %></td>
+					  	<% @country = Carmen::Country.coded(school.country) unless school.country.blank?%>
+						  <td><%= Carmen::Country.coded(school.country).subregions.coded(school.state).try(:name) unless school.country.blank? %></td>
+						  <td><%= @country.name unless school.country.blank?%></td>
+				 		<td>
+				 			<%= link_to 'Un-archive', un_archive_school_schools_path(:id=>school) %> 
+						</td>
+				 	</tr>
+				<%end%>
+			</tbody>	
+		</table>
+	</div>	
+	<div data-no-turbolink>
+		<%= paginate @schools %>
+	</div>	
+	</div>	
+</div>	 
+
+<script type="text/javascript">
+	showHideMenu('li_school');
+	<% unless current_user.is_web_admin?%>
+  		showHideMenu('li_options');	
+	<%end%>
+</script>		

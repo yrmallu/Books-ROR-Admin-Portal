@@ -1,9 +1,9 @@
 class SchoolsController < ApplicationController
 
   before_action :logged_in?
-  before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list, :quick_edit_school], except: [:save_school_list]
+  before_action :set_school, only: [:show, :edit, :update, :destroy, :get_schoolwise_license_list, :quick_edit_school, :un_archive_school], except: [:save_school_list]
   before_action :get_schools, only: [:index]
-  before_action :set_bread_crumb, only: [:index, :edit, :new, :import_list, :import]
+  before_action :set_bread_crumb, only: [:index, :edit, :new, :import_list, :import, :un_archive_school_list]
   
   load_and_authorize_resource :only=>[:show, :new, :edit, :destroy, :index]
   
@@ -171,6 +171,15 @@ class SchoolsController < ApplicationController
   def set_school_delete_flag(school)
     school.update_attributes(:delete_flag=>false)
   end
+
+  def un_archive_school_list
+    @schools = School.archived.by_newest.page params[:page]
+  end
+  
+  def un_archive_school 
+    @school.update_attributes(:delete_flag=>false)
+    redirect_to un_archive_school_list_schools_path, notice: 'School un-archived.' 
+  end  
   
   private
     def set_school

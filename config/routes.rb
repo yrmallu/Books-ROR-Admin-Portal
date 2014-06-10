@@ -14,6 +14,8 @@ BooksThatGrow::Application.routes.draw do
       post 'import'
       post 'save_classroom_list'
       get 'get_class_info'
+      get 'un_archive_class_list'
+      get 'un_archive_class'
     end
   end
 
@@ -90,6 +92,8 @@ BooksThatGrow::Application.routes.draw do
 	    get 'quick_edit_school'
 	    get 'undo_school'
       get 'subregion_options'
+      get 'un_archive_school_list'
+      get 'un_archive_school'
     end
   end
   

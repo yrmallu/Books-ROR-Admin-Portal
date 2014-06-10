@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+	<div class="panel-body pos-rel"> 
+	<div class="">
+		<table class="table class_common_table" id="un_archive_classroom_table">
+			<thead>
+				<tr>
+                	<th><span class="table-header">Class Code</span></th>
+                    <th><span class="table-header">Class Name</span></th>
+					<th><span class="table-header">Number Of School Admins</span></th>
+					<th><span class="table-header">Number Of Teachers</span></th>
+					<th><span class="table-header">Number Of Students</span></th>
+                    <th><span class="table-header">Actions</span></th>
+                 </tr>
+            </thead>
+            <tbody>
+				<% @classrooms.each do |classroom| %>
+				 	<tr class="odd gradeX" data-no-turbolink>
+				 		<td><%= classroom.code %></td>
+				 		<td><%= classroom.name %></td>
+				 		<td><%= classroom.users.un_archived.school_admins.count %></td>
+					  	<td><%= classroom.users.un_archived.teachers.count %></td>
+					  	<td><%= classroom.users.un_archived.students.count %></td>
+				 		<td>
+				 			<%= link_to 'Un-archive', un_archive_class_classrooms_path(:id=>classroom, :school_id=>@school.id) %> 
+						</td>
+				 	</tr>
+				<%end%>
+			</tbody>	
+		</table>
+	</div>	
+	<div data-no-turbolink>
+		<%= paginate @classrooms %>
+	</div>	
+	</div>	
+</div>	 
+
+<script type="text/javascript">
+	showHideMenu('li_school');
+	<% unless current_user.is_web_admin?%>
+  		showHideMenu('li_options');	
+	<%end%>
+</script>		

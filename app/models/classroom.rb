@@ -20,6 +20,7 @@ class Classroom < ActiveRecord::Base
   ###########################################################################################
   scope :by_newest, -> {order("created_at DESC")}
   scope :un_archived, -> {where(delete_flag: false)}
+  scope :archived, -> {where(delete_flag: true)}
   #store_accessor :classroom_count, :student_count, :teacher_count, :school_admin_count
   
   paginates_per 10

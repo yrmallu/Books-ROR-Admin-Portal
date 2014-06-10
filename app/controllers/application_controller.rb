@@ -305,6 +305,16 @@ class ApplicationController < ActionController::Base
         }
       }
 
+      when "schools#un_archive_school_list"
+        @breadcrumb = {
+          :title=>"Un-archived School List",
+          :icon=>"fa fa-building-o",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            "Un-archived School List"=> "",
+        }
+      }
+      
       when "users#new-2"
         get_particular_school(parameters[1])
 	      @breadcrumb = {
@@ -735,7 +745,20 @@ class ApplicationController < ActionController::Base
             "Class Information"=> "",
         }
       }
-			
+
+      when "classrooms#un_archive_class_list"
+        get_particular_school(parameters[0])
+        @breadcrumb = {
+          :title=>"Un-archived Class List",
+          :icon=>"fa fa-users",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[0]),
+            "Class List" => (url_for :controller => 'classrooms', :action => 'index', :school_id => parameters[0]),
+            "Un-archived Class List"=> "",
+        }
+      }
+      
       when "licenses#new"
         get_particular_school(parameters[0])
   		  @breadcrumb = {

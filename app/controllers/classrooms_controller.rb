@@ -1,9 +1,9 @@
 class ClassroomsController < ApplicationController
   
   before_action :logged_in?
-  before_action :set_classroom, only: [:show, :edit, :update, :destroy, :quick_edit_classroom]
+  before_action :set_classroom, only: [:show, :edit, :update, :destroy, :quick_edit_classroom, :un_archive_class]
   #before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
-  before_action :get_school_by_id, only: [:new, :index, :edit, :update, :show]
+  before_action :get_school_by_id, only: [:new, :index, :edit, :update, :show, :un_archive_class_list]
   before_action :get_school_year_range, only: [:new, :edit, :update]
   before_action :get_complete_date, only: [:create, :update]
   before_action :get_school_specific_users, :only => [:new, :edit, :update]
@@ -167,6 +167,18 @@ class ClassroomsController < ApplicationController
     render :file=>"/classrooms/classroom_info", :layout=>false
   end
   
+  def un_archive_class_list
+    set_bread_crumb(@school.id)
+    unless params[:school_id].blank?
+      @classrooms = @school.classrooms.archived.by_newest.page params[:page]
+    end  
+  end
+
+  def un_archive_class
+    @classroom.update_attributes(:delete_flag=>false)
+    redirect_to un_archive_class_list_classrooms_path(:school_id=> @classroom.school_id), notice: 'Class un-archived.' 
+  end
+    
   private
   def set_classroom
     @classroom = Classroom.find(params[:id])

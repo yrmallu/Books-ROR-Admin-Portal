@@ -28,6 +28,7 @@ class School < ActiveRecord::Base
 	
 	scope :by_newest, -> {order("created_at DESC")}
 	scope :un_archived, -> {where(delete_flag: false)}
+  scope :archived, -> {where(delete_flag: true)}
 	#default_scope {where.not(delete_flag: true)}	
 
   ###########################################################################################
