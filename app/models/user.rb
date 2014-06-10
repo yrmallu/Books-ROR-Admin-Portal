@@ -118,7 +118,7 @@ class User < ActiveRecord::Base
   end
 
   def phone_number_masking
-     self.phone_number = phone_number.gsub(/\W+/, '')
+     self.phone_number = phone_number.to_s.split(".")[0].gsub(/\W+/, '') unless phone_number.blank?
   end  
 
   def get_full_name
