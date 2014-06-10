@@ -151,7 +151,7 @@ hr.school-heading-hr{margin-top: 21px;}
 
 /* Making sign in btn clickable */
 .signin-btn-highlight:active{opacity: 0.4}
-.signinpanel .form-control{height: 32px;}
+.signinpanel .form-control{height: 36px;}
 	
 .word-wrap{word-wrap: break-word;}	
 
