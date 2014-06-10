@@ -15,7 +15,8 @@
 					<div id="errorbox">	
 					    <%= render "shared/error_messages", :object=>@user %>
 					    <%if params[:un_archive].eql?('true')%>
-					    	<div class="error show">A user with this email address / username already exists. Please enter a new email address / username to restore this user from the archive.</div>
+					    	<div class="error show">A user with this email address / username already exists. <br>
+					    		Please enter a new email address / username to restore this user from the archive.</div>
 					    <%end%>
 					</div>
 		        <%= render 'common_fields', f: f %>

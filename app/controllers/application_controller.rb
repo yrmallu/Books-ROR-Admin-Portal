@@ -389,6 +389,19 @@ class ApplicationController < ActionController::Base
             "Import School Admin List"=> "",
         }
       }
+
+      when "users#un_archive_users_list-2"
+        get_particular_school(parameters[1])
+        @breadcrumb = {
+          :title=>"Un-archived School Admin List",
+          :icon=>"btg btg-admin",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+            "School Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Un-archived School Admin List"=> "",
+        }
+      }
 	  
       when "users#new-1"
 		    @breadcrumb = {
@@ -554,6 +567,19 @@ class ApplicationController < ActionController::Base
             "Import Teacher List"=> "",
         }
       }
+
+      when "users#un_archive_users_list-3"
+        get_particular_school(parameters[1])
+        @breadcrumb = {
+          :title=>"Un-archived Teacher List",
+          :icon=>"btg btg-admin",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+            "Teacher List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Un-archived Teacher List"=> "",
+        }
+      }
        
       when "users#new-4"
         get_particular_school(parameters[1])
@@ -613,6 +639,19 @@ class ApplicationController < ActionController::Base
           :breadcrumb=>{
             "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[1], :school_id => parameters[2]),
             "Import Student List"=> "",
+        }
+      }
+
+    when "users#un_archive_users_list-4"
+        get_particular_school(parameters[1])
+        @breadcrumb = {
+          :title=>"Un-archived Student List",
+          :icon=>"btg btg-admin",
+          :breadcrumb=>{
+            "School List"=> schools_path,
+            @school_name.name => school_path(:id=>parameters[1], :role_id => parameters[0]),
+            "Student List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0], :school_id => parameters[1]),
+            "Un-archived Student List"=> "",
         }
       }
       

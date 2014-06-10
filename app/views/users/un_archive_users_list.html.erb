@@ -28,15 +28,15 @@
 				 		<td><%=user.email%></td>
 				 		<td><%=user.phone_number%></td>
 				 		<%unless @role_id.name.eql?('Web Admin')%>
-				 			<td><%=%></td>
+				 			<td><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
 				 		<%end%>
 						<%if @role_id.name.eql?('Student')%>
-				 			<td><%=%></td>
-				 			<td><%=%></td>
+				 			<td><%= user.grade unless  user.grade.blank? %></td>
+				 			<td><%= user.reading_ability unless user.reading_ability.blank? %></td>
 				 		<%end%>
 				 		<td>
 				 			<%unless @school.blank?%>		
-    							<%= link_to 'Un-archive', un_archive_user_users_path(user, :role_id => @role_id, :school_id=>@school.id) %> 
+    							<%= link_to 'Un-archive', un_archive_user_users_path(:id=>user, :role_id => @role_id, :school_id=>@school.id, :un_archive=>true) %> 
 							<%else%>
    								<%= link_to 'Un-archive', un_archive_user_users_path(:id=>user, :role_id => @role_id, :un_archive=>true) %>
 							<% end %>

@@ -246,9 +246,11 @@ class UsersController < ApplicationController
   def user_update
     @un_archive = params[:un_archive]
     @user = params[:un_archive].eql?('true') ? User.where("id = #{params[:id]}").last : @user
-    user_params.merge("delete_flag" => false) if params[:un_archive].eql?('true')
+    #user_params.merge("delete_flag" => false) if params[:un_archive].eql?('true')
     
     if @user.update_attributes(user_params)
+      @user.delete_flag = false if params[:un_archive].eql?('true')
+      @user.save if params[:un_archive].eql?('true')
       unless params[:accessright].blank?
         if params[:accessright].eql?('0')
           can_manage_access_right_id = get_manage_student_accessright
