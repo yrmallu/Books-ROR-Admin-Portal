@@ -110,7 +110,7 @@
 							     <textarea class="invisible dynamic"></textarea>
 							 </td>
 					         <td>
-								 <div class="quick-edit" data-col="phone_number" data-id='<%= user.id%>'><%= user.phone_number %></div>
+								 <div class="quick-edit" data-col="phone_number" data-id='<%= user.id%>'><%= "("+user.phone_number[0]+user.phone_number[1]+user.phone_number[2]+")"+" "+user.phone_number[3]+user.phone_number[4]+user.phone_number[5]+"-"+user.phone_number[6]+user.phone_number[7]+user.phone_number[8]+user.phone_number[9]  unless user.phone_number.blank?%></div>
 							     <input type="text" class="mask-phone mask-phone-width invisible dynamic" value='<%= user.phone_number %>'></input>	 
 							 </td>
 					         <%unless @role_id.name.eql?('Web Admin')%>

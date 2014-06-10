@@ -33,7 +33,7 @@
             	</address>
             	<address>
 			    	<strong>Phone Number:</strong>
-			    	<%= @user.phone_number %>
+			    	<%= "("+@user.phone_number[0]+@user.phone_number[1]+@user.phone_number[2]+")"+" "+@user.phone_number[3]+@user.phone_number[4]+@user.phone_number[5]+"-"+@user.phone_number[6]+@user.phone_number[7]+@user.phone_number[8]+@user.phone_number[9]  unless @user.phone_number.blank?%>
             	</address>
 				<% unless @role_id.name.eql?('Web Admin')%>
 				<address data-no-turbolink>
