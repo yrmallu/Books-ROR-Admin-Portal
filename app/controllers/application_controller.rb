@@ -115,7 +115,6 @@ class ApplicationController < ActionController::Base
       row.merge!(:role_id => role) if role && !role.blank?
       row.merge!(:school_id => school) if !school.blank?
       data_obj = obj.new(row)
-      puts "new recode", row.to_hash
       if save_list
         if User.eql?(obj)
           db_exist = obj.where("username = '#{data_obj.username}' and school_id = '#{school}'").last
@@ -136,7 +135,10 @@ class ApplicationController < ActionController::Base
             data_list << data_obj
          end
       else
-        error_hash = {:is_valid => data_obj.valid?, :error_messages  => data_obj.errors.full_messages}
+        track_err = []
+        data_obj.valid?      
+        data_obj.errors.keys.each{|x|   track_err << data_obj.errors.full_messages_for(x)[0]}
+        error_hash = {:is_valid => data_obj.valid?, :error_messages  => track_err}
         data_list << [data_obj, error_hash]
       end
       
@@ -174,7 +176,10 @@ class ApplicationController < ActionController::Base
             data_list << data_obj
          end
       else
-        error_hash = {:is_valid => data_obj.valid?, :error_messages  => data_obj.errors.full_messages}
+        track_err = []
+        data_obj.valid?      
+        data_obj.errors.keys.each{|x|   track_err << data_obj.errors.full_messages_for(x)[0]}
+        error_hash = {:is_valid => data_obj.valid?, :error_messages  => track_err}
         data_list << [data_obj, error_hash]
       end
     end
