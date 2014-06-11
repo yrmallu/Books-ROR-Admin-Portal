@@ -463,7 +463,7 @@ class ApplicationController < ActionController::Base
    	      :icon=>"fa fa-user",
           :breadcrumb=>{
             "Web Admin List"=> (url_for :controller => 'users', :action => 'index', :role_id => parameters[0]),
-            "School Admin Information"=> "",
+            "Web Admin Information"=> "",
           }
         }
 	 	  end
