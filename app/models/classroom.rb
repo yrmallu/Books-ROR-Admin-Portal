@@ -48,7 +48,7 @@ class Classroom < ActiveRecord::Base
     return true if self.code.blank? 
     classroom = Classroom.where("code = '#{code.to_i}'").last
     if classroom.blank?
-      errors.add( :code, "There is no class with the code #{code.to_i}. If you wish to create a new class, simply leave the field blank and the system will assign a code.")
+      errors.add( :code, ": There is no class with the code #{code.to_i}. If you wish to create a new class, simply leave the field blank and the system will assign a code.")
       return false
     else
       return true

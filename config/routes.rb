@@ -2,6 +2,7 @@ BooksThatGrow::Application.routes.draw do
   resources :books do
     collection do
       post 'delete_book'
+      get 'book_api_script'
     end
   end
 
