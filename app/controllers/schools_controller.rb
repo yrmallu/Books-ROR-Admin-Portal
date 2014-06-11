@@ -57,8 +57,8 @@ class SchoolsController < ApplicationController
       license.update_attributes(:delete_flag=>true)
     end
     flash[:success] = "School archived." 
-	  redirect_to schools_url
-    #redirect_to schools_url(:school_id=>@school.id) 
+	  #redirect_to schools_url
+    redirect_to schools_url(:school_id=>@school.id) 
   end
   
   def get_schoolwise_license_list
@@ -124,14 +124,14 @@ class SchoolsController < ApplicationController
     redirect_to schools_url
   end
 
-  def check_school_name_uniqueness
-     @check_unique_name = School.where("name = '#{params[:name]}' and id != #{params[:id]}")
-     unless (@check_unique_name.blank?)
-        render :text => "This name is already in use."
-      else
-        render :text => "avaiable"
-     end
-   end
+  # def check_school_name_uniqueness
+  #    @check_unique_name = School.where("name = '#{params[:name]}' and id != #{params[:id]}")
+  #    unless (@check_unique_name.blank?)
+  #       render :text => "This name is already in use."
+  #     else
+  #       render :text => "avaiable"
+  #    end
+  #  end
 
   def update_license_expiration_date
     params[:license_expiry_date].each do |k,v|
@@ -157,15 +157,15 @@ class SchoolsController < ApplicationController
   
   def undo_school
     if params[:id].kind_of?(Array)
-	  params[:id].each do |id|
-	    school = School.where("id = '#{id}' AND delete_flag = true ").last
-	    set_school_delete_flag(school)
-	  end
-	else
+	    params[:id].each do |id|
+	      school = School.where("id = '#{id}' AND delete_flag = true ").last
+	      set_school_delete_flag(school)
+	    end
+	  else
       school = School.where("id = '#{params[:id]}' AND delete_flag = true ").last
       set_school_delete_flag(school)
-	end
-	redirect_to schools_url, notice: "School un-archived."
+	  end
+	  redirect_to schools_url, notice: "School un-archived."
   end
    
   def set_school_delete_flag(school)

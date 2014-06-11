@@ -25,13 +25,16 @@ function checkIfAny(chkBoxType){
   
   if (chkBoxType == 'user')
   {
-    var arr_user_ids = [];
-    $("input[id='"+ chkBoxType + "_ids_']:checked").each(
-      function(){ arr_user_ids.push($(this).val() )
-    });
-    //alert($(".bulk-add-update-license").attr("href").concat("&user_ids="+arr_user_ids));
-    $(".bulk-remove-license").attr("href", $(".bulk-remove-license").attr("href").concat("&user_ids="+arr_user_ids))
-    $('#selected_user_ids_').val(arr_user_ids);
+    if (!'<%= current_user.is_web_admin?%>')
+    {  
+      var arr_user_ids = [];
+      $("input[id='"+ chkBoxType + "_ids_']:checked").each(
+        function(){ arr_user_ids.push($(this).val() )
+      });
+      //alert($(".bulk-add-update-license").attr("href").concat("&user_ids="+arr_user_ids));
+      $(".bulk-remove-license").attr("href", $(".bulk-remove-license").attr("href").concat("&user_ids="+arr_user_ids))
+      $('#selected_user_ids_').val(arr_user_ids);
+    }
   }
     
   if ($("input[id='"+ chkBoxType + "_ids_']:checked").length > 0){
