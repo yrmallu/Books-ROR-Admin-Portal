@@ -99,7 +99,12 @@ class BooksController < ApplicationController
   end
 
   def show_all_books
-
+  end
+  
+  def book_api_script
+    @book = Book.find(params[:id])
+    @book.parse_epub unless @book.blank?
+    render :json => true
   end  
 
   private
