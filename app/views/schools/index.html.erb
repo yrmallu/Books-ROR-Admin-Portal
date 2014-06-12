@@ -89,10 +89,10 @@
 	        	</tbody>
 	    	</table>
 		</div>
-        <% if @schools.count && @schools.count > 1 %>
-		<div data-no-turbolink>
-			<%= paginate @schools %>
-		</div>
+		<% if (@schools.count && @schools.count > 1) || (!params[:page].blank?) %>
+			<div data-no-turbolink>
+				<%= paginate @schools %>
+			</div>
 		<% end %>	
 	<% end %>
 	</div>	
