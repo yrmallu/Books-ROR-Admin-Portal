@@ -84,26 +84,44 @@ jQuery(document).ready(function(){
   $(document).ready(function() {
 
     $('.remove').click(function(e) {
+      selected_ids = [];
+      remove_selected_ids = [];
       selected_ids = $("#selected_ids").val().split(" ");
-      $('#already_assigned_id option:selected').each(function(){
+      var selectedOpts = $('#already_assigned_id option:selected').clone();
+      selectedOpts.each(function(i){
+       	$('#all_present_id').append(this);
+       	console.log($('#all_present_id').append(this));
+       	remove_selected_ids.push(this.value);
         selected_ids.removeByValue(this.value)
       });
-      $('#already_assigned_id option:selected').remove();
+
       $("#selected_ids").val(selected_ids.join(" "));
       $('#assigned_div').children('div .lbjs').remove();
       $('select#already_assigned_id').listbox({'searchbar': true});
+
+      $.each( remove_selected_ids, function( key, value ) {
+      	$('.left-listbox .lbjs-item[user_id='+value+']').remove();
+  	  });		
+	  //$('#already_assigned_id option:selected').remove();
+      
     });
 
     $('.add').on('click', function(){
-      selected_ids = []
+      selected_ids = [];
       var selectedOpts = $('#all_present_id option:selected').clone();
       selectedOpts.each(function(i){
-        if($("#already_assigned_id option[value='"+this.value+"']").length <= 0){
-          $('#already_assigned_id').append(this);
-          selected_ids.push(this.value);
-        }
+        //if($("#already_assigned_id option[value='"+this.value+"']").length <= 0){
+         $('#already_assigned_id').append(this);
+         console.log($('#already_assigned_id').append(this));
+         selected_ids.push(this.value);
+        //}
+      //  selected_ids.removeByValue(this.value);
       });
-      $("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
+      $.each( selected_ids, function( key, value ) {
+ 		 $('.right-listbox .lbjs-item[user_id='+value+']').remove();
+	  });
+	  $("#selected_ids").val(selected_ids.join(" "));
+      //$("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
       $('#assigned_div').children('div .lbjs').remove();
       $('select#already_assigned_id').listbox({'searchbar': true});
     });
