@@ -58,8 +58,9 @@ class BooksController < ApplicationController
 
   def update
     respond_to do |format|
+      FileUtils.rm_rf  "#{Rails.root}/public/books/#{@book.book_unique_id}"
+      @book.book_unique_id = Time.now.to_i.to_s
       if @book.update(book_params)
-        FileUtils.rm_rf  "#{Rails.root}/public/books/#{@book.book_unique_id}"
         @book.parse_epub 
         format.html { 
           unless params[:reading_level].blank?
