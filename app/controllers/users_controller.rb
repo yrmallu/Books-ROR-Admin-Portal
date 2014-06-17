@@ -364,13 +364,25 @@ class UsersController < ApplicationController
   
   def delete_user
     deleted_user = ''
-    User.where(id: params[:user_ids]).each do |user|
-      deleted_user = user
-	    @user = user
-      unless @user.license.blank?
-        remove_license_from_user
+    unless params[:web_ids].blank?
+      User.where(id: params[:web_ids]).each do |user|
+        deleted_user = user
+        @user = user
+        unless @user.license.blank?
+          remove_license_from_user
+        end
+        user.update_attributes(delete_flag: true)
       end
-      user.update_attributes(delete_flag: true)
+    end  
+    unless params[:user_ids].blank?
+      User.where(id: params[:user_ids]).each do |user|
+        deleted_user = user
+	      @user = user
+        unless @user.license.blank?
+          remove_license_from_user
+        end
+        user.update_attributes(delete_flag: true)
+      end
     end
     redirect_to users_path(:school_id=> deleted_user.school_id, :role_id=>deleted_user.role_id), notice: 'Users archived.'
   end
@@ -434,7 +446,6 @@ class UsersController < ApplicationController
     license = License.find(params[:license_id])
     if license.used_liscenses < license.no_of_licenses
       if params[:user_ids].split(",").to_a.count <= (license.no_of_licenses - license.used_liscenses)
-        
         # First remove all license if previously allocated any for selected user.
         params[:user_ids].split(",").to_a.each do |user_id|
           get_user(user_id)

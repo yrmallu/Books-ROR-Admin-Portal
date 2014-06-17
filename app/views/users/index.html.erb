@@ -49,7 +49,7 @@
 			<%= hidden_field_tag 'selected_user_ids[]'%>
 		<%end%>	
 		<% if  @role_id.name.eql?('Web Admin')%> 
-			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
+			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_web',:disabled => true, data: { confirm: 'Are you sure?' }%>
 		<%end%>
 		<% if ((can? :destroy, :users) && (can? :destroy_sa, :users)) && params[:role_id].eql?('2') %>
 			<%=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
@@ -66,7 +66,11 @@
 			<div class="error-message error quick-edit-error-msg"></div>
 			<thead>
                 <tr>
-                	<th><%= link_to :All, 'javascript:checkAll("user")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("user")', :class => "lnk-typ2" %></th>
+                	<% if params[:role_id].eql?('1')%>
+                		<th><%= link_to :All, 'javascript:checkAll("web")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("web")', :class => "lnk-typ2" %></th>
+                	<%else%>
+                		<th><%= link_to :All, 'javascript:checkAll("user")', :class => "lnk-typ1" %> | <%= link_to :None, 'javascript:uncheckAll("user")', :class => "lnk-typ2" %></th>
+                	<%end%>	
                     <th><span class="table-header">First Name</span></th>
                     <th><span class="table-header">Last Name</span></th>
 					<th><span class="table-header">Username</span></th>
@@ -86,7 +90,11 @@
 				 <% @users.each do |user| %>
 				     <% unless user.id == current_user.id%>
                          <tr class="odd gradeX" data-no-turbolink>
-                 	         <td class="bulk-remove-license-checkbox"><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
+                         	<% if params[:role_id].eql?('1')%>
+                 	         	<td class="bulk-remove-license-checkbox"><%= check_box_tag 'web_ids[]', user.id, false, :class => "web-check-box" %></td>
+                 	        <%else%>
+                 	        	<td class="bulk-remove-license-checkbox"><%= check_box_tag 'user_ids[]', user.id, false, :class => "user-check-box" %></td>
+                 	        <%end%> 	
 							 <%unless @role_id.name.eql?('Web Admin')%>
                                  <td>
 									 <div class="quick-edit" data-col="first_name" data-id='<%= user.id%>'><%=user.first_name%></div>
