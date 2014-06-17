@@ -14,6 +14,12 @@ class Api::BooksController < ApplicationController
 		File.open(file_path, "r") {|file|  toc = Nokogiri::HTML(file.read)} 
 		render json: jsonify_toc(toc), status: 200
 	end
+  
+  def book_api_script
+    @book = Book.where("id = #{params[:id]}").last
+    @book.parse_epub unless @book.blank?
+    render :json => true, :layout => "angular"
+  end  
 
 	private
 

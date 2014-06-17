@@ -2,7 +2,6 @@ BooksThatGrow::Application.routes.draw do
   resources :books do
     collection do
       post 'delete_book'
-      get 'book_api_script'
     end
   end
 
@@ -25,6 +24,7 @@ BooksThatGrow::Application.routes.draw do
       collection do
         get 'read'
         get 'table_of_content'
+        get 'book_api_script'
       end
     end
     resources :resetpasswords do 

@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
   #validates :email, :format=>{:with=> VALID_EMAIL_REGEX }, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
   validates :first_name, :presence=> true, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
   validates :last_name, :presence=> true, :length => {:maximum => 255}, :format => { :with => LETTER_ONLY_REGEX }
-  validates :phone_number, :length => {:minimum => 10, :maximum => 10, :message => "Please use one of the following formats: 212.555.1234, (212)555-1234 and 2125551234"}, :if => Proc.new{|f| !f.phone_number.blank? }
+  validates :phone_number, :length => {:minimum => 10, :maximum => 10, :message => ": Only 10 digit phone numbers may be entered. Please use one of the following formats: 212.555.1234, (212)555-1234 and 2125551234."}, :if => Proc.new{|f| !f.phone_number.blank? }
   #validates :school_id, :presence=> {:message => "Select School."}
   #validates :password, :presence => true, :confirmation => true, :format => {:with=> NO_SPACE_REGEX}, :length => { :minimum => 5, :message =>  'Minimum length 5 charater.'}
   validates_attachment_size :photos, :less_than => 5.megabytes
