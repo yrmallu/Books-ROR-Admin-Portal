@@ -177,7 +177,9 @@ class UsersController < ApplicationController
     else 
       get_all_reading_grades
       @assigned_classrooms = []
-      @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank? 
+      @school_specific_classrooms = @school.classrooms.un_archived unless @school.blank? 
+      @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
+
 	    render :action=> 'new'
     end
   end
@@ -283,7 +285,9 @@ class UsersController < ApplicationController
 	else
       get_all_reading_grades
       @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-      @school_specific_classrooms = @school.classrooms("delete_flag is not true") unless @school.blank?
+      @school_specific_classrooms = @school.classrooms.un_archived unless @school.blank? 
+      @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
+      
       render :action=> 'edit'
     end
   end
@@ -372,7 +376,14 @@ class UsersController < ApplicationController
   end
   
   def get_school_specific_classrooms
-    @school_specific_classrooms = @school.classrooms.un_archived unless params[:school_id].blank? 
+    @user_specific_classrooms = []
+    @school_user_specific_classrooms = []
+    unless  @user.blank?
+      @school_user_specific_classrooms = (@school.classrooms.un_archived - @user.classrooms).map(&:id) unless params[:school_id].blank? 
+      @user_specific_classrooms = @user.classrooms.map(&:id) unless @user.classrooms.blank?
+    end
+      @school_specific_classrooms = @school.classrooms.un_archived unless params[:school_id].blank? 
+      @school_classrooms = @school_specific_classrooms.map(&:id) unless params[:school_id].blank? 
   end
   
   def get_manage_student_accessright

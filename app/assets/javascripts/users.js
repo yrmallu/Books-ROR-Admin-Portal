@@ -75,117 +75,123 @@ jQuery(document).ready(function(){
   });
 
 
-// select/de-select classrooms while add/edit school-admin,teacher,student
-// select/de-select users while add/edit classroom
-    $(function () {
-      $('select#already_assigned_id').listbox({'searchbar': true});
-      $('select#all_present_id').listbox({'searchbar': true});
-    });
-  $(document).ready(function() {
-
-    $('.remove').click(function(e) {
-      selected_ids = [];
-      remove_selected_ids = [];
-      selected_ids = $("#selected_ids").val().split(" ");
-      var selectedOpts = $('#already_assigned_id option:selected').clone();
-      selectedOpts.each(function(i){
-       	$('#all_present_id').append(this);
-       	console.log($('#all_present_id').append(this));
-       	remove_selected_ids.push(this.value);
-        selected_ids.removeByValue(this.value)
-      });
-
-      $("#selected_ids").val(selected_ids.join(" "));
-      $('#assigned_div').children('div .lbjs').remove();
-      $('select#already_assigned_id').listbox({'searchbar': true});
-
-      $.each( remove_selected_ids, function( key, value ) {
-      	$('.left-listbox .lbjs-item[user_id='+value+']').remove();
-  	  });		
-	  //$('#already_assigned_id option:selected').remove();
+// // select/de-select classrooms while add/edit school-admin,teacher,student
+// // select/de-select users while add/edit classroom
+//     $(function () {
+//       $('select#already_assigned_id').listbox({'searchbar': true});
+//       $('select#all_present_id').listbox({'searchbar': true});
+//     });
+//   $(document).ready(function() {
+  	
+//     $('.remove').click(function(e) {
+//       selected_ids = [];
+//       remove_selected_ids = [];
+//       selected_ids = $("#selected_ids").val().split(" ");
       
-    });
+//       $('#assigned_div').children('div .lbjs').remove();
+//       $('select#already_assigned_id').listbox({'searchbar': true});
 
-    $('.add').on('click', function(){
-      selected_ids = [];
-      var selectedOpts = $('#all_present_id option:selected').clone();
-      selectedOpts.each(function(i){
-        //if($("#already_assigned_id option[value='"+this.value+"']").length <= 0){
-         $('#already_assigned_id').append(this);
-         console.log($('#already_assigned_id').append(this));
-         selected_ids.push(this.value);
-        //}
-      //  selected_ids.removeByValue(this.value);
-      });
-      $.each( selected_ids, function( key, value ) {
- 		 $('.right-listbox .lbjs-item[user_id='+value+']').remove();
-	  });
-	  $("#selected_ids").val(selected_ids.join(" "));
-      //$("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
-      $('#assigned_div').children('div .lbjs').remove();
-      $('select#already_assigned_id').listbox({'searchbar': true});
-    });
-  });
+//       var selectedOpts = $('#already_assigned_id option:selected').clone();
+//       selectedOpts.each(function(i){
+//       	alert("value to be added==="+this.value);
+//       	console.log($('.right-listbox .lbjs-item[user_id='+this.value+']').show());
+//       	$("#already_assigned_id option[value='"+this.value+"']").hide();
+      	
+// 		//$('.right-listbox .lbjs-list').append('<div class="lbjs-item" user_id='+this.value+' data-hasqtip='+this.value+'>'+this.text+'</div>');
+//        	//$('#all_present_id').append(this);
+//        	remove_selected_ids.push(this.value);
+//         selected_ids.removeByValue(this.value)
+//       });
 
-  Array.prototype.removeByValue = function(val) {
-    for(var i=0; i<this.length; i++) {
-        if(this[i] == val) {
-            this.splice(i, 1);
-            break;
-        }
-    }
-}
+//       $.each( remove_selected_ids, function( key, value ) {
+//       	$('.left-listbox .lbjs-item[user_id='+value+']').hide();
+//   	  });	
+//       alert("final ids===="+selected_ids);
+//       alert("removed ids===="+remove_selected_ids);
+//       $("#selected_ids").val(selected_ids.join(" "));
+//       $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+// 	  $('.right-listbox.disable-add').unbind('click', false);
+// 	});
 
-// Disable arrows by default, enable when clicked on left or right lists
-$(document).ready(function(){
-$('.disable-add').bind('click', false);
-$('.disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
-$('.disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
-$('.disable-remove').bind('click', false);
+//     $('.add').on('click', function(){
+//       selected_ids = [];
+//       var selectedOpts = $('#all_present_id option:selected').clone();
+//       selectedOpts.each(function(i){
+//       	$("#all_present_id option[value='"+this.value+"']").removeAttr("selected").hide();
+//         $('#already_assigned_id').append(this);
+//         selected_ids.push(this.value);
+//       });
+//       $.each( selected_ids, function( key, value ) {
+//       	$('.right-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").hide();
+// 	  });
+// 	  //$("#selected_ids").val(selected_ids.join(" "));
+//       $("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
+//       $('#assigned_div').children('div .lbjs').remove();
+//       $('select#already_assigned_id').listbox({'searchbar': true});
+//       $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+// 	  $('.right-listbox.disable-add').unbind('click', false);
+// 	});
+//   });
 
-$('.stud-disable-add').bind('click', false);
-$('.stud-disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
-$('.stud-disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
-$('.stud-disable-remove').bind('click', false);
+//   Array.prototype.removeByValue = function(val) {
+//     for(var i=0; i<this.length; i++) {
+//         if(this[i] == val) {
+//             this.splice(i, 1);
+//             break;
+//         }
+//     }
+// }
 
-// $('.disable-remove').click(function() {
-// 	alert($('div.left-listbox').find('.lbjs-item').length );
-// 	// if ($('div.left-listbox').hasClass('lbjs-item'))
-// 	// {
-	
-// 	// }
-// 	if($('div.left-listbox').find('lbjs-item').length == 0)
+// // Disable arrows by default, enable when clicked on left or right lists
+// $(document).ready(function(){
+// $('.disable-add').bind('click', false);
+// $('.disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
+// $('.disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
+// $('.disable-remove').bind('click', false);
+
+// $('.stud-disable-add').bind('click', false);
+// $('.stud-disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
+// $('.stud-disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
+// $('.stud-disable-remove').bind('click', false);
+
+
+// $('.left-listbox').on('click','.lbjs-item',function(){
+// 	if ($('#already_assigned_id option:selected').length > 0) 
 // 	{
-// 		alert('alaa');
-// 		$('.disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
-// 		$('.disable-remove').bind('click', false);
-// 		$('.stud-disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
-// 		$('.stud-disable-remove').bind('click', false);
-	
+// 		$('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+// 		$('.left-listbox.disable-remove').unbind('click', false);
+// 	}
+// 	else
+// 	{	
+// 		$('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+// 		$('.left-listbox.disable-remove').unbind('click', true);
 // 	}
 // });
 
-$('.left-listbox').on('click','.lbjs-item',function(){
-	$('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
-	$('.left-listbox.disable-remove').unbind('click', false);
-});
+// $('.right-listbox').on('click','.lbjs-item',function(){
+// 	if ($('#all_present_id option:selected').length > 0) 
+// 	{
+// 		$('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+// 		$('.right-listbox.disable-add').unbind('click', false);
+// 	}
+// 	else
+// 	{
+// 		$('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+// 		$('.right-listbox.disable-add').unbind('click', true);
+// 	}
+// });
 
-$('.right-listbox').on('click','.lbjs-item',function(){
-	$('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
-	$('.right-listbox.disable-add').unbind('click', false);
-});
+// $('.left-stud-listbox').on('click','.lbjs-item',function(){
+// 	$('.stud-disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+// 	$('.left-stud-listbox.stud-disable-remove').unbind('click', false);
+// });
 
-$('.left-stud-listbox').on('click','.lbjs-item',function(){
-	$('.stud-disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
-	$('.left-stud-listbox.stud-disable-remove').unbind('click', false);
-});
-
-$('.right-stud-listbox').on('click','.lbjs-item',function(){
-	$('.stud-disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
-	$('.right-stud-listbox.stud-disable-remove').unbind('click', false);
-});
+// $('.right-stud-listbox').on('click','.lbjs-item',function(){
+// 	$('.stud-disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+// 	$('.right-stud-listbox.stud-disable-remove').unbind('click', false);
+// });
 
 
-});
+// });
  
 

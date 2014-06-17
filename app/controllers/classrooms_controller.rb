@@ -35,13 +35,17 @@ class ClassroomsController < ApplicationController
   end
 
   def edit
-    @role_wise_count = []
-    @assigned_teachers = @classroom.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
-    @assigned_students = @classroom.users.un_archived.includes(:role).where("name='Student'").references(:role) if @classroom && @classroom.users
-    @role_wise_users = @classroom.users.un_archived.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
-    @role_wise_users.each{|x| @role_wise_count << x.total_users_count} 
+    initialize_in_edit_update
     set_bread_crumb(@school.id)
   end
+
+  def initialize_in_edit_update
+    @role_wise_count = []
+    @assigned_teachers = get_classroom_specific_teachers if @classroom && @classroom.users
+    @assigned_students = get_classroom_specific_students if @classroom && @classroom.users
+    @role_wise_users = @classroom.users.un_archived.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
+    @role_wise_users.each{|x| @role_wise_count << x.total_users_count} 
+  end  
 
   def create
     @classroom = Classroom.new(classroom_params)
@@ -71,11 +75,7 @@ class ClassroomsController < ApplicationController
       end
       redirect_to classroom_path(:school_id=> @classroom.school_id), notice: 'Class updated.'
     else
-      @role_wise_count = []
-      @assigned_teachers = @classroom.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) if @classroom && @classroom.users
-      @assigned_students = @classroom.users.un_archived.includes(:role).where("name='Student'").references(:role) if @classroom && @classroom.users
-      @role_wise_users = @classroom.users.un_archived.select("users.role_id as role_id, count(user_classrooms.user_id) as total_users_count").group("users.role_id")
-      @role_wise_users.each{|x| @role_wise_count << x.total_users_count} 
+      initialize_in_edit_update
       render :action=> 'edit'
     end
   end
@@ -104,16 +104,52 @@ class ClassroomsController < ApplicationController
   end
 
   def get_school_specific_users
+    @school_user_specific_classrooms = []
+    @class_specific_teachers = []
+    @school_student_specific_classrooms = []
+    @class_specific_students = []
+
     if params[:action] == 'update'
       @school = School.find(params[:classroom][:school_id])
-      @school_specific_teachers = @school.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:classroom][:school_id].blank?
-      @school_specific_students = @school.users.un_archived.includes(:role).where("name='Student'").references(:role) unless params[:classroom][:school_id].blank?
+      @school_specific_teachers = get_school_specific_teachers unless params[:classroom][:school_id].blank?
+      @school_specific_students = get_school_specific_students unless params[:classroom][:school_id].blank?
     else
-      @school_specific_teachers = @school.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role) unless params[:school_id].blank? 
-      @school_specific_students = @school.users.un_archived.includes(:role).where("name='Student'").references(:role) unless params[:school_id].blank? 
+      # Teacher and School Admin
+      @school_specific_teachers = get_school_specific_teachers unless params[:school_id].blank? 
+      @school_teachers = @school_specific_teachers.map(&:id)
+
+      unless @classroom.blank?
+        # Teacher and School Admin
+        @school_user_specific_classrooms = (get_school_specific_teachers - get_classroom_specific_teachers).map(&:id)
+        @class_specific_teachers = get_classroom_specific_teachers.map(&:id)
+      
+        # Student
+        @school_student_specific_classrooms = (get_school_specific_students - get_classroom_specific_students).map(&:id)
+        @class_specific_students = get_classroom_specific_students.map(&:id)
+      end  
+
+      # Student
+      @school_specific_students = get_school_specific_students unless params[:school_id].blank? 
+      @school_students = @school_specific_students.map(&:id)
     end
   end
-  
+
+  def get_school_specific_teachers
+    @school.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role)
+  end
+
+  def get_school_specific_students
+    @school.users.un_archived.includes(:role).where("name='Student'").references(:role)
+  end  
+
+  def get_classroom_specific_teachers
+    @classroom.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role)
+  end  
+
+  def get_classroom_specific_students
+    @classroom.users.un_archived.includes(:role).where(" (name='Student') ").references(:role)
+  end  
+
   def quick_edit_classroom
    	@classroom.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
     render :json=> true and return

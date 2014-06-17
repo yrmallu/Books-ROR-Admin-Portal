@@ -79,17 +79,15 @@
 	                          <div class="form-group">
 	                              <%= label_tag "teachers", "Teachers", :class=>"control-label form-lable-multiselect" %>
 								  <div class="listbox-alig left-listbox" id="assigned_div">
-									  <%= select_tag :already_assigned_id, options_for_select(@assigned_teachers.collect {|m| [ m.get_full_name, m.id ] }),{:size=>"8", :multiple=>"multiple"}%>
-									  <%#= select_tag "already_assigned_id", options_from_collection_for_select(@assigned_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
-	                              </div>
+									  <%= select_tag :already_assigned_id, options_for_select(@school_specific_teachers.collect {|m| [ m.get_full_name, m.id ] }),{:size=>"8", :multiple=>"multiple"}%>
+								  </div>
 	                              <div class="assign_arrows">
 	                                  <a href="#Remove" class="remove btn disable-remove"> > </a><br />
 	                                  <a href="#Add" class="add btn disable-add"> < </a>
 	                              </div>
 	                              <div class="listbox-alig right-listbox" id="all_div">
 	                              	  <%= select_tag :all_present_id, options_for_select(@school_specific_teachers.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
-									  <%#= select_tag "all_present_id", options_from_collection_for_select(@school_specific_teachers, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
-	                              </div>
+							      </div>
 	                          </div>
 	                      </div>
 	  		        </div>
@@ -99,17 +97,14 @@
   	                          <div class="form-group">
 								  <%= label_tag "studnts", "Students", :class=>"control-label form-lable-multiselect" %>
   	                              <div class="listbox-alig left-stud-listbox" id="student_assigned_div">
-  	                                  <%= select_tag :student_assigned_id, options_for_select(@assigned_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
-
-  	                                  <%#= select_tag "student_assigned_id", options_from_collection_for_select(@assigned_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
-  	                              </div>
+  	                                  <%= select_tag :student_assigned_id, options_for_select(@school_specific_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+								  </div>
   	                              <div class="assign_arrows">
   	                                  <a href="#Remove" class="remove_stud btn stud-disable-remove"> > </a><br />
   	                                  <a href="#Add" class="add_stud btn stud-disable-add"> < </a>
   	                              </div>
   	                              <div class="listbox-alig right-stud-listbox" id="all_student_div">
   	                              	  <%= select_tag :all_student_id, options_for_select(@school_specific_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
-  	                                  <%#= select_tag "all_student_id", options_from_collection_for_select(@school_specific_students, "id", "first_name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
   	                              </div>
   	                          </div>
   	                      </div>
@@ -134,11 +129,54 @@
 	  showHideMenu('li_options');	
 	<%end%>
 
+// select/de-select classrooms while add/edit school-admin,teacher,student
+// select/de-select users while add/edit classroom
+$(function () {
+  $('select#already_assigned_id').listbox({'searchbar': true});
+  $('select#all_present_id').listbox({'searchbar': true});
+});
 
+$(function () {
+  $('select#student_assigned_id').listbox({'searchbar': true});
+  $('select#all_student_id').listbox({'searchbar': true});
+});
 
-	$(document).ready(function()
- 	{
-     $('.lbjs-item').each(function() {
+$(document).ready(function() {
+
+  	// Teachers and School Admins
+  var class_specific_teachers = [];
+  var school_user_specific_classrooms = [];
+  var school_specific_teachers = [];
+
+  school_user_specific_classrooms = <%=@school_user_specific_classrooms%>
+  class_specific_teachers = <%=@class_specific_teachers%>
+  school_specific_teachers = <%=@school_teachers%>
+
+  //alert(jQuery.isArray(school_user_specific_classrooms));
+  if(school_user_specific_classrooms.length >0)
+  {
+    $.each( school_user_specific_classrooms, function( key, value ) {
+      $("#already_assigned_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
+      $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+    });
+  }
+  else
+  {	
+    $.each( school_specific_teachers, function( key, value ) {
+ 	  $("#already_assigned_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
+      $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+    });
+  }
+  if(class_specific_teachers.length > 0)
+  {
+    $.each( class_specific_teachers, function( key, value ) {
+      $("#all_present_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
+      $('.right-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+    });
+  }
+
+  // Code for qtip
+  $('.lbjs-item').each(function() {
          $(this).qtip({
             content: {
                 text: function(event, api) {
@@ -163,7 +201,197 @@
             style: 'qtip-wiki'
          });
      });
- });
+
+  $('.remove').click(function(e) {
+    selected_ids = [];
+    remove_selected_ids = [];
+    selected_ids = $("#selected_ids").val().split(" ");
+      
+    var selectedOpts = $('#already_assigned_id option:selected').clone();
+    selectedOpts.each(function(i){
+      $('.right-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      $("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+      	
+	  remove_selected_ids.push(this.value);
+      selected_ids.removeByValue(this.value)
+    });
+
+    $.each( remove_selected_ids, function( key, value ) {
+      $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+  	});	
+    $("#selected_ids").val(selected_ids.join(" "));
+    $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+	$('.right-listbox.disable-add').unbind('click', false);
+  });
+
+  $('.add').on('click', function(){
+    selected_ids = [];
+    var selectedOpts = $('#all_present_id option:selected').clone();
+    selectedOpts.each(function(i){
+      $('.left-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      $("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+      selected_ids.push(this.value);
+    });
+    $.each( selected_ids, function( key, value ) {
+      $('.right-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+	});
+	$("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
+    $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+	$('.right-listbox.disable-add').unbind('click', false);
+	});
+  
+
+  	// Students
+  	var class_specific_students = [];
+  	var school_student_specific_classrooms = [];
+  	var school_specific_students = [];
+
+  	school_student_specific_classrooms = <%=@school_student_specific_classrooms%>
+  	class_specific_students = <%=@class_specific_students%>
+  	school_specific_students = <%=@school_students%>
+
+  	//alert(jQuery.isArray(school_user_specific_classrooms));
+  	if(school_student_specific_classrooms.length >0)
+  	{
+  	  $.each( school_student_specific_classrooms, function( key, value ) {
+        $("#student_assigned_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
+        $('.left-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+      });
+ 	}
+ 	else
+ 	{	
+ 		$.each( school_specific_students, function( key, value ) {
+ 		$("#student_assigned_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
+        $('.left-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+      });
+ 	}
+ 	if(class_specific_students.length > 0)
+  	{
+  	  $.each( class_specific_students, function( key, value ) {
+       $("#all_student_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
+       $('.right-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+      });
+  	}
+  	
+  	$('.remove_stud').click(function(e) {
+      student_selected_ids = [];
+      remove_selected_ids = [];
+      student_selected_ids = $("#student_selected_ids").val().split(" ");
+      
+      var selectedOpts = $('#student_assigned_id option:selected').clone();
+      selectedOpts.each(function(i){
+      	$('.right-stud-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$("#student_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+      	
+		remove_selected_ids.push(this.value);
+        student_selected_ids.removeByValue(this.value)
+      });
+
+      $.each( remove_selected_ids, function( key, value ) {
+      	$('.left-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+  	  });	
+      $("#student_selected_ids").val(student_selected_ids.join(" "));
+      $('.stud-disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+	  $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+	});
+
+    $('.add_stud').on('click', function(){
+      student_selected_ids = [];
+      var selectedOpts = $('#all_student_id option:selected').clone();
+      selectedOpts.each(function(i){
+      	$('.left-stud-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$("#all_student_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        student_selected_ids.push(this.value);
+      });
+      $.each( student_selected_ids, function( key, value ) {
+      	$('.right-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+	  });
+	  //$("#selected_ids").val(selected_ids.join(" "));
+      $("#student_selected_ids").val($.merge($("#student_selected_ids").val().split(" "), student_selected_ids).join(" "));
+
+      $('.stud-disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+	  $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+	});
+    
+  Array.prototype.removeByValue = function(val) {
+    for(var i=0; i<this.length; i++) {
+        if(this[i] == val) {
+            this.splice(i, 1);
+            break;
+        	}
+    	}
+	}
+});
+
+// Disable arrows by default, enable when clicked on left or right lists
+$(document).ready(function(){
+$('.disable-add').bind('click', false);
+$('.disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.disable-remove').bind('click', false);
+
+$('.stud-disable-add').bind('click', false);
+$('.stud-disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.stud-disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
+$('.stud-disable-remove').bind('click', false);
+
+// Teachers and School Admins
+$('.left-listbox').on('click','.lbjs-item',function(){
+	if ($('#already_assigned_id option:selected').length > 0) 
+	{
+		$('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+		$('.left-listbox.disable-remove').unbind('click', false);
+	}
+	else
+	{	
+		$('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+		$('.left-listbox.disable-remove').unbind('click', true);
+	}
+});
+
+$('.right-listbox').on('click','.lbjs-item',function(){
+	if ($('#all_present_id option:selected').length > 0) 
+	{
+		$('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+		$('.right-listbox.disable-add').unbind('click', false);
+	}
+	else
+	{
+		$('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+		$('.right-listbox.disable-add').unbind('click', true);
+	}
+});
+
+// Students
+$('.left-stud-listbox').on('click','.lbjs-item',function(){
+	if ($('#student_assigned_id option:selected').length > 0) 
+	{
+		$('.stud-disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+		$('.left-stud-listbox.stud-disable-remove').unbind('click', false);
+	}
+	else
+	{	
+		$('.stud-disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+		$('.left-stud-listbox.stud-disable-remove').unbind('click', true);
+	}
+});
+
+$('.right-stud-listbox').on('click','.lbjs-item',function(){
+	if ($('#all_student_id option:selected').length > 0) 
+	{
+		$('.stud-disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+		$('.right-stud-listbox.stud-disable-add').unbind('click', false);
+	}
+	else
+	{
+		$('.stud-disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+		$('.right-stud-listbox.stud-disable-add').unbind('click', true);
+	}
+});
+
+});
+
+
 </script>
 
 
