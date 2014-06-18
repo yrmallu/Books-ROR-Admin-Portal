@@ -502,6 +502,8 @@ class UsersController < ApplicationController
     @user.password = params[:password]
     @user.password_confirmation = params[:password]
     if @user.save
+      user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :url =>  "http://"+request.env['HTTP_HOST'] } 
+      UserMailer.password_reset_email(user_info).deliver
       Coupon.delete_all(:code=>params[:coupon])
       flash.now[:success] = "Signin with new password."
       redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?

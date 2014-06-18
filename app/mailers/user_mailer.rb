@@ -36,6 +36,9 @@ class UserMailer < ActionMailer::Base
 #     mail(to: @email, subject: 'Books That Grow Account Password changed.')
 #   end
 
-  
+  def password_reset_email(user_info)
+    @user_info = user_info
+    mail(to: @user_info[:email], subject: 'Your Books That Grow password has been reset.')
+  end
 
 end
