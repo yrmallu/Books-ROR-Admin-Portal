@@ -163,8 +163,8 @@ $(document).ready(function() {
   else
   {	
     $.each( school_specific_teachers, function( key, value ) {
- 	  $("#already_assigned_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
-      $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+ 	  $("#already_assigned_id option[value='"+value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+      $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('hide').addClass('show');
     });
   }
   if(class_specific_teachers.length > 0)
@@ -271,8 +271,8 @@ $(document).ready(function() {
  	else
  	{	
  		$.each( school_specific_students, function( key, value ) {
- 		$("#student_assigned_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
-        $('.left-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
+ 		$("#student_assigned_id option[value='"+value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+        $('.left-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('hide').addClass('show');
       });
  	}
  	if(class_specific_students.length > 0)
