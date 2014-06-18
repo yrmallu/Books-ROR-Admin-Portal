@@ -201,6 +201,16 @@ $(document).ready(function() {
             style: 'qtip-wiki'
          });
      });
+	 
+	 $( ".list_item_img" ).on("click",function(){
+		 $.ajax({
+         	url: "<%=url_for :controller => 'users', :action => 'show_user_data'%>",
+            data: {id: $(this).parent().attr("user_id")},
+			success: function(data) {
+				window.open(data, '_blank')
+			}
+     	});          
+	});
 
   $('.remove').click(function(e) {
     selected_ids = [];

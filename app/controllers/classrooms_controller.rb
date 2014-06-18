@@ -1,7 +1,7 @@
 class ClassroomsController < ApplicationController
   
   before_action :logged_in?
-  before_action :set_classroom, only: [:show, :edit, :update, :destroy, :quick_edit_classroom, :un_archive_class]
+  before_action :set_classroom, only: [:show, :edit, :update, :destroy, :quick_edit_classroom, :un_archive_class, :show_class_data]
   #before_action :set_bread_crumb, only: [:index, :show, :edit, :new]
   before_action :get_school_by_id, only: [:new, :index, :edit, :update, :show, :un_archive_class_list]
   before_action :get_school_year_range, only: [:new, :edit, :update]
@@ -201,6 +201,10 @@ class ClassroomsController < ApplicationController
   def get_class_info
     @classroom = Classroom.includes(:users).where("id = #{params[:id]}").last
     render :file=>"/classrooms/classroom_info", :layout=>false
+  end
+  
+  def show_class_data
+    render :text => "#{classroom_path(@classroom,:school_id=>@classroom.school_id)}"
   end
   
   def un_archive_class_list

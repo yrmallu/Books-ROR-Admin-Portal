@@ -244,6 +244,16 @@ $('.add-parent').on('click','.remove_fields',function(){
             style: 'qtip-wiki'
         });
     });
+	
+	 $( ".list_item_img" ).on("click",function(){
+		 $.ajax({
+	     	url: "<%=url_for :controller => 'classrooms', :action => 'show_class_data'%>",
+	        data: {id: $(this).parent().attr("user_id")},
+			success: function(data) {
+				window.open(data, '_blank')
+			}
+	 	});          
+	});
 
     $('.remove').click(function(e) {
       selected_ids = [];

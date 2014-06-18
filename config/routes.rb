@@ -16,6 +16,7 @@ BooksThatGrow::Application.routes.draw do
       get 'get_class_info'
       get 'un_archive_class_list'
       get 'un_archive_class'
+      get 'show_class_data'
     end
   end
 
@@ -76,6 +77,7 @@ BooksThatGrow::Application.routes.draw do
       get 'get_user_info'
       get 'un_archive_users_list'
       get 'un_archive_user'
+      get 'show_user_data'
      end
   end
 
