@@ -21,7 +21,7 @@ class School < ActiveRecord::Base
 	before_validation :strip_whitespace
 	before_create :generate_random_code
   before_save :reset_params_datatype
-    
+  before_save :check_valid_country_or_state
 	###########################################################################################
   ## Scopes
   ###########################################################################################
@@ -39,8 +39,8 @@ class School < ActiveRecord::Base
   validates :address, :length => {:maximum => 255}, :allow_blank=>true
   validates :city, :length => {:maximum => 255}, :allow_blank=>true
   validates :district, :length => {:maximum => 255}, :allow_blank=>true
-  validates :state, :length => {:maximum => 255}, :allow_blank=>true
-  validates :country, :length => {:maximum => 255}, :allow_blank=>true
+  validates :state, :length => {:maximum => 255}, :allow_blank=>true, :if => :check_valid_country_or_state
+  validates :country, :length => {:maximum => 255}, :allow_blank=>true, :if => :check_valid_country_or_state
   validate :check_school_code_existance
   #validates :phone, :length => {:maximum => 255}, :allow_blank=>true
 
@@ -55,6 +55,33 @@ class School < ActiveRecord::Base
   def reset_params_datatype
     self.code = code.to_i
    # self.phone = phone.to_i
+  end
+  
+  def check_valid_country_or_state
+    return true if self.country.blank? && self.state.blank?
+    if self.country.blank? && !self.state.blank?
+      state_error_msg
+    elsif !self.country.blank?
+      p country  = Carmen::Country.coded(self.country)
+      unless country.blank?
+        unless self.state.blank?
+          unless country.subregions.coded(self.state).blank?
+            return true
+          else
+            state_error_msg
+          end
+        end
+        return true
+      else
+        errors.add(:country, ": Sorry but the country (state) code you entered is invalid. Please refer to the spreadsheet for detailed instructions.")
+        return false
+      end
+    end
+  end
+  
+  def state_error_msg
+    errors.add(:state, ": Sorry but the country (state) code you entered is invalid. Please refer to the spreadsheet for detailed instructions.")
+    return false
   end
   
   def check_school_code_existance
