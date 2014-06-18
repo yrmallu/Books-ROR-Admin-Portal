@@ -162,3 +162,7 @@ hr.school-heading-hr{margin-top: 21px;}
 .table-header{display: block;width: 80%;min-width: 60px;}
 
 .list-style{list-style: none;}
+
+.modal-dialog.modal-dialog-width{width: 500px !important}
+
+.class_licenses{width: 400px !important}

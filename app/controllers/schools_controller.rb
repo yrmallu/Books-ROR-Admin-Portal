@@ -71,7 +71,7 @@ class SchoolsController < ApplicationController
   end
   
   def delete_school
-    School.where(id: params[:school_ids]).each do |school|
+    School.where(id: params[:school_ids].split(",")).each do |school|
       school.update_attributes(delete_flag: true)
     end
     flash[:success] = "Schools archived." 

@@ -365,7 +365,7 @@ class UsersController < ApplicationController
   def delete_user
     deleted_user = ''
     unless params[:web_ids].blank?
-      User.where(id: params[:web_ids]).each do |user|
+      User.where(id: params[:web_ids].split(",")).each do |user|
         deleted_user = user
         @user = user
         unless @user.license.blank?
@@ -375,7 +375,7 @@ class UsersController < ApplicationController
       end
     end  
     unless params[:user_ids].blank?
-      User.where(id: params[:user_ids]).each do |user|
+      User.where(id: params[:user_ids].split(",")).each do |user|
         deleted_user = user
 	      @user = user
         unless @user.license.blank?

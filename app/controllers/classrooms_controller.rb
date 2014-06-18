@@ -87,7 +87,7 @@ class ClassroomsController < ApplicationController
 
   def delete_classroom
     deleted_classroom = ''
-    Classroom.where(id: params[:classroom_ids]).each do |classroom|
+    Classroom.where(id: params[:classroom_ids].split(",")).each do |classroom|
      deleted_classroom = classroom
      classroom.destroy
    end

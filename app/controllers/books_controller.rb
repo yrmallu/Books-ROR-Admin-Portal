@@ -87,7 +87,7 @@ class BooksController < ApplicationController
   end
   
   def delete_book
-    Book.where(id: params[:book_ids]).each do |book|
+    Book.where(id: params[:book_ids].split(",")).each do |book|
       book.update_attributes(:delete_flag => true)
       FileUtils.rm_rf  "#{Rails.root}/public/books/#{book.book_unique_id}"
     end

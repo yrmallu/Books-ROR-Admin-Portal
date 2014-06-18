@@ -14,7 +14,10 @@
 			<%= link_to 'Download Sample',"", :class=>"btn btn-success btn-xs download_sample", :"data-toggle" => "modal", :"data-target" => "#download_list_modal" %>
 			<%= link_to 'Import Class List', import_list_classrooms_path(:school_id => @school.id), :class=>"btn btn-success btn-xs"%>
 			<%#= link_to 'Un-archive', un_archive_class_list_classrooms_path(:school_id => @school.id), :class=>"btn btn-success btn-xs" %>
-			<%= submit_tag 'Archive', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
+			<% if can? :destroy, :classrooms %> 
+				<%#= submit_tag 'Archive', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
+				<%= link_to 'Archive', delete_classroom_classrooms_path(:school_id=>@school.id), method: :post, :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", data: { confirm: 'Are you sure you want to archive selected Classes?' }, :disabled => true %>
+			<%end%>
 	 	</div>
 	 <div class="table-responsive">
 		<table class="table class_common_table" id="classroom_table">
@@ -52,7 +55,7 @@
 						      <%= link_to '<i title="Edit Class" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
 						  <%end%>
    				   	      <% if can? :destroy, :classrooms %> 
-						      <%= link_to '<i title="Archive Class" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: 'Are you sure?' } %> 
+						      <%= link_to '<i title="Archive Class" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: "Are you sure you want to archive class: #{classroom.name} ?" } %> 
 					      <%end%>
 					</td>
                    </tr>
