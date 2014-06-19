@@ -16,7 +16,7 @@
 			<%#= link_to 'Un-archive', un_archive_class_list_classrooms_path(:school_id => @school.id), :class=>"btn btn-success btn-xs" %>
 			<% if can? :destroy, :classrooms %> 
 				<%#= submit_tag 'Archive', :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", :id=>'delete_classroom',:disabled => true, data: { confirm: 'Are you sure?' } %>
-				<%= link_to 'Archive', delete_classroom_classrooms_path(:school_id=>@school.id), method: :post, :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", data: { confirm: 'Are you sure you want to archive selected Classes?' }, :disabled => true %>
+				<%= link_to 'Archive', delete_classroom_classrooms_path(:school_id=>@school.id), method: :post, :class=>"btn btn-success btn-sm delete-classroom-list btn-xs save-btns", data: { confirm: 'Are you sure you want to archive selected classes?' }, :disabled => true, confirm_text: "" %>
 			<%end%>
 	 	</div>
 	 <div class="table-responsive">
@@ -55,7 +55,7 @@
 						      <%= link_to '<i title="Edit Class" class="fa fa-pencil"></i>'.html_safe, edit_classroom_path(:id=>classroom, :school_id=>@school.id) %> 						  
 						  <%end%>
    				   	      <% if can? :destroy, :classrooms %> 
-						      <%= link_to '<i title="Archive Class" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: "Are you sure you want to archive class: #{classroom.name} ?" } %> 
+						      <%= link_to '<i title="Archive Class" class="glyphicon glyphicon-trash"></i>'.html_safe, classroom, method: :delete, data: { confirm: "Are you sure you want to archive class: #{classroom.name} ?"}, confirm_text: ""%> 
 					      <%end%>
 					</td>
                    </tr>
