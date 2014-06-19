@@ -5,10 +5,8 @@
 	<div class="panel-body pos-rel"> 
 		<div class="fade-bg"></div>
 		<div class="loader"><%= image_tag("loader5.gif")%></div>
-		<div class="">
 		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
 		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="user_search" title="Search User" >	</i>
-		</div>						
 		<%#= form_tag 'users/delete_user' do %>
 	  <div class="index_page_btns" data-no-turbolink>
 		<% if @role_id.name.eql?('Web Admin')%>
