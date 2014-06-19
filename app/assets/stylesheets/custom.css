@@ -163,11 +163,14 @@ hr.school-heading-hr{margin-top: 21px;}
 
 .list-style{list-style: none;}
 
-.modal-dialog.modal-dialog-width{width: 500px !important}
+.modal-dialog.modal-dialog-width{width: 600px !important}
 
 .class_licenses{width: 400px !important}
 
-.modal-footer.modal-footer-top{margin-top:0 !important;}
+.modal-footer.modal-footer-top{margin-top:0 !important; padding: 9px 20px 10px !important;}
 
 .pop-up-message1{font-size: 18px;font-weight: bolder;}
 .pop-up-message2{font-size: 15px;font-weight: normal;letter-spacing: 0.03em;}
+
+.panel-footer{padding:10px !important;}
+.panel-body.panel-body-padding {padding: 10px !important;}

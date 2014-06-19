@@ -2,13 +2,11 @@
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	       <%= form_tag({controller: "users", action: "add_update_bulk_licenses"}, {method: "post", class: "form_validation"}) do %>
-		   <div class="panel-body">
+		   <div class="panel-body panel-body-padding">
 			   <%= hidden_field_tag :send_mail, @no_mail%>
 			   <%= hidden_field_tag :role_id, params[:role_id]%>
 			   <%= hidden_field_tag :user_ids, @user_ids %>
 			   <%= hidden_field_tag :school_id, params[:id]%>
-
-
 			       <div class="row">
 		               <div class="col-sm-6">
 		                   <div class="form-group">
