@@ -199,23 +199,30 @@ $('.add-parent').on('click','.remove_fields',function(){
   	//alert(jQuery.isArray(user_specific_classrooms));
   	if(school_user_specific_classrooms.length >0)
   	{
-  		//alert("LHS====="+school_user_specific_classrooms);
   	  $.each( school_user_specific_classrooms, function( key, value ) {
         $("#already_assigned_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
         $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
       });
  	}
  	else
- 	{	
- 		//alert("LHS====="+school_specific_classrooms);
- 		$.each( school_specific_classrooms, function( key, value ) {
-        $("#already_assigned_id option[value='"+value+"']").removeAttr("selected").removeClass('hide').addClass('show');
-        $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('hide').addClass('show');
-      });
+ 	{
+ 		if(<%= action_name.eql?('edit') || action_name.eql?('update')%>)	
+ 		{
+ 			$.each( school_specific_classrooms, function( key, value ) {
+        		$("#already_assigned_id option[value='"+value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+        		$('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('hide').addClass('show');
+      		});
+      	}
+      	else
+      	{
+      		$.each( school_specific_classrooms, function( key, value ) {
+        		$("#already_assigned_id option[value='"+value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        		$('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+      		});
+      	}
  	}
  	if(user_specific_classrooms.length > 0)
   	{
-  		//alert("RHS====="+user_specific_classrooms);
   	  $.each( user_specific_classrooms, function( key, value ) {
        $("#all_present_id option[value='"+value+"']").removeAttr("selected").addClass('hide');
        $('.right-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
