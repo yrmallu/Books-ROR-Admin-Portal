@@ -62,10 +62,10 @@ class Api::ResetpasswordsController < ApplicationController
         unless user_mail["username"].blank?
           student = User.where("lower(username) = lower('#{user_mail["username"]}') and school_id = '#{user_mail["school_id"]}'").last
           pwd_param = {"username" => user_mail["username"], "school_id" => user_mail["school_id"], "a_type" => "angular", "coupon" => coupon}.to_json
-          user_info = {:email => @user.email, :name => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :username=>student.first_name+" "+student.last_name.to_s, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" } 
+          user_info = {:email => @user.email, :name => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :username=>student.first_name+" "+student.last_name.to_s, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :portal_link =>  "http://"+request.env['HTTP_HOST'] } 
         else
           pwd_param = {"email" => @user.email, "a_type" => "angular", "coupon" => coupon}.to_json
-          user_info = {:email => @user.email, :name => @user.first_name+" "+@user.last_name.to_s, :username=>@user.username, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" } 
+          user_info = {:email => @user.email, :name => @user.first_name+" "+@user.last_name.to_s, :username=>@user.username, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :portal_link =>  "http://"+request.env['HTTP_HOST'] } 
         end
         UserMailer.forgot_password_email(user_info).deliver
         json_data = {"return_code" => 1, "return_msg" => "sent successfully", "response_data" => "", "username" => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name}
