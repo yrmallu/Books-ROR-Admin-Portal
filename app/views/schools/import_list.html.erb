@@ -7,3 +7,11 @@
 		<% end %>
 	</div>
 </div>	
+
+<script type="text/javascript">
+    showHideMenu('li_school');	
+
+	<% unless current_user.is_web_admin?%>
+	  showHideMenu('li_options');	
+	<%end%>
+</script>	
