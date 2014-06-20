@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 	    <div class="panel panel-default">
 	       <%= form_for @user, :html=>{:class=>"form_validation"} do |f| %>
-		   <div class="panel-body">
+		   <div class="panel-body panel-body-padding">
 			   <%= hidden_field_tag :send_mail, @no_mail%>
 			   <%= hidden_field_tag :role_id, params[:role_id]%>
 			       <div class="row">

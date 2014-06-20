@@ -5,7 +5,7 @@
 		<div class="index_page_btns" data-no-turbolink>
 			<%=link_to 'List All Records', new_license_path(:school_id=>params[:school_id]), :class=>"btn btn-success btn-xs" if @search_flag %>
 	    </div>
-	    <div class="">
+	    <div>
 		    <table class="table" id="licenses_table">
                 <thead>
                     <tr>
@@ -19,16 +19,16 @@
                 <tbody id="license_body">
 			        <% @licenses.each do |lic| %>
 	                    <tr class="odd gradeX">
-							<td class=""><%= lic.license_batch_name %></td>
-	                        <td class=""><%= lic.no_of_licenses %></td>
-						    <td class=""><%= lic.used_liscenses %></td>
-	                        <td class=""><%= lic.expiry_date %></td>
+							<td><%= lic.license_batch_name %></td>
+	                        <td><%= lic.no_of_licenses %></td>
+						    <td><%= lic.used_liscenses %></td>
+	                        <td><%= lic.expiry_date %></td>
 						    <td data-no-turbolink>
 								<% if can? :update, :licenses %> 
 						            <%= link_to '<i title="Edit License" class="fa fa-pencil"></i>'.html_safe, edit_license_path(:id=>lic, :school_id=>lic.school_id), :remote=>true %> 
 								<%end%>
 								<% if can? :destroy, :licenses %> 
-						            <%= link_to '<i title="Archive License" class="glyphicon glyphicon-trash"></i>'.html_safe, lic, method: :delete, data: { confirm: "Are you sure you want to archive license: #{lic.license_batch_name} ?", dismiss: "modal"}, :remote=>true%>	
+						            <%= link_to '<i title="Archive License" class="glyphicon glyphicon-trash"></i>'.html_safe, lic, method: :delete, data: { confirm: "Are you sure you want to archive license: #{lic.license_batch_name} ?", dismiss: "modal"}, :remote=>true, confirm_text: "All associated users will no longer be able to log in to Books That Grow."%>	
 								<%end%>					
 			                </td> 
 				        </tr>

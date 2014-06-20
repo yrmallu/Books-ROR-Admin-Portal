@@ -11,7 +11,7 @@
 			<%= link_to 'List All Records', books_path, :class=>"btn btn-success btn-xs" if @search_flag %>
 			<% if can? :create, :books %> <%=link_to 'Add Book', new_book_path, :class=>"btn btn-success btn-xs"%> <%end%>
 			<%#= submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-book-list", :id=>'delete_book',:disabled => true, data: { confirm: 'Are you sure?' } %>		
-			<%= link_to 'Archive', delete_book_books_path(:yes=>true),method: :post, :class=>"btn btn-success btn-xs delete-book-list", data: { confirm: 'Are you sure you want to archive selected Books?' }, :disabled => true %> 	
+			<%= link_to 'Archive', delete_book_books_path(:yes=>true),method: :post, :class=>"btn btn-success btn-xs delete-book-list", data: { confirm: 'Are you sure you want to archive selected books?' }, :disabled => true, confirm_text: "" %> 	
 		</div>
 		 
 		 <div class="table-responsive">
@@ -48,7 +48,7 @@
 						      		<%= link_to '<i title="Edit Book" class="fa fa-pencil"></i>'.html_safe, edit_book_path(book) %> 						  
 						  		<%end%>
    				   	      		<% if can? :destroy, :books %> 
-						      		<%= link_to '<i title="Archive Book" class="glyphicon glyphicon-trash"></i>'.html_safe, book, method: :delete, data: { confirm: "Are you sure you want to archive book: #{book.title} ?" } %> 
+						      		<%= link_to '<i title="Archive Book" class="glyphicon glyphicon-trash"></i>'.html_safe, book, method: :delete, data: { confirm: "Are you sure you want to archive book: #{book.title} ?" }, confirm_text: "" %> 
 					      		<%end%>
     						</td>
                  		</tr>

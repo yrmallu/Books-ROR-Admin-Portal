@@ -5,10 +5,8 @@
 	<div class="panel-body pos-rel"> 
 		<div class="fade-bg"></div>
 		<div class="loader"><%= image_tag("loader5.gif")%></div>
-		<div class="">
 		<%= text_field_tag :text_field_search, '', :placeholder=>'Search text', :class=>"search-box" %>
 		<i class="glyphicon glyphicon-search btn btn-primary btn-xs search-icon-align" id="user_search" title="Search User" >	</i>
-		</div>						
 		<%#= form_tag 'users/delete_user' do %>
 	  <div class="index_page_btns" data-no-turbolink>
 		<% if @role_id.name.eql?('Web Admin')%>
@@ -42,7 +40,7 @@
 			<%#= link_to 'Un-archive', un_archive_users_list_users_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs" %>
 		<%end%>
 		<% unless @role_id.name.eql?('Web Admin')%>
-			<%=link_to 'Remove Licenses', remove_bulk_licenses_users_path(:role_id => @role_id.id, :school_id => params[:school_id]), :class=>"btn btn-success btn-xs bulk-remove-license", :disabled => true %>
+			<%=link_to 'Remove Licenses', remove_bulk_licenses_users_path(:role_id => @role_id.id, :school_id => params[:school_id]), method: :get, :class=>"btn btn-success btn-xs bulk-remove-license", data: { confirm: 'Are you sure you want to remove selected licenses?' }, :disabled => true, confirm_text: "The selected users will no longer be able to log in to Books That Grow." %>
 			
 			<button type="button" class="btn btn-success btn-xs bulk-add-update-license" data-input="<%=params[:school_id]%>" data-target="#add_update_lic" data-toggle="modal" disabled >Add/Update Licenses</button>
 
@@ -50,19 +48,19 @@
 		<%end%>	
 		<% if  @role_id.name.eql?('Web Admin')%> 
 			<%#=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_web',:disabled => true, data: { confirm: 'Are you sure?' }%>
-			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected Web Admins?' }, :disabled => true %> 
+			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected web admins?' }, :disabled => true, confirm_text: ""%> 
 		<%end%>
 		<% if ((can? :destroy, :users) && (can? :destroy_sa, :users)) && params[:role_id].eql?('2') %>
 			<%#=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
-			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id, :school_id => params[:school_id]),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected School Admins?' }, :disabled => true %> 
+			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id, :school_id => params[:school_id]),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected school admins?' }, :disabled => true, confirm_text: "" %> 
 		<%end%>
 		<% if ((can? :destroy, :users) && (can? :destroy_teacher, :users)) && params[:role_id].eql?('3') %>
 			<%#=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
-			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id, :school_id => params[:school_id]),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected Teachers?' }, :disabled => true %> 
+			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id, :school_id => params[:school_id]),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected teachers?' }, :disabled => true, confirm_text: "" %> 
 		<%end%>
 		<% if (((can? :destroy, :users) && (can? :destroy_student, :users)) || ((can? :destroy, :users) && (can? :manage_student, :users))) && params[:role_id].eql?('4') %>
 			<%#=submit_tag 'Archive', :class=>"btn btn-success btn-xs delete-user-list", :id=>'delete_user',:disabled => true, data: { confirm: 'Are you sure?' }%>
-			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id, :school_id => params[:school_id]),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected Students?' }, :disabled => true %> 
+			<%= link_to 'Archive', delete_user_users_path(:role_id => @role_id.id, :school_id => params[:school_id]),method: :post, :class=>"btn btn-success btn-xs delete-user-list", data: { confirm: 'Are you sure you want to archive selected students?' }, :disabled => true, confirm_text: "" %> 
 		<%end%>
 	</div>
 	<div class="table-responsive">
@@ -166,11 +164,11 @@
 							             <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
 						             <% end %>
 								     <% if (can? :remove_license, :users) && params[:role_id].eql?('4') %>
-						                 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: "Are you sure you want to remove this user's license? The user will no longer be able to log in to Books That Grow." } unless user.license_expiry_date.blank? %>   
+						                 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: "Are you sure you want to remove this user's license? "}, confirm_text: "The user will no longer be able to log in to Books That Grow." unless user.license_expiry_date.blank? %>   
 								     <% end %>
 								 <%else%>
 								     <%= link_to '<i title="Assign License" class="btg btg-lisence"></i>'.html_safe, '', :class=>"assign_license", data: { toggle: "modal", target: "#myModal", input: user.id}%> 
-									 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: "Are you sure you want to remove this user's license? The user will no longer be able to log in to Books That Grow." } unless user.license_expiry_date.blank? %>  
+									 <%= link_to '<i title="Remove License" class="btg btg-lisence-cancel"></i>'.html_safe, remove_license_users_path(:id=>user.id) , data: { confirm: "Are you sure you want to remove this user's license? "}, confirm_text: "The user will no longer be able to log in to Books That Grow." unless user.license_expiry_date.blank? %>  
 						         <%end%>
 							<%else%>
 						        <%= render 'edit_link', user: user%> 

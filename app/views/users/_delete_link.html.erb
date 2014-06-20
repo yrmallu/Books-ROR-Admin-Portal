@@ -1,3 +1,3 @@
-<%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: "Are you sure you want to archive user: #{user.username} ?" } %> 
+<%= link_to '<i title="Archive User" class="glyphicon glyphicon-trash"></i>'.html_safe, user, method: :delete, data: { confirm: "Are you sure you want to archive user: #{user.get_full_name} ?"}, confirm_text: "" %> 
 
 
