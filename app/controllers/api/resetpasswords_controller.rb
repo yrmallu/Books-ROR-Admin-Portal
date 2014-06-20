@@ -68,7 +68,7 @@ class Api::ResetpasswordsController < ApplicationController
           user_info = {:email => @user.email, :name => @user.first_name+" "+@user.last_name.to_s, :username=>@user.username, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" } 
         end
         UserMailer.forgot_password_email(user_info).deliver
-        json_data = {"return_code" => 1, "return_msg" => "sent successfully", "response_data" => ""}
+        json_data = {"return_code" => 1, "return_msg" => "sent successfully", "response_data" => "", "username" => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name}
       else
         json_data = {"return_code" => 0, "return_msg" => "not found", "response_data" => ""}
       end
