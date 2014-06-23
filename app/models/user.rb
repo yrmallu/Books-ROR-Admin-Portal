@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_one :reading_grade
   has_many :parents
   belongs_to :license
-  before_update :update_license_count
+  before_save :update_license_count
   before_update :user_details_change_email
   before_save :phone_number_masking
   before_validation :phone_number_masking
