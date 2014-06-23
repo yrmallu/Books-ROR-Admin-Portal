@@ -55,20 +55,20 @@ class Api::ResetpasswordsController < ApplicationController
   def send_reset_password_email
     user_mail = JSON.parse(params[:p])
     unless user_mail["email"].blank?
-      @user = User.un_archived.where("lower(email) = lower('#{user_mail["email"]}')").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
+      @user = User.un_archived.where("lower(email) = lower('#{user_mail["email"]}') and school_id = '#{user_mail["school_id"]}'").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
       unless @user.blank?
         coupon = random_coupon
         Coupon.create(:code=>coupon)
         unless user_mail["username"].blank?
           student = User.where("lower(username) = lower('#{user_mail["username"]}') and school_id = '#{user_mail["school_id"]}'").last
           pwd_param = {"username" => user_mail["username"], "school_id" => user_mail["school_id"], "a_type" => "angular", "coupon" => coupon}.to_json
-          user_info = {:email => @user.email, :name => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :username=>student.first_name+" "+student.last_name.to_s, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" } 
+          user_info = {:email => @user.email, :name => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :username=>student.first_name+" "+student.last_name.to_s, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :portal_link =>  "http://"+request.env['HTTP_HOST'] } 
         else
           pwd_param = {"email" => @user.email, "a_type" => "angular", "coupon" => coupon}.to_json
-          user_info = {:email => @user.email, :name => @user.first_name+" "+@user.last_name.to_s, :username=>@user.username, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" } 
+          user_info = {:email => @user.email, :name => @user.first_name+" "+@user.last_name.to_s, :username=>@user.username, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :portal_link =>  "http://"+request.env['HTTP_HOST'] } 
         end
         UserMailer.forgot_password_email(user_info).deliver
-        json_data = {"return_code" => 1, "return_msg" => "sent successfully", "response_data" => ""}
+        json_data = {"return_code" => 1, "return_msg" => "sent successfully", "response_data" => "", "username" => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name}
       else
         json_data = {"return_code" => 0, "return_msg" => "not found", "response_data" => ""}
       end
