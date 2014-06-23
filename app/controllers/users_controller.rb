@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
-  before_action :check_sign_in, :only => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
+  before_action :check_sign_in, :only => [:forgot_password, :email_for_password]
   before_action :set_user, :only => [:show_user_data, :get_user_info, :show, :edit, :update, :destroy, :get_user_school_licenses, :quick_edit_user, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent, :create, :update, :un_archive_users_list] 
   before_action :get_manage_student_accessright, :only => [:new, :edit, :create, :update]
