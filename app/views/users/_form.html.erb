@@ -34,7 +34,7 @@
 					    <%= link_to 'Return to User List', users_path(:role_id => @role_id.id, :school_id => @school.id), class: "btn btn-white btn-xs"%>
 					<%end%>
 				<% else %>
-				    <%= f.submit "Update", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Updating...' } %>
+				    <%= f.submit "Update", class: "btn btn-primary btn-sm btn-xs save-btns", :id=>"user_edit", data: { disable_with: 'Updating...' } %>
 					<% if @role_id.name.eql?('Web Admin')%>
 						<%= link_to 'Cancel', users_path(:role_id => @role_id.id), class: "btn btn-white btn-xs"%>
 					<% elsif @role_id.name.eql?('School Admin')%>

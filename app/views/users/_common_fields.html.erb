@@ -49,19 +49,7 @@
 	                </div>
 	            </div> 
 				<%end%>
-				<% unless ('new').eql?action_name %>
-				    <% unless (@role_id.name.eql?('Web Admin') || @user.license_expiry_date.blank?)%>
-					    <div class="row">
-					        <div class="col-sm-3">
-						        <div class="form-group">
-							        <%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
-								    <%= f.text_field :license_expiry_date, :class=>"form-control", :readonly=>true %>
-						        </div>
-						    </div> 
-				        </div>
-				    <%end%>
-			    <%end%>
-			    <% unless ((('edit').eql?action_name) || (('update').eql?action_name)) %>
+				<% unless ((('edit').eql?action_name) || (('update').eql?action_name)) %>
 	                <div class="row">
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
@@ -76,6 +64,49 @@
 	                        </div>
 	                    </div>
 	                </div>
+			    <%end%>
+			    <% unless @role_id.name.eql?('Web Admin') %>
+			    	<% if (('new').eql?action_name) || (('create').eql?action_name)%>
+				    	<div class="row">
+					    	<div class="col-sm-6">
+						       	<div class="form-group">
+						       		<%= f.label :license_id, "License Expiration Date", :class=>"control-label"%><br>
+						        	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }, :selected=>f.object.license_expiry_date), {:prompt=>"Select License Expiration Date", :class=>"form-control class_licenses"} %>
+						        	
+								</div>
+						   	</div> 
+				        </div>
+				    <% elsif ((('edit').eql?action_name) || (('update').eql?action_name)) && (@user.license_expiry_date.blank?) %>   
+				    	<div class="row">
+					    	<div class="col-sm-6">
+						       	<div class="form-group">
+						       		<%= f.label :license_id, "License Expiration Date", :class=>"control-label"%><br>
+						        	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }, :selected=>f.object.license_expiry_date), {:prompt=>"Select License Expiration Date", :class=>"form-control class_licenses"} %>
+								</div>
+						   	</div> 
+				        </div>
+				    <% elsif ((('edit').eql?action_name) || (('update').eql?action_name)) && (!@user.license_expiry_date.blank?) %>   
+				    	<div class="row">
+					    	<div class="col-sm-3">
+						       	<div class="form-group">
+						       		<%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
+							    	<%= text_field_tag "expiry_date", @user.license_expiry_date, :class=>"form-control", :readonly=>true %> 
+							    </div>
+						   	</div>
+						   	<div class="col-sm-3">
+						   		<br>
+								<a href="javascript:void(0)" id="change_lic">Change License</a><br>
+								<!-- <a href="javascript:void(0)" id="remove_lic">Remove License</a>   -->
+							</div>	
+						   	<div class="col-sm-6 hide" id="div_change_lic">
+						       	<div class="form-group">
+						       		<%= f.label :license_id, "Update License Expiration Date", :class=>"control-label"%><br>
+						        	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }), {:prompt=>"Select License Expiration Date", :class=>"form-control"} %>
+								</div>
+						   	</div>
+				        </div> 
+			    	<%end%>
+			    	<%= f.hidden_field :license_expiry_date %>
 			    <%end%>
 				<% if @role_id.name.eql?('Student')%>
 				
@@ -177,6 +208,29 @@ $('.add-parent').on('click','.remove_fields',function(){
 	{
 		$('.add_fields').addClass('show').removeClass('hide');
 	}
+});
+
+
+
+$(document).ready(function () {
+    $('#user_license_id').change(function() {
+    	//alert($("#user_license_id :selected").text());
+    	$('#user_license_expiry_date').val($("#user_license_id :selected").text());
+    });	
+    $('#change_lic').click(function(){
+		$('#div_change_lic').removeClass('hide').addClass('show');		
+	 	$("a#change_lic").removeAttr('href');
+	 	$("a#change_lic").addClass("grey-effect");
+	 	//$("a#remove_lic").removeAttr('href');
+		//$("a#remove_lic").addClass("grey-effect");
+	});
+	// $('#remove_lic').click(function(){
+	// 	$('#user_license_expiry_date').val("");		
+	// 	$("a#remove_lic").removeAttr('href');
+	// 	$("a#remove_lic").addClass("grey-effect");
+	// 	$("a#change_lic").removeAttr('href');
+	//  	$("a#change_lic").addClass("grey-effect");
+	// });
 });
 
 // select/de-select classrooms while add/edit school-admin,teacher,student
