@@ -66,16 +66,34 @@
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
 			    		        <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
-			    			    <%= f.password_field :password, :required=>true, :class=>"form-control class_password class_no_space" %>
+			    			    <%= f.password_field :password, :required=>true, :class=>"form-control class_password class_no_space", :action_type =>"new" %>
 	                        </div>
 	                    </div>
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
 			    			    <%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
-			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control class_no_space" %>
+			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control class_no_space", :action_type =>"new" %>
 	                        </div>
 	                    </div>
 	                </div>
+				<%else%>
+					<%if f.object.role_id == 4%>
+						<p>(Leave blank if you don't want to change password)</p>
+	               		<div class="row">
+	                    	<div class="col-sm-3">
+	                        	<div class="form-group">
+			    		        	<%= f.label :password, "New Password", :class=>"control-label" %>
+			    			    	<%= f.password_field :password, :class=>"form-control", :action_type =>"edit", :placeholder=>"********" %>
+	                        	</div>
+	                    	</div>
+	                    	<div class="col-sm-3">
+	                        	<div class="form-group">
+			    			    	<%= f.label :password_confirmation, "Confirm Password", :class=>"control-label" %>
+			    			    	<%= f.password_field :password_confirmation, :class=>"form-control", :action_type =>"edit", :placeholder=>"********" %>
+	                        	</div>
+	                    	</div>
+	                	</div>
+					<%end%>
 			    <%end%>
 				<% if @role_id.name.eql?('Student')%>
 				
@@ -356,7 +374,6 @@ $('.right-listbox').on('click','.lbjs-item',function(){
 });
 
 });
-
-</script>		
+</script>
 
 

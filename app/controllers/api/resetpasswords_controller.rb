@@ -55,7 +55,7 @@ class Api::ResetpasswordsController < ApplicationController
   def send_reset_password_email
     user_mail = JSON.parse(params[:p])
     unless user_mail["email"].blank?
-      @user = User.un_archived.where("lower(email) = lower('#{user_mail["email"]}')").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
+      @user = User.un_archived.where("lower(email) = lower('#{user_mail["email"]}') and school_id = '#{user_mail["school_id"]}'").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
       unless @user.blank?
         coupon = random_coupon
         Coupon.create(:code=>coupon)

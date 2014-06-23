@@ -23,8 +23,61 @@ required_field = function(){
 			"user[first_name]":{required: true} ,
 			"user[last_name]":{required: true} ,
 			//"user[email]":{ email:true, required: true} ,
-			"user[password]":{ minlength: 5, required: true} ,
-			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} ,
+			// "user[password]":{ minlength: 5, required: true} ,
+			// "user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} ,
+			"user[password]":{ 
+				required: function(element) {
+					if ($( "input[name='user[password]']").attr("action_type") == "edit"){
+						if ($( "input[name='user[password]']").val() > 0) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+					else{
+						return true;	
+					}
+				},
+				minlength: function(element) {
+					if ($( "input[name='user[password]']").attr("action_type") == "edit"){
+						if ($( "input[name='user[password]']").val() > 0) {
+							return 5;
+						} else {
+							return 5;
+						}
+					}
+					else{
+						return 5;	
+					}
+				}
+			} ,
+			"user[password_confirmation]":{ 
+				required: function(element) {
+					if ($( "input[name='user[password_confirmation]']").attr("action_type") == "edit"){
+						if ($( "input[name='user[password_confirmation]']").val() > 0) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+					else{
+						return true;	
+					}
+				},
+				minlength: function(element) {
+					if ($( "input[name='user[password_confirmation]']").attr("action_type") == "edit"){
+						if ($( "input[name='user[password_confirmation]']").val() > 0) {
+							return 5;
+						} else {
+							return 5;
+						}
+					}
+					else{
+						return 5;	
+					}
+				},
+				equalTo: "#user_password"
+			} ,
 			"license[license_batch_name]":{required: true} ,
 			"classroom[name]":{required: true} ,
 			"user[parent_email]":{email:true },
