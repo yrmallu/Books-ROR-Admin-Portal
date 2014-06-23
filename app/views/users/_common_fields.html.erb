@@ -89,9 +89,8 @@
 					    	<div class="col-sm-6">
 						       	<div class="form-group">
 						       		<%= f.label :license_id, "License Expiration Date", :class=>"control-label"%><br>
-						        	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }, :selected=>f.object.license_expiry_date), {:prompt=>"Select License Expiration Date", :class=>"form-control class_licenses"} %>
-						        	
-								</div>
+						        	<%= render "school_related_licenses", :f=>f %>
+						        </div>
 						   	</div> 
 				        </div>
 				    <% elsif ((('edit').eql?action_name) || (('update').eql?action_name)) && (@user.license_expiry_date.blank?) %>   
@@ -99,7 +98,7 @@
 					    	<div class="col-sm-6">
 						       	<div class="form-group">
 						       		<%= f.label :license_id, "License Expiration Date", :class=>"control-label"%><br>
-						        	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }, :selected=>f.object.license_expiry_date), {:prompt=>"Select License Expiration Date", :class=>"form-control class_licenses"} %>
+						        	<%= render "school_related_licenses", :f=>f %>
 								</div>
 						   	</div> 
 				        </div>
@@ -120,6 +119,7 @@
 						       	<div class="form-group">
 						       		<%= f.label :license_id, "Update License Expiration Date", :class=>"control-label"%><br>
 						        	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }), {:prompt=>"Select License Expiration Date", :class=>"form-control"} %>
+						        	<%#= render "school_related_licenses", :f=>f %>
 								</div>
 						   	</div>
 				        </div> 

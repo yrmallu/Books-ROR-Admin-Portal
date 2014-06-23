@@ -1,0 +1,1 @@
+<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }, :selected=>f.object.license_expiry_date), {:prompt=>"Select License Expiration Date", :class=>"form-control class_licenses"} %>

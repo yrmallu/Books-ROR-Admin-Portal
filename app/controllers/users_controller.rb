@@ -676,12 +676,14 @@ class UsersController < ApplicationController
     end
 
     def get_school_related_licenses
-      unless params[:school_id].blank?
-        @school = School.where("id = #{params[:school_id]}").last
-      else
-        @school = School.where("id = #{params[:user][:school_id]}").last
-      end  
-      @school_related_licenses = @school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
+      unless params[:role_id].eql?('1')
+        unless params[:school_id].blank?
+          @school = School.where("id = #{params[:school_id]}").last
+        else
+          @school = School.where("id = #{params[:user][:school_id]}").last
+        end  
+        @school_related_licenses = @school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
+      end
     end
     
     def delete_parent
