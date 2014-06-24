@@ -174,33 +174,35 @@ class User < ActiveRecord::Base
         link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s
       end
     
-	  arr_changed_attributes = []
-	  if !self.first_name_was.eql?(self.first_name) && !self.first_name.blank?
-	    arr_changed_attributes << 'First Name'
-	  end
+	    arr_changed_attributes = []
+	    if !self.first_name_was.eql?(self.first_name) && !self.first_name.blank?
+	      arr_changed_attributes << 'First Name'
+	    end
       if !self.last_name_was.eql?(self.last_name) && !self.last_name.blank?
         arr_changed_attributes << 'Last Name'
       end
       if !self.username_was.eql?(self.username) && !self.username.blank?
 	    arr_changed_attributes << 'Username'
       end
-	  # if !self.userinfo_was.eql?(self.userinfo) && !self.userinfo.blank?
-	  #   arr_changed_attributes << 'Phone Number OR Grade OR Reading level'
-	  # end
-	  if !self.password_digest_was.eql?(self.password_digest) && !self.password_digest.blank?
-	    arr_changed_attributes << 'Password'
-	  end
+	    # if !self.userinfo_was.eql?(self.userinfo) && !self.userinfo.blank?
+	    #   arr_changed_attributes << 'Phone Number OR Grade OR Reading level'
+	    # end
+	    if !self.password_digest_was.eql?(self.password_digest) && !self.password_digest.blank?
+	      arr_changed_attributes << 'Password'
+	    end
       if !self.email_was.eql?(self.email) && !self.email.blank?
 	    arr_changed_attributes << 'Email'
       pwd_param = pwd_reset_params(self.email)
 	    user_info = {:email => email_was, :name => self.first_name, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :new_email=> self.email, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => link_url, :login_url =>  "http://"+app_route } 
 	    UserMailer.user_email_changed(user_info).deliver unless self.email_was.blank?
-	  end
-	  unless arr_changed_attributes.empty?
-        pass_changed = arr_changed_attributes.include?('Password') ? "Password Changed" : ""
-        pwd_param = pwd_reset_params(self.email)
-        user_info = {:email => self.email, :name => self.first_name, :password_changed =>pass_changed, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => link_url, :login_url =>  "http://"+app_route } 
-	      UserMailer.user_details_changed(user_info).deliver
+	    end
+	    unless arr_changed_attributes.empty?
+        if !current_user.blank?
+          pass_changed = arr_changed_attributes.include?('Password') ? "Password Changed" : ""
+          pwd_param = pwd_reset_params(self.email)
+          user_info = {:email => self.email, :name => self.first_name, :password_changed =>pass_changed, :username => self.username.to_s, :current_user => current_user.first_name+" "+current_user.last_name.to_s, :changed_attributes => arr_changed_attributes.join(","), :reset_pass_url => "http://"+app_route+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => link_url, :login_url =>  "http://"+app_route } 
+	        UserMailer.user_details_changed(user_info).deliver
+        end
       end
     end
   end
