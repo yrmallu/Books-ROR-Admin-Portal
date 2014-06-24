@@ -107,22 +107,13 @@
 					    	<div class="col-sm-3">
 						       	<div class="form-group">
 						       		<%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
-							    	<%= text_field_tag "expiry_date", @user.license_expiry_date, :class=>"form-control", :readonly=>true %> 
-							    </div>
+							    	<div class="dropdown-quick-edit-student" data-col="license_id" data-id='<%= @user.id%>'>
+							    		<%= text_field_tag "expiry_date", @user.license_expiry_date, :class=>"form-control", :readonly=>true %> 
+							    	</div>
+							    	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }), {:prompt=>"Select License Expiration Date"}, {:class=>"form-control invisible dropdown-dynamic class-grade"} %>
+						   		</div>
 						   	</div>
-						   	<div class="col-sm-3">
-						   		<br>
-								<a href="javascript:void(0)" id="change_lic">Change License</a><br>
-								<!-- <a href="javascript:void(0)" id="remove_lic">Remove License</a>   -->
-							</div>	
-						   	<div class="col-sm-6 hide" id="div_change_lic">
-						       	<div class="form-group">
-						       		<%= f.label :license_id, "Update License Expiration Date", :class=>"control-label"%><br>
-						        	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }), {:prompt=>"Select License Expiration Date", :class=>"form-control"} %>
-						        	<%#= render "school_related_licenses", :f=>f %>
-								</div>
-						   	</div>
-				        </div> 
+						</div> 
 			    	<%end%>
 			    	<%= f.hidden_field :license_expiry_date %>
 			    <%end%>
@@ -229,26 +220,41 @@ $('.add-parent').on('click','.remove_fields',function(){
 });
 
 
+$.valHooks.textarea = {
+    get: function(elem) {
+        return elem.value.replace(/\r?\n/g, "<br/>");
+    }
+};
+
+$(".dropdown-quick-edit-student").click(function(e) {
+    e.preventDefault();
+    var text = $(this).text();
+	$(this).parent().children(".dropdown-dynamic").removeClass("invisible");
+	$(this).parent().children(".dropdown-dynamic").show().focus().click();
+	$(this).addClass("invisible");
+});
+
+$('.dropdown-dynamic').change(function(e) {
+    e.preventDefault();
+	dropdown_update_on_quick_edit($(this));
+});	
+
+$('.dropdown-dynamic').blur(function(e) {
+	e.preventDefault();
+	dropdown_update_on_quick_edit($(this));
+});
+
+function dropdown_update_on_quick_edit(this_val)
+{
+	$('#user_license_expiry_date').val($("#user_license_id :selected").text());
+	this_val.parent().children(".dropdown-quick-edit-student").html(this_val.find('option:selected').text()).removeClass("invisible");
+    this_val.addClass("invisible");	
+}
 
 $(document).ready(function () {
     $('#user_license_id').change(function() {
-    	//alert($("#user_license_id :selected").text());
     	$('#user_license_expiry_date').val($("#user_license_id :selected").text());
     });	
-    $('#change_lic').click(function(){
-		$('#div_change_lic').removeClass('hide').addClass('show');		
-	 	$("a#change_lic").removeAttr('href');
-	 	$("a#change_lic").addClass("grey-effect");
-	 	//$("a#remove_lic").removeAttr('href');
-		//$("a#remove_lic").addClass("grey-effect");
-	});
-	// $('#remove_lic').click(function(){
-	// 	$('#user_license_expiry_date').val("");		
-	// 	$("a#remove_lic").removeAttr('href');
-	// 	$("a#remove_lic").addClass("grey-effect");
-	// 	$("a#change_lic").removeAttr('href');
-	//  	$("a#change_lic").addClass("grey-effect");
-	// });
 });
 
 // select/de-select classrooms while add/edit school-admin,teacher,student

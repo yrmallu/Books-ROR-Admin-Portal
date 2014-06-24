@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   before_action :get_school_by_id, :only => [:new, :edit, :index, :show, :delete_parent, :email_for_password, :un_archive_users_list]
   before_action :get_school_specific_classrooms, :only => [:new, :edit, :delete_parent, :create, :update]
   before_action :get_all_reading_grades, :only => [:new, :edit, :delete_parent, :index]
-  before_action :get_school_related_licenses, :only=>[:new, :edit]
+  before_action :get_school_related_licenses, :only=>[:new, :edit, :index]
   before_action :assign_root_path
   before_action :get_current_user
   before_action :get_all_schools, only: [:forgot_password]
@@ -675,63 +675,45 @@ class UsersController < ApplicationController
       @reading_grades = ReadingGrade.all
     end
 
-    def get_school_related_licenses
-      unless params[:role_id].eql?('1')
-        unless params[:school_id].blank?
-          @school = School.where("id = #{params[:school_id]}").last
-        else
-          @school = School.where("id = #{params[:user][:school_id]}").last
-        end  
-        @school_related_licenses = @school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
-      end
+  def get_school_related_licenses
+    unless params[:role_id].eql?('1')
+      unless params[:school_id].blank?
+        @school = School.where("id = #{params[:school_id]}").last
+      else
+        @school = School.where("id = #{params[:user][:school_id]}").last
+      end  
+      @school_related_licenses = @school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     end
+  end
     
-    def delete_parent
-      @user = User.find(params[:id])
-      @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-      @parent = Parent.find(params[:parent_id])
-      @parent.destroy
-      respond_to do |format|
-      	format.html {
-      	}
-      	format.js{}
-      end
+  def delete_parent
+    @user = User.find(params[:id])
+    @assigned_classrooms = @user.classrooms if @user && @user.classrooms
+    @parent = Parent.find(params[:parent_id])
+    @parent.destroy
+    respond_to do |format|
+    	format.html {
+    	}
+    	format.js{}
     end
+  end
     
-    def app_route
-      @app_path = request.host
-    end
+  def app_route
+    @app_path = request.host
+  end
     
-    def quick_edit_user
-    return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
-  	if return_val.eql?(true)
-        render :json=> true and return
-  	else
-       arrValues = []
-       arrValues = params[:column_name].split('_') if params[:column_name].include? "_"
-  	   if !arrValues.blank?
-         arrValues[0].capitalize!
-         arrValues[1].capitalize! 
-         column_name = arrValues.join(' ')
-       else
-         column_name = params[:column_name].capitalize 
-       end 
-       render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
-  	end
+  def user_search
+    if params[:query_string] && !(params[:query_string].blank?)
+      @users = User.search_all("%#{params[:query_string]}%").un_archived.page(params[:page]).per(10) 
     end
+    set_bread_crumb
+  end
     
-    def user_search
-      if params[:query_string] && !(params[:query_string].blank?)
-        @users = User.search_all("%#{params[:query_string]}%").un_archived.page(params[:page]).per(10) 
-      end
-      set_bread_crumb
-    end
-    
-    def undo_user
-      @user = User.where("id = '#{params[:id]}' AND delete_flag = true ").last
-  	@user.update_attributes(:delete_flag=>false)
-      redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User un-archived.'
-    end
+  def undo_user
+    @user = User.where("id = '#{params[:id]}' AND delete_flag = true ").last
+    @user.update_attributes(:delete_flag=>false)
+    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User un-archived.'
+  end
 
   def save_user_list
     @users, @data_flag =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
@@ -764,24 +746,46 @@ class UsersController < ApplicationController
   def app_route
     @app_path = request.host
   end
-  
+
   def quick_edit_user
-  return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
-	if return_val.eql?(true)
+    unless params[:edited_value].blank?
+       license = License.find(params[:edited_value])
+       @user.update_attributes("license_expiry_date" => license.expiry_date) 
+    end 
+    return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+    if return_val.eql?(true)
       render :json=> true and return
-	else
-     arrValues = []
-     arrValues = params[:column_name].split('_') if params[:column_name].include? "_"
-	   if !arrValues.blank?
-       arrValues[0].capitalize!
-       arrValues[1].capitalize! 
-       column_name = arrValues.join(' ')
-     else
-       column_name = params[:column_name].capitalize 
-     end 
-     render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
-	end
+    else
+      arrValues = []
+      arrValues = params[:column_name].split('_') if params[:column_name].include? "_"
+      if !arrValues.blank?
+        arrValues[0].capitalize!
+        arrValues[1].capitalize! 
+        column_name = arrValues.join(' ')
+      else
+        column_name = params[:column_name].capitalize 
+      end 
+      render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
+    end
   end
+  
+ #  def quick_edit_user
+ #  return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
+	# if return_val.eql?(true)
+ #      render :json=> true and return
+	# else
+ #     arrValues = []
+ #     arrValues = params[:column_name].split('_') if params[:column_name].include? "_"
+	#    if !arrValues.blank?
+ #       arrValues[0].capitalize!
+ #       arrValues[1].capitalize! 
+ #       column_name = arrValues.join(' ')
+ #     else
+ #       column_name = params[:column_name].capitalize 
+ #     end 
+ #     render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
+	# end
+ #  end
   
   def user_search
     if params[:query_string] && !(params[:query_string].blank?)

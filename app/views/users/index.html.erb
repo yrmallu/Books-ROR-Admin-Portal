@@ -126,7 +126,10 @@
 							     <input type="text" class="mask-phone mask-phone-width invisible dynamic" value='<%= user.phone_number %>'></input>	 
 							 </td>
 					         <%unless @role_id.name.eql?('Web Admin')%>
-					             <td class=""><%= user.license_expiry_date unless user.license_expiry_date.blank? %></td>
+					             <td>
+					             	<div class="dropdown-quick-edit" data-col="license_id" data-id='<%= user.id%>'><%= user.license_expiry_date unless user.license_expiry_date.blank? %></div>
+					             	<%= select_tag "license_id", options_for_select(@school_related_licenses.collect {|g| [ g.expiry_date, g.id ] }, :selected=>user.license_id), {:prompt=>"Select License Expiration Date", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
+					             </td>
 					         <%end%>
   					         <%if @role_id.name.eql?('Student')%>
 					             <td>
@@ -428,11 +431,16 @@ $('.dropdown-dynamic').blur(function(e) {
 
 function dropdown_update_on_quick_edit(this_val)
 {
+	//$('#license_expiry_date').val($("#license_id :selected").text());
     var edited_column_name = this_val.prev(".dropdown-quick-edit").data('col');
 	var edited_user_id = this_val.prev(".dropdown-quick-edit").data('id');
+	var exp_date = $("#license_id :selected").text();
+	//alert(this_val.text());
+	//alert($("#license_id :selected").text());
 	jQuery.get("<%= url_for(:controller => controller_name, :action=>'quick_edit_user')%>",{ column_name : edited_column_name, edited_value :this_val.val() , id : edited_user_id},
 	  function(data) {  
 	  });
+	$('#license_expiry_date').val("");
 	this_val.parent().children(".dropdown-quick-edit").html(this_val.find('option:selected').text()).removeClass("invisible");
     this_val.addClass("invisible");	
 }
