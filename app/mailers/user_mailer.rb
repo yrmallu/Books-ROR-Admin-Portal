@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: 'noreply@borne-digital.com'
+  default from: 'noreply@booksthatgrow.com'
   
   def welcome_email(user_info)
     @user_info = user_info
