@@ -748,7 +748,7 @@ class UsersController < ApplicationController
   end
 
   def quick_edit_user
-    unless params[:edited_value].blank?
+    if (params[:column_name].eql?("license_id"))
        license = License.find(params[:edited_value])
        @user.update_attributes("license_expiry_date" => license.expiry_date) 
     end 
