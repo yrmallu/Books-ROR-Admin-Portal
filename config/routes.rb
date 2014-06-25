@@ -105,6 +105,7 @@ BooksThatGrow::Application.routes.draw do
   match '/signout', to: 'sessions#destroy',     via: 'delete'
   match '/forgot_password', to: 'users#forgot_password',     via: 'get'
   match '/reset_password', to: 'users#reset_password',     via: 'get'
+  match '/reset', to: 'users#reset',     via: 'get'
   
   
   # The priority is based upon order of creation: first created -> highest priority.

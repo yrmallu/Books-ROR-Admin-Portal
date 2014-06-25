@@ -501,23 +501,26 @@ class UsersController < ApplicationController
   
   def set_new_password
     if params[:password] != ""
-    @user = params[:email_id].blank? ? User.un_archived.where("lower(username) = lower('#{params[:username]}') and school_id = '#{params[:school_id]}'").last : User.un_archived.where("lower(email) = lower('#{params[:email_id]}')").last
-    @user.password = params[:password]
-    @user.password_confirmation = params[:password]
-    if @user.save
-      if params[:app_type].blank?
-        user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :url =>  "http://"+request.env['HTTP_HOST'] } 
-        UserMailer.password_reset_email(user_info).deliver
+      @user = params[:email_id].blank? ? User.un_archived.where("lower(username) = lower('#{params[:username]}') and school_id = '#{params[:school_id]}'").last : User.un_archived.where("lower(email) = lower('#{params[:email_id]}')").last
+      @user.password = params[:password]
+      @user.password_confirmation = params[:password]
+      if @user.save
+        if params[:app_type].blank?
+          user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :url =>  "http://"+request.env['HTTP_HOST'] } 
+          UserMailer.password_reset_email(user_info).deliver
+        end
+        Coupon.delete_all(:code=>params[:coupon])
+        #binding.pry
+        flash.now[:success] = "Signin with new password."
+        redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?
+        redirect_to signin_path
+        #redirect_to reset_path
       end
-      Coupon.delete_all(:code=>params[:coupon])
-      flash.now[:success] = "Signin with new password."
-      redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?
-      redirect_to signin_path
+    else
+      #binding.pry
+      flash.now[:error] = "Please enter new password."
+      redirect_to reset_password_path
     end
-   else
-     flash.now[:error] = "Please enter new password."
-     redirect_to reset_password_path
-   end
   end
   
   def forgot_password
