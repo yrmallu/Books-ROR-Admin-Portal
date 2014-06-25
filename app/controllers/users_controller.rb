@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password]
+  before_action :logged_in?, :except => [:forgot_password, :reset_password, :set_new_password, :email_for_password, :reset]
   before_action :check_sign_in, :only => [:forgot_password, :email_for_password]
   before_action :set_user, :only => [:show_user_data, :get_user_info, :show, :edit, :update, :destroy, :get_user_school_licenses, :quick_edit_user, :change_user_password, :remove_license ]
   before_action :get_role_id, :only => [:new, :index, :edit, :show, :delete_parent, :create, :update, :un_archive_users_list] 
@@ -510,11 +510,15 @@ class UsersController < ApplicationController
           UserMailer.password_reset_email(user_info).deliver
         end
         Coupon.delete_all(:code=>params[:coupon])
-        #binding.pry
         flash.now[:success] = "Signin with new password."
-        redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?
-        redirect_to signin_path
-        #redirect_to reset_path
+        #redirect_to "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/" and return unless params[:app_type].blank?
+        #redirect_to signin_path
+        app_signin_path = "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/"
+        unless params[:app_type].blank?
+          redirect_to reset_path(:path=>app_signin_path)
+        else
+          redirect_to reset_path(:path=>signin_path)
+        end  
       end
     else
       #binding.pry
@@ -526,7 +530,11 @@ class UsersController < ApplicationController
   def forgot_password
     render :layout=>"login"
   end
- 
+
+  def reset
+    render :layout=>"login"
+  end
+
   def email_for_password
     # Check if web admin
     @user = User.where("(email = '#{params[:email].downcase}') AND (delete_flag is false)").last
