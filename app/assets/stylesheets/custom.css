@@ -123,7 +123,7 @@ label.error {display:block;}
 .diasble-arrors{color:black;background:#e0e0e0 !important;cursor:default !important;}
 .enable-arrors{color:#428bca;background:rgba(112, 147, 216, 0.5) !important;cursor:pointer !important;}
 .mask-phone-width{width:110px}
-.dropdown-quick-edit-student:hover{cursor:pointer;}
+/* .dropdown-quick-edit-student:hover{border: solid 2px #ccc;padding: 5px;margin: -5px;cursor:pointer;}*/
 
 
 /* Loader for quick edit */

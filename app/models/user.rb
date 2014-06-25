@@ -136,6 +136,11 @@ class User < ActiveRecord::Base
   def is_school_admin?
   	 self.role.name.eql?("School Admin") unless self.role.blank?
   end
+
+  def get_lic_name_date
+    license = License.find(self.license_id)
+    license.license_batch_name+" ("+license.expiry_date.to_s+")"
+  end  
  
   def assign_accessright(accessright_id)
     self.user_accessrights.create(:accessright_id=>accessright_id, :access_flag=>false, :role_id=>self.role_id) unless accessright_id.blank?

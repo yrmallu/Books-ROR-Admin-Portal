@@ -107,10 +107,11 @@
 					    	<div class="col-sm-3">
 						       	<div class="form-group">
 						       		<%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
-							    	<div class="dropdown-quick-edit-student" data-col="license_id" data-id='<%= @user.id%>'>
-							    		<%= text_field_tag "expiry_date", @user.license_expiry_date, :class=>"form-control", :readonly=>true %> 
+							    	<div class="dropdown-quick-edit" data-col="license_id" data-id='<%= @user.id%>'>
+							    		<% @lic = License.find(@user.license_id) %>
+							    		<%= @user.get_lic_name_date  %>
 							    	</div>
-							    	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_date, g.id ] }), {:prompt=>"Select License Expiration Date"}, {:class=>"form-control invisible dropdown-dynamic class-grade"} %>
+							    	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_exp_date, g.id ] }), {:prompt=>"Select License Expiration Date"}, {:class=>"form-control invisible dropdown-dynamic class-grade"} %>
 						   		</div>
 						   	</div>
 						</div> 
@@ -226,7 +227,18 @@ $.valHooks.textarea = {
     }
 };
 
-$(".dropdown-quick-edit-student").click(function(e) {
+$( ".dropdown-quick-edit" ).mouseover(function() {
+		if ($(this).text() == '')
+		{
+			$(this).addClass('empty-quick-edit-field');
+		}
+		else
+		{
+			$(this).removeClass('empty-quick-edit-field');
+		}
+});	
+
+$(".dropdown-quick-edit").click(function(e) {
     e.preventDefault();
     var text = $(this).text();
 	$(this).parent().children(".dropdown-dynamic").removeClass("invisible");
@@ -247,7 +259,7 @@ $('.dropdown-dynamic').blur(function(e) {
 function dropdown_update_on_quick_edit(this_val)
 {
 	$('#user_license_expiry_date').val($("#user_license_id :selected").text());
-	this_val.parent().children(".dropdown-quick-edit-student").html(this_val.find('option:selected').text()).removeClass("invisible");
+	this_val.parent().children(".dropdown-quick-edit").html(this_val.find('option:selected').text()).removeClass("invisible");
     this_val.addClass("invisible");	
 }
 

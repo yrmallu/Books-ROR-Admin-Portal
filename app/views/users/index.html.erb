@@ -127,8 +127,8 @@
 							 </td>
 					         <%unless @role_id.name.eql?('Web Admin')%>
 					             <td>
-					             	<div class="dropdown-quick-edit" data-col="license_id" data-id='<%= user.id%>'><%= user.license_expiry_date unless user.license_expiry_date.blank? %></div>
-					             	<%= select_tag "license_id", options_for_select(@school_related_licenses.collect {|g| [ g.expiry_date, g.id ] }, :selected=>user.license_id), {:prompt=>"Select License Expiration Date", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
+					             	<div class="dropdown-quick-edit" data-col="license_id" data-id='<%= user.id%>'><%= user.get_lic_name_date unless user.license_expiry_date.blank? %></div>
+					             	<%= select_tag "license_id", options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_exp_date, g.id ] }, :selected=>user.license_id), {:prompt=>"Select License Expiration Date", :class=>"form-control invisible dropdown-dynamic class-grade"} %>
 					             </td>
 					         <%end%>
   					         <%if @role_id.name.eql?('Student')%>
