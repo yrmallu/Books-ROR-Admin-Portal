@@ -108,7 +108,6 @@
 						       	<div class="form-group">
 						       		<%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
 							    	<div class="dropdown-quick-edit" data-col="license_id" data-id='<%= @user.id%>'>
-							    		<% @lic = License.find(@user.license_id) %>
 							    		<%= @user.get_lic_name_date  %>
 							    	</div>
 							    	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_exp_date, g.id ] }), {:prompt=>"Select License Expiration Date"}, {:class=>"form-control invisible dropdown-dynamic class-grade"} %>
