@@ -1,8 +1,12 @@
 <div class="logopanel reset-text">
-    <h1><span>[</span> Books That Grow<span>]</span></h1>
+    <h1> Books That Grow</h1>
 	<%= image_tag("app_icon.png", :class=>"logo_image")%>
 	<h3>You password has been reset.</h3>
-	<h4>Click <a href = '<%= params[:path] %>'>here</a> to log in to Books That Grow.</h4>
+	<% unless params[:app_type].blank? %>
+		<h4>Click <a href = '<%= params[:path] %>'>here</a> to log in to the administrative portal.</h4>
+	<%else%>
+		<h4>Click <a href = '<%= params[:path] %>'>here</a> to log in to Books That Grow.</h4>
+	<%end%>	
 </div>
 
 

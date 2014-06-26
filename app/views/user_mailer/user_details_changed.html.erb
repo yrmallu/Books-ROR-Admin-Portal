@@ -20,7 +20,7 @@
 
           <%if @user_info[:password_changed].blank?%>
             <td valign="top" colspan="2" style="padding:20px">
-              <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow account has been updated.</h2>
+             <!--  <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow account has been updated.</h2> -->
               <p style="margin:15px 0; font-size:13px">
                 Hello <%= @user_info[:name] %>, 
               </p>
@@ -31,7 +31,7 @@
                 <p style="margin:0 0; font-size:13px">
                   Username: <%= @user_info[:username] %>
                 </p>
-                <p style="margin:0 0; font-size:13px">
+                <p style="margin:15px 0; font-size:13px">
                   Email: <%= @user_info[:email] %>
                 </p>
               </p> 

@@ -107,7 +107,7 @@
 					    	<div class="col-sm-3">
 						       	<div class="form-group">
 						       		<%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
-							    	<div class="dropdown-quick-edit" data-col="license_id" data-id='<%= @user.id%>'>
+							    	<div class="dropdown-quick-edit-stud " data-col="license_id" data-id='<%= @user.id%>'>
 							    		<%= @user.get_lic_name_date  %>
 							    	</div>
 							    	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_exp_date, g.id ] }), {:prompt=>"Select License Expiration Date"}, {:class=>"form-control invisible dropdown-dynamic class-grade"} %>
@@ -226,18 +226,18 @@ $.valHooks.textarea = {
     }
 };
 
-$( ".dropdown-quick-edit" ).mouseover(function() {
-		if ($(this).text() == '')
-		{
-			$(this).addClass('empty-quick-edit-field');
-		}
-		else
-		{
-			$(this).removeClass('empty-quick-edit-field');
-		}
-});	
+// $( ".dropdown-quick-edit-stud" ).mouseover(function() {
+// 		if ($(this).text() == '')
+// 		{
+// 			$(this).addClass('empty-quick-edit-field');
+// 		}
+// 		else
+// 		{
+// 			$(this).removeClass('empty-quick-edit-field');
+// 		}
+// });	
 
-$(".dropdown-quick-edit").click(function(e) {
+$(".dropdown-quick-edit-stud").click(function(e) {
     e.preventDefault();
     var text = $(this).text();
 	$(this).parent().children(".dropdown-dynamic").removeClass("invisible");
@@ -258,7 +258,7 @@ $('.dropdown-dynamic').blur(function(e) {
 function dropdown_update_on_quick_edit(this_val)
 {
 	$('#user_license_expiry_date').val($("#user_license_id :selected").text());
-	this_val.parent().children(".dropdown-quick-edit").html(this_val.find('option:selected').text()).removeClass("invisible");
+	this_val.parent().children(".dropdown-quick-edit-stud").html(this_val.find('option:selected').text()).removeClass("invisible");
     this_val.addClass("invisible");	
 }
 
