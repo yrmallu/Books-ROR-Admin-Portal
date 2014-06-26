@@ -25,7 +25,7 @@ class UserMailer < ActionMailer::Base
     if @user_info[:app_type].eql?('angular')
       mail(to: @user_info[:email], subject: "Books That Grow password reset request for #{@user_info[:username]} .")
     else
-      mail(to: @user_info[:email], subject: "Books That Grow password reset request")
+      mail(to: @user_info[:email], subject: "Books That Grow password reset request.")
     end 
   end
   
