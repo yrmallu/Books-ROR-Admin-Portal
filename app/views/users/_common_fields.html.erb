@@ -109,7 +109,10 @@
 						       		<%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
 							    	<div class="dropdown-quick-edit-stud " data-col="license_id" data-id='<%= @user.id%>'>
 							    		<%= @user.get_lic_name_date  %>
+
+							    		<span class="input-group-addon datepicker-align" id = "user-edit-datepicket"><i class="glyphicon glyphicon-calendar"></i></span>
 							    	</div>
+							    	
 							    	<%= f.select :license_id, options_for_select(@school_related_licenses.collect {|g| [ g.get_license_batch_name_exp_date, g.id ] }), {:prompt=>"Select License Expiration Date"}, {:class=>"form-control invisible dropdown-dynamic class-grade"} %>
 						   		</div>
 						   	</div>
@@ -188,6 +191,7 @@
 							<div class="listbox-alig left-listbox" id="assigned_div">
                                 <!-- <span>Assigned Classrooms: </span> -->
 								<%= select_tag "already_assigned_id", options_from_collection_for_select(@school_specific_classrooms, "id", "name"), :class=>"classroom-info-hover", :size=>"8", :multiple=>"multiple" %>
+                           <!--  <a href=javascript:void(0) class="clear-selected-classes">Clear all</a> -->
                             </div>
                             <div class="assign_arrows">
                                 <a href="#Remove" class="remove btn disable-remove"> > </a><br />
@@ -199,7 +203,7 @@
                             </div>
                         </div>
                     </div>
-		        </div>
+                </div>
         <%end%>
 		<%= hidden_field_tag 'user_search_param', @user_search_param%>
             
@@ -226,16 +230,6 @@ $.valHooks.textarea = {
     }
 };
 
-// $( ".dropdown-quick-edit-stud" ).mouseover(function() {
-// 		if ($(this).text() == '')
-// 		{
-// 			$(this).addClass('empty-quick-edit-field');
-// 		}
-// 		else
-// 		{
-// 			$(this).removeClass('empty-quick-edit-field');
-// 		}
-// });	
 
 $(".dropdown-quick-edit-stud").click(function(e) {
     e.preventDefault();
@@ -259,6 +253,7 @@ function dropdown_update_on_quick_edit(this_val)
 {
 	$('#user_license_expiry_date').val($("#user_license_id :selected").text());
 	this_val.parent().children(".dropdown-quick-edit-stud").html(this_val.find('option:selected').text()).removeClass("invisible");
+	this_val.parent().children(".dropdown-quick-edit-stud").append('<span class="input-group-addon datepicker-align" id = "user-edit-datepicket"><i class="glyphicon glyphicon-calendar"></i></span>');
     this_val.addClass("invisible");	
 }
 
@@ -354,6 +349,28 @@ $(document).ready(function () {
 			}
 	 	});          
 	});
+
+	$(".clear-selected-classes").click(function(e) {
+	  selected_ids = [];
+      remove_selected_ids = [];
+      selected_ids = $("#selected_ids").val().split(" ");
+      
+      var selectedOpts = $('#already_assigned_id option:selected').clone();
+      selectedOpts.each(function(i){
+      	$('.right-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+      	
+		remove_selected_ids.push(this.value);
+        selected_ids.removeByValue(this.value)
+      });
+
+      $.each( remove_selected_ids, function( key, value ) {
+      	$('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+  	  });	
+      $("#selected_ids").val(selected_ids.join(" "));
+      $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+	  $('.right-listbox.disable-add').unbind('click', false);
+	});	
 
     $('.remove').click(function(e) {
       selected_ids = [];

@@ -521,7 +521,6 @@ class UsersController < ApplicationController
         end  
       end
     else
-      #binding.pry
       flash.now[:error] = "Please enter new password."
       redirect_to reset_password_path
     end

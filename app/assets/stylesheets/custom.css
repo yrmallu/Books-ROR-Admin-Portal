@@ -183,4 +183,6 @@ hr.school-heading-hr{margin-top: 21px;}
 .signinpanel .form-control{margin-top: 0 !important;}
 .reset-text{text-align: center;}
 
-.dropdown-quick-edit-stud{background: lightgrey; padding: 7px;cursor: pointer;}
+.dropdown-quick-edit-stud{background: #eee; padding: 7px; cursor: pointer; border: solid 1px #ccc; border-radius: 4px; position:relative;}
+.datepicker-align{position: absolute; top: -1px; right: 1px; height: 37px; width: 36px !important; border-left: solid 1px #ccc !important; padding-top: 10px !important; padding-left: 12px !important;}
+.input-group-addon:hover{cursor: pointer;	}
