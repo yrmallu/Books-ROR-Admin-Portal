@@ -75,42 +75,52 @@
 	              </div> -->
 				  <%= hidden_field_tag 'selected_ids', @assigned_teachers.map{|c| c.id }  %>
 	  		        <div class="row">
-	                      <div class="col-sm-9">
-	                          <div class="form-group">
-	                              <%= label_tag "teachers", "Teachers", :class=>"control-label form-lable-multiselect" %>
-								  <div class="listbox-alig left-listbox" id="assigned_div">
-									  <%= select_tag :already_assigned_id, options_for_select(@school_specific_teachers.collect {|m| [ m.get_full_name, m.id ] }),{:size=>"8", :multiple=>"multiple"}%>
-								  </div>
-	                              <div class="assign_arrows">
-	                                  <a href="#Remove" class="remove btn disable-remove"> > </a><br />
-	                                  <a href="#Add" class="add btn disable-add"> < </a>
-	                              </div>
-	                              <div class="listbox-alig right-listbox" id="all_div">
-	                              	  <%= select_tag :all_present_id, options_for_select(@school_specific_teachers.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
-							      </div>
-	                          </div>
-	                      </div>
+	                <div class="col-sm-9">
+	                  <div class="form-group">
+	                    <%#= label_tag "teachers", "Teachers", :class=>"control-label form-lable-multiselect" %>
+								      <div class="listbox-alig left-listbox" id="assigned_div">
+                        <span class="multi-select-heading"> Assigned Teachers: </span>
+								        <%= select_tag :already_assigned_id, options_for_select(@school_specific_teachers.collect {|m| [ m.get_full_name, m.id ] }),{:size=>"8", :multiple=>"multiple"}%>
+                        <a href=javascript:void(0) class="clear-selected-classes btn btn-success btn-xs multiselect-btns" disabled="disabled">Clear all</a>
+								      </div>
+	                    <div class="assign_arrows">
+	                      <a href="#Remove" class="remove btn disable-remove"> > </a><br />
+	                      <a href="#Add" class="add btn disable-add"> < </a>
+	                    </div>
+	                    <div class="listbox-alig right-listbox" id="all_div">
+                        <span class="multi-select-heading">Teachers: </span>
+                        <%= select_tag :all_present_id, options_for_select(@school_specific_teachers.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+                        <a href=javascript:void(0) class="add-all-classes btn btn-success btn-xs multiselect-btns"  disabled="disabled">Add all</a>
+							        </div>
+	                  </div>
+	                </div>
 	  		        </div>
+                <br><br><br><br>
   				  <%= hidden_field_tag 'student_selected_ids', @assigned_students.map{|c| c.id }  %>
-  	  		        <div class="row">
-  	                      <div class="col-sm-9">
-  	                          <div class="form-group">
-								  <%= label_tag "studnts", "Students", :class=>"control-label form-lable-multiselect" %>
-  	                              <div class="listbox-alig left-stud-listbox" id="student_assigned_div">
-  	                                  <%= select_tag :student_assigned_id, options_for_select(@school_specific_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
-								  </div>
-  	                              <div class="assign_arrows">
-  	                                  <a href="#Remove" class="remove_stud btn stud-disable-remove"> > </a><br />
-  	                                  <a href="#Add" class="add_stud btn stud-disable-add"> < </a>
-  	                              </div>
-  	                              <div class="listbox-alig right-stud-listbox" id="all_student_div">
-  	                              	  <%= select_tag :all_student_id, options_for_select(@school_specific_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
-  	                              </div>
-  	                          </div>
+  	  		      <div class="row">
+  	                <div class="col-sm-9">
+  	                    <div class="form-group">
+								          <%#= label_tag "studnts", "Students", :class=>"control-label form-lable-multiselect" %>
+  	                      <div class="listbox-alig left-stud-listbox" id="student_assigned_div">
+  	                        <span class="multi-select-heading"> Assigned Students: </span>
+                            <%= select_tag :student_assigned_id, options_for_select(@school_specific_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+                            <a href=javascript:void(0) class="clear-selected-classes-stud btn btn-success btn-xs multiselect-btns"  disabled="disabled">Clear all</a>
+								          </div>
+  	                      <div class="assign_arrows">
+  	                        <a href="#Remove" class="remove_stud btn stud-disable-remove"> > </a><br />
+  	                        <a href="#Add" class="add_stud btn stud-disable-add"> < </a>
   	                      </div>
-  	  		        </div>
-			</div>  
-	        <div class="panel-footer" data-no-turbolink>
+  	                      <div class="listbox-alig right-stud-listbox" id="all_student_div">
+                            <span class="multi-select-heading">Students: </span>
+                            <%= select_tag :all_student_id, options_for_select(@school_specific_students.collect {|m| [  m.get_full_name , m.id] }),{:size=>"8", :multiple=>"multiple"}%>
+                            <a href=javascript:void(0) class="add-all-classes-stud btn btn-success btn-xs multiselect-btns"  disabled="disabled">Add all</a>
+  	                      </div>
+  	                    </div>
+  	                  </div>
+  	  		          </div>
+			          </div>  
+	      
+        <div class="panel-footer" data-no-turbolink>
 				<% if action_name.eql?('new') || action_name.eql?('create') %>
 	        <%= f.submit "Save", class: "btn btn-primary btn-sm btn-xs save-btns", data: { disable_with: 'Saving...' } %>
 					<%= link_to 'Cancel', classrooms_path(:school_id=>@school.id), class: "btn btn-white btn-xs"%>
@@ -141,9 +151,77 @@ $(function () {
   $('select#all_student_id').listbox({'searchbar': true});
 });
 
+  function enable_disable_clear_btn()
+  { 
+    var selected_teacher = $("#already_assigned_id option:not(.hide)");
+    var count_selected_teacher = 0;
+    selected_teacher.each(function(i){
+      count_selected_teacher++;
+    });
+    if(count_selected_teacher > 0)
+    { 
+      $(".clear-selected-classes").removeAttr('disabled');
+    }
+    else if(count_selected_teacher <= 0)
+    {
+      $(".clear-selected-classes").attr('disabled', 'true'); 
+    }
+  }
+
+  function enable_disable_add_btn()
+  {
+    var all_teacher = $("#all_present_id option:not(.hide)");
+    var count_all_teacher = 0;
+    all_teacher.each(function(i){
+      count_all_teacher++;
+    });
+    if(count_all_teacher > 0)
+    { 
+      $(".add-all-classes").removeAttr('disabled');
+    }
+    else if(count_all_teacher <= 0)
+    {
+      $(".add-all-classes").attr('disabled', 'true'); 
+    }
+  }
+
+  function enable_disable_clear_btn_stud()
+  {
+    var selected_student = $("#student_assigned_id option:not(.hide)");
+    var count_selected_student = 0;
+    selected_student.each(function(i){
+      count_selected_student++;
+    });
+    if(count_selected_student > 0)
+    { 
+      $(".clear-selected-classes-stud").removeAttr('disabled');
+    }
+    else if(count_selected_student <= 0)
+    {
+      $(".clear-selected-classes-stud").attr('disabled', 'true'); 
+    }
+  }
+
+  function enable_disable_add_btn_stud()
+  {
+    var all_student = $("#all_student_id option:not(.hide)");
+    var count_all_student = 0;
+    all_student.each(function(i){
+      count_all_student++;
+    });
+    if(count_all_student > 0)
+    { 
+      $(".add-all-classes-stud").removeAttr('disabled');
+    }
+    else if(count_all_student <= 0)
+    {
+      $(".add-all-classes-stud").attr('disabled', 'true'); 
+    }
+  }
+
 $(document).ready(function() {
 
-  	// Teachers and School Admins
+  // Teachers and School Admins
   var class_specific_teachers = [];
   var school_user_specific_classrooms = [];
   var school_specific_teachers = [];
@@ -222,6 +300,45 @@ $(document).ready(function() {
      	});          
 	});
 
+
+  $(".clear-selected-classes").click(function(e) {
+    var selectedOpts =  $("#already_assigned_id option:not(.hide)");
+      selectedOpts.each(function(i){
+        $('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('hide').addClass('show');
+        $("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+        $("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        $('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
+      });
+      
+      $("#selected_ids").val("");
+      $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+      $('.right-listbox.disable-add').unbind('click', false);
+      enable_disable_clear_btn();
+      enable_disable_add_btn();
+      enable_disable_remove_arrow();
+      enable_disable_add_arrow();
+  }); 
+
+  $(".add-all-classes").click(function(e) {
+    selected_ids = [];
+    var selectedOpts =  $("#all_present_id option:not(.hide)");
+      selectedOpts.each(function(i){
+        $('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('hide').addClass('show');
+        $("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+        $("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        $('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
+        selected_ids.push(this.value);
+      });
+      
+      $("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
+      $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+      $('.right-listbox.disable-add').unbind('click', false);
+      enable_disable_clear_btn();
+      enable_disable_add_btn();
+      enable_disable_remove_arrow();
+      enable_disable_add_arrow();
+  }); 
+
   $('.remove').click(function(e) {
     selected_ids = [];
     remove_selected_ids = [];
@@ -229,38 +346,62 @@ $(document).ready(function() {
       
     var selectedOpts = $('#already_assigned_id option:selected').clone();
     selectedOpts.each(function(i){
-      $('.right-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      $('.right-listbox .lbjs-item[user_id='+this.value+']').attr('selected',true).removeClass('hide').addClass('show');
       $("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
-      	
-	  remove_selected_ids.push(this.value);
-      selected_ids.removeByValue(this.value)
+      $("#all_present_id option[value='"+this.value+"']").attr('selected',true).removeClass('hide').addClass('show');
+      remove_selected_ids.push(this.value);
+      selected_ids.removeByValue(this.value);
     });
 
     $.each( remove_selected_ids, function( key, value ) {
-      $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
-  	});	
+        $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+      }); 
     $("#selected_ids").val(selected_ids.join(" "));
     $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
-	$('.right-listbox.disable-add').unbind('click', false);
+    $('.right-listbox.disable-add').unbind('click', false);
+    if($("#already_assigned_id option:selected").length > 0)
+    {
+      $('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+      $('.right-listbox.disable-add').unbind('click', false);
+    }   
+    enable_disable_clear_btn();
+    enable_disable_add_btn();
+    enable_disable_remove_arrow();
+    enable_disable_add_arrow(); 
   });
 
   $('.add').on('click', function(){
-    selected_ids = [];
-    var selectedOpts = $('#all_present_id option:selected').clone();
-    selectedOpts.each(function(i){
-      $('.left-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
-      $("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
-      selected_ids.push(this.value);
-    });
-    $.each( selected_ids, function( key, value ) {
-      $('.right-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
-	});
-	$("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
+      selected_ids = [];
+      var selectedOpts = $('#all_present_id option:selected').clone();
+      selectedOpts.each(function(i){
+        $('.left-listbox .lbjs-item[user_id='+this.value+']').attr('selected',true).removeClass('hide').addClass('show');
+        $("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        $("#already_assigned_id option[value='"+this.value+"']").attr('selected',true).removeClass('hide').addClass('show');
+        selected_ids.push(this.value);
+      });
+      $.each( selected_ids, function( key, value ) {
+        $('.right-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+      });
+    $("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
     $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
-	$('.right-listbox.disable-add').unbind('click', false);
-	});
+    $('.right-listbox.disable-add').unbind('click', false);
+    if($("#all_present_id option:selected").length > 0)
+    {
+      $('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+      $('.left-listbox.disable-remove').unbind('click', false);
+    }
+    enable_disable_clear_btn();
+    enable_disable_add_btn();
+    enable_disable_remove_arrow();
+    enable_disable_add_arrow();
+  });
   
+    enable_disable_add_btn();
+    enable_disable_clear_btn();
+    enable_disable_remove_arrow();
+    enable_disable_add_arrow();
 
+  
   	// Students
   	var class_specific_students = [];
   	var school_student_specific_classrooms = [];
@@ -302,7 +443,46 @@ $(document).ready(function() {
        $('.right-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").addClass('hide');
       });
   	}
-  	
+
+    $(".clear-selected-classes-stud").click(function(e) {
+      var selectedOpts =  $("#student_assigned_id option:not(.hide)");
+      selectedOpts.each(function(i){
+        $('.right-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('hide').addClass('show');
+        $("#all_student_id option[value='"+this.value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+        $("#student_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        $('.left-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
+      });
+      
+      $("#student_selected_ids").val("");
+      $('.stud-disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+      $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+      enable_disable_clear_btn_stud();
+      enable_disable_add_btn_stud();
+      enable_disable_remove_arrow_stud();
+      enable_disable_add_arrow_stud();
+  }); 
+
+  $(".add-all-classes-stud").click(function(e) {
+    student_selected_ids = [];
+    var selectedOpts =  $("#all_student_id option:not(.hide)");
+      selectedOpts.each(function(i){
+        $('.left-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('hide').addClass('show');
+        $("#student_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+        $("#all_student_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        $('.right-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
+        student_selected_ids.push(this.value);
+      });
+      
+      $("#student_selected_ids").val($.merge($("#student_selected_ids").val().split(" "), student_selected_ids).join(" "));
+      $('.stud-disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+      $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+
+      enable_disable_clear_btn_stud();
+      enable_disable_add_btn_stud();
+      enable_disable_remove_arrow_stud();
+      enable_disable_add_arrow_stud();
+  }); 
+
   	$('.remove_stud').click(function(e) {
       student_selected_ids = [];
       remove_selected_ids = [];
@@ -310,10 +490,10 @@ $(document).ready(function() {
       
       var selectedOpts = $('#student_assigned_id option:selected').clone();
       selectedOpts.each(function(i){
-      	$('.right-stud-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$('.right-stud-listbox .lbjs-item[user_id='+this.value+']').attr('selected',true).removeClass('hide').addClass('show');
       	$("#student_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
-      	
-		remove_selected_ids.push(this.value);
+        $("#all_student_id option[value='"+this.value+"']").attr('selected',true).removeClass('hide').addClass('show');
+		    remove_selected_ids.push(this.value);
         student_selected_ids.removeByValue(this.value)
       });
 
@@ -322,36 +502,63 @@ $(document).ready(function() {
   	  });	
       $("#student_selected_ids").val(student_selected_ids.join(" "));
       $('.stud-disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
-	  $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+	    $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+      if($("#already_assigned_id option:selected").length > 0)
+      {
+        $('.stud-disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+        $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+      } 
+      enable_disable_clear_btn_stud();
+      enable_disable_add_btn_stud();
+      enable_disable_remove_arrow_stud();
+      enable_disable_add_arrow_stud();
 	});
+
 
     $('.add_stud').on('click', function(){
       student_selected_ids = [];
       var selectedOpts = $('#all_student_id option:selected').clone();
       selectedOpts.each(function(i){
-      	$('.left-stud-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$('.left-stud-listbox .lbjs-item[user_id='+this.value+']').attr('selected',true).removeClass('hide').addClass('show');
       	$("#all_student_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+        $("#student_assigned_id option[value='"+this.value+"']").attr('selected',true).removeClass('hide').addClass('show');
         student_selected_ids.push(this.value);
       });
       $.each( student_selected_ids, function( key, value ) {
       	$('.right-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
-	  });
-	  //$("#selected_ids").val(selected_ids.join(" "));
-      $("#student_selected_ids").val($.merge($("#student_selected_ids").val().split(" "), student_selected_ids).join(" "));
+	    });
+	    $("#student_selected_ids").val($.merge($("#student_selected_ids").val().split(" "), student_selected_ids).join(" "));
 
       $('.stud-disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
-	  $('.right-stud-listbox.stud-disable-add').unbind('click', false);
-	});
+	    $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+      if($("#all_present_id option:selected").length > 0)
+      {
+        $('.stud-disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+        $('.left-stud-listbox.stud-disable-remove').unbind('click', false);
+      }
+      enable_disable_clear_btn_stud();
+      enable_disable_add_btn_stud();
+      enable_disable_remove_arrow_stud();
+      enable_disable_add_arrow_stud();
+	  });
+
     
-  Array.prototype.removeByValue = function(val) {
+    enable_disable_add_btn_stud();
+    enable_disable_clear_btn_stud();
+    enable_disable_remove_arrow_stud();
+    enable_disable_add_arrow_stud();
+    
+  
+});
+
+Array.prototype.removeByValue = function(val) {
     for(var i=0; i<this.length; i++) {
         if(this[i] == val) {
             this.splice(i, 1);
             break;
-        	}
-    	}
-	}
-});
+          }
+      }
+  }
 
 // Disable arrows by default, enable when clicked on left or right lists
 $(document).ready(function(){
@@ -367,60 +574,81 @@ $('.stud-disable-remove').bind('click', false);
 
 // Teachers and School Admins
 $('.left-listbox').on('click','.lbjs-item',function(){
-	if ($('#already_assigned_id option:selected').length > 0) 
-	{
-		$('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
-		$('.left-listbox.disable-remove').unbind('click', false);
-	}
-	else
-	{	
-		$('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
-		$('.left-listbox.disable-remove').unbind('click', true);
-	}
+  enable_disable_remove_arrow();
 });
 
 $('.right-listbox').on('click','.lbjs-item',function(){
-	if ($('#all_present_id option:selected').length > 0) 
-	{
-		$('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
-		$('.right-listbox.disable-add').unbind('click', false);
-	}
-	else
-	{
-		$('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
-		$('.right-listbox.disable-add').unbind('click', true);
-	}
+  enable_disable_add_arrow();
 });
+
 
 // Students
 $('.left-stud-listbox').on('click','.lbjs-item',function(){
-	if ($('#student_assigned_id option:selected').length > 0) 
-	{
-		$('.stud-disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
-		$('.left-stud-listbox.stud-disable-remove').unbind('click', false);
-	}
-	else
-	{	
-		$('.stud-disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
-		$('.left-stud-listbox.stud-disable-remove').unbind('click', true);
-	}
+	enable_disable_remove_arrow_stud();
 });
 
 $('.right-stud-listbox').on('click','.lbjs-item',function(){
-	if ($('#all_student_id option:selected').length > 0) 
-	{
-		$('.stud-disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
-		$('.right-stud-listbox.stud-disable-add').unbind('click', false);
-	}
-	else
-	{
-		$('.stud-disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
-		$('.right-stud-listbox.stud-disable-add').unbind('click', true);
-	}
+	enable_disable_add_arrow_stud();
 });
+
 
 });
 
+function enable_disable_remove_arrow()
+{
+  if ($('#already_assigned_id option:selected').length > 0) 
+  {
+    $('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+    $('.left-listbox.disable-remove').unbind('click', false);
+  }
+  else
+  { 
+    $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+    $('.left-listbox.disable-remove').unbind('click', true);
+  }
+}
+
+function enable_disable_add_arrow()
+{
+  if ($('#all_present_id option:selected').length > 0) 
+  {
+    $('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+    $('.right-listbox.disable-add').unbind('click', false);
+  }
+  else
+  {
+    $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+    $('.right-listbox.disable-add').unbind('click', true);
+  }
+}
+
+function enable_disable_remove_arrow_stud()
+{
+  if ($('#student_assigned_id option:selected').length > 0) 
+  {
+    $('.stud-disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+    $('.left-stud-listbox.stud-disable-remove').unbind('click', false);
+  }
+  else
+  { 
+    $('.stud-disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
+    $('.left-stud-listbox.stud-disable-remove').unbind('click', true);
+  }
+}
+
+function enable_disable_add_arrow_stud()
+{
+  if ($('#all_student_id option:selected').length > 0) 
+  {
+    $('.stud-disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+    $('.right-stud-listbox.stud-disable-add').unbind('click', false);
+  }
+  else
+  {
+    $('.stud-disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+    $('.right-stud-listbox.stud-disable-add').unbind('click', true);
+  }
+}
 
 </script>
 

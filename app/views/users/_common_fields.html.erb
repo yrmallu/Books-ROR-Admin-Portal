@@ -187,19 +187,20 @@
 		        <div class="row">
                     <div class="col-sm-9">
                         <div class="form-group margin-t-10">
-							<%= label_tag 'classrooms', "Classes", :class=>"control-label form-lable-multiselect"%>
+							<%#= label_tag 'classrooms', "Classes", :class=>"control-label form-lable-multiselect"%>
 							<div class="listbox-alig left-listbox" id="assigned_div">
-                                <!-- <span>Assigned Classrooms: </span> -->
+                                <span class="multi-select-heading"> Assigned Classes: </span>
 								<%= select_tag "already_assigned_id", options_from_collection_for_select(@school_specific_classrooms, "id", "name"), :class=>"classroom-info-hover", :size=>"8", :multiple=>"multiple" %>
-                           <!--  <a href=javascript:void(0) class="clear-selected-classes">Clear all</a> -->
+                            	<a href=javascript:void(0) class="clear-selected-classes btn btn-success btn-xs multiselect-btns" disabled="disabled">Clear all</a>
                             </div>
                             <div class="assign_arrows">
                                 <a href="#Remove" class="remove btn disable-remove"> > </a><br />
                                 <a href="#Add" class="add btn disable-add"> < </a>
                             </div>
 							<div class="listbox-alig right-listbox" id="all_div">
-                                <!-- <span>All Classrooms: </span> -->
+                                <span class="multi-select-heading">Classes: </span>
 								<%= select_tag "all_present_id", options_from_collection_for_select(@school_specific_classrooms, "id", "name"), :class=>"", :size=>"8", :multiple=>"multiple" %>
+								<a href=javascript:void(0) class="add-all-classes btn btn-success btn-xs multiselect-btns" disabled="disabled">Add all</a>	
                             </div>
                         </div>
                     </div>
@@ -229,7 +230,6 @@ $.valHooks.textarea = {
         return elem.value.replace(/\r?\n/g, "<br/>");
     }
 };
-
 
 $(".dropdown-quick-edit-stud").click(function(e) {
     e.preventDefault();
@@ -269,8 +269,42 @@ $(document).ready(function () {
       $('select#already_assigned_id').listbox({'searchbar': true});
       $('select#all_present_id').listbox({'searchbar': true});
     });
-  $(document).ready(function() {
 
+	function enable_disable_clear_btn()
+	{ 
+		var selected_class = $("#already_assigned_id option:not(.hide)");
+		var count_selected_class = 0;
+		selected_class.each(function(i){
+			count_selected_class++;
+		});
+		if(count_selected_class > 0)
+		{	
+			$(".clear-selected-classes").removeAttr('disabled');
+		}
+		else if(count_selected_class <= 0)
+		{
+			$(".clear-selected-classes").attr('disabled', 'true'); 
+		}
+	}
+
+	function enable_disable_add_btn()
+	{
+		var all_class = $("#all_present_id option:not(.hide)");
+		var count_all_class = 0;
+		all_class.each(function(i){
+			count_all_class++;
+		});
+		if(count_all_class > 0)
+		{	
+			$(".add-all-classes").removeAttr('disabled');
+		}
+		else if(count_all_class <= 0)
+		{
+			$(".add-all-classes").attr('disabled', 'true'); 
+		}
+	}
+
+  $(document).ready(function() {
   	var user_specific_classrooms = [];
   	var school_user_specific_classrooms = [];
   	var school_specific_classrooms = [];
@@ -279,8 +313,6 @@ $(document).ready(function () {
   	user_specific_classrooms = <%=@user_specific_classrooms%>
   	school_specific_classrooms = <%=@school_classrooms%>
   	
-  	
-  	//alert(jQuery.isArray(user_specific_classrooms));
   	if(school_user_specific_classrooms.length >0)
   	{
   	  $.each( school_user_specific_classrooms, function( key, value ) {
@@ -351,25 +383,41 @@ $(document).ready(function () {
 	});
 
 	$(".clear-selected-classes").click(function(e) {
-	  selected_ids = [];
-      remove_selected_ids = [];
-      selected_ids = $("#selected_ids").val().split(" ");
-      
-      var selectedOpts = $('#already_assigned_id option:selected').clone();
+	  var selectedOpts =  $("#already_assigned_id option:not(.hide)");
       selectedOpts.each(function(i){
-      	$('.right-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('hide').addClass('show');
+      	$("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('hide').addClass('show');
       	$("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
-      	
-		remove_selected_ids.push(this.value);
-        selected_ids.removeByValue(this.value)
+      	$('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
       });
-
-      $.each( remove_selected_ids, function( key, value ) {
-      	$('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
-  	  });	
-      $("#selected_ids").val(selected_ids.join(" "));
+      
+      $("#selected_ids").val("");
       $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
 	  $('.right-listbox.disable-add').unbind('click', false);
+	  enable_disable_clear_btn();
+  	  enable_disable_add_btn();
+  	  enable_disable_remove_arrow();
+  	  enable_disable_add_arrow();
+	});	
+
+	$(".add-all-classes").click(function(e) {
+	  selected_ids = [];
+	  var selectedOpts =  $("#all_present_id option:not(.hide)");
+      selectedOpts.each(function(i){
+      	$('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('hide').addClass('show');
+      	$("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('hide').addClass('show');
+      	$("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+      	$('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
+        selected_ids.push(this.value);
+      });
+      
+      $("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
+      $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
+	  $('.right-listbox.disable-add').unbind('click', false);
+	  enable_disable_clear_btn();
+  	  enable_disable_add_btn();
+  	  enable_disable_remove_arrow();
+  	  enable_disable_add_arrow();
 	});	
 
     $('.remove').click(function(e) {
@@ -382,27 +430,37 @@ $(document).ready(function () {
 
       var selectedOpts = $('#already_assigned_id option:selected').clone();
       selectedOpts.each(function(i){
-      	$('.right-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$('.right-listbox .lbjs-item[user_id='+this.value+']').attr('selected',true).removeClass('hide').addClass('show');
       	$("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
-      	
+      	$("#all_present_id option[value='"+this.value+"']").attr('selected',true).removeClass('hide').addClass('show');
 		remove_selected_ids.push(this.value);
-        selected_ids.removeByValue(this.value)
+        selected_ids.removeByValue(this.value);
       });
 
       $.each( remove_selected_ids, function( key, value ) {
       	$('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
-  	  });	
+      });	
       $("#selected_ids").val(selected_ids.join(" "));
       $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
 	  $('.right-listbox.disable-add').unbind('click', false);
+	  if($("#already_assigned_id option:selected").length > 0)
+	  {
+	  	$('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
+	  	$('.right-listbox.disable-add').unbind('click', false);
+	  } 	
+	  enable_disable_clear_btn();
+  	  enable_disable_add_btn();
+  	  enable_disable_remove_arrow();
+  	  enable_disable_add_arrow(); 
 	});
 
     $('.add').on('click', function(){
       selected_ids = [];
       var selectedOpts = $('#all_present_id option:selected').clone();
       selectedOpts.each(function(i){
-      	$('.left-listbox .lbjs-item[user_id='+this.value+']').removeClass('hide').addClass('show');
+      	$('.left-listbox .lbjs-item[user_id='+this.value+']').attr('selected',true).removeClass('hide').addClass('show');
       	$("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
+      	$("#already_assigned_id option[value='"+this.value+"']").attr('selected',true).removeClass('hide').addClass('show');
         selected_ids.push(this.value);
       });
       $.each( selected_ids, function( key, value ) {
@@ -416,7 +474,22 @@ $(document).ready(function () {
 
       $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
 	  $('.right-listbox.disable-add').unbind('click', false);
+	  if($("#all_present_id option:selected").length > 0)
+	  {
+	  	$('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
+	  	$('.left-listbox.disable-remove').unbind('click', false);
+	  }
+	  enable_disable_clear_btn();
+  	  enable_disable_add_btn();
+  	  enable_disable_remove_arrow();
+  	  enable_disable_add_arrow();
 	});
+  	
+  	enable_disable_add_btn();
+  	enable_disable_clear_btn();
+  	enable_disable_remove_arrow();
+  	enable_disable_add_arrow();
+  	
   });
 
   Array.prototype.removeByValue = function(val) {
@@ -429,13 +502,22 @@ $(document).ready(function () {
 }
 
 // Disable arrows by default, enable when clicked on left or right lists
-$(document).ready(function(){
+//$(document).ready(function(){
 $('.disable-add').bind('click', false);
 $('.disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
 $('.disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
 $('.disable-remove').bind('click', false);
 
 $('.left-listbox').on('click','.lbjs-item',function(){
+	enable_disable_remove_arrow();
+});
+
+$('.right-listbox').on('click','.lbjs-item',function(){
+	enable_disable_add_arrow();
+});
+
+function enable_disable_remove_arrow()
+{
 	if ($('#already_assigned_id option:selected').length > 0) 
 	{
 		$('.disable-remove').removeClass("diasble-arrors").addClass("enable-arrors");
@@ -446,9 +528,10 @@ $('.left-listbox').on('click','.lbjs-item',function(){
 		$('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
 		$('.left-listbox.disable-remove').unbind('click', true);
 	}
-});
+}
 
-$('.right-listbox').on('click','.lbjs-item',function(){
+function enable_disable_add_arrow()
+{
 	if ($('#all_present_id option:selected').length > 0) 
 	{
 		$('.disable-add').removeClass("diasble-arrors").addClass("enable-arrors");
@@ -459,9 +542,18 @@ $('.right-listbox').on('click','.lbjs-item',function(){
 		$('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
 		$('.right-listbox.disable-add').unbind('click', true);
 	}
-});
+}
 
-});
+// $('body').on('click', function(e) {
+// 	console.log('body clicked...')
+//   if ($('.left-listbox').hasClass('.classroom-info-hover')) {
+//   	alert('ahe class...');
+//     // if (!$(e.target).parent().hasClass('left-listbox')) {
+//     // 	alert('aaaaa');
+//     // }
+//   }
+// });
+//});
 </script>
 
 

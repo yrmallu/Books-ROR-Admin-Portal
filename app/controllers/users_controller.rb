@@ -179,7 +179,7 @@ class UsersController < ApplicationController
       get_all_reading_grades
       @assigned_classrooms = []
       get_school_related_licenses
-      @school_specific_classrooms = @school.classrooms.un_archived unless @school.blank? 
+      @school_specific_classrooms = @school.classrooms.un_archived.order( 'name ASC' ) unless @school.blank? 
       @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
 
 	    render :action=> 'new'
@@ -288,7 +288,7 @@ class UsersController < ApplicationController
       get_all_reading_grades
       get_school_related_licenses
       @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-      @school_specific_classrooms = @school.classrooms.un_archived unless @school.blank? 
+      @school_specific_classrooms = @school.classrooms.un_archived.order( 'name ASC' ) unless @school.blank? 
       @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
       
       render :action=> 'edit'
@@ -397,7 +397,7 @@ class UsersController < ApplicationController
       @school_user_specific_classrooms = (@school.classrooms.un_archived - @user.classrooms).map(&:id) unless params[:school_id].blank? 
       @user_specific_classrooms = @user.classrooms.map(&:id) unless @user.classrooms.blank?
     end
-      @school_specific_classrooms = @school.classrooms.un_archived unless params[:school_id].blank? 
+      @school_specific_classrooms = @school.classrooms.un_archived.order( 'name ASC' ) unless params[:school_id].blank? 
       @school_classrooms = @school_specific_classrooms.map(&:id) unless params[:school_id].blank? 
   end
   

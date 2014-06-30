@@ -35,6 +35,14 @@
     background: rgba(112, 147, 216, 0.9);
 }
 
+.lbjs .lbjs-list .lbjs-item:active:not([disabled]) {
+    opacity: 0.4;
+}
+
+.lbjs .lbjs-list .lbjs-item:hover:not([disabled]) {
+    background: rgba(112, 147, 216, 0.9);
+}
+
 .lbjs .lbjs-list .lbjs-item[selected] {
     background: rgba(112, 147, 216, 0.5);
 }

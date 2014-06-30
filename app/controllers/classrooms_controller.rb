@@ -135,19 +135,19 @@ class ClassroomsController < ApplicationController
   end
 
   def get_school_specific_teachers
-    @school.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role)
+    @school.users.un_archived.order( 'first_name ASC' ).includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role)
   end
 
   def get_school_specific_students
-    @school.users.un_archived.includes(:role).where("name='Student'").references(:role)
+    @school.users.un_archived.order( 'first_name ASC' ).includes(:role).where("name='Student'").references(:role)
   end  
 
   def get_classroom_specific_teachers
-    @classroom.users.un_archived.includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role)
+    @classroom.users.un_archived.order( 'first_name ASC' ).includes(:role).where(" (name='School Admin' OR name='Teacher') ").references(:role)
   end  
 
   def get_classroom_specific_students
-    @classroom.users.un_archived.includes(:role).where(" (name='Student') ").references(:role)
+    @classroom.users.un_archived.order( 'first_name ASC' ).includes(:role).where(" (name='Student') ").references(:role)
   end  
 
   def quick_edit_classroom
