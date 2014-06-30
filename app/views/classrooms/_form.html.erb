@@ -31,22 +31,28 @@
 	               </div>
 	               <% if action_name.eql?("edit")%> 
 				   <div class="row">
-						<div class="col-sm-3">
+						<!-- <div class="col-sm-3">
 	                        <div class="form-group">
-	                    	    <%= label_tag "teachers_count", "Number Of School Admins", :class=>"control-label" %> : 
-								<%= @classroom.users.un_archived.school_admins.count %>
+	                    	    <%#= label_tag "teachers_count", "Number Of School Admins", :class=>"control-label" %> : 
+								            <%#= @classroom.users.un_archived.school_admins.count %>
 	                        </div>
-	                    </div>
+	                    </div> -->
 						<div class="col-sm-3">
 	                        <div class="form-group">
 	                    	    <%= label_tag "teachers_count", "Number Of Teachers", :class=>"control-label" %> : 
-								<%= @classroom.users.un_archived.teachers.count %>
-	                        </div>
+								            <%= hidden_field_tag "teachers_count",  @classroom.users.un_archived.teachers.count + @classroom.users.un_archived.school_admins.count%>
+                            <div id="old_teachers_count">
+                              <%= @classroom.users.un_archived.teachers.count + @classroom.users.un_archived.school_admins.count %>
+                            </div>
+                          </div>
 	                    </div>
 						<div class="col-sm-6">
 	                        <div class="form-group">
-			     		        <%= label_tag "students_count", "Number Of Students", :class=>"control-label" %> :
-								<%= @classroom.users.un_archived.students.count %>
+			     		            <%= label_tag "students_count", "Number Of Students", :class=>"control-label" %> :
+                          <%= hidden_field_tag "students_count", @classroom.users.un_archived.students.count %>
+                          <div id="old_students_count">
+								            <%= @classroom.users.un_archived.students.count %>
+                          </div>
 	                        </div>
 	                    </div>
 	               </div>
@@ -317,6 +323,8 @@ $(document).ready(function() {
       enable_disable_add_btn();
       enable_disable_remove_arrow();
       enable_disable_add_arrow();
+      $('#teachers_count').val("0");
+      $("#old_teachers_count").text($("#teachers_count").val());
   }); 
 
   $(".add-all-classes").click(function(e) {
@@ -328,6 +336,7 @@ $(document).ready(function() {
         $("#all_present_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
         $('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
         selected_ids.push(this.value);
+        $('#teachers_count').val(parseInt($('#teachers_count').val()) + 1);
       });
       
       $("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
@@ -337,6 +346,7 @@ $(document).ready(function() {
       enable_disable_add_btn();
       enable_disable_remove_arrow();
       enable_disable_add_arrow();
+      $("#old_teachers_count").text($("#teachers_count").val());
   }); 
 
   $('.remove').click(function(e) {
@@ -355,6 +365,7 @@ $(document).ready(function() {
 
     $.each( remove_selected_ids, function( key, value ) {
         $('.left-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+        $('#teachers_count').val(parseInt($('#teachers_count').val()) - 1);
       }); 
     $("#selected_ids").val(selected_ids.join(" "));
     $('.disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
@@ -368,6 +379,7 @@ $(document).ready(function() {
     enable_disable_add_btn();
     enable_disable_remove_arrow();
     enable_disable_add_arrow(); 
+    $("#old_teachers_count").text($("#teachers_count").val());
   });
 
   $('.add').on('click', function(){
@@ -381,6 +393,7 @@ $(document).ready(function() {
       });
       $.each( selected_ids, function( key, value ) {
         $('.right-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+        $('#teachers_count').val(parseInt($('#teachers_count').val()) + 1);
       });
     $("#selected_ids").val($.merge($("#selected_ids").val().split(" "), selected_ids).join(" "));
     $('.disable-add').addClass("diasble-arrors").removeClass("enable-arrors");
@@ -394,12 +407,14 @@ $(document).ready(function() {
     enable_disable_add_btn();
     enable_disable_remove_arrow();
     enable_disable_add_arrow();
+    $("#old_teachers_count").text($("#teachers_count").val());
   });
   
     enable_disable_add_btn();
     enable_disable_clear_btn();
     enable_disable_remove_arrow();
     enable_disable_add_arrow();
+
 
   
   	// Students
@@ -460,6 +475,8 @@ $(document).ready(function() {
       enable_disable_add_btn_stud();
       enable_disable_remove_arrow_stud();
       enable_disable_add_arrow_stud();
+      $('#students_count').val("0");
+      $("#old_students_count").text($("#students_count").val());
   }); 
 
   $(".add-all-classes-stud").click(function(e) {
@@ -471,6 +488,7 @@ $(document).ready(function() {
         $("#all_student_id option[value='"+this.value+"']").removeAttr("selected").removeClass('show').addClass('hide');
         $('.right-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected").removeClass('show').addClass('hide');
         student_selected_ids.push(this.value);
+        $('#students_count').val(parseInt($('#students_count').val()) + 1);
       });
       
       $("#student_selected_ids").val($.merge($("#student_selected_ids").val().split(" "), student_selected_ids).join(" "));
@@ -481,6 +499,7 @@ $(document).ready(function() {
       enable_disable_add_btn_stud();
       enable_disable_remove_arrow_stud();
       enable_disable_add_arrow_stud();
+      $("#old_students_count").text($("#students_count").val());
   }); 
 
   	$('.remove_stud').click(function(e) {
@@ -499,6 +518,7 @@ $(document).ready(function() {
 
       $.each( remove_selected_ids, function( key, value ) {
       	$('.left-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+        $('#students_count').val(parseInt($('#students_count').val()) - 1);
   	  });	
       $("#student_selected_ids").val(student_selected_ids.join(" "));
       $('.stud-disable-remove').addClass("diasble-arrors").removeClass("enable-arrors");
@@ -512,6 +532,7 @@ $(document).ready(function() {
       enable_disable_add_btn_stud();
       enable_disable_remove_arrow_stud();
       enable_disable_add_arrow_stud();
+      $("#old_students_count").text($("#students_count").val());
 	});
 
 
@@ -526,6 +547,7 @@ $(document).ready(function() {
       });
       $.each( student_selected_ids, function( key, value ) {
       	$('.right-stud-listbox .lbjs-item[user_id='+value+']').removeAttr("selected").removeClass('show').addClass('hide');
+        $('#students_count').val(parseInt($('#students_count').val()) + 1);
 	    });
 	    $("#student_selected_ids").val($.merge($("#student_selected_ids").val().split(" "), student_selected_ids).join(" "));
 
@@ -540,6 +562,7 @@ $(document).ready(function() {
       enable_disable_add_btn_stud();
       enable_disable_remove_arrow_stud();
       enable_disable_add_arrow_stud();
+      $("#old_students_count").text($("#students_count").val());
 	  });
 
     

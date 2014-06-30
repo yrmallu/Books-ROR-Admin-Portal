@@ -19,13 +19,13 @@
 			    	<strong>Name:</strong>
 			    	<%= @classroom.name %>
             	</address>
-            	<address>
+            	<!-- <address>
 			    	<strong>Number Of School Admins:</strong>
-					<%= @classroom.users.school_admins.count %>
-            	</address>
+					<%#= @classroom.users.school_admins.count %>
+            	</address> -->
             	<address>
 			    	<strong>Number Of Teachers:</strong>
-			    	<%= @classroom.users.teachers.count %>
+			    	<%= @classroom.users.teachers.count + @classroom.users.school_admins.count%>
             	</address>
             	<address>
 			    	<strong>Number Of Students:</strong>
