@@ -544,15 +544,29 @@ function enable_disable_add_arrow()
 	}
 }
 
-// $('body').on('click', function(e) {
-// 	console.log('body clicked...')
-//   if ($('.left-listbox').hasClass('.classroom-info-hover')) {
-//   	alert('ahe class...');
-//     // if (!$(e.target).parent().hasClass('left-listbox')) {
-//     // 	alert('aaaaa');
-//     // }
-//   }
-// });
+$('body').on('click', function(e) {
+    if (!$(e.target.parentElement).hasClass('lbjs-list')) {
+    	var selectedOpts = $('#all_present_id option:selected').clone();
+      	selectedOpts.each(function(i){
+      	$('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+      	$('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+      	$("#all_present_id option[value='"+this.value+"']").removeAttr("selected");
+      	$("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected");
+        enable_disable_remove_arrow();
+        enable_disable_add_arrow();
+      });
+      	var selectedOpts = $('#already_assigned_id option:selected').clone();
+      	selectedOpts.each(function(i){
+      	$('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+      	$('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+      	$("#all_present_id option[value='"+this.value+"']").removeAttr("selected");
+      	$("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected");
+        enable_disable_remove_arrow();
+        enable_disable_add_arrow();
+      });
+    }
+});
+
 //});
 </script>
 

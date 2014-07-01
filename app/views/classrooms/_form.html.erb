@@ -673,6 +673,46 @@ function enable_disable_add_arrow_stud()
   }
 }
 
+$('body').on('click', function(e) {
+    if (!$(e.target.parentElement).hasClass('lbjs-list')) {
+      var selectedOpts = $('#all_present_id option:selected').clone();
+        selectedOpts.each(function(i){
+        $('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $("#all_present_id option[value='"+this.value+"']").removeAttr("selected");
+        $("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected");
+        enable_disable_remove_arrow();
+        enable_disable_add_arrow();
+      });
+        var selectedOpts = $('#already_assigned_id option:selected').clone();
+        selectedOpts.each(function(i){
+        $('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $("#all_present_id option[value='"+this.value+"']").removeAttr("selected");
+        $("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected");
+        enable_disable_remove_arrow();
+        enable_disable_add_arrow();
+      });
+      var selectedOpts = $('#student_assigned_id option:selected').clone();
+        selectedOpts.each(function(i){
+        $('.left-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $('.right-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $("#student_assigned_id option[value='"+this.value+"']").removeAttr("selected");
+        $("#all_student_id option[value='"+this.value+"']").removeAttr("selected");
+        enable_disable_remove_arrow_stud();
+        enable_disable_add_arrow_stud();
+      });
+      var selectedOpts = $('#all_student_id option:selected').clone();
+        selectedOpts.each(function(i){
+        $('.left-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $('.right-stud-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+        $("#student_assigned_id option[value='"+this.value+"']").removeAttr("selected");
+        $("#all_student_id option[value='"+this.value+"']").removeAttr("selected");
+        enable_disable_remove_arrow_stud();
+        enable_disable_add_arrow_stud();
+      });  
+    }
+});
 </script>
 
 
