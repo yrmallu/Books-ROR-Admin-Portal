@@ -193,6 +193,7 @@ hr.school-heading-hr{margin-top: 21px;}
 .btn:active{opacity: 0.6; }
 .btn.btn-success:hover{background: #079480 !important}
 .btn.btn-primary:hover{background: #2475BB !important}
+.btn-primary{border-color: #428bca !important;}
 
 .lbjs-list .list_item_img:hover{color: #000}
-.lbjs-list .list_item_img:active{opacity: 0.6}
+.lbjs-list .list_item_img:active{color: white; opacity: 0.6}
