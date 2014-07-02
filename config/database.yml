@@ -29,7 +29,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: books_that_grow_v1_0_1
+  database: books_that_grow_migration_v1_0_2
   pool: 5
   host: localhost
   username: postgres
