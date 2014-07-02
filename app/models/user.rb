@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
- 
+
+  # establish_connection "other_#{Rails.env}"
+  
   include CommonQueries
   paginates_per 10
   max_paginates_per 10
@@ -174,6 +176,7 @@ class User < ActiveRecord::Base
   def user_details_change_email
     if !self.email.blank? && !current_user.blank?
       unless self.school_id.blank? 
+        binding.pry
         link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s 
       else
         link_url = "http://"+app_route+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s
