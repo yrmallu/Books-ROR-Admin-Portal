@@ -506,6 +506,7 @@ class UsersController < ApplicationController
       @user.password_confirmation = params[:password]
       if @user.save
         if params[:app_type].blank?
+          forgot_password_generate_coupon
           user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :url =>  "http://"+request.env['HTTP_HOST'] } 
           UserMailer.password_reset_email(user_info).deliver
         end
