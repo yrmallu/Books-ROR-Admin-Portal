@@ -280,12 +280,14 @@ class ApplicationController < ActionController::Base
         }
       }
       
-      when "schools#edit"
+      when "schools#edit-#{parameters[0]}"
+        get_particular_school(parameters[0])
         @breadcrumb = {
           :title=>"Edit School Information",
 		      :icon=>"fa fa-building-o",
           :breadcrumb=>{
             "School List"=> schools_path,
+            @school_name.name => school_path(parameters[0]),
             "Edit School Information"=> "",
         }
       }

@@ -29,6 +29,7 @@ class SchoolsController < ApplicationController
   end
 
   def edit
+    set_bread_crumb(params[:id])
   end
 
   def create

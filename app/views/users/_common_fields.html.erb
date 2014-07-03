@@ -152,7 +152,8 @@
 				        </div>
 				    </div>
 				</div>
-                 <div class="row">
+                <% end %>
+                <div class="row">
                     <div class="col-md-6">
 					   <table class="">
 			   			    <tr>
@@ -170,7 +171,7 @@
 			   		    </table>
                     </div> 
                 </div>
-				<% end %>
+				<br>
 				<% if @role_id.name.eql?('Teacher')%>
 				    <div class="row">
 					    <div class="col-sm-3">
@@ -543,6 +544,30 @@ function enable_disable_add_arrow()
 		$('.right-listbox.disable-add').unbind('click', true);
 	}
 }
+
+$('.right-listbox').on('click','.lbjs-item',function(){
+	if ($('#already_assigned_id option:selected').length > 0) 
+		{
+	  		var selectedOpts = $('#already_assigned_id option:selected').clone();
+      		selectedOpts.each(function(i){
+      		$('.left-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+      		$("#already_assigned_id option[value='"+this.value+"']").removeAttr("selected");
+        	}); 
+        }	
+    enable_disable_remove_arrow();
+});
+
+$('.left-listbox').on('click','.lbjs-item',function(){
+	if ($('#all_present_id option:selected').length > 0) 
+		{
+	  		var selectedOpts = $('#all_present_id option:selected').clone();
+      		selectedOpts.each(function(i){
+      		$('.right-listbox .lbjs-item[user_id='+this.value+']').removeAttr("selected");
+      		$("#all_present_id option[value='"+this.value+"']").removeAttr("selected");
+      		}); 
+        }	
+    enable_disable_add_arrow();
+});
 
 $('body').on('click', function(e) {
     if (!$(e.target.parentElement).hasClass('lbjs-list')) {
