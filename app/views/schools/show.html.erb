@@ -115,7 +115,9 @@
 	  				<%end%>
 	  			</address>
 			    <div data-no-turbolink>
-			        <%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary btn-xs" %>
+			    	<% if can? :update, :schools %> 
+			        	<%= link_to 'Edit', edit_school_path(@school), class: "btn btn-primary btn-xs" %>
+			        <%end%>
 			        <%#=if current_user.role.name.eql?('Web Admin')%>
 					    <%= link_to 'Return to School List', schools_path, class: "btn btn-white btn-xs"%>
 					<%#=end%>
@@ -126,4 +128,7 @@
 </div>
 <script type="text/javascript">
 	showHideMenu('li_school');
+<% unless current_user.is_web_admin?%>
+	showHideMenu('li_options');	
+<%end%>
 </script>

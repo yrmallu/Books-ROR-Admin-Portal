@@ -54,10 +54,10 @@ class Ability
         can [:destroy, :read], :schools if user_rights.include?("Delete School")
         can [:update, :read], :schools if user_rights.include?("Update School")
 		
-        can :create, :classrooms if user_rights.include?("Create Classroom")
-        can :read, :classrooms if user_rights.include?("View Classroom")
-        can [:destroy, :read], :classrooms if user_rights.include?("Delete Classroom")
-        can [:update, :read], :classrooms if user_rights.include?("Update Classroom")
+        can :create, :classrooms if user_rights.include?("Create Class")
+        can :read, :classrooms if user_rights.include?("View Class")
+        can [:destroy, :read], :classrooms if user_rights.include?("Delete Class")
+        can [:update, :read], :classrooms if user_rights.include?("Update Class")
 		
         can :create, :licenses if user_rights.include?("Create License")
         can :read, :licenses if user_rights.include?("View License")

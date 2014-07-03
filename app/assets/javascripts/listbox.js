@@ -175,7 +175,7 @@
             .attr('user_id',parentItem.val())
             .appendTo(this._list)
             .text(parentItem.text())
-			.append("        <i class='glyphicon glyphicon-eye-open list_item_img'></i>")
+			.append("            <i class='glyphicon glyphicon-eye-open list_item_img'></i>")
             .click(function () {
                 self.onItemClick($(this));
             });

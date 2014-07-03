@@ -13,7 +13,7 @@
 					    <%= render "shared/error_messages", :object=>@school %>
 					</div>
 	            <div class="row">
-	            	<% if params["action"] == "edit"%>
+	            	<% if action_name.eql?("edit") || action_name.eql?("update")%>
 	                <div class="col-sm-3">
 	                    <div class="form-group">
 	                    	<%= f.label :code, "School Code", :class=>"control-label" %></br>
@@ -74,9 +74,61 @@
  							 <%= render partial: 'subregion_select', locals: {parent_region: f.object.country} %>
 	                    </div>
 	                </div>
-	                
-	                
 	            </div>
+	            <!-- <%# if action_name.eql?("edit") || action_name.eql?("update")%>
+	            	<%# @total_school_licenses = 0%>
+					<%# @total_schooladmin_licenses = 0%>
+					<%# @total_teacher_licenses = 0%>
+					<%# @total_student_licenses = 0%>
+					<%# @total_school_used_licenses = 0%>
+					<%# @total_school_un_used_licenses = 0%>
+	            	<%# unless @school.licenses.blank? %>
+	  		   		    <table class="table" id="lic_info_table">
+							<thead>
+								<tr>
+									<td><strong>License Batch Name</strong></td>
+									<td><strong>Expiration Date</strong></td>
+									<td><strong>Licenses allocated to School Admins</strong></td>
+									<td><strong>Licenses allocated to Teachers</strong></td>
+									<td><strong>Licenses allocated to Students</strong></td>
+									<td><strong>Licenses in Use</strong></td>
+									<td><strong>Unused Licenses</strong></td>
+									<td><strong>Total No. of Licenses</strong></td>
+								</tr>
+							</thead>
+							<tbody>	
+						        <%#@school.licenses.un_archived.each do |lic|%>
+						            <tr>
+										<td><%#= lic.license_batch_name unless lic.blank?%></td>
+										<td><%#= lic.expiry_date.to_date unless lic.blank?%></td>
+										<td><%#= lic.users.un_archived.school_admins.count %></td>
+					        			<td><%#= lic.users.un_archived.teachers.count %></td>
+					        			<td><%#= lic.users.un_archived.students.count %></td>
+	  					                <td><%##= lic.used_liscenses unless lic.blank?%></td>
+										<td><%#= (lic.no_of_licenses - lic.used_liscenses) unless lic.blank?%></td>
+										<td><%#= lic.no_of_licenses unless lic.blank?%></td>
+										<%# @total_school_licenses += lic.no_of_licenses  unless lic.blank?%>
+										<%# @total_school_used_licenses += lic.used_liscenses  unless lic.blank?%>
+										<%# @total_school_un_used_licenses += (lic.no_of_licenses - lic.used_liscenses) unless lic.blank?%>
+										<%# @total_schooladmin_licenses += lic.users.un_archived.school_admins.count  unless lic.blank?%>
+										<%# @total_teacher_licenses += lic.users.un_archived.teachers.count  unless lic.blank?%>
+										<%# @total_student_licenses += lic.users.un_archived.students.count unless lic.blank?%>
+									</tr>
+								<%#end%>	
+								<tr class="total">
+										<td><strong>Total:</strong></td>
+										<td></td>
+										<td><%#= @total_schooladmin_licenses%></td>
+										<td><%#= @total_teacher_licenses%></td>
+										<td><%#= @total_student_licenses%></td>
+										<td><%#= @total_school_used_licenses%></td>
+										<td><%#= @total_school_un_used_licenses%></td>
+										<td><%##= @total_school_licenses%></td>
+									</tr>
+							</tbody>			
+	  					</table>
+	  				<%#end%>
+	  			<%# end %> -->
 	        </div>
 	        <div class="panel-footer" data-no-turbolink>
 				<% if action_name.eql?('new') || action_name.eql?('create') %>

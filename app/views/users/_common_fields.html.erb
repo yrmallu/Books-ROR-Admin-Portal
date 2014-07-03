@@ -120,6 +120,7 @@
 			    	<%end%>
 			    	<%= f.hidden_field :license_expiry_date %>
 			    <%end%>
+			    <br>
 				<% if @role_id.name.eql?('Student')%>
 				
 	        	    <%=f.fields_for :parents,@parent do |fb|%>     

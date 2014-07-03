@@ -69,9 +69,9 @@
 					      	<% if can? :read, :schools %> 
 						      <%= link_to '<i title="View School" class="glyphicon glyphicon-eye-open"></i>'.html_safe, school_path(school) %> 
 					      	<%end%>
-							<% if can? :create, :licenses %> 
-							   <%= link_to '<i title="Add License" class="btg btg-lisence"></i>'.html_safe, new_license_path(:school_id=>school)%> 
-							<%end%>
+							<%# if can? :create, :licenses %> 
+							   <%#= link_to '<i title="Add License" class="btg btg-lisence"></i>'.html_safe, new_license_path(:school_id=>school)%> 
+							<%#end%>
 							<% if (can? :read, :users) && (can? :read_sa, :users) %>
 							    <%=link_to '<i title="School Admin List" class="btg btg-admin"></i>'.html_safe, users_path(:school_id=>school, :role_id=>@school_admin.id)%> 
 							<%end%>

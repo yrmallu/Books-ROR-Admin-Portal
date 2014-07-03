@@ -21,7 +21,7 @@ input[type=checkbox] {cursor:pointer;}
 }*/
 .dynamic{width:85%;}
 
-.listbox-alig{float:left;width:170px;}
+.listbox-alig{float:left;width:200px;}
 
 .pageheader .btg { font-size: 24px; margin-right: 5px;padding: 6px 7px; border: 2px solid #1D2939; -moz-border-radius: 50px;-webkit-border-radius: 50px; border-radius: 50px; }
 .pageheader .btg-lisence:before{vertical-align: top;}
@@ -36,7 +36,7 @@ input[type=checkbox] {cursor:pointer;}
 
 .student-img {border-radius:128px; height:128px; width:128px; position:relative; overflow:hidden; box-shadow:inset 0 0 1px #a1a1a1;}
 
-.assign_arrows{float:left; vertical-align:middle; height:300px; padding:110px 30px;}
+.assign_arrows{float:left; vertical-align:middle; height:300px; padding:110px 50px;}
 .assign_arrows .btn{padding:3px 20px; background:#e0e0e0; margin-bottom:10px;}
 
 .alert_license_success{ background-color: #dff0d8;border-color: #d6e9c6;color: #3c763d;padding: 10px !important;}
@@ -188,7 +188,7 @@ hr.school-heading-hr{margin-top: 21px;}
 .input-group-addon:hover{cursor: pointer;}
 
 .multi-select-heading{display: block;font-size: 15px;padding-bottom: 10px;}
-.multiselect-btns{margin: 15px 50px -10px 50px !important;;height: 25px;}
+.multiselect-btns{margin: 15px 50px -10px 62px !important;;height: 25px;}
 
 .btn:active{opacity: 0.6; }
 .btn.btn-success:hover{background: #079480 !important}
@@ -196,4 +196,8 @@ hr.school-heading-hr{margin-top: 21px;}
 .btn-primary{border-color: #428bca !important;}
 
 .lbjs-list .list_item_img:hover{color: #000}
-.lbjs-list .list_item_img:active{color: white; opacity: 0.6}
+.lbjs-list .list_item_img:active{color: white; }
+
+.div-color-blue{background-color:#7093D8 !important;}
+.div-color-white{background-color:white !important;}
+
