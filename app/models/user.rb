@@ -75,8 +75,8 @@ class User < ActiveRecord::Base
   validates_attachment_content_type :photos, :content_type => /\Aimage\/.*\Z/
   validate :username_uniqness
   validate :email_uniqness
-  
 
+  
   ###########################################################################################
   ## Methods
   ###########################################################################################

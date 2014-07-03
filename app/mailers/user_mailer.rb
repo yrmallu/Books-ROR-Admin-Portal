@@ -9,23 +9,23 @@ class UserMailer < ActionMailer::Base
   def user_details_changed(user_info)
     @user_info = user_info
     if @user_info[:password_changed].blank?
-      mail(to: @user_info[:email], subject: 'Your Books That Grow account has been updated.')
+      mail(to: @user_info[:email], subject: 'Your Books That Grow account has been updated')
     else
-      mail(to: @user_info[:email], subject: 'Your Books That Grow password has been reset.')
+      mail(to: @user_info[:email], subject: 'Your Books That Grow password has been reset')
     end
   end
 
   def user_email_changed(user_info)
     @user_info = user_info
-    mail(to: @user_info[:email], subject: 'Books That Grow Account Email changed.')
+    mail(to: @user_info[:email], subject: 'Books That Grow Account Email changed')
   end
 
   def forgot_password_email(user_info)
     @user_info = user_info
     if @user_info[:app_type].eql?('angular')
-      mail(to: @user_info[:email], subject: "Books That Grow password reset request for #{@user_info[:username]} .")
+      mail(to: @user_info[:email], subject: "Books That Grow password reset request for #{@user_info[:username]}")
     else
-      mail(to: @user_info[:email], subject: "Books That Grow password reset request.")
+      mail(to: @user_info[:email], subject: "Books That Grow password reset request")
     end 
   end
   
@@ -42,7 +42,7 @@ class UserMailer < ActionMailer::Base
 
   def password_reset_email(user_info)
     @user_info = user_info
-    mail(to: @user_info[:email], subject: 'Your Books That Grow password has been reset.')
+    mail(to: @user_info[:email], subject: 'Your Books That Grow password has been reset')
   end
 
 end
