@@ -522,9 +522,9 @@ class UsersController < ApplicationController
         #redirect_to signin_path
         app_signin_path = "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/"
         unless params[:app_type].blank?
-          redirect_to reset_path(:path=>app_signin_path, :app_type=>params[:app_type])
+          redirect_to reset_path(:app_path=>app_signin_path, :app_type=>params[:app_type], :role=>@user.role_id)
         else
-          redirect_to reset_path(:path=>signin_path)
+          redirect_to reset_path(:app_path=>app_signin_path, :path=>signin_path, :role=>@user.role_id)
         end  
       end
     else

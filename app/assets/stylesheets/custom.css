@@ -202,5 +202,8 @@ hr.school-heading-hr{margin-top: 21px;}
 .div-color-white{background-color:white !important;}
 
 .reset-password-app-error-msg .error{margin: 6px 190px !important;}
-.stud-name-reset-pass{margin: 0 193px;}
+.stud-name-reset-pass{margin: 0 193px !important;}
+
+.reset-img{margin-top: 18px;}
+.reset-font{font-family: sans-serif !important;}
 
