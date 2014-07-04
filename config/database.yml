@@ -29,7 +29,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: btg-migration_v_1_0_4
+  database: btg-migration_v_1_0_5
   pool: 5
   host: localhost
   username: postgres

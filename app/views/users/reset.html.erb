@@ -8,7 +8,7 @@
 	<%elsif (params[:app_type].blank?) && (params[:role].eql?('1') ||  params[:role].eql?('4')) %>
 		<h4 class="reset-font">Click <a href = '<%= params[:path] %>'>here</a> to log in to the administrative portal.</h4>
 	<%else %>	
-		<h4 class="reset-font">Click <a href = '<%= params[:path] %>'>here</a> to log in to Books That Grow.</h4>
+		<h4 class="reset-font">Click <a href = '<%= params[:app_path] %>'>here</a> to log in to Books That Grow.</h4>
 	<%end%>	
 </div>
 
