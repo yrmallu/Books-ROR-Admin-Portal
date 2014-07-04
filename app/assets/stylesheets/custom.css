@@ -206,4 +206,5 @@ hr.school-heading-hr{margin-top: 21px;}
 
 .reset-img{margin-top: 18px;}
 .reset-font{font-family: sans-serif !important;}
+.btn.btn-primary:focus{outline: none;}
 

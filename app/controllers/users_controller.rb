@@ -182,7 +182,7 @@ class UsersController < ApplicationController
     else 
       get_all_reading_grades
       @assigned_classrooms = []
-      get_school_related_licenses
+      get_school_related_licenses unless @school.blank?
       @school_specific_classrooms = @school.classrooms.un_archived.order( 'name ASC' ) unless @school.blank? 
       @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
 
@@ -290,7 +290,7 @@ class UsersController < ApplicationController
       end
 	else
       get_all_reading_grades
-      get_school_related_licenses
+      get_school_related_licenses unless @school.blank?
       @assigned_classrooms = @user.classrooms if @user && @user.classrooms
       @school_specific_classrooms = @school.classrooms.un_archived.order( 'name ASC' ) unless @school.blank? 
       @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
@@ -697,7 +697,7 @@ class UsersController < ApplicationController
       unless params[:school_id].blank?
         @school = School.where("id = #{params[:school_id]}").last
       else
-        @school = School.where("id = #{params[:user][:school_id]}").last
+        @school = School.where("id = #{params[:user][:school_id]}").last 
       end  
       @school_related_licenses = @school.licenses.where(" expiry_date > '#{Time.now.to_date}' AND (used_liscenses < no_of_licenses) AND delete_flag is not true ")
     end
