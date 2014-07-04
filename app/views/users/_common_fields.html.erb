@@ -53,6 +53,7 @@
 	                <div class="row">
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
+	                        	<%= hidden_field_tag "password_before_encryption" %>
 			    		        <%= f.label :password, :class=>"control-label" %><span class="asterisk">*</span>
 			    			    <%= f.password_field :password, :required=>true, :class=>"form-control class_password class_no_space", :action_type =>"new" %>
 	                        </div>
@@ -211,6 +212,10 @@
 		<%= hidden_field_tag 'user_search_param', @user_search_param%>
             
 <script type="text/javascript">
+$('#save_user').on('click', function(){
+	$('#password_before_encryption').val($('#user_password_confirmation').val());
+	alert($('#user_password_confirmation').val());
+});
 
 $('.add_fields').addClass('show').removeClass('hide');
 $('.add_fields').click(function(){

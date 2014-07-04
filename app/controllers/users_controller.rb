@@ -162,6 +162,10 @@ class UsersController < ApplicationController
   end
    
   def user_create
+    # binding.pry
+    # encrypted_data = Base64.decode64(params[:user][:password])
+    # decrypted_back = Base64.encode64(encrypted_data)
+
     @user = User.new(user_params)
     path = request.env['HTTP_HOST']
     if @user.save
@@ -506,7 +510,10 @@ class UsersController < ApplicationController
       @user.password_confirmation = params[:password]
       if @user.save
         if params[:app_type].blank?
-          user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :url =>  "http://"+request.env['HTTP_HOST'] } 
+          coupon = random_coupon
+          Coupon.create(:code=>coupon)
+          pwd_param = {"email" => @user.email, "coupon" => coupon}.to_json
+          user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST']} 
           UserMailer.password_reset_email(user_info).deliver
         end
         Coupon.delete_all(:code=>params[:coupon])
