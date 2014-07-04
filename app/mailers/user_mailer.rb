@@ -17,7 +17,7 @@ class UserMailer < ActionMailer::Base
 
   def user_email_changed(user_info)
     @user_info = user_info
-    mail(to: @user_info[:email], subject: 'Books That Grow Account Email changed')
+    mail(to: @user_info[:email], subject: 'Books That Grow Account email changed')
   end
 
   def forgot_password_email(user_info)
