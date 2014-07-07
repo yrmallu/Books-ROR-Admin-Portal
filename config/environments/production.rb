@@ -95,17 +95,17 @@ BooksThatGrow::Application.configure do
   # }
 
 
-  config.action_mailer.delivery_method = :smtp  
-  config.action_mailer.smtp_settings = {  
-  address:                'smtpout.secureserver.net',  
-  port:                      465,  
-  user_name:              'noreply@booksthatgrow.com',  
-  domain:                 'booksthatgrow.com',  
-  password:               'bornedigital',  
-  authentication:         :plain,  
-  ssl:                    true,  
-  tls:                    true  
-}  
-config.action_mailer.default_url_options = { host:  '54.225.184.100' }  
+#   config.action_mailer.delivery_method = :smtp  
+#   config.action_mailer.smtp_settings = {  
+#   address:                'smtpout.secureserver.net',  
+#   port:                      465,  
+#   user_name:              'noreply@booksthatgrow.com',  
+#   domain:                 'booksthatgrow.com',  
+#   password:               'bornedigital',  
+#   authentication:         :plain,  
+#   ssl:                    true,  
+#   tls:                    true  
+# }  
+# config.action_mailer.default_url_options = { host:  '54.225.184.100' }  
 	
 end
