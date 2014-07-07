@@ -12,7 +12,7 @@ ActionMailer::Base.raise_delivery_errors = true
 
 ActionMailer::Base.smtp_settings = {  
     :address              => "smtpout.secureserver.net",  
-    :port                 => 80,  
+    :port                 => 465,  
     :domain               => "booksthatgrow.com",  
     :user_name            => "noreply@booksthatgrow.com",
     :password             => "bornedigital",
