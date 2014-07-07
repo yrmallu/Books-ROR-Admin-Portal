@@ -75,15 +75,19 @@
 	                    	<div class="col-sm-3">
 	                        	<div class="form-group">
 			    		        	<%= f.label :password, "New Password", :class=>"control-label" %>
-			    			    	<%= f.password_field :password, :class=>"form-control", :action_type =>"edit", :placeholder=>"********" %>
+			    			    	<%= f.password_field :password, :class=>"form-control class_password", :action_type =>"edit", :placeholder=>"********" %>
 	                        	</div>
 	                    	</div>
 	                    	<div class="col-sm-3">
 	                        	<div class="form-group">
 			    			    	<%= f.label :password_confirmation, "Confirm Password", :class=>"control-label" %>
-			    			    	<%= f.password_field :password_confirmation, :class=>"form-control", :action_type =>"edit", :placeholder=>"********" %>
+			    			    	<%= f.password_field :password_confirmation, :class=>"form-control class_confirm_password", :action_type =>"edit", :placeholder=>"********" %>
 	                        	</div>
 	                    	</div>
+	                    	<div class="col-sm-6">
+	                    		<span class="asterisk">*</span>  Password Policy:
+	                    		<p>Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.<p>
+	        				</div>
 	                	</div>
 					<%end%>
 			    <%end%>
