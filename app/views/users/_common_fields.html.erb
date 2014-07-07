@@ -60,9 +60,13 @@
 	                    <div class="col-sm-3">
 	                        <div class="form-group">
 			    			    <%= f.label :password_confirmation, :class=>"control-label" %><span class="asterisk">*</span>
-			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control class_no_space", :action_type =>"new" %>
+			    			    <%= f.password_field :password_confirmation, :required=>true, :class=>"form-control class_no_space class_confirm_password", :action_type =>"new" %>
 	                        </div>
 	                    </div>
+	                    <div class="col-sm-6">
+	                    	<span class="asterisk">*</span>  Password Policy:
+	                    	<p>Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.<p>
+	        			</div>
 	                </div>
 				<%else%>
 					<%if f.object.role_id == 4%>
@@ -211,6 +215,7 @@
 		<%= hidden_field_tag 'user_search_param', @user_search_param%>
             
 <script type="text/javascript">
+<% unless @role_id.name.eql?('Web Admin') %>
 
 $('.add_fields').addClass('show').removeClass('hide');
 $('.add_fields').click(function(){
@@ -504,7 +509,6 @@ $(document).ready(function () {
 }
 
 // Disable arrows by default, enable when clicked on left or right lists
-//$(document).ready(function(){
 $('.disable-add').bind('click', false);
 $('.disable-add').removeClass("enable-arrors").addClass("diasble-arrors");
 $('.disable-remove').removeClass("enable-arrors").addClass("diasble-arrors");
@@ -592,8 +596,8 @@ $('body').on('click', function(e) {
       });
     }
 });
+<%end%>
 
-//});
 </script>
 
 

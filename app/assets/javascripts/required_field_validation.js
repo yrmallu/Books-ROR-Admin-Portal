@@ -7,6 +7,19 @@ $.validator.addMethod("noSpace", function(value, element) {
 }, "Spaces not allowed.");
 $.validator.addClassRules("class_no_space", {noSpace:true});
 
+$.validator.addMethod("password_policy",function(value,element)
+{
+	return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/.test(value); 
+},"Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.");
+$.validator.addClassRules("class_password", {password_policy:true});
+
+$.validator.addMethod("conf_password_policy",function(value,element)
+{
+	return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/.test(value); 
+},"Confirm Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.");
+$.validator.addClassRules("class_confirm_password", {conf_password_policy:true});
+
+var return_val;
 var required_field;
 required_field = function(){
 	$(".form_validation").validate({
