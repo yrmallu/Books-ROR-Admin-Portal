@@ -83,7 +83,7 @@ BooksThatGrow::Application.configure do
   config.action_mailer.perform_deliveries = true 
   config.action_mailer.raise_delivery_errors = true 
   config.action_mailer.default :charset => "utf-8"
-  # 
+  
   # config.action_mailer.smtp_settings = {
   #   address: "smtp.gmail.com",
   #   port: 587,
@@ -93,5 +93,19 @@ BooksThatGrow::Application.configure do
   #   user_name: ENV["GMAIL_USERNAME"],
   #   password: ENV["GMAIL_PASSWORD"]
   # }
+
+
+  config.action_mailer.delivery_method = :smtp  
+  config.action_mailer.smtp_settings = {  
+  address:                'smtpout.secureserver.net',  
+  port:                      465,  
+  user_name:              'noreply@booksthatgrow.com',  
+  domain:                 'booksthatgrow.com',  
+  password:               'bornedigital',  
+  authentication:         :plain,  
+  ssl:                    true,  
+  tls:                    true  
+}  
+config.action_mailer.default_url_options = { host:  '54.225.184.100' }  
 	
 end
