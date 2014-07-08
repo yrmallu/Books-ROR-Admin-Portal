@@ -65,7 +65,7 @@
 	                    </div>
 	                    <div class="col-sm-6">
 	                    	<span class="asterisk">*</span>  Password Policy:
-	                    	<p class="pass_policy">Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.<p>
+	                    	<p class="pass_policy">Password should contain at least 1 character.<p>
 	        			</div>
 	                </div>
 				<%else%>
@@ -86,7 +86,7 @@
 	                    	</div>
 	                    	<div class="col-sm-6">
 	                    		<span class="asterisk">*</span>  Password Policy:
-	                    		<p class="pass_policy">Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.<p>
+	                    		<p class="pass_policy">Password should contain at least 1 character.<p>
 	        				</div>
 	                	</div>
 					<%end%>
@@ -112,7 +112,7 @@
 				        </div>
 				    <% elsif ((('edit').eql?action_name) || (('update').eql?action_name)) && (!@user.license_expiry_date.blank?) %>   
 				    	<div class="row">
-					    	<div class="col-sm-3">
+					    	<div class="col-sm-6">
 						       	<div class="form-group">
 						       		<%= f.label :license_expiry_date, "License Expiration Date", :class=>"control-label"%>
 							    	<div class="dropdown-quick-edit-stud " data-col="license_id" data-id='<%= @user.id%>'>

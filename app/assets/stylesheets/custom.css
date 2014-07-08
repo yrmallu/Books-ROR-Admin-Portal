@@ -119,7 +119,8 @@ label.error {display:block;}
 .dropdown-quick-edit:hover{border: solid 2px #ccc;padding: 5px;margin: -5px;cursor:pointer;}
 .empty-quick-edit-field{height: 34px;position: absolute;width: 93%;top: 0;bottom: 0;margin: auto !important;}
 .dropdown-quick-edit{padding:2px;}
-.quick-edit-error-msg{text-align: center;margin: 37px auto 0;position: absolute !important;left: 0;right: 0;z-index: 10;}
+.quick-edit-error-msg{text-align: left;margin: 37px auto 0;left: 0;right: 0;z-index: 10;padding: 10px;background-color: #EBD8D1; border-color: #DAC5C5}
+.error-message.error.quick-edit-error-msg{margin-bottom: 0}
 .diasble-arrors{color:black;background:#e0e0e0 !important;cursor:default !important;}
 .enable-arrors{color:#428bca;background:rgba(112, 147, 216, 0.5) !important;cursor:pointer !important;}
 .mask-phone-width{width:110px}
@@ -209,3 +210,5 @@ hr.school-heading-hr{margin-top: 21px;}
 .btn.btn-primary:focus{outline: none;}
 
 .pass_policy{font-style: italic;font-size: 13px;}
+
+.alert-failure {background-color: #dff0d8;border-color: #d6e9c6;color: #3c763d;}

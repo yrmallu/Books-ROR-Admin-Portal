@@ -169,7 +169,8 @@ class User < ActiveRecord::Base
   
   def welcome_email(path)
     pwd_param = pwd_reset_params(self.email)
-    user_info = {:email => self.email, :firstname => self.first_name, :lastname => self.last_name.to_s, :username=> self.username.to_s, :reset_pass_url => "http://"+path+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
+    school = School.find(self.school_id)
+    user_info = {:email => self.email, :firstname => self.first_name, :lastname => self.last_name.to_s, :username=> self.username.to_s, :school => school.name, :reset_pass_url => "http://"+path+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :link => "http://"+path+"/users/"+self.id.to_s+"/edit?role_id="+self.role_id.to_s+"&school_id="+self.school_id.to_s, :login_url =>  "http://"+path } 
     UserMailer.welcome_email(user_info).deliver
   end
   

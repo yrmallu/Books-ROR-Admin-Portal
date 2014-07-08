@@ -65,7 +65,9 @@
 	</div>
 	<div class="table-responsive">
 		<table class="table class_common_table" id="users_table">
-			<div class="error-message error quick-edit-error-msg"></div>
+			<div class="error-message error quick-edit-error-msg">
+				<!-- <button id="error" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
+			</div>
 			<thead>
                 <tr>
                 	<% if params[:role_id].eql?('1')%>
@@ -342,17 +344,17 @@ function(data) {
   $('#changePassword').click(function() {
 	$(".form_validation").validate({
 		rules: {
-			"user[password]":{ minlength: 5, required: true} ,
-			"user[password_confirmation]":{ minlength: 5, required: true, equalTo: "#user_password"} 
+			"user[password]":{ minlength: 1, required: true} ,
+			"user[password_confirmation]":{ minlength: 1, required: true, equalTo: "#user_password"} 
 		},
 		messages: {
 			"user[password]":{
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long."
+				minlength: "Your password must be at least 1 character long."
 			},
 			"user[password_confirmation]": {
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long.",
+				minlength: "Your password must be at least 1 character long.",
 				equalTo: "Please enter the same password as above."
 			}
 		}

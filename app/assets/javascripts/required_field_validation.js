@@ -2,22 +2,22 @@
 $.validator.addMethod("parent_email_valid", $.validator.methods.email, "Please enter a valid email.");
 $.validator.addClassRules("class_parent_email", {parent_email_valid:true});
 
-$.validator.addMethod("noSpace", function(value, element) { 
-  return value.indexOf(" ") < 0 && value != ""; 
-}, "Spaces not allowed.");
-$.validator.addClassRules("class_no_space", {noSpace:true});
+// $.validator.addMethod("noSpace", function(value, element) { 
+//   return value.indexOf(" ") < 0 && value != ""; 
+// }, "Spaces not allowed.");
+// $.validator.addClassRules("class_no_space", {noSpace:true});
 
-$.validator.addMethod("password_policy",function(value,element)
-{
-	return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/.test(value); 
-},"Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.");
-$.validator.addClassRules("class_password", {password_policy:true});
+// $.validator.addMethod("password_policy",function(value,element)
+// {
+// 	return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/.test(value); 
+// },"Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.");
+// $.validator.addClassRules("class_password", {password_policy:true});
 
-$.validator.addMethod("conf_password_policy",function(value,element)
-{
-	return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/.test(value); 
-},"Confirm Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.");
-$.validator.addClassRules("class_confirm_password", {conf_password_policy:true});
+// $.validator.addMethod("conf_password_policy",function(value,element)
+// {
+// 	return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/.test(value); 
+// },"Confirm Password should contain at least 5 characters, at least 1 number, at least 1 lowercase character (a-z), at least 1 uppercase character (A-Z), no special characters allowed.");
+// $.validator.addClassRules("class_confirm_password", {conf_password_policy:true});
 
 var return_val;
 var required_field;
@@ -28,7 +28,7 @@ required_field = function(){
 			"school[name]": { required: true },
 			//"school[phone]":{ number: true },
 			"session[email]":{ required: true, email:true },
-			"session[password]":{ required: true, minlength: 5 },
+			"session[password]":{ required: true, minlength: 1 },
 			"license[expiry_date]":{required: true} ,
 			"user[username]":{required: true} ,
 			"license[no_of_licenses]":{ required: true, number: true, min: 1 },
@@ -54,13 +54,13 @@ required_field = function(){
 				minlength: function(element) {
 					if ($( "input[name='user[password]']").attr("action_type") == "edit"){
 						if ($( "input[name='user[password]']").val() > 0) {
-							return 5;
+							return 1;
 						} else {
-							return 5;
+							return 1;
 						}
 					}
 					else{
-						return 5;	
+						return 1;	
 					}
 				}
 			} ,
@@ -80,13 +80,13 @@ required_field = function(){
 				minlength: function(element) {
 					if ($( "input[name='user[password_confirmation]']").attr("action_type") == "edit"){
 						if ($( "input[name='user[password_confirmation]']").val() > 0) {
-							return 5;
+							return 1;
 						} else {
-							return 5;
+							return 1;
 						}
 					}
 					else{
-						return 5;	
+						return 1;	
 					}
 				},
 				equalTo: "#user_password"
@@ -106,13 +106,13 @@ required_field = function(){
 			 },
  			password: {
  				required: true,
-				noSpace: true,
- 				minlength: 5
+				//noSpace: true,
+ 				minlength: 1
  			},
  			password_confirmation: {
  				required: true,
-				noSpace: true,
- 				minlength: 5,
+				//noSpace: true,
+ 				minlength: 1,
  				equalTo: "#password"
  			}
 		},
@@ -132,16 +132,16 @@ required_field = function(){
 			//"book[epub]":"Upload Epub Book.",
 			"session[password]": {
 								required: "Please provide a password.",
-								minlength: "Your password must be at least 5 characters long."
+								minlength: "Your password must be at least 1 character long."
 			                  },
 			email: "Enter a valid email address.",
 			password: {
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long."
+				minlength: "Your password must be at least 1 character long."
 			},
 			password_confirmation: {
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long.",
+				minlength: "Your password must be at least 1 character long.",
 				equalTo: "Please enter the same password as above."
 			},
 			//"user[phone_number]":"Please enter only number.",
@@ -153,11 +153,11 @@ required_field = function(){
 			//"user[email]":"Enter a valid email address.",
 			"user[password]":{
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long."
+				minlength: "Your password must be at least 1 character long."
 			},
 			"user[password_confirmation]": {
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long.",
+				minlength: "Your password must be at least 1 character long.",
 				equalTo: "Please enter the same password as above."
 			}
 		}

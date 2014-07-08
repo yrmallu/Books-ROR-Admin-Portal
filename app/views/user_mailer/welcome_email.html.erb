@@ -35,6 +35,9 @@
               <p style="margin:15px 0; font-size:13px">
                 Email: <%= @user_info[:email] %>
               </p>
+              <p style="margin:15px 0; font-size:13px">
+                School: <%= @user_info[:school] %>
+              </p>
             </p>
             <p style="margin:0 0; font-size:13px">
               To reset your password, click on the following link: <a href = '<%= @user_info[:reset_pass_url] %>'>reset password</a>

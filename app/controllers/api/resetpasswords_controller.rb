@@ -6,7 +6,7 @@ class Api::ResetpasswordsController < ApplicationController
       student_info = JSON.parse(params[:p])
       query = ""
       query << "lower(username) = lower('#{student_info["username"]}')"
-      query << " and school_id = '#{student_info["school_id"]}'" unless student_info["school_id"].blank?
+      #query << " and school_id = '#{student_info["school_id"]}'" unless student_info["school_id"].blank?
       query << " and role_id = '#{student_info["role_id"]}'" unless student_info["role_id"].blank?
       @user = User.includes(:classrooms, :parents).un_archived.where(query).last
       response_data = []
@@ -55,13 +55,13 @@ class Api::ResetpasswordsController < ApplicationController
   def send_reset_password_email
     user_mail = JSON.parse(params[:p])
     unless user_mail["email"].blank?
-      @user = User.un_archived.where("lower(email) = lower('#{user_mail["email"]}') and school_id = '#{user_mail["school_id"]}'").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
+      @user = User.un_archived.where("lower(email) = lower('#{user_mail["email"]}')").last || Parent.where("lower(email) = lower('#{user_mail["email"]}')").last
       unless @user.blank?
         coupon = random_coupon
         Coupon.create(:code=>coupon)
         unless user_mail["username"].blank?
-          student = User.where("lower(username) = lower('#{user_mail["username"]}') and school_id = '#{user_mail["school_id"]}'").last
-          pwd_param = {"username" => user_mail["username"], "school_id" => user_mail["school_id"], "a_type" => "angular", "coupon" => coupon}.to_json
+          student = User.where("lower(username) = lower('#{user_mail["username"]}') ").last
+          pwd_param = {"username" => user_mail["username"], "a_type" => "angular", "coupon" => coupon}.to_json
           user_info = {:email => @user.email, :name => User.eql?(@user.class) ?  @user.first_name+" "+@user.last_name.to_s : @user.name, :username=>student.first_name+" "+student.last_name.to_s, :app_type =>'angular', :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://107.21.250.244/books-that-grow-web-app/app_demo_v1.0/#/", :portal_link =>  "http://"+request.env['HTTP_HOST'] } 
         else
           pwd_param = {"email" => @user.email, "a_type" => "angular", "coupon" => coupon}.to_json
