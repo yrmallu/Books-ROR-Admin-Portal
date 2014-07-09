@@ -714,22 +714,9 @@ class UsersController < ApplicationController
   end
     
   def app_route
-    @app_path = request.host
+    @app_path = request.host+":"+request.port.to_s
   end
-    
-  def user_search
-    if params[:query_string] && !(params[:query_string].blank?)
-      @users = User.search_all("%#{params[:query_string]}%").un_archived.page(params[:page]).per(10) 
-    end
-    set_bread_crumb
-  end
-    
-  def undo_user
-    @user = User.where("id = '#{params[:id]}' AND delete_flag = true ").last
-    @user.update_attributes(:delete_flag=>false)
-    redirect_to users_path(:role_id => @user.role_id, :school_id=> @user.school_id), notice: 'User un-archived.'
-  end
-
+  
   def save_user_list
     @users, @data_flag =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
     #FileUtils.rm session[:file]
@@ -758,10 +745,6 @@ class UsersController < ApplicationController
     end
   end
   
-  def app_route
-    @app_path = request.host
-  end
-
   def quick_edit_user
     if (params[:column_name].eql?("license_id"))
        license = License.find(params[:edited_value])
