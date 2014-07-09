@@ -782,7 +782,7 @@ class UsersController < ApplicationController
       else
         column_name = params[:column_name].capitalize 
       end 
-      render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
+      render :json=> {:status=>false, :message=>" #{column_name} already exists or is invalid."}.to_json and return
     end
   end
   
@@ -800,7 +800,7 @@ class UsersController < ApplicationController
  #     else
  #       column_name = params[:column_name].capitalize 
  #     end 
- #     render :json=> {:status=>false, :message=>" #{column_name} already exist or is invalid."}.to_json and return
+ #     render :json=> {:status=>false, :message=>" #{column_name} already exists or is invalid."}.to_json and return
 	# end
  #  end
   

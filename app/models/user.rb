@@ -91,11 +91,34 @@ class User < ActiveRecord::Base
   
   def username_uniqness
     return true if username.blank? 
-    query = "username = '#{username}'"
-    query << " AND school_id = '#{school_id}'" unless school_id.blank?
-    query << " AND id != #{id}" unless id.blank?
-    query << " AND role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
-    user = User.where(query).un_archived
+    # query = "username = '#{username}'"
+    # query << " AND school_id = '#{school_id}'" unless school_id.blank?
+    # query << " AND id != #{id}" unless id.blank?
+    # query << " AND role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
+    # user = User.where(query).un_archived
+    
+    unless school_id.blank?
+      # if shool id is not blank check if already web admin exist with same email.
+      query = "username = '#{username}'"
+      query << " AND id != #{id}" unless id.blank?
+      query << " AND role_id = 1"
+      user = User.where(query).un_archived
+      if user.blank?
+        query = "username = '#{username}'"
+        query << " AND school_id = '#{school_id}'" unless school_id.blank?
+        query << " AND id != #{id}" unless id.blank?
+        query << " AND role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
+        user = User.where(query).un_archived
+      else
+        errors.add( :username, 'has already been taken.')
+        return true
+      end  
+    else
+      query = "username = '#{username}'"
+      query << " AND id != #{id}" unless id.blank?
+      user = User.where(query).un_archived
+    end  
+
     unless user.blank?
       errors.add( :username, 'has already been taken.')
       return true
@@ -106,11 +129,28 @@ class User < ActiveRecord::Base
 
   def email_uniqness
     return true if email.blank? 
-    query = "email = '#{email}'"
-    query << " AND school_id = '#{school_id}'" unless school_id.blank?
-    query << " AND id != #{id}" unless id.blank?
-    query << " AND role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
-    user = User.where(query).un_archived
+    unless school_id.blank?
+      # if shool id is not blank check if already web admin exist with same email.
+      query = "email = '#{email}'"
+      query << " AND id != #{id}" unless id.blank?
+      query << " AND role_id = 1"
+      user = User.where(query).un_archived
+      if user.blank?
+        query = "email = '#{email}'"
+        query << " AND school_id = '#{school_id}'" unless school_id.blank?
+        query << " AND id != #{id}" unless id.blank?
+        query << " AND role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
+        user = User.where(query).un_archived
+      else
+        errors.add( :email, 'has already been taken.')
+        return true
+      end  
+    else
+      query = "email = '#{email}'"
+      query << " AND id != #{id}" unless id.blank?
+      user = User.where(query).un_archived
+    end  
+    
     unless user.blank?
       errors.add( :email, 'has already been taken.')
       return true
