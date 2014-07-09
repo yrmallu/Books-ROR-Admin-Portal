@@ -133,7 +133,7 @@ class UsersController < ApplicationController
       user_create
     end
   else
-      get_school_after_render
+      #get_school_after_render
       user_create
   end
   end
@@ -147,7 +147,7 @@ class UsersController < ApplicationController
     else
       @school = School.find(@user.school_id) 
       end
-  end
+    end
   end
   
   def user_new
@@ -162,10 +162,8 @@ class UsersController < ApplicationController
   end
    
   def user_create
-    # binding.pry
     # encrypted_data = Base64.decode64(params[:user][:password])
     # decrypted_back = Base64.encode64(encrypted_data)
-
     @user = User.new(user_params)
     path = request.env['HTTP_HOST']
     if @user.save
@@ -177,7 +175,7 @@ class UsersController < ApplicationController
         array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
       end  
       add_user_level_setting if @user.role.name.eql?('Student')
-      redirect_to users_path(:school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' 
+      redirect_to users_path(:school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' and return
       @user.welcome_email(path) unless params[:user][:email].blank?
     else 
       get_all_reading_grades
@@ -185,7 +183,7 @@ class UsersController < ApplicationController
       get_school_related_licenses unless @school.blank?
       @school_specific_classrooms = @school.classrooms.un_archived.order( 'name ASC' ) unless @school.blank? 
       @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
-
+      
 	    render :action=> 'new'
     end
   end
