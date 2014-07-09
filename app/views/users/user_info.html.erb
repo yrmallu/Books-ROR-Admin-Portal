@@ -3,7 +3,7 @@
 	<b>Email:</b> <%=@user.email%>
 	
 	<%if @user.is_student?%>
-		<br/><b>Grade:</b>  <%=@user.userinfo["grade"]%><br/>
-		<b>Reading Ability:</b> <%=@user.userinfo["reading_ability"]%>
+		<br/><b>Grade:</b>  <%= @user.userinfo["grade"] unless @user.userinfo["grade"].blank? %><br/>
+		<b>Reading Ability:</b> <%=@user.userinfo["reading_ability"] unless @user.userinfo["reading_ability"].blank?%>
 	<%end%>
 <%end%>
