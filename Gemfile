@@ -8,8 +8,7 @@ gem 'rails', '4.0.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '0.17.1'
-
-#gem 'cancan', '1.6.10'
+#gem 'rails-env-favicon'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '4.0.2'

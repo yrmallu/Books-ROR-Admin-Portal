@@ -52,16 +52,15 @@
               </p>
             </td>
           <%else%>
-            <td valign="top" colspan="2" style="padding:20px">
-              <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow password has been reset.</h2>
+            <!-- <td valign="top" colspan="2" style="padding:20px">
               <p style="margin:15px 0; font-size:13px">
-                Hello <%= @user_info[:name] %>, 
+                Hello <%#= @user_info[:name] %>, 
               </p>
               <p style="margin:0 0; font-size:13px">
                 Your Books That Grow password has been reset. 
               </p>
               <p style="margin:15px 0; font-size:13px">
-                If you believe this was done in error, please immediately contact your school administrator and reset your password by clicking on the following link: <a href = '<%= @user_info[:reset_pass_url] %>'>reset password</a>
+                If you believe this was done in error, please immediately contact your school administrator and reset your password by clicking on the following link: <a href = '<%#= @user_info[:reset_pass_url] %>'>reset password</a>
               </p>
               <p style="margin:15px 0 0; font-size:13px">
                 Thanks,
@@ -69,7 +68,7 @@
               <p style="margin:15px 0; font-size:13px">
                 The Books That Grow Team
               </p>
-            </td>
+            </td> -->
           <%end%>  
 
         </tr>

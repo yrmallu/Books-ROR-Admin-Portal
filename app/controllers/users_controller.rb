@@ -175,7 +175,7 @@ class UsersController < ApplicationController
         array_classroom_ids.each{|classroom_id| @user.user_classrooms.create(:classroom_id=> classroom_id, :role_id=>@user.role_id) } unless array_classroom_ids.blank?
       end  
       add_user_level_setting if @user.role.name.eql?('Student')
-      redirect_to users_path(:school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.' and return
+      redirect_to users_path(:school_id=> @user.school_id, :role_id=>@user.role_id), notice: 'User created.'
       @user.welcome_email(path) unless params[:user][:email].blank?
     else 
       get_all_reading_grades
