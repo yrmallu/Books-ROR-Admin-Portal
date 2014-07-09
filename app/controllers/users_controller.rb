@@ -180,7 +180,7 @@ class UsersController < ApplicationController
     else 
       get_all_reading_grades
       @assigned_classrooms = []
-      get_school_related_licenses unless @school.blank?
+      get_school_related_licenses unless params[:user][:school_id].blank?
       @school_specific_classrooms = @school.classrooms.un_archived.order( 'name ASC' ) unless @school.blank? 
       @school_classrooms = @school_specific_classrooms.map(&:id) unless @school.blank? 
       
