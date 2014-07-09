@@ -554,7 +554,10 @@ class UsersController < ApplicationController
             flash[:error] = "Entered email address is not associated with the selected school."
             redirect_to forgot_password_path
           end  
-        end
+        else
+          flash[:error] = "Please select a school."
+          redirect_to forgot_password_path
+        end  
       end  
     else
       flash[:error] = "That email address is not associated with a Books That Grow account. Please try a different email address or contact your administrator for help"
