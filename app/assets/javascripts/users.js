@@ -10,6 +10,11 @@ jQuery(document).ready(function(){
 	$("#user_phone_number").mask("(999) 999-9999");
 	
 	// Search on index page
+	$('#text_field_search').keypress(function(e){
+      if(e.which == 13){//Enter key pressed
+        $('#user_search').click();//Trigger search button click event
+      }
+    });
 	$("#user_search").on('click',function(){
 	 	var search_query = jQuery.trim($('#text_field_search').val());
 		if (search_query.length > 0) {

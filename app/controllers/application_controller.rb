@@ -493,10 +493,10 @@ class ApplicationController < ActionController::Base
 
       when "users#un_archive_users_list-1"
         @breadcrumb = {
-          :title=>"Un-archived Web Admin List",
+          :title=>"Archived Web Admin List",
           :icon=>"fa fa-user",
           :breadcrumb=>{
-            "Un-archived Web Admin List"=> "",
+            "Archived Web Admin List"=> "",
         }
       }
          

@@ -1,7 +1,13 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 $(document).ready(function () {
-	 $("#book_search").on('click',function(){
+  $('#text_field_search').keypress(function(e){
+    if(e.which == 13){//Enter key pressed
+      $('#book_search').click();//Trigger search button click event
+    }
+  });
+	
+  $("#book_search").on('click',function(){
 	 	var search_query = jQuery.trim($('#text_field_search').val());
 		if (search_query.length > 0) {
 			url = document.URL.split("?");

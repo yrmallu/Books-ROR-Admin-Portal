@@ -1,5 +1,11 @@
 // Search on index page
 $(document).ready(function () {
+    $('#text_field_search').keypress(function(e){
+      if(e.which == 13){//Enter key pressed
+        $('#license_search').click();//Trigger search button click event
+      }
+    });
+
 	 $("#license_search").on('click',function(){
  	 	var search_query = jQuery.trim($('#text_field_search').val());
  		if (search_query.length > 0) {
