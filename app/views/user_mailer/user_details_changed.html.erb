@@ -1,3 +1,5 @@
+<%if @user_info[:password_changed].blank?%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,7 +20,7 @@
         </tr>
         <tr class="episode">
 
-          <%if @user_info[:password_changed].blank?%>
+          
             <td valign="top" colspan="2" style="padding:20px">
              <!--  <h2 style=" margin-top:0; margin-bottom:8px; font-size:18px; color:#1caf9a">Your Books That Grow account has been updated.</h2> -->
               <p style="margin:15px 0; font-size:13px">
@@ -51,7 +53,7 @@
                 The Books That Grow Team
               </p>
             </td>
-          <%else%>
+          <%#=else%>
             <!-- <td valign="top" colspan="2" style="padding:20px">
               <p style="margin:15px 0; font-size:13px">
                 Hello <%#= @user_info[:name] %>, 
@@ -69,7 +71,7 @@
                 The Books That Grow Team
               </p>
             </td> -->
-          <%end%>  
+          
 
         </tr>
         <tr>
@@ -85,4 +87,4 @@
   </table>
 </body>
 </html>
-
+<%end%>  
