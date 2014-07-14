@@ -29,7 +29,7 @@ test:
 staging:
   adapter: postgresql
   encoding: unicode
-  database: btg-staging_v_1_0_1
+  database: btg-staging_v_1_0_2
   pool: 5
   host: localhost
   username: postgres
