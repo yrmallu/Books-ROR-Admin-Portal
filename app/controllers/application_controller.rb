@@ -202,7 +202,7 @@ class ApplicationController < ActionController::Base
 
     p "extras=====",parameters = extra.split(",")
 	selector =  parameters.empty? ? "#{params[:controller]}##{params[:action]}" : (("classrooms").eql?("#{params[:controller]}") || ("licenses").eql?("#{params[:controller]}")) ? "#{params[:controller]}##{params[:action]}" : "#{params[:controller]}##{params[:action]}".concat("-"+parameters[0])  
-    p "selector=====",selector
+   # p "selector=====",selector
 	  
     case selector
 

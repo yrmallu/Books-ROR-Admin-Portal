@@ -677,19 +677,19 @@ class UsersController < ApplicationController
     end
   end
 
-    def save_user_list
-      @users, @data_flag =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
-      #FileUtils.rm session[:file]
-      session[:file] = ""
-      if @data_flag
-        flash[:success] = "List imported successfully." 
-      else
-        flash[:success] = "List is not imported due to some incorrect data." 
-      end
-      redirect_to users_path(:role_id=>params[:role_id], :school_id => params[:school_id])
+  def save_user_list
+    @users, @data_flag =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
+    #FileUtils.rm session[:file]
+    session[:file] = ""
+    if @data_flag
+      flash[:success] = "List imported successfully." 
+    else
+      flash[:success] = "List is not imported due to some incorrect data." 
     end
-    
-    def get_all_reading_grades
+    redirect_to users_path(:role_id=>params[:role_id], :school_id => params[:school_id])
+  end
+
+  def get_all_reading_grades
       @reading_grades = ReadingGrade.all
     end
 
@@ -720,39 +720,12 @@ class UsersController < ApplicationController
     @app_path = request.host+":"+request.port.to_s
   end
   
-  def save_user_list
-    @users, @data_flag =  get_file_data(session[:file], User, save = true, params[:role_id], params[:school_id])
-    #FileUtils.rm session[:file]
-    session[:file] = ""
-    if @data_flag
-      flash[:success] = "List imported successfully." 
-    else
-      flash[:success] = "List is not imported due to some incorrect data." 
-    end
-    redirect_to users_path(:role_id=>params[:role_id], :school_id => params[:school_id])
-  end
-  
-  def get_all_reading_grades
-    @reading_grades = ReadingGrade.all
-  end
-  
-  def delete_parent
-    @user = User.find(params[:id])
-    @assigned_classrooms = @user.classrooms if @user && @user.classrooms
-    @parent = Parent.find(params[:parent_id])
-    @parent.destroy
-    respond_to do |format|
-    	format.html {
-    	}
-    	format.js{}
-    end
-  end
-  
   def quick_edit_user
     if (params[:column_name].eql?("license_id"))
        license = License.find(params[:edited_value])
        @user.update_attributes("license_expiry_date" => license.expiry_date) 
     end 
+    binding.pry
     return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
     if return_val.eql?(true)
       render :json=> true and return

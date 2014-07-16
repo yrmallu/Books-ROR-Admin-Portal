@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
   ## Validations
   ###########################################################################################  
   
-  validates :username, :presence=> true, :length => {:maximum => 255}, :format => {:with=> NO_SPACE_REGEX}
+  validates :username, :presence=> true, :length => {:maximum => 255}, :format => {:with=> LETTER_ONLY_REGEX}
   validates :email, :presence=> true, :length => {:maximum => 255}, :if => :not_student?
   validates :email, :format=>{:with=> VALID_EMAIL_REGEX }, :allow_blank=>true
   #validates :email, :format=>{:with=> VALID_EMAIL_REGEX }, :allow_blank=>true, :uniqueness=>{:case_sensitive=>false, conditions: -> { where.not(delete_flag: 'true') }}
@@ -97,6 +97,8 @@ class User < ActiveRecord::Base
     # query << " AND role_id = '#{role_id}'" unless role_id.blank? if school_id.blank?
     # user = User.where(query).un_archived
     user = ""
+    #binding.pry
+    #uname = "#{self.username}".strip.gsub("'", %q(\\\')).insert(0,'(').insert(-1,')')
     unless school_id.blank?
       # if shool id is not blank check if already web admin exist with same email.
       query = "username = '#{username}'"
