@@ -67,7 +67,7 @@ end
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-gem 'capistrano', '2.15.5'
+#gem 'capistrano', '2.15.5'
 
 group :development do
  gem 'letter_opener', '1.2.0'
