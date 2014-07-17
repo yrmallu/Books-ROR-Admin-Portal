@@ -22,8 +22,8 @@ class UserMailer < ActionMailer::Base
 
   def forgot_password_email(user_info)
     @user_info = user_info
-    if @user_info[:app_type].eql?('angular')
-      mail(to: @user_info[:email], subject: "Books That Grow password reset request for #{@user_info[:username]}")
+    if @user_info[:role].eql?('Student')
+      mail(to: @user_info[:email], subject: "Books That Grow password reset request for #{@user_info[:full_name]}")
     else
       mail(to: @user_info[:email], subject: "Books That Grow password reset request")
     end 

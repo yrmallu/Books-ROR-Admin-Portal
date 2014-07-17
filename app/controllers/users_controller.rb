@@ -582,7 +582,7 @@ class UsersController < ApplicationController
     coupon = random_coupon
     Coupon.create(:code=>coupon)
     pwd_param = {"email" => @user.email, "coupon" => coupon}.to_json
-    user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
+    user_info = {:email => @user.email, :name=>@user.first_name, :username => @user.username, :full_name =>@user.first_name+" "+@user.last_name.to_s,  :role => @user.role.name, :link => "http://"+request.env['HTTP_HOST']+"/reset_password?password_key="+Base64.encode64(pwd_param.to_s), :url =>  "http://"+request.env['HTTP_HOST'] } 
     UserMailer.forgot_password_email(user_info).deliver
     flash[:success] = "Instructions will be sent to the email address you enter."
     redirect_to signin_path
@@ -725,7 +725,6 @@ class UsersController < ApplicationController
        license = License.find(params[:edited_value])
        @user.update_attributes("license_expiry_date" => license.expiry_date) 
     end 
-    binding.pry
     return_val = @user.update_attributes("#{params[:column_name]}" => "#{params[:edited_value]}")
     if return_val.eql?(true)
       render :json=> true and return
