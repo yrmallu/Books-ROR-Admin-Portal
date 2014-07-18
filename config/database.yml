@@ -7,7 +7,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: migrate_btg_2
+  database: btg-migration_v_1_0_6
   pool: 5
   host: 192.168.10.37
   username: postgres
@@ -29,7 +29,7 @@ test:
 staging:
   adapter: postgresql
   encoding: unicode
-  database: btg-staging_v_1_0_3
+  database: btg-migration_v_1_0_6
   pool: 5
   host: localhost
   username: postgres
